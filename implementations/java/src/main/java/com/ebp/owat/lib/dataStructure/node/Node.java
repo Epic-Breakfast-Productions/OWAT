@@ -165,15 +165,29 @@ public abstract class Node<T extends NodeValue> {
 		this.setValue(temp);
 	}
 	
+	/**
+	 * Gets the value held by this node.
+	 * @return The value held by this node.
+	 */
 	public T getValue(){
 		return this.value;
 	}
 	
+	/**
+	 * Sets the value held by this node.
+	 * @param valueIn The value to set this node with.
+	 * @return This node object.
+	 */
 	public Node<T> setValue(T valueIn){
 		this.value = valueIn;
 		return this;
 	}
 	
+	/**
+	 * Sets the value of this node with the value of another node.
+	 * @param nodeIn The node to get the value from to set this node's value to.
+	 * @return This node object.
+	 */
 	public Node<T> setValue(Node<T> nodeIn){
 		this.value = nodeIn.getValue();
 		return this;
