@@ -8,6 +8,11 @@ import com.ebp.owat.lib.dataStructure.node.value.NodeValue;
  * Created by Greg Stewart on 3/23/17.
  */
 public abstract class Node<T extends NodeValue> {
+	/**
+	 * Node Direction, use this to tell a node which direction you mean.
+	 */
+	public enum NodeDir {NORTH,SOUTH,EAST,WEST}
+	
 	/** The Node that is 'north' or 'above' this node. */
 	private Node<T> north = null;
 	/** The node that is 'south' or 'below' this node */
@@ -36,23 +41,38 @@ public abstract class Node<T extends NodeValue> {
 	
 	/**
 	 * Sets a node to the node of the direction given.
+	 *
+	 * Automatically sets the NodeIn's opposite direction to this.
+	 *
 	 * @param dirIn The direction of the node the nodeIn should be set to.
 	 * @param nodeIn The node to set to the direction given.
 	 * @return This Node.
 	 */
-	public Node<T> setNode(NodeDir dirIn, Node<T> nodeIn){
+	private Node<T> setNode(NodeDir dirIn, Node<T> nodeIn){
 		switch (dirIn){
 			case NORTH:
 				this.north = nodeIn;
+				if(nodeIn.getSouth() != this) {
+					nodeIn.setSouthNode(this);
+				}
 				break;
 			case SOUTH:
 				this.south = nodeIn;
+				if(nodeIn.getNorth() != this) {
+					nodeIn.setNorthNode(this);
+				}
 				break;
 			case EAST:
 				this.east = nodeIn;
+				if(nodeIn.getWest() != this) {
+					nodeIn.setWestNode(this);
+				}
 				break;
 			case WEST:
 				this.west = nodeIn;
+				if(nodeIn.getEast() != this) {
+					nodeIn.setEastNode(this);
+				}
 				break;
 		}
 		return this;
@@ -60,6 +80,9 @@ public abstract class Node<T extends NodeValue> {
 	
 	/**
 	 * Sets the northern node.
+	 *
+	 * Automatically sets the NodeIn's south direction to this.
+	 *
 	 * @param nodeIn The node to set.
 	 * @return This Node.
 	 */
@@ -70,6 +93,9 @@ public abstract class Node<T extends NodeValue> {
 	
 	/**
 	 * Sets the southern node.
+	 *
+	 * Automatically sets the NodeIn's north direction to this.
+	 *
 	 * @param nodeIn The node to set.
 	 * @return This Node.
 	 */
@@ -80,6 +106,9 @@ public abstract class Node<T extends NodeValue> {
 	
 	/**
 	 * Sets the eastern node.
+	 *
+	 * Automatically sets the NodeIn's west direction to this.
+	 *
 	 * @param nodeIn The node to set.
 	 * @return This Node.
 	 */
@@ -90,6 +119,9 @@ public abstract class Node<T extends NodeValue> {
 	
 	/**
 	 * Sets the western node.
+	 *
+	 * Automatically sets the NodeIn's east direction to this.
+	 *
 	 * @param nodeIn The node to set.
 	 * @return This Node.
 	 */
@@ -99,9 +131,28 @@ public abstract class Node<T extends NodeValue> {
 	}
 	
 	/**
-	 * Node Direction, use this to tell a node which direction you mean.
+	 * Gets the node to the north of this node.
+	 * @return The node to the north of this node.
 	 */
-	public enum NodeDir {NORTH,SOUTH,EAST,WEST}
+	public Node<T> getNorth(){return north;}
+	
+	/**
+	 * Gets the node to the south of this node.
+	 * @return The node to the south of this node.
+	 */
+	public Node<T> getSouth(){return west;}
+	
+	/**
+	 * Gets the node to the east of this node.
+	 * @return The node to the east of this node.
+	 */
+	public Node<T> getEast(){return east;}
+	
+	/**
+	 * Gets the node to the south of this node.
+	 * @return The node to the south of this node.
+	 */
+	public Node<T> getWest(){return south;}
 	
 	/**
 	 * Trades a value with another node.
@@ -160,6 +211,38 @@ public abstract class Node<T extends NodeValue> {
 			default:
 				throw new OwatNodeException("Bad site border given. You should not be able to get this.");
 		}
+	}
+	
+	/**
+	 * Determines if the given node borders this one.
+	 * @param nodeIn The node to see if it borders this node.
+	 * @return If the given node borders this one.
+	 */
+	public boolean borders(Node<T> nodeIn){
+		return this.north == nodeIn ||
+				this.south == nodeIn ||
+				this.east == nodeIn ||
+				this.west == nodeIn;
+	}
+	
+	/**
+	 * Determines if the node given borders this node in the direction given.
+	 * @param nodeIn The node to test if it borders.
+	 * @param dirIn The direction to test on.
+	 * @return If the node given borders this node in the direction given.
+	 */
+	public boolean borders(Node<T> nodeIn, NodeDir dirIn){
+		switch (dirIn){
+			case NORTH:
+				return this.north == nodeIn;
+			case SOUTH:
+				return this.south == nodeIn;
+			case EAST:
+				return this.east == nodeIn;
+			case WEST:
+				return this.west == nodeIn;
+		}
+		throw new OwatNodeException("Didn't catch in dir switch. This should not happen.");
 	}
 	
 	/**
