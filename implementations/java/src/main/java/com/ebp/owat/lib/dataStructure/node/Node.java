@@ -3,26 +3,99 @@ package com.ebp.owat.lib.dataStructure.node;
 import com.ebp.owat.lib.dataStructure.node.value.NodeValue;
 
 /**
- * Created by stewy on 3/23/17.
+ * Abstract class for a single node of the matrix.
+ *
+ * Created by Greg Stewart on 3/23/17.
  */
 public abstract class Node<T extends NodeValue> {
 	/** The Node that is 'north' or 'above' this node. */
-	private final Node<T> north;
+	private Node<T> north = null;
 	/** The node that is 'south' or 'below' this node */
-	private final Node<T> south;
+	private Node<T> south = null;
 	/** The node that is 'east' or 'to the right of' this node */
-	private final Node<T> east;
+	private Node<T> east = null;
 	/** The node that is 'west' or 'to the left of' this node */
-	private final Node<T> west;
+	private Node<T> west = null;
 	
 	/** The value this node holds. */
-	private T value;
+	private T value = null;
 	
-	public Node(Node<T> north, Node<T> south, Node<T> east, Node<T> west){
-		this.north = north;
-		this.south = south;
-		this.east = east;
-		this.west = west;
+	/**
+	 * Basic constructor. Does not set any values.
+	 */
+	public Node(){}
+	
+	/**
+	 * Constructor that sets this node's value.
+	 * @param nodeValue The value to set this node to.
+	 */
+	public Node(T nodeValue){
+		this();
+		this.value = nodeValue;
+	}
+	
+	/**
+	 * Sets a node to the node of the direction given.
+	 * @param dirIn The direction of the node the nodeIn should be set to.
+	 * @param nodeIn The node to set to the direction given.
+	 * @return This Node.
+	 */
+	public Node<T> setNode(NodeDir dirIn, Node<T> nodeIn){
+		switch (dirIn){
+			case NORTH:
+				this.north = nodeIn;
+				break;
+			case SOUTH:
+				this.south = nodeIn;
+				break;
+			case EAST:
+				this.east = nodeIn;
+				break;
+			case WEST:
+				this.west = nodeIn;
+				break;
+		}
+		return this;
+	}
+	
+	/**
+	 * Sets the northern node.
+	 * @param nodeIn The node to set.
+	 * @return This Node.
+	 */
+	public Node<T> setNorthNode(Node<T> nodeIn){
+		this.setNode(NodeDir.NORTH, nodeIn);
+		return this;
+	}
+	
+	/**
+	 * Sets the southern node.
+	 * @param nodeIn The node to set.
+	 * @return This Node.
+	 */
+	public Node<T> setSouthNode(Node<T> nodeIn){
+		this.setNode(NodeDir.SOUTH, nodeIn);
+		return this;
+	}
+	
+	/**
+	 * Sets the eastern node.
+	 * @param nodeIn The node to set.
+	 * @return This Node.
+	 */
+	public Node<T> setEastNode(Node<T> nodeIn){
+		this.setNode(NodeDir.EAST, nodeIn);
+		return this;
+	}
+	
+	/**
+	 * Sets the western node.
+	 * @param nodeIn The node to set.
+	 * @return This Node.
+	 */
+	public Node<T> setWestNode(Node<T> nodeIn){
+		this.setNode(NodeDir.WEST, nodeIn);
+		return this;
 	}
 	
 	/**
@@ -101,5 +174,4 @@ public abstract class Node<T extends NodeValue> {
 				(this.south == null && this.west == null)
 				);
 	}
-	
 }//Node

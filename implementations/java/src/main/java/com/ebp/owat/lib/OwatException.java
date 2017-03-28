@@ -1,7 +1,9 @@
 package com.ebp.owat.lib;
 
 /**
- * Created by stewy on 3/23/17.
+ * Exception to describe an issue with an element of OWAT.
+ *
+ * Created by Greg Stewart on 3/23/17.
  */
 public class OwatException extends RuntimeException {
 	public OwatException() { super(); }

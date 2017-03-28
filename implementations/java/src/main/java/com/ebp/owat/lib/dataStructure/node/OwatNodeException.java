@@ -3,7 +3,9 @@ package com.ebp.owat.lib.dataStructure.node;
 import com.ebp.owat.lib.dataStructure.OwatStructureException;
 
 /**
- * Created by stewy on 3/23/17.
+ * Exception to describe an issue with a Node.
+ *
+ * Created by Greg Stewart on 3/23/17.
  */
 public class OwatNodeException extends OwatStructureException{
 	public OwatNodeException() {super();}
