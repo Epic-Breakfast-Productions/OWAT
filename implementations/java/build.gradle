@@ -16,19 +16,10 @@ repositories {
 	jcenter()
 }
 
-/**
- * Task to generate Javadocs for the project.
- *
- * https://docs.gradle.org/current/dsl/org.gradle.api.tasks.javadoc.Javadoc.html
- */
-task generateJavadocs(type: Javadoc) {
-	source = sourceSets.main.allJava
-	destinationDir = reporting.file("JavaDocs")
-}
-
 // In this section you declare the dependencies for your production and test code
 dependencies {
 	// The production code uses the SLF4J logging API at compile time
-	compile 'org.slf4j:slf4j-api:1.7.13'
+	compile 'org.slf4j:slf4j-api:1.7.+'
+	compile 'org.slf4j:slf4j-simple:1.7.+'
 	testCompile 'junit:junit:4.12'
 }
