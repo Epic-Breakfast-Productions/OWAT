@@ -11,7 +11,7 @@ import java.util.LinkedList;
  *
  * Created by Greg Stewart on 3/24/17.
  */
-public class NodeList extends LinkedList<Node> {
+public class NodeList<T extends Node> extends LinkedList<T> {
 	/**
 	 * The type of list this is.
 	 */
