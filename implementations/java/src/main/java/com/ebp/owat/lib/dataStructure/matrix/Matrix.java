@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.dataStructure.matrix;
 
 import com.ebp.owat.lib.dataStructure.io.NodeReader;
+import com.ebp.owat.lib.dataStructure.io.NodeWriter;
 import com.ebp.owat.lib.dataStructure.node.Node;
 import com.ebp.owat.lib.dataStructure.matrix.set.NodeList;
 import com.ebp.owat.lib.dataStructure.node.value.NodeValue;
@@ -19,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class Matrix<T extends Node<NodeValue>> {
 	/**
 	 * Enum to describe which node is held in the spot in the hashmap.
+	 *
+	 * TODO:: add data/method here to determine where these should be?
 	 */
 	public enum FixedNodePos{
 		TOP_LEFT,
@@ -60,11 +63,63 @@ public abstract class Matrix<T extends Node<NodeValue>> {
 	 */
 	public abstract void readInOriginalData(NodeReader<T> readerIn);
 	
+	private void updateFixedNode(FixedNodePos posIn){
+	
+	}
+	
+	public void updateFixedNodes(){
+		//top right node
+		T curFixedPosNode = this.fixedNodes.get(FixedNodePos.TOP_RIGHT);
+		if(!curFixedPosNode.isCorner()){
+			while(!curFixedPosNode.isBorder(Node.NodeDir.NORTH)){
+				curFixedPosNode = (T)curFixedPosNode.getNorth();
+			}
+			while(!curFixedPosNode.isBorder(Node.NodeDir.WEST)){
+				curFixedPosNode = (T)curFixedPosNode.getWest();
+			}
+		}
+		this.fixedNodes.put(FixedNodePos.TOP_RIGHT,curFixedPosNode);
+		//top left node
+		curFixedPosNode = this.fixedNodes.get(FixedNodePos.TOP_LEFT);
+		if(!curFixedPosNode.isCorner()){
+			while(!curFixedPosNode.isBorder(Node.NodeDir.NORTH)){
+				curFixedPosNode = (T)curFixedPosNode.getNorth();
+			}
+			while(!curFixedPosNode.isBorder(Node.NodeDir.EAST)){
+				curFixedPosNode = (T)curFixedPosNode.getEast();
+			}
+		}
+		this.fixedNodes.put(FixedNodePos.TOP_RIGHT,curFixedPosNode);
+		//bot right node
+		curFixedPosNode = this.fixedNodes.get(FixedNodePos.BOT_RIGHT);
+		if(!curFixedPosNode.isCorner()){
+			while(!curFixedPosNode.isBorder(Node.NodeDir.SOUTH)){
+				curFixedPosNode = (T)curFixedPosNode.getSouth();
+			}
+			while(!curFixedPosNode.isBorder(Node.NodeDir.WEST)){
+				curFixedPosNode = (T)curFixedPosNode.getWest();
+			}
+		}
+		this.fixedNodes.put(FixedNodePos.BOT_RIGHT,curFixedPosNode);
+		//bot left node
+		curFixedPosNode = this.fixedNodes.get(FixedNodePos.BOT_LEFT);
+		if(!curFixedPosNode.isCorner()){
+			while(!curFixedPosNode.isBorder(Node.NodeDir.SOUTH)){
+				curFixedPosNode = (T)curFixedPosNode.getSouth();
+			}
+			while(!curFixedPosNode.isBorder(Node.NodeDir.EAST)){
+				curFixedPosNode = (T)curFixedPosNode.getEast();
+			}
+		}
+		this.fixedNodes.put(FixedNodePos.BOT_LEFT,curFixedPosNode);
+		
+	}
+	
 	/**
 	 * Gets an output stream to read out the data.
 	 * @return A stream to use to read out the data.
 	 */
-	public abstract OutputStream getOutputStream();
+	public abstract NodeWriter<T> getOutputStream();
 	
 	/**
 	 * Gets the number of rows held by this Matrix.
