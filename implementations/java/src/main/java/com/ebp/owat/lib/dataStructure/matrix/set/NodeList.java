@@ -33,17 +33,6 @@ public class NodeList<T extends Node> extends LinkedList<T> {
 	}
 	
 	/**
-	 * Creates a new NodeList with an ArrayList.
-	 *
-	 * @param listIn The list of nodes to add to the list.
-	 * @param typeIn The type of list this is.
-	 */
-	public NodeList(ArrayList<Node> listIn, Type typeIn){
-		this(typeIn);
-		this.addAll(listIn);
-	}
-	
-	/**
 	 * Shifts the node values down or up.
 	 *
 	 * @param numToShiftBy The number of increments to shift the nodes by.

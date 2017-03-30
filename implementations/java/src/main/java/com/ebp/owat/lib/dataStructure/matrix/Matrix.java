@@ -45,6 +45,13 @@ public abstract class Matrix<T extends Node<NodeValue>> {
 	 */
 	public Matrix(){}
 	
+	/**
+	 * Creates this matrix with the data stream given.
+	 * @param streamIn The stream to get the information from.
+	 */
+	public Matrix(InputStream streamIn){
+		this.readInOriginalData(streamIn);
+	}
 	
 	/**
 	 * Method to set up the original data.
@@ -158,23 +165,53 @@ public abstract class Matrix<T extends Node<NodeValue>> {
 		BigInteger one = BigInteger.ONE;
 		BigInteger curRowCol;
 		T curNode = this.getNode(FixedNodePos.TOP_LEFT);
+		//TODO:: work off of the closest fixed node(s)
 		//go south
 		for(curRowCol = BigInteger.ZERO; curRowCol.compareTo(this.numRows) < 1; curRowCol = curRowCol.add(one)){
-			curNode = curNode.getSouth();
+			curNode = (T)curNode.getSouth();// SHOULD always be of type T
 		}
 		//go east
 		for(curRowCol = BigInteger.ZERO; curRowCol.compareTo(this.numCols) < 1; curRowCol = curRowCol.add(one)){
-			curNode = curNode.getEast();
+			curNode = (T)curNode.getEast();// SHOULD always be of type T
 		}
 		return curNode;
 	}
 	
+	/**
+	 * Gets a list of nodes from the structure. The first node is the north/top most node.
+	 * @param row The row to get from the structure.
+	 * @return A list of nodes that is the whole row.
+	 * @throws OwatMatrixException If the row number is greater than the number of rows.
+	 */
 	public NodeList<T> getRow(BigInteger row) throws OwatMatrixException{
 		checkValidRowNumber(row);
-		//TODO
+		T endNode = this.getNode(row, BigInteger.ZERO);
+		//now have leftmost node in row
+		NodeList<T> output = new NodeList<>(NodeList.Type.ROW);
+		T curNode = endNode;
+		while(curNode != null){
+			output.addLast(curNode);
+			curNode = (T)curNode.getEast();//SHOULD always be of type T
+		}
+		return output;
 	}
 	
+	/**
+	 * Gets a list of nodes from the structure. The first node is the west/left most node.
+	 * @param col The number of the column to get.
+	 * @return A list of nodes that is the column in the structure.
+	 * @throws OwatMatrixException If the column number given is out of bounds of the structure.
+	 */
 	public NodeList<T> getCol(BigInteger col) throws OwatMatrixException{
-		//TODO
+		checkValidColNumber(col);
+		T topNode = this.getNode(BigInteger.ZERO, col);
+		//now have leftmost node in row
+		NodeList<T> output = new NodeList<>(NodeList.Type.ROW);
+		T curNode = topNode;
+		while(curNode != null){
+			output.addLast(curNode);
+			curNode = (T)curNode.getSouth();//SHOULD always be of type T
+		}
+		return output;
 	}
 }//Matrix
