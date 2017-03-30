@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.dataStructure.matrix;
 
+import com.ebp.owat.lib.dataStructure.io.NodeReader;
 import com.ebp.owat.lib.dataStructure.node.Node;
 import com.ebp.owat.lib.dataStructure.matrix.set.NodeList;
 import com.ebp.owat.lib.dataStructure.node.value.NodeValue;
@@ -46,18 +47,18 @@ public abstract class Matrix<T extends Node<NodeValue>> {
 	public Matrix(){}
 	
 	/**
-	 * Creates this matrix with the data stream given.
-	 * @param streamIn The stream to get the information from.
+	 * Creates this matrix using a NodeReader.
+	 * @param readerIn The node reader to use to populate the matrix.
 	 */
-	public Matrix(InputStream streamIn){
-		this.readInOriginalData(streamIn);
+	public Matrix(NodeReader<T> readerIn){
+		this.readInOriginalData(readerIn);
 	}
 	
 	/**
-	 * Method to set up the original data.
-	 * @param streamIn The stream to read data in with.
+	 * Method to read in the original data using a NodeReader.
+	 * @param readerIn The reader to use to get the data.
 	 */
-	public abstract void readInOriginalData(InputStream streamIn);
+	public abstract void readInOriginalData(NodeReader<T> readerIn);
 	
 	/**
 	 * Gets an output stream to read out the data.
