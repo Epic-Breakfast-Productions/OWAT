@@ -1,12 +1,10 @@
-package structureTests.node.value;
+package tests.structure.node.value;
 
 import com.ebp.owat.lib.dataStructure.node.value.BitValue;
 import com.ebp.owat.lib.dataStructure.node.value.ByteValue;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Random;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

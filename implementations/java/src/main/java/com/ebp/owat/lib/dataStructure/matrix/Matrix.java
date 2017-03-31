@@ -63,10 +63,19 @@ public abstract class Matrix<T extends Node<NodeValue>> {
 	 */
 	public abstract void readInOriginalData(NodeReader<T> readerIn);
 	
-	private void updateFixedNode(FixedNodePos posIn){
-	
+	public void addRow(NodeList<T> listIn){
+		//TODO
+		updateFixedNodes();
 	}
 	
+	public void addCol(NodeList<T> listIn){
+		//TODO
+		updateFixedNodes();
+	}
+	
+	/**
+	 * Ensures the fixed node positions are at their correct places.
+	 */
 	public void updateFixedNodes(){
 		//top right node
 		T curFixedPosNode = this.fixedNodes.get(FixedNodePos.TOP_RIGHT);

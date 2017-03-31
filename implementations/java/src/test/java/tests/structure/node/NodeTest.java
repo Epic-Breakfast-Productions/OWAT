@@ -1,4 +1,4 @@
-package structureTests.node;
+package tests.structure.node;
 
 import com.ebp.owat.lib.dataStructure.node.BitNode;
 import com.ebp.owat.lib.dataStructure.node.Node;
@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import testModels.structure.node.NodeTestModels;
 
 import java.util.ArrayList;
 
@@ -28,27 +29,7 @@ public class NodeTest {
 	 * 3 4 5
 	 * 6 7 8
 	 */
-	private ArrayList<BitNode> testingNodes = new ArrayList<>(9);
-	
-	@Before
-	public void setupNodes(){
-		for(int i = 0; i < 9; i++){
-			testingNodes.add(
-					new BitNode(
-							new BitValue(i%2 == 0)
-					)
-			);
-		}
-		
-		this.testingNodes.get(0).setEastNode(this.testingNodes.get(1));
-		this.testingNodes.get(1).setEastNode(this.testingNodes.get(2)).setSouthNode(this.testingNodes.get(4));
-		this.testingNodes.get(2).setSouthNode(this.testingNodes.get(5));
-		this.testingNodes.get(5).setWestNode(this.testingNodes.get(4)).setSouthNode(this.testingNodes.get(8));
-		this.testingNodes.get(8).setWestNode(this.testingNodes.get(7));
-		this.testingNodes.get(7).setNorthNode(this.testingNodes.get(4)).setWestNode(this.testingNodes.get(6));
-		this.testingNodes.get(6).setNorthNode(this.testingNodes.get(3));
-		this.testingNodes.get(3).setNorthNode(this.testingNodes.get(0)).setEastNode(this.testingNodes.get(4));
-	}
+	private ArrayList<BitNode> testingNodes = NodeTestModels.getTestingNodes();
 	
 	@Test
 	public void testNodeDirsMadeCorrectly(){
