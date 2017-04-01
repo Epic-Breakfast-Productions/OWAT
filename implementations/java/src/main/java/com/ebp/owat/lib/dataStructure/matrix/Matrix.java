@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -17,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * Created by Greg Stewart on 3/23/17.
  */
-public abstract class Matrix<T extends Node<NodeValue>> {
+public abstract class Matrix<T extends Node> {
 	/**
 	 * Enum to describe which node is held in the spot in the hashmap.
 	 *
@@ -34,6 +35,7 @@ public abstract class Matrix<T extends Node<NodeValue>> {
 	 * A set of nodes that we know the positions of.
 	 */
 	private ConcurrentHashMap<FixedNodePos, T> fixedNodes = new ConcurrentHashMap<>(FixedNodePos.values().length);
+	
 	/** The number of rows held by this object. */
 	private BigInteger numRows = BigInteger.ZERO;
 	/** The number of columns held by this object. */
@@ -50,27 +52,49 @@ public abstract class Matrix<T extends Node<NodeValue>> {
 	public Matrix(){}
 	
 	/**
-	 * Creates this matrix using a NodeReader.
-	 * @param readerIn The node reader to use to populate the matrix.
+	 * Constructor to build using a provided node.
+	 *
+	 * Assumes that the node given is the top right.
+	 *
+	 * @param nodeIn The node to use to build this object.
 	 */
-	public Matrix(NodeReader<T> readerIn){
-		this.readInOriginalData(readerIn);
+	public Matrix(T nodeIn){
+		this();
+		this.setNodes(nodeIn);
 	}
 	
 	/**
-	 * Method to read in the original data using a NodeReader.
-	 * @param readerIn The reader to use to get the data.
+	 * Sets up the nodes this object holds.
+	 *
+	 * Also sets up the lengths and widths of the data, and the fixed positions.
+	 *
+	 * @param nodeIn The node that points to the rest of the matrix.
 	 */
-	public abstract void readInOriginalData(NodeReader<T> readerIn);
+	private void setNodes(T nodeIn){
+		if(nodeIn == null){
+			throw new OwatMatrixException("Unable to set up Matrix with a null node.");
+		}
+		for(FixedNodePos curPos : FixedNodePos.values()) {
+			this.fixedNodes.put(curPos, nodeIn);
+		}
+		//TODO:: to integrity check on node given.
+		updateFixedPosAndLengthWidth();
+	}
 	
 	public void addRow(NodeList<T> listIn){
-		//TODO
-		updateFixedNodes();
+		if(this.numCols.compareTo(listIn.listSize()) != 0){
+			throw new OwatMatrixException("List given is the wrong size to use to add to the matrix.");
+		}
+		//TODO: add row, ensuring that they all connect to what they need to.
+		updateFixedPosAndLengthWidth();
 	}
 	
 	public void addCol(NodeList<T> listIn){
-		//TODO
-		updateFixedNodes();
+		if(this.numRows.compareTo(listIn.listSize()) != 0){
+			throw new OwatMatrixException("List given is the wrong size to use to add to the matrix.");
+		}
+		//TODO: add column, ensuring that they all connect to what they need to.
+		updateFixedPosAndLengthWidth();
 	}
 	
 	/**
@@ -123,6 +147,19 @@ public abstract class Matrix<T extends Node<NodeValue>> {
 		this.fixedNodes.put(FixedNodePos.BOT_LEFT,curFixedPosNode);
 		
 	}
+	
+	public void updateLengthWidth(){
+		//TODO
+	}
+	
+	/**
+	 * Updates the fixed position nodes and the length/width held.
+	 */
+	public void updateFixedPosAndLengthWidth(){
+		this.updateFixedNodes();
+		this.updateLengthWidth();
+	}
+	
 	
 	/**
 	 * Gets an output stream to read out the data.
@@ -279,4 +316,5 @@ public abstract class Matrix<T extends Node<NodeValue>> {
 		}
 		return output;
 	}
+	
 }//Matrix

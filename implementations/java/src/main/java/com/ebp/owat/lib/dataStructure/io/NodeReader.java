@@ -11,7 +11,7 @@ import java.io.*;
  *
  * Created by Greg Stewart on 3/30/17.
  */
-public abstract class NodeReader<T extends Node<NodeValue>> {
+public abstract class NodeReader<T extends Node> {
 	/** The input stream to get the information from. */
 	private InputStream inStream;
 	

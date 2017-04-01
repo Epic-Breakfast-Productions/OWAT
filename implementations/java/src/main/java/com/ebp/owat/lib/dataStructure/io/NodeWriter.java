@@ -8,7 +8,7 @@ import com.ebp.owat.lib.dataStructure.node.value.NodeValue;
  *
  * Created by Greg Stewart on 3/30/17.
  */
-public abstract class NodeWriter<T extends Node<NodeValue>> {
+public abstract class NodeWriter<T extends Node> {
 	//TODO:: abstract methods to write out nodes using an OutputStream.
 	//TODO:: possibly extend OutputStream?
 }

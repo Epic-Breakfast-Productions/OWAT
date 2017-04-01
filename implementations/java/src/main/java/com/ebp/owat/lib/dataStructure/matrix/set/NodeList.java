@@ -4,6 +4,7 @@ import com.ebp.owat.lib.dataStructure.node.Node;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -57,5 +58,32 @@ public class NodeList<T extends Node> extends LinkedList<T> {
 	 */
 	public Type getType(){
 		return this.type;
+	}
+	
+	/**
+	 * DO NOT USE, use listSize() instead.
+	 * @return nothing. Always throws OwatNodeSetException saying to use listSize() instead.
+	 */
+	@Override
+	public int size() throws OwatNodeSetException{
+		throw new OwatNodeSetException("Due to the fact that this can return values greater than MAXINT, please use the seprate function, listSize();.");
+	}
+	
+	/**
+	 * Gets the size of this list.
+	 *
+	 * @return The size of this list.
+	 */
+	public BigInteger listSize(){
+		if(super.size() != Integer.MAX_VALUE){
+			return BigInteger.valueOf(super.size());
+		}
+		Iterator<T> curSpot = this.listIterator(Integer.MAX_VALUE);
+		BigInteger curCount = BigInteger.valueOf(Integer.MAX_VALUE);
+		
+		while(curSpot.hasNext()){
+			curCount = curCount.add(BigInteger.ONE);
+		}
+		return curCount;
 	}
 }
