@@ -1,16 +1,10 @@
 package com.ebp.owat.lib.dataStructure.matrix;
 
-import com.ebp.owat.lib.dataStructure.io.NodeReader;
 import com.ebp.owat.lib.dataStructure.io.NodeWriter;
 import com.ebp.owat.lib.dataStructure.node.Node;
-import com.ebp.owat.lib.dataStructure.matrix.set.NodeList;
-import com.ebp.owat.lib.dataStructure.node.value.NodeValue;
+import com.ebp.owat.lib.dataStructure.set.node.NodeList;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

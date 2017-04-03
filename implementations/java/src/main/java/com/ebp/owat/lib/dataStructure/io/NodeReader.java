@@ -1,8 +1,7 @@
 package com.ebp.owat.lib.dataStructure.io;
 
-import com.ebp.owat.lib.dataStructure.matrix.set.NodeList;
+import com.ebp.owat.lib.dataStructure.set.node.NodeList;
 import com.ebp.owat.lib.dataStructure.node.Node;
-import com.ebp.owat.lib.dataStructure.node.value.NodeValue;
 
 import java.io.*;
 

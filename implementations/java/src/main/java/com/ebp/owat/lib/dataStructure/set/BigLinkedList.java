@@ -1,23 +1,15 @@
-package com.ebp.owat.lib.dataStructure.matrix.set;
-
-import com.ebp.owat.lib.dataStructure.node.Node;
+package com.ebp.owat.lib.dataStructure.set;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
- * Defines a list of nodes, typically for holding a whole row/column of a matrix.
+ * Defines a big linked list, to work well with large numbers of nodes.
  *
- * Created by Greg Stewart on 3/24/17.
+ * Created by Greg Stewart on 4/1/17.
  */
-public class NodeList<T extends Node> extends LinkedList<T> {
-	/**
-	 * The type of list this is.
-	 */
-	private final Type type;
-	
+public abstract class BigLinkedList<E> extends LinkedList {
 	/**
 	 * The types of lists a NodeList can be.
 	 */
@@ -26,29 +18,23 @@ public class NodeList<T extends Node> extends LinkedList<T> {
 	}
 	
 	/**
-	 * Creates an empty NodeList and sets its type.
-	 * @param typeIn The type to set this to.
+	 * The type of list this is.
 	 */
-	public NodeList(Type typeIn){
-		this.type = typeIn;
+	private final Type type;
+	
+	/**
+	 * Basic constructor. Sets the type to NA.
+	 */
+	public BigLinkedList(){
+		this.type = Type.NA;
 	}
 	
 	/**
-	 * Shifts the node values down or up.
-	 *
-	 * @param numToShiftBy The number of increments to shift the nodes by.
-	 * @return This NodeList object
+	 * Creates an empty NodeList and sets its type.
+	 * @param typeIn The type to set this to.
 	 */
-	public NodeList shift(BigInteger numToShiftBy){
-		if(numToShiftBy.signum() == 1){
-			//positive movement
-			//TODO
-			
-		}else{
-			//negative movement
-			//TODO
-		}
-		return this;
+	public BigLinkedList(Type typeIn){
+		this.type = typeIn;
 	}
 	
 	/**
@@ -78,7 +64,7 @@ public class NodeList<T extends Node> extends LinkedList<T> {
 		if(super.size() != Integer.MAX_VALUE){
 			return BigInteger.valueOf(super.size());
 		}
-		Iterator<T> curSpot = this.listIterator(Integer.MAX_VALUE);
+		ListIterator<E> curSpot = this.listIterator(Integer.MAX_VALUE);
 		BigInteger curCount = BigInteger.valueOf(Integer.MAX_VALUE);
 		
 		while(curSpot.hasNext()){

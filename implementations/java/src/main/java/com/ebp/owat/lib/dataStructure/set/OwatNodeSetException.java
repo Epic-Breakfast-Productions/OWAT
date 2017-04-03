@@ -1,4 +1,4 @@
-package com.ebp.owat.lib.dataStructure.matrix.set;
+package com.ebp.owat.lib.dataStructure.set;
 
 import com.ebp.owat.lib.dataStructure.node.OwatNodeException;
 
