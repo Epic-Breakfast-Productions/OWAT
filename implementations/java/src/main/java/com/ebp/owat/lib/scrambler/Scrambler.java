@@ -3,8 +3,10 @@ package com.ebp.owat.lib.scrambler;
 import com.ebp.owat.lib.scrambler.move.ScrambleMove;
 
 /**
- * Created by stewy on 3/23/17.
+ * A scrambler object to scramble a matrix.
+ *
+ * Created by Greg Stewart on 3/23/17.
  */
-public abstract class Scrambler {
-	public abstract ScrambleMove nextMove();
+public abstract class Scrambler implements ScramblerMoves {
+
 }//Scrambler

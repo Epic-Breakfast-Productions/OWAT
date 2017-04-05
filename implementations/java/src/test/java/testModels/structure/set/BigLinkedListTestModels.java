@@ -14,11 +14,11 @@ public class BigLinkedListTestModels {
 	private static NodeList<BitNode> bigTestingNodeList = null;
 	
 	public static void buildBigTestingNodeList(){
-		//TODO
+		bigTestingNodeList = new NodeList<>();
 	}
 	
 	public static void buildTestingNodeList(){
-		//TODO
+		testingNodeList = new NodeList<>();
 	}
 	
 	public static NodeList<BitNode> getTestingNodeList(boolean bigList){

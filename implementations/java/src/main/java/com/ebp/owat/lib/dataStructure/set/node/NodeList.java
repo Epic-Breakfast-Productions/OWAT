@@ -22,18 +22,9 @@ public class NodeList<T extends Node> extends BigLinkedList<T> {
 	}
 	
 	/**
-	 * Shifts the node values down or up.
-	 *
-	 * @param numToShiftBy The number of increments to shift the nodes by.
+	 * Basic constructor. Sets the type to NA.
 	 */
-	public void shiftValues(BigInteger numToShiftBy){
-		if(numToShiftBy.signum() == 1){
-			//positive movement
-			//TODO
-			
-		}else{
-			//negative movement
-			//TODO
-		}
+	public NodeList() {
+		super();
 	}
 }
