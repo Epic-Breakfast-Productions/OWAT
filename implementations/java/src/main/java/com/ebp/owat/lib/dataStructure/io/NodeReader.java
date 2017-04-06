@@ -53,7 +53,7 @@ public abstract class NodeReader<T extends Node> {
 	 * Sets this reader's input stream.
 	 * @param streamIn The stream to set.
 	 */
-	private void setInputStream(InputStream streamIn){
+	private void setInputStream(InputStream streamIn) {
 		this.inStream = streamIn;
 	}
 	
