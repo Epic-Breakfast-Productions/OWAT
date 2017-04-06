@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.dataStructure.matrix;
 
+import com.ebp.owat.lib.dataStructure.io.NodeReader;
 import com.ebp.owat.lib.dataStructure.io.NodeWriter;
 import com.ebp.owat.lib.dataStructure.node.Node;
 import com.ebp.owat.lib.dataStructure.set.node.NodeList;
@@ -40,6 +41,12 @@ public abstract class Matrix<T extends Node> {
 	/** The width of the original data set. */
 	private BigInteger origDataWidth = BigInteger.ZERO;
 	
+	/** The reader to get in original data. */
+	private NodeReader<T> dataReader;
+	
+	/** Flag to tell if the data has been read in. */
+	private boolean dataIn = false;
+	
 	/**
 	 * Basic Constructor.
 	 */
@@ -55,7 +62,52 @@ public abstract class Matrix<T extends Node> {
 	public Matrix(T nodeIn){
 		this();
 		this.setNodes(nodeIn);
+		this.dataIn = true;
 	}
+	
+	/**
+	 * Constructor to set the stream reader and optionally read in the data right away.
+	 * @param readerIn The reader to use to read the data in.
+	 * @param readIn If we are to read the data in immediately or not.
+	 */
+	public Matrix(NodeReader<T> readerIn, boolean readIn){
+		this();
+		this.setInputStream(readerIn);
+		if(readIn){
+			this.readInData();
+		}
+	}
+	
+	/**
+	 * Constructor to set the stream reader in and read in the data into nodes.
+	 * @param readerIn The reader to get the nodes from.
+	 */
+	public Matrix(NodeReader<T> readerIn){
+		this(readerIn, true);
+	}
+	
+	/**
+	 * Reads in the data from a data stream.
+	 * @throws OwatMatrixException If this matrix is not set up to read data in with a stream or it data is already read in.
+	 */
+	public void readInData() throws OwatMatrixException{
+		if(this.dataReader == null){
+			throw new OwatMatrixException("This matrix is not setup to read in nodes from a stream.");
+		}
+		if(this.dataIn){
+			throw new OwatMatrixException("Cannot read data in. Data already read in.");
+		}
+		//TODO:: this
+		this.dataIn = true;
+	}
+	
+	/**
+	 * Gets an output stream to read out the data.
+	 * @return A stream to use to read out the data.
+	 */
+	public abstract NodeWriter<T> getOutputStream();
+	
+	public abstract void setInputStream(NodeReader<T> readerIn);
 	
 	/**
 	 * Sets up the nodes this object holds.
@@ -153,13 +205,6 @@ public abstract class Matrix<T extends Node> {
 		this.updateFixedNodes();
 		this.updateLengthWidth();
 	}
-	
-	
-	/**
-	 * Gets an output stream to read out the data.
-	 * @return A stream to use to read out the data.
-	 */
-	public abstract NodeWriter<T> getOutputStream();
 	
 	/**
 	 * Gets the number of rows held by this Matrix.
