@@ -188,7 +188,7 @@ public abstract class Matrix<T extends Node> {
 	 * @param col The column number given.
 	 * @throws OwatMatrixException If the column number given is null or greater than the number of columns held by this object.
 	 */
-	private void checkValidColNumber(BigInteger col) throws OwatMatrixException{
+	public void checkValidColNumber(BigInteger col) throws OwatMatrixException{
 		if(col == null){
 			throw new OwatMatrixException("Bad column number given. It was null.");
 		}
@@ -202,7 +202,7 @@ public abstract class Matrix<T extends Node> {
 	 * @param row The row number given.
 	 * @throws OwatMatrixException If the row number given is null or greater than the number of rows held by this object.
 	 */
-	private void checkValidRowNumber(BigInteger row) throws OwatMatrixException{
+	public void checkValidRowNumber(BigInteger row) throws OwatMatrixException{
 		if(row == null){
 			throw new OwatMatrixException("Bad row number given. It was null.");
 		}
@@ -238,6 +238,34 @@ public abstract class Matrix<T extends Node> {
 		}else if(colException != null){
 			throw colException;
 		}
+	}
+	
+	/**
+	 * Tests if the given row number is valid.
+	 * @param rowNumIn The row number to test.
+	 * @return If the row number given is valid.
+	 */
+	public boolean isValidRowNum(BigInteger rowNumIn){
+		try{
+			this.checkValidRowNumber(rowNumIn);
+		}catch(OwatMatrixException e){
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Tests if the given col number is valid.
+	 * @param colNumIn The col number to test.
+	 * @return If the col number given is valid.
+	 */
+	public boolean isValidColNum(BigInteger colNumIn){
+		try{
+			this.checkValidColNumber(colNumIn);
+		}catch(OwatMatrixException e){
+			return false;
+		}
+		return true;
 	}
 	
 	/**
