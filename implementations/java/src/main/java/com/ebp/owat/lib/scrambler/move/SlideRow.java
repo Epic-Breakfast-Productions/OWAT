@@ -1,6 +1,6 @@
 package com.ebp.owat.lib.scrambler.move;
 
-import com.ebp.owat.lib.dataStructure.matrix.Coordinate;
+import com.ebp.owat.lib.dataStructure.matrix.utils.Coordinate;
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 
 /**

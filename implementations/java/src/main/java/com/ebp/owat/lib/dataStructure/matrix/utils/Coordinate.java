@@ -1,4 +1,7 @@
-package com.ebp.owat.lib.dataStructure.matrix;
+package com.ebp.owat.lib.dataStructure.matrix.utils;
+
+import com.ebp.owat.lib.dataStructure.matrix.Matrix;
+import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
 
 import java.math.BigInteger;
 
@@ -29,8 +32,9 @@ public class Coordinate {
 	 * @param matrix The matrix this coordinate is on.
 	 * @param xIn The X value (which col) of this coordinate.
 	 * @param yIn The Y value (which row) of this coordinate.
+	 * @throws OwatMatrixException If the values in are out of bounds.
 	 */
-	public Coordinate(Matrix matrix, BigInteger xIn, BigInteger yIn){
+	public Coordinate(Matrix matrix, BigInteger xIn, BigInteger yIn) throws OwatMatrixException{
 		this(matrix);
 		this.setX(xIn).setY(yIn);
 	}
@@ -39,8 +43,9 @@ public class Coordinate {
 	 * Sets the X value (which col) of this coordinate.
 	 * @param xIn The X value (which col) of this coordinate.
 	 * @return This Coordinate.
+	 * @throws OwatMatrixException If the value in is out of bounds.
 	 */
-	public Coordinate setX(BigInteger xIn){
+	public Coordinate setX(BigInteger xIn) throws OwatMatrixException{
 		matrix.checkValidColNumber(xIn);
 		return this;
 	}
@@ -49,8 +54,9 @@ public class Coordinate {
 	 * Sets the Y value (which row) of this coordinate.
 	 * @param yIn The Y value (which row) of this coordinate.
 	 * @return This Coordinate.
+	 * @throws OwatMatrixException If the value in is out of bounds.
 	 */
-	public Coordinate setY(BigInteger yIn){
+	public Coordinate setY(BigInteger yIn) throws OwatMatrixException{
 		matrix.checkValidColNumber(yIn);
 		return this;
 	}

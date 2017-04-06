@@ -1,11 +1,12 @@
-package com.ebp.owat.lib.dataStructure.matrix;
+package com.ebp.owat.lib.dataStructure.matrix.scrambling;
 
+import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.node.Node;
 
 /**
  * Created by stewy on 3/28/17.
  */
-public abstract class ScramblingMatrix<T extends Node> extends Matrix{
+public abstract class ScramblingMatrix<T extends Node> extends Matrix {
 	/** If we have read in the original data set. */
 	private boolean originalDataReadIn = false;
 	
