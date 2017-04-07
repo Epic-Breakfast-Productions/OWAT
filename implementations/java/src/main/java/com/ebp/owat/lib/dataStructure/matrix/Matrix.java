@@ -4,7 +4,6 @@ import com.ebp.owat.lib.dataStructure.io.NodeReader;
 import com.ebp.owat.lib.dataStructure.io.NodeWriter;
 import com.ebp.owat.lib.dataStructure.node.Node;
 import com.ebp.owat.lib.dataStructure.set.BigLinkedList;
-import com.ebp.owat.lib.dataStructure.set.node.NodeList;
 
 import java.math.BigInteger;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,28 +31,28 @@ public abstract class Matrix<T extends Node> {
 	/**
 	 * A set of nodes that we know the positions of.
 	 */
-	private ConcurrentHashMap<FixedNodePos, T> fixedNodes = new ConcurrentHashMap<>(FixedNodePos.values().length);
+	protected ConcurrentHashMap<FixedNodePos, T> fixedNodes = new ConcurrentHashMap<>(FixedNodePos.values().length);
 	
 	/** The number of rows held by this object. */
-	private BigInteger numRows = BigInteger.ZERO;
+	protected BigInteger numRows = BigInteger.ZERO;
 	/** The number of columns held by this object. */
-	private BigInteger numCols = BigInteger.ZERO;
+	protected BigInteger numCols = BigInteger.ZERO;
 	
 	/** The length of the original data set. */
-	private BigInteger origDataLength = BigInteger.ZERO;
+	protected BigInteger origDataLength = BigInteger.ZERO;
 	/** The width of the original data set. */
-	private BigInteger origDataWidth = BigInteger.ZERO;
+	protected BigInteger origDataWidth = BigInteger.ZERO;
 	
 	/** The reader to get in original data. */
-	private NodeReader<T> dataReader;
+	protected NodeReader<T> dataReader;
 	
 	/** Flag to tell if the data has been read in. */
-	private boolean dataIn = false;
+	protected boolean dataIn = false;
 	
 	/**
 	 * Basic Constructor.
 	 */
-	public Matrix(){}
+	private Matrix(){}
 	
 	/**
 	 * Constructor to build using a provided node.
@@ -93,29 +92,7 @@ public abstract class Matrix<T extends Node> {
 	 * Reads in the data from a data stream.
 	 * @throws OwatMatrixException If this matrix is not set up to read data in with a stream or it data is already read in.
 	 */
-	public void readInData() throws OwatMatrixException{
-		if(this.dataReader == null){
-			throw new OwatMatrixException("This matrix is not setup to read in nodes from a stream.");
-		}
-		if(this.dataIn){
-			throw new OwatMatrixException("Cannot read data in. Data already read in.");
-		}
-		
-		BigLinkedList<T> newNodes = this.dataReader.getAllNodes(); //This should always be correct
-		
-		//determine length and width with the help of the rand.
-		BigInteger listLength = newNodes.listSize();
-		
-		boolean found = false;
-		while(!found){
-			
-		}
-		
-		
-		//TODO: put all nodes together into the matrix
-		
-		this.dataIn = true;
-	}
+	public abstract void readInData() throws OwatMatrixException;
 	
 	/**
 	 * Gets an output stream to read out the data.
@@ -143,7 +120,7 @@ public abstract class Matrix<T extends Node> {
 		updateFixedPosAndLengthWidth();
 	}
 	
-	public void addRow(NodeList<T> listIn){
+	public void addRow(BigLinkedList<T> listIn){
 		if(this.numCols.compareTo(listIn.listSize()) != 0){
 			throw new OwatMatrixException("List given is the wrong size to use to add to the matrix.");
 		}
@@ -151,7 +128,7 @@ public abstract class Matrix<T extends Node> {
 		updateFixedPosAndLengthWidth();
 	}
 	
-	public void addCol(NodeList<T> listIn){
+	public void addCol(BigLinkedList<T> listIn){
 		if(this.numRows.compareTo(listIn.listSize()) != 0){
 			throw new OwatMatrixException("List given is the wrong size to use to add to the matrix.");
 		}
@@ -368,11 +345,11 @@ public abstract class Matrix<T extends Node> {
 	 * @return A list of nodes that is the whole row.
 	 * @throws OwatMatrixException If the row number is greater than the number of rows.
 	 */
-	public NodeList<T> getRow(BigInteger row) throws OwatMatrixException{
+	public BigLinkedList<T> getRow(BigInteger row) throws OwatMatrixException{
 		checkValidRowNumber(row);
 		T endNode = this.getNode(row, BigInteger.ZERO);
 		//now have leftmost node in row
-		NodeList<T> output = new NodeList<>(NodeList.Type.ROW);
+		BigLinkedList<T> output = new BigLinkedList<>(BigLinkedList.Type.ROW);
 		T curNode = endNode;
 		while(curNode != null){
 			output.addLast(curNode);
@@ -387,11 +364,11 @@ public abstract class Matrix<T extends Node> {
 	 * @return A list of nodes that is the column in the structure.
 	 * @throws OwatMatrixException If the column number given is out of bounds of the structure.
 	 */
-	public NodeList<T> getCol(BigInteger col) throws OwatMatrixException{
+	public BigLinkedList<T> getCol(BigInteger col) throws OwatMatrixException{
 		checkValidColNumber(col);
 		T topNode = this.getNode(BigInteger.ZERO, col);
 		//now have leftmost node in row
-		NodeList<T> output = new NodeList<>(NodeList.Type.ROW);
+		BigLinkedList<T> output = new BigLinkedList<>(BigLinkedList.Type.ROW);
 		T curNode = topNode;
 		while(curNode != null){
 			output.addLast(curNode);

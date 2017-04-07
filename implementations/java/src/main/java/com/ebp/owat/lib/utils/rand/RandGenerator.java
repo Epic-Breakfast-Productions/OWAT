@@ -11,14 +11,15 @@ import java.util.Random;
  * Created by Greg Stewart on 4/6/17.
  */
 public class RandGenerator extends BigIntegerGenerator {
-	
-	Random rand;
+	/** The random number generator to use. */
+	private Random rand;
 	
 	/**
 	 * Default constructor.
 	 */
 	public RandGenerator() {
 		super();
+		this.setRandom(null);
 	}
 	
 	/**
@@ -68,6 +69,7 @@ public class RandGenerator extends BigIntegerGenerator {
 	
 	@Override
 	public BigInteger next() {
+		//http://stackoverflow.com/questions/2290057/how-to-generate-a-random-biginteger-value-in-java
 		BigInteger adjUpper = this.getUpperBound().subtract(this.getLowerBound());
 		int nlen = adjUpper.bitLength();
 		BigInteger nm1 = adjUpper.subtract(BigInteger.ONE);
