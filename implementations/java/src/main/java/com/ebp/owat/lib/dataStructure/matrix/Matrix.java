@@ -3,6 +3,7 @@ package com.ebp.owat.lib.dataStructure.matrix;
 import com.ebp.owat.lib.dataStructure.io.NodeReader;
 import com.ebp.owat.lib.dataStructure.io.NodeWriter;
 import com.ebp.owat.lib.dataStructure.node.Node;
+import com.ebp.owat.lib.dataStructure.set.BigLinkedList;
 import com.ebp.owat.lib.dataStructure.set.node.NodeList;
 
 import java.math.BigInteger;
@@ -10,6 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *  Abstract class of a matrix to hold all the information and perform scrambling operations on.
+ *
+ * TODO:: add random component
  *
  * Created by Greg Stewart on 3/23/17.
  */
@@ -97,7 +100,20 @@ public abstract class Matrix<T extends Node> {
 		if(this.dataIn){
 			throw new OwatMatrixException("Cannot read data in. Data already read in.");
 		}
-		//TODO:: this
+		
+		BigLinkedList<T> newNodes = this.dataReader.getAllNodes(); //This should always be correct
+		
+		//determine length and width with the help of the rand.
+		BigInteger listLength = newNodes.listSize();
+		
+		boolean found = false;
+		while(!found){
+			
+		}
+		
+		
+		//TODO: put all nodes together into the matrix
+		
 		this.dataIn = true;
 	}
 	

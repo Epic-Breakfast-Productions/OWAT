@@ -9,7 +9,7 @@ import java.util.ListIterator;
  *
  * Created by Greg Stewart on 4/1/17.
  */
-public abstract class BigLinkedList<E> extends LinkedList {
+public class BigLinkedList<E> extends LinkedList {
 	/**
 	 * The types of lists a NodeList can be.
 	 */

@@ -1,6 +1,6 @@
 package com.ebp.owat.lib.dataStructure.io;
 
-import com.ebp.owat.lib.dataStructure.set.node.NodeList;
+import com.ebp.owat.lib.dataStructure.set.BigLinkedList;
 import com.ebp.owat.lib.dataStructure.node.BitNode;
 import com.ebp.owat.lib.dataStructure.node.Node;
 
@@ -58,7 +58,7 @@ public class BitNodeReader extends NodeReader<BitNode> {
 	 * @return All of the nodes available from the stream.
 	 */
 	@Override
-	public NodeList<Node> getAllNodes() {
+	public BigLinkedList<BitNode> getAllNodes() {
 		//TODO
 		return null;
 	}
