@@ -56,7 +56,7 @@ public abstract class BigIntegerGenerator {
 		if(lowerIn == null){
 			throw new NullPointerException("Can't set lower bound. Lower bound in was null.");
 		}else if(lowerIn.compareTo(this.upperBound) >= 0) {
-			throw new OwatRandException("Can't set lower bound. It is greater than the upper bound.");
+			throw new OwatRandException("Can't set lower bound. It is greater than the upper bound. ("+lowerIn.toString()+" >= "+this.getUpperBound().toString()+")");
 		}else{
 			this.lowerBound = lowerIn;
 		}
@@ -71,8 +71,8 @@ public abstract class BigIntegerGenerator {
 	public BigIntegerGenerator setUpperBound(BigInteger upperIn){
 		if(upperIn == null) {
 			throw new NullPointerException("Can't set upper bound. Upper bound in was null.");
-		}else  if(upperIn.compareTo(this.lowerBound) <= 0) {
-			throw new OwatRandException("Can't set upper bound. It is less than the lower bound.");
+		}else if(upperIn.compareTo(this.lowerBound) <= 0) {
+			throw new OwatRandException("Can't set upper bound. It is less than the lower bound. ("+upperIn.toString()+" <= "+this.getLowerBound().toString()+")");
 		}else {
 			this.upperBound = upperIn;
 		}

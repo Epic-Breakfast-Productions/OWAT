@@ -3,7 +3,6 @@ package tests.structure.set;
 import com.ebp.owat.lib.dataStructure.node.BitNode;
 import com.ebp.owat.lib.dataStructure.set.BigLinkedList;
 import com.ebp.owat.lib.dataStructure.set.OwatNodeSetException;
-import com.ebp.owat.lib.dataStructure.set.node.NodeList;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -25,8 +24,8 @@ public class BigLinkedListTest {
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	
-	private NodeList<BitNode> testingNodeList = BigLinkedListTestModels.getTestingNodeList(false);
-	private NodeList<BitNode> testingBigNodeList = BigLinkedListTestModels.getTestingNodeList(true);
+	private BigLinkedList<BitNode> testingNodeList = BigLinkedListTestModels.getTestingNodeList(false);
+	private BigLinkedList<BitNode> testingBigNodeList = BigLinkedListTestModels.getTestingNodeList(true);
 	
 	@Test public void nodeListSizeTest(){
 		//TODO, test that the sizes of the lists are correct
@@ -38,13 +37,13 @@ public class BigLinkedListTest {
 	
 	@Test public void nodeListTypeTest(){
 		LOGGER.info("Testing that NodeLists can correctly get their set types.");
-		testingNodeList = new NodeList<>(BigLinkedList.Type.COL);
+		testingNodeList = new BigLinkedList<>(BigLinkedList.Type.COL);
 		assertEquals(BigLinkedList.Type.COL, testingNodeList.getType());
-		testingNodeList = new NodeList<>(BigLinkedList.Type.ROW);
+		testingNodeList = new BigLinkedList<>(BigLinkedList.Type.ROW);
 		assertEquals(BigLinkedList.Type.ROW, testingNodeList.getType());
-		testingNodeList = new NodeList<>(BigLinkedList.Type.NA);
+		testingNodeList = new BigLinkedList<>(BigLinkedList.Type.NA);
 		assertEquals(BigLinkedList.Type.NA, testingNodeList.getType());
-		testingNodeList = new NodeList<>();
+		testingNodeList = new BigLinkedList<>();
 		assertEquals(BigLinkedList.Type.NA, testingNodeList.getType());
 	}
 }

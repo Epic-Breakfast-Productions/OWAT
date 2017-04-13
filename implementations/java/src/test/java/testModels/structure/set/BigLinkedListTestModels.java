@@ -1,7 +1,7 @@
 package testModels.structure.set;
 
 import com.ebp.owat.lib.dataStructure.node.BitNode;
-import com.ebp.owat.lib.dataStructure.set.node.NodeList;
+import com.ebp.owat.lib.dataStructure.set.BigLinkedList;
 
 /**
  * Class to build the necessary objects to make the BigLinkedList tests work.
@@ -10,18 +10,18 @@ import com.ebp.owat.lib.dataStructure.set.node.NodeList;
  */
 public class BigLinkedListTestModels {
 	/** The nodes for testing. */
-	private static NodeList<BitNode> testingNodeList = null;
-	private static NodeList<BitNode> bigTestingNodeList = null;
+	private static BigLinkedList<BitNode> testingNodeList = null;
+	private static BigLinkedList<BitNode> bigTestingNodeList = null;
 	
 	public static void buildBigTestingNodeList(){
-		bigTestingNodeList = new NodeList<>();
+		bigTestingNodeList = new BigLinkedList<>();
 	}
 	
 	public static void buildTestingNodeList(){
-		testingNodeList = new NodeList<>();
+		testingNodeList = new BigLinkedList<>();
 	}
 	
-	public static NodeList<BitNode> getTestingNodeList(boolean bigList){
+	public static BigLinkedList<BitNode> getTestingNodeList(boolean bigList){
 		if(bigList){
 			if (bigTestingNodeList == null) {
 				buildBigTestingNodeList();
