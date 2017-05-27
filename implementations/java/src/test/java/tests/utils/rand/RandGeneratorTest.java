@@ -22,12 +22,12 @@ public class RandGeneratorTest {
 	
 	private static final int NUM_TEST_ITERATIONS = 10000000;
 	
-	//TODO:: split into multiple tests
+	private RandGenerator test;
+	private long cur;
+	
 	@Test
-	public void testRandGenerator(){
-		LOGGER.info("Testing the RandGenerator.");
-		RandGenerator test = new RandGenerator(testUpper, testLower);
-		long cur;
+	public void testRandGeneratorWithinIntRange(){
+		test = new RandGenerator(testUpper, testLower);
 		
 		LOGGER.info("Testing getting numbers within the integer range.");
 		for(int i = 0; i < NUM_TEST_ITERATIONS; i++){
@@ -35,24 +35,27 @@ public class RandGeneratorTest {
 			assertTrue("Number greater than the upper bounds." + " Iteration: " +i, cur >= testLower);
 			assertTrue("Number lower than the lower bounds." + " Iteration: " +i, cur <= testUpper);
 		}
-		
+	}
+	
+	@Test
+	public void testRandGeneratorOutsideIntRange(){
 		test = new RandGenerator(testUpperBig, testLowerBig);
-		
 		LOGGER.info("Testing getting numbers outside the integer range.");
 		for(int i = 0; i < NUM_TEST_ITERATIONS; i++){
 			cur = test.next();
 			assertTrue("Number greater than the upper bounds." + " Iteration: " +i, cur >= testLowerBig);
 			assertTrue("Number lower than the lower bounds." + " Iteration: " +i,cur <= testUpperBig);
 		}
-		
+	}
+	
+	@Test
+	public void testRandGeneratorMixedRange(){
 		test = new RandGenerator(testUpperBig, testLower);
-		
 		LOGGER.info("Testing getting numbers mixed around the integer range.");
 		for(int i = 0; i < NUM_TEST_ITERATIONS; i++){
 			cur = test.next();
 			assertTrue("Number greater than the upper bounds." + " Iteration: " +i, cur >= testLower);
 			assertTrue("Number lower than the lower bounds." + " Iteration: " +i,cur <= testUpperBig);
 		}
-		LOGGER.info("Done.");
 	}
 }

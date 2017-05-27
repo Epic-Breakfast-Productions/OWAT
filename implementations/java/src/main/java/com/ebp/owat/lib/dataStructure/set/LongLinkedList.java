@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.dataStructure.set;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -97,5 +98,52 @@ public class LongLinkedList<E> extends LinkedList {
 			}
 		}
 		return output;
+	}
+	
+	@Override
+	public boolean addAll(int i, Collection collection) {
+		//TODO:: redo this to work with our way of doing this long linked list
+		return super.addAll(i, collection);
+	}
+	
+	@Override
+	public Object get(int i) {
+		//TODO:: redo this to work with our way of doing this long linked list
+		return super.get(i);
+	}
+	
+	@Override
+	public Object set(int i, Object o) {
+		//TODO:: redo this to work with our way of doing this long linked list
+		return super.set(i, o);
+	}
+	
+	@Override
+	public void add(int i, Object o) {
+		//TODO:: redo this to work with our way of doing this long linked list
+		super.add(i, o);
+	}
+	
+	@Override
+	public Object remove(int i) {
+		//TODO:: redo this to work with our way of doing this long linked list
+		return super.remove(i);
+	}
+	
+	@Override
+	public int indexOf(Object o) {
+		//TODO:: redo this to work with our way of doing this long linked list
+		return super.indexOf(o);
+	}
+	
+	@Override
+	public int lastIndexOf(Object o) {
+		//TODO:: redo this to work with our way of doing this long linked list
+		return super.lastIndexOf(o);
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return this.listSize() == 0;
 	}
 }

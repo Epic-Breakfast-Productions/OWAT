@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
  *
  * Created by Greg Stewart on 4/1/17.
  */
-public class BigLinkedListTestModels {
-	static private Logger LOGGER = LoggerFactory.getLogger(BigLinkedListTestModels.class);
+public class LongLinkedListTestModels {
+	static private Logger LOGGER = LoggerFactory.getLogger(LongLinkedListTestModels.class);
 	/** The nodes for testing. */
 	private static LongLinkedList<Boolean> testingNodeList = null;
 	private static LongLinkedList<Boolean> bigTestingNodeList = null;
@@ -50,9 +50,7 @@ public class BigLinkedListTestModels {
 			}
 			return testingNodeList;
 		}else {
-			if (testingNodeList == null) {
-				buildTestingNodeList();
-			}
+			buildTestingNodeList();
 			return testingNodeList;
 		}
 	}
