@@ -22,13 +22,16 @@ public class BigLinkedListTestModels {
 	
 	private static Boolean testVal = new Boolean(true);
 	
-	
 	public static void buildBigTestingNodeList(){
 		LOGGER.info("Building the BIG node list ({} nodes).", bigTestSize);
 		bigTestingNodeList = new BigLinkedList<>();
-		
-		for(BigInteger i = BigInteger.ZERO; i.compareTo(bigTestSize) <= 0; i = i.add(BigInteger.ONE)){
+		BigInteger modAmount = BigInteger.valueOf(10000000L);
+		for(BigInteger i = BigInteger.ZERO; i.compareTo(bigTestSize) < 0; i = i.add(BigInteger.ONE)){
+			//LOGGER.debug("Iterating... {}", i);
 			bigTestingNodeList.add(testVal);
+			if(i.mod(modAmount).compareTo(BigInteger.ZERO) == 0){
+				LOGGER.info("At number {}/.", i, bigTestSize);
+			}
 		}
 		LOGGER.info("Done.");
 	}
@@ -37,7 +40,7 @@ public class BigLinkedListTestModels {
 		LOGGER.info("Building the smaller node list ({} nodes).", testSize);
 		testingNodeList = new BigLinkedList<>();
 		
-		for(BigInteger i = BigInteger.ZERO; i.compareTo(testSize) <= 0; i = i.add(BigInteger.ONE)){
+		for(BigInteger i = BigInteger.ZERO; i.compareTo(testSize) < 0; i = i.add(BigInteger.ONE)){
 			testingNodeList.add(testVal);
 		}
 		LOGGER.info("Done.");
