@@ -6,8 +6,6 @@ import java.util.Random;
 /**
  * A BigIntegerGenerator that gets its random numbers from a simple rand().
  *
- * //TODO:: tests
- *
  * Created by Greg Stewart on 4/6/17.
  */
 public class RandGenerator extends BigIntegerGenerator {

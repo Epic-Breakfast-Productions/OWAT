@@ -11,8 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  *  Abstract class of a matrix to hold all the information and perform scrambling operations on.
  *
- * TODO:: add random component
- *
  * Created by Greg Stewart on 3/23/17.
  */
 public abstract class Matrix<T extends Node> {

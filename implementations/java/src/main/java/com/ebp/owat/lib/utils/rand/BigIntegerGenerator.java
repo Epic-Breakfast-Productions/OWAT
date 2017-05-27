@@ -27,8 +27,7 @@ public abstract class BigIntegerGenerator {
 	 * @param upperIn The upper bound to give this generator.
 	 */
 	public BigIntegerGenerator(BigInteger upperIn, BigInteger lowerIn){
-		this.setUpperBound(upperIn);
-		this.setLowerBound(lowerIn);
+		this.setBounds(upperIn, lowerIn);
 	}
 	
 	/**
@@ -76,6 +75,20 @@ public abstract class BigIntegerGenerator {
 		}else {
 			this.upperBound = upperIn;
 		}
+		return this;
+	}
+	
+	/**
+	 * Sets the upper and lower bounds of this generator.
+	 *
+	 * @param upperIn The upper bound to set this generator to.
+	 * @param lowerIn The lower bound to set this generator to.
+	 * @return This generator object.
+	 */
+	public BigIntegerGenerator setBounds(BigInteger upperIn, BigInteger lowerIn){
+		this.setLowerBound(BigInteger.ZERO);
+		this.setUpperBound(upperIn);
+		this.setLowerBound(lowerIn);
 		return this;
 	}
 	

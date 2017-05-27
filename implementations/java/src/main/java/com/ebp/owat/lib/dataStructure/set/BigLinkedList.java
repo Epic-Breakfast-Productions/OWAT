@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.dataStructure.set;
 
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -71,5 +72,31 @@ public class BigLinkedList<E> extends LinkedList {
 			curCount = curCount.add(BigInteger.ONE);
 		}
 		return curCount;
+	}
+	
+	/**
+	 * Gets a sub list of this list.
+	 *
+	 * @param numToGet The number of nodes to get. If not enough nodes, just puts in as many as are there.
+	 * @param cutListOff If we are to remove these nodes from the list.
+	 * @return The list of nodes from this list.
+	 */
+	public BigLinkedList<E> getSubList(BigInteger numToGet, boolean cutListOff){
+		BigLinkedList<E> output = new BigLinkedList<>();
+		
+		if(cutListOff){
+			BigInteger listSize = this.listSize();
+			for(BigInteger cur = BigInteger.ZERO; cur.compareTo(numToGet) < 0 && listSize.compareTo(BigInteger.ZERO) > 0; cur = cur.add(BigInteger.ONE)){
+				output.add(this.removeFirst());
+			}
+		}else{
+			Iterator<E> it = this.listIterator();
+			BigInteger cur = BigInteger.ZERO;
+			while(cur.compareTo(numToGet) < 0 && it.hasNext()){
+				output.add(it.next());
+				cur = cur.add(BigInteger.ONE);
+			}
+		}
+		return output;
 	}
 }

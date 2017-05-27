@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import testModels.structure.set.BigLinkedListTestModels;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -24,11 +25,14 @@ public class BigLinkedListTest {
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	
-	private BigLinkedList<BitNode> testingNodeList = BigLinkedListTestModels.getTestingNodeList(false);
-	private BigLinkedList<BitNode> testingBigNodeList = BigLinkedListTestModels.getTestingNodeList(true);
+	private BigLinkedList<Boolean> testingNodeList = BigLinkedListTestModels.getTestingNodeList(false);
+	private BigLinkedList<Boolean> testingBigNodeList = BigLinkedListTestModels.getTestingNodeList(true);
 	
 	@Test public void nodeListSizeTest(){
 		//TODO, test that the sizes of the lists are correct
+		
+		assertTrue("Smaller node list size is wrong.", BigLinkedListTestModels.testSize.compareTo(testingNodeList.listSize()) == 0);
+		assertTrue("Larger node list size is wrong.", BigLinkedListTestModels.bigTestSize.compareTo(testingBigNodeList.listSize()) == 0);
 		
 		//test that the overridden size() fails
 		exception.expect(OwatNodeSetException.class);
@@ -45,5 +49,10 @@ public class BigLinkedListTest {
 		assertEquals(BigLinkedList.Type.NA, testingNodeList.getType());
 		testingNodeList = new BigLinkedList<>();
 		assertEquals(BigLinkedList.Type.NA, testingNodeList.getType());
+	}
+	
+	@Test
+	public void nodeListSubListTest(){
+		//TODO:: this
 	}
 }
