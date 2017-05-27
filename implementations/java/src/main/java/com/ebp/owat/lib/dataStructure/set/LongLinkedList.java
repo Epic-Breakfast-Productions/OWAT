@@ -108,8 +108,27 @@ public class LongLinkedList<E> extends LinkedList {
 	
 	@Override
 	public Object get(int i) {
-		//TODO:: redo this to work with our way of doing this long linked list
 		return super.get(i);
+	}
+	
+	public Object get(long i){//TODO:: test
+		if(i < Integer.MAX_VALUE){
+			return super.get((int)i);
+		}
+		if(i > this.listSize()){
+			throw new IndexOutOfBoundsException();
+		}
+		Iterator<E> it = this.iterator();
+		long count = 0;
+		E curVal;
+		while(it.hasNext()){
+			curVal = it.next();
+			if(count == i){
+				return curVal;
+			}
+			count++;
+		}
+		throw new OwatNodeSetException("Did not get to i in get(long). This should not happen.");
 	}
 	
 	@Override

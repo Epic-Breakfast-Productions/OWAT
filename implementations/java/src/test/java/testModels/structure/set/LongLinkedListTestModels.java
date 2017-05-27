@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 public class LongLinkedListTestModels {
 	static private Logger LOGGER = LoggerFactory.getLogger(LongLinkedListTestModels.class);
 	/** The nodes for testing. */
+	private static LongLinkedList<Long> numberedNodeList = null;
 	private static LongLinkedList<Boolean> testingNodeList = null;
 	private static LongLinkedList<Boolean> bigTestingNodeList = null;
 	
@@ -41,6 +42,17 @@ public class LongLinkedListTestModels {
 			testingNodeList.add(testVal);
 		}
 		LOGGER.info("Done.");
+	}
+	
+	public LongLinkedList<Long> getNumberedNodeList(){
+		LOGGER.info("Building a numbered node list ({} nodes).", testSize);
+		numberedNodeList = new LongLinkedList<>();
+		
+		for(long i = 0L; i < testSize; i++){
+			numberedNodeList.add(i);
+		}
+		LOGGER.info("Done.");
+		return numberedNodeList;
 	}
 	
 	public static LongLinkedList<Boolean> getTestingNodeList(boolean bigList){
