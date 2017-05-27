@@ -3,9 +3,8 @@ package com.ebp.owat.lib.dataStructure.matrix;
 import com.ebp.owat.lib.dataStructure.io.NodeReader;
 import com.ebp.owat.lib.dataStructure.io.NodeWriter;
 import com.ebp.owat.lib.dataStructure.node.Node;
-import com.ebp.owat.lib.dataStructure.set.BigLinkedList;
+import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
 
-import java.math.BigInteger;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -32,14 +31,14 @@ public abstract class Matrix<T extends Node> {
 	protected ConcurrentHashMap<FixedNodePos, T> fixedNodes = new ConcurrentHashMap<>(FixedNodePos.values().length);
 	
 	/** The number of rows held by this object. */
-	protected BigInteger numRows = BigInteger.ZERO;
+	protected long numRows = 0L;
 	/** The number of columns held by this object. */
-	protected BigInteger numCols = BigInteger.ZERO;
+	protected long numCols = 0L;
 	
 	/** The length of the original data set. */
-	protected BigInteger origDataLength = BigInteger.ZERO;
+	protected long origDataLength = 0L;
 	/** The width of the original data set. */
-	protected BigInteger origDataWidth = BigInteger.ZERO;
+	protected long origDataWidth = 0L;
 	
 	/** The reader to get in original data. */
 	protected NodeReader<T> dataReader;
@@ -118,16 +117,16 @@ public abstract class Matrix<T extends Node> {
 		updateFixedPosAndLengthWidth();
 	}
 	
-	public void addRow(BigLinkedList<T> listIn){
-		if(this.numCols.compareTo(listIn.listSize()) != 0){
+	public void addRow(LongLinkedList<T> listIn){
+		if(this.numCols != listIn.listSize()){
 			throw new OwatMatrixException("List given is the wrong size to use to add to the matrix.");
 		}
 		//TODO: add row, ensuring that they all connect to what they need to.
 		updateFixedPosAndLengthWidth();
 	}
 	
-	public void addCol(BigLinkedList<T> listIn){
-		if(this.numRows.compareTo(listIn.listSize()) != 0){
+	public void addCol(LongLinkedList<T> listIn){
+		if(this.numRows != listIn.listSize()){
 			throw new OwatMatrixException("List given is the wrong size to use to add to the matrix.");
 		}
 		//TODO: add column, ensuring that they all connect to what they need to.
@@ -201,34 +200,31 @@ public abstract class Matrix<T extends Node> {
 	 * Gets the number of rows held by this Matrix.
 	 * @return The number of rows held by this Matrix.
 	 */
-	public BigInteger getNumRows(){return this.numRows;}
+	public long getNumRows(){return this.numRows;}
 	/**
 	 * Gets the number of columns held by this Matrix.
 	 * @return The number of columns held by this Matrix.
 	 */
-	public BigInteger getNumCols(){return this.numCols;}
+	public long getNumCols(){return this.numCols;}
 	
 	/**
 	 * Gets the number of rows in the original data set.
 	 * @return The number of rows in the original data set.
 	 */
-	public BigInteger getOrigDataLength(){return this.origDataLength;}
+	public long getOrigDataLength(){return this.origDataLength;}
 	/**
 	 * Gets the number of columns in the original data set.
 	 * @return The number of columns in the original data set.
 	 */
-	public BigInteger getOrigDataWidth(){return this.origDataWidth;}
+	public long getOrigDataWidth(){return this.origDataWidth;}
 	
 	/**
 	 * Checks that the column number given is valid.
 	 * @param col The column number given.
 	 * @throws OwatMatrixException If the column number given is null or greater than the number of columns held by this object.
 	 */
-	public void checkValidColNumber(BigInteger col) throws OwatMatrixException{
-		if(col == null){
-			throw new OwatMatrixException("Bad column number given. It was null.");
-		}
-		if(this.numCols.compareTo(col) > 0){
+	public void checkValidColNumber(long col) throws OwatMatrixException{
+		if(this.numCols > col){
 			throw new OwatMatrixException("Bad column number given. It was greater than the number of columns in the data set.");
 		}
 	}
@@ -238,11 +234,8 @@ public abstract class Matrix<T extends Node> {
 	 * @param row The row number given.
 	 * @throws OwatMatrixException If the row number given is null or greater than the number of rows held by this object.
 	 */
-	public void checkValidRowNumber(BigInteger row) throws OwatMatrixException{
-		if(row == null){
-			throw new OwatMatrixException("Bad row number given. It was null.");
-		}
-		if(this.numRows.compareTo(row) > 0){
+	public void checkValidRowNumber(long row) throws OwatMatrixException{
+		if(this.numRows > row){
 			throw new OwatMatrixException("Bad row number given. It was greater than the number of columns in the data set.");
 		}
 	}
@@ -253,7 +246,7 @@ public abstract class Matrix<T extends Node> {
 	 * @param col The column number given.
 	 * @throws OwatMatrixException  If the row/column number given is null or greater than the number of row/columns held by this object.
 	 */
-	public void checkValidRowColNumber(BigInteger row, BigInteger col) throws OwatMatrixException{
+	public void checkValidRowColNumber(long row, long col) throws OwatMatrixException{
 		OwatMatrixException rowException = null;
 		OwatMatrixException colException = null;
 		try{
@@ -281,7 +274,7 @@ public abstract class Matrix<T extends Node> {
 	 * @param rowNumIn The row number to test.
 	 * @return If the row number given is valid.
 	 */
-	public boolean isValidRowNum(BigInteger rowNumIn){
+	public boolean isValidRowNum(long rowNumIn){
 		try{
 			this.checkValidRowNumber(rowNumIn);
 		}catch(OwatMatrixException e){
@@ -295,7 +288,7 @@ public abstract class Matrix<T extends Node> {
 	 * @param colNumIn The col number to test.
 	 * @return If the col number given is valid.
 	 */
-	public boolean isValidColNum(BigInteger colNumIn){
+	public boolean isValidColNum(long colNumIn){
 		try{
 			this.checkValidColNumber(colNumIn);
 		}catch(OwatMatrixException e){
@@ -320,18 +313,18 @@ public abstract class Matrix<T extends Node> {
 	 * @return The node at the row and column given.
 	 * @throws OwatMatrixException If the row or column was out of bounds of the data the matrix holds.
 	 */
-	public T getNode(BigInteger row, BigInteger col) throws OwatMatrixException{
+	public T getNode(long row, long col) throws OwatMatrixException{
 		checkValidRowColNumber(row,col);
-		BigInteger one = BigInteger.ONE;
-		BigInteger curRowCol;
+		long one = 1L;
+		long curRowCol;
 		T curNode = this.getNode(FixedNodePos.TOP_LEFT);
 		//TODO:: work off of the closest fixed node(s)
 		//go south
-		for(curRowCol = BigInteger.ZERO; curRowCol.compareTo(this.numRows) < 1; curRowCol = curRowCol.add(one)){
+		for(curRowCol = 0L; curRowCol < this.numRows; curRowCol++){
 			curNode = (T)curNode.getSouth();// SHOULD always be of type T
 		}
 		//go east
-		for(curRowCol = BigInteger.ZERO; curRowCol.compareTo(this.numCols) < 1; curRowCol = curRowCol.add(one)){
+		for(curRowCol = 0L; curRowCol < this.numCols; curRowCol++){
 			curNode = (T)curNode.getEast();// SHOULD always be of type T
 		}
 		return curNode;
@@ -343,11 +336,11 @@ public abstract class Matrix<T extends Node> {
 	 * @return A list of nodes that is the whole row.
 	 * @throws OwatMatrixException If the row number is greater than the number of rows.
 	 */
-	public BigLinkedList<T> getRow(BigInteger row) throws OwatMatrixException{
+	public LongLinkedList<T> getRow(long row) throws OwatMatrixException{
 		checkValidRowNumber(row);
-		T endNode = this.getNode(row, BigInteger.ZERO);
+		T endNode = this.getNode(row, 0L);
 		//now have leftmost node in row
-		BigLinkedList<T> output = new BigLinkedList<>(BigLinkedList.Type.ROW);
+		LongLinkedList<T> output = new LongLinkedList<>(LongLinkedList.Type.ROW);
 		T curNode = endNode;
 		while(curNode != null){
 			output.addLast(curNode);
@@ -362,11 +355,11 @@ public abstract class Matrix<T extends Node> {
 	 * @return A list of nodes that is the column in the structure.
 	 * @throws OwatMatrixException If the column number given is out of bounds of the structure.
 	 */
-	public BigLinkedList<T> getCol(BigInteger col) throws OwatMatrixException{
+	public LongLinkedList<T> getCol(long col) throws OwatMatrixException{
 		checkValidColNumber(col);
-		T topNode = this.getNode(BigInteger.ZERO, col);
+		T topNode = this.getNode(0L, col);
 		//now have leftmost node in row
-		BigLinkedList<T> output = new BigLinkedList<>(BigLinkedList.Type.ROW);
+		LongLinkedList<T> output = new LongLinkedList<>(LongLinkedList.Type.ROW);
 		T curNode = topNode;
 		while(curNode != null){
 			output.addLast(curNode);

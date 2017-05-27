@@ -1,7 +1,6 @@
 package tests.structure.set;
 
-import com.ebp.owat.lib.dataStructure.node.BitNode;
-import com.ebp.owat.lib.dataStructure.set.BigLinkedList;
+import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
 import com.ebp.owat.lib.dataStructure.set.OwatNodeSetException;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -16,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 
 /**
- * Tests the BigLinkedList class.
+ * Tests the LongLinkedList class.
  *
  * Created by Greg Stewart on 4/1/17.
  */
@@ -26,7 +25,7 @@ public class BigLinkedListTest {
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	
-	private BigLinkedList<Boolean> testingNodeList = BigLinkedListTestModels.getTestingNodeList(false);
+	private LongLinkedList<Boolean> testingNodeList = BigLinkedListTestModels.getTestingNodeList(false);
 	
 	@Test(expected = OwatNodeSetException.class)
 	public void nodeListSizeExceptionTest(){
@@ -35,27 +34,26 @@ public class BigLinkedListTest {
 	
 	@Test
 	public void smallNodeListSizeTest(){
-		assertTrue("Smaller node list size is wrong. Expected: " + BigLinkedListTestModels.testSize.toString() + " Actual: " + testingNodeList.listSize().toString(), BigLinkedListTestModels.testSize.compareTo(testingNodeList.listSize()) == 0);
+		assertTrue("Smaller node list size is wrong. Expected: " + BigLinkedListTestModels.testSize + " Actual: " + testingNodeList.listSize(), BigLinkedListTestModels.testSize == testingNodeList.listSize());
 	}
 	
 	@Ignore
 	@Test
 	public void largeNodeListSizeTest(){
-		BigLinkedList<Boolean> testingBigNodeList = BigLinkedListTestModels.getTestingNodeList(true);
-		assertTrue("Larger node list size is wrong.", BigLinkedListTestModels.bigTestSize.compareTo(testingBigNodeList.listSize()) == 0);
+		LongLinkedList<Boolean> testingBigNodeList = BigLinkedListTestModels.getTestingNodeList(true);
+		assertTrue("Larger node list size is wrong. Expected: " + BigLinkedListTestModels.bigTestSize + " Actual: " + testingBigNodeList.listSize(), BigLinkedListTestModels.bigTestSize == testingBigNodeList.listSize());
 	}
-	
 	
 	@Test public void nodeListTypeTest(){
 		LOGGER.info("Testing that NodeLists can correctly get their set types.");
-		testingNodeList = new BigLinkedList<>(BigLinkedList.Type.COL);
-		assertEquals(BigLinkedList.Type.COL, testingNodeList.getType());
-		testingNodeList = new BigLinkedList<>(BigLinkedList.Type.ROW);
-		assertEquals(BigLinkedList.Type.ROW, testingNodeList.getType());
-		testingNodeList = new BigLinkedList<>(BigLinkedList.Type.NA);
-		assertEquals(BigLinkedList.Type.NA, testingNodeList.getType());
-		testingNodeList = new BigLinkedList<>();
-		assertEquals(BigLinkedList.Type.NA, testingNodeList.getType());
+		testingNodeList = new LongLinkedList<>(LongLinkedList.Type.COL);
+		assertEquals(LongLinkedList.Type.COL, testingNodeList.getType());
+		testingNodeList = new LongLinkedList<>(LongLinkedList.Type.ROW);
+		assertEquals(LongLinkedList.Type.ROW, testingNodeList.getType());
+		testingNodeList = new LongLinkedList<>(LongLinkedList.Type.NA);
+		assertEquals(LongLinkedList.Type.NA, testingNodeList.getType());
+		testingNodeList = new LongLinkedList<>();
+		assertEquals(LongLinkedList.Type.NA, testingNodeList.getType());
 	}
 	
 	@Ignore

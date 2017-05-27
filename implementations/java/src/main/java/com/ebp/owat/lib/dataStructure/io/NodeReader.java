@@ -1,6 +1,6 @@
 package com.ebp.owat.lib.dataStructure.io;
 
-import com.ebp.owat.lib.dataStructure.set.BigLinkedList;
+import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
 import com.ebp.owat.lib.dataStructure.node.Node;
 
 import java.io.*;
@@ -80,5 +80,5 @@ public abstract class NodeReader<T extends Node> {
 	 * Gets all nodes available from the stream.
 	 * @return All of the nodes available from the stream.
 	 */
-	public abstract BigLinkedList getAllNodes();
+	public abstract LongLinkedList getAllNodes();
 }

@@ -1,6 +1,5 @@
 package com.ebp.owat.lib.dataStructure.set;
 
-import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -10,7 +9,7 @@ import java.util.ListIterator;
  *
  * Created by Greg Stewart on 4/1/17.
  */
-public class BigLinkedList<E> extends LinkedList {
+public class LongLinkedList<E> extends LinkedList {
 	/**
 	 * The types of lists a NodeList can be.
 	 */
@@ -26,7 +25,7 @@ public class BigLinkedList<E> extends LinkedList {
 	/**
 	 * Basic constructor. Sets the type to NA.
 	 */
-	public BigLinkedList(){
+	public LongLinkedList(){
 		this.type = Type.NA;
 	}
 	
@@ -34,7 +33,7 @@ public class BigLinkedList<E> extends LinkedList {
 	 * Creates an empty NodeList and sets its type.
 	 * @param typeIn The type to set this to.
 	 */
-	public BigLinkedList(Type typeIn){
+	public LongLinkedList(Type typeIn){
 		this.type = typeIn;
 	}
 	
@@ -53,7 +52,7 @@ public class BigLinkedList<E> extends LinkedList {
 	 */
 	@Override
 	public int size() throws OwatNodeSetException{
-		throw new OwatNodeSetException("Due to the fact that this can return values greater than MAXINT, please use the seprate function, listSize();.");
+		throw new OwatNodeSetException("Due to the fact that this can return values greater than MAXINT, please use the separate function, listSize();.");
 	}
 	
 	/**
@@ -61,15 +60,15 @@ public class BigLinkedList<E> extends LinkedList {
 	 *
 	 * @return The size of this list.
 	 */
-	public BigInteger listSize(){
+	public long listSize(){
 		if(super.size() != Integer.MAX_VALUE){
-			return BigInteger.valueOf(super.size());
+			return super.size();
 		}
 		ListIterator<E> curSpot = this.listIterator(Integer.MAX_VALUE);
-		BigInteger curCount = BigInteger.valueOf(Integer.MAX_VALUE);
+		long curCount = Integer.MAX_VALUE;
 		
 		while(curSpot.hasNext()){
-			curCount = curCount.add(BigInteger.ONE);
+			curCount++;
 		}
 		return curCount;
 	}
@@ -81,20 +80,20 @@ public class BigLinkedList<E> extends LinkedList {
 	 * @param cutListOff If we are to remove these nodes from the list.
 	 * @return The list of nodes from this list.
 	 */
-	public BigLinkedList<E> getSubList(BigInteger numToGet, boolean cutListOff){
-		BigLinkedList<E> output = new BigLinkedList<>();
+	public LongLinkedList<E> getSubList(long numToGet, boolean cutListOff){
+		LongLinkedList<E> output = new LongLinkedList<>();
 		
 		if(cutListOff){
-			BigInteger listSize = this.listSize();
-			for(BigInteger cur = BigInteger.ZERO; cur.compareTo(numToGet) < 0 && listSize.compareTo(BigInteger.ZERO) > 0; cur = cur.add(BigInteger.ONE)){
+			long listSize = this.listSize();
+			for(long cur = 0; cur < numToGet && listSize > 0; cur++){
 				output.add(this.removeFirst());
 			}
 		}else{
 			Iterator<E> it = this.listIterator();
-			BigInteger cur = BigInteger.ZERO;
-			while(cur.compareTo(numToGet) < 0 && it.hasNext()){
+			long cur = 0;
+			while(cur < numToGet && it.hasNext()){
 				output.add(it.next());
-				cur = cur.add(BigInteger.ONE);
+				cur++;
 			}
 		}
 		return output;

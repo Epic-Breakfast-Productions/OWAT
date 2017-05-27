@@ -4,10 +4,9 @@ import com.ebp.owat.lib.dataStructure.io.NodeReader;
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
 import com.ebp.owat.lib.dataStructure.node.Node;
-import com.ebp.owat.lib.dataStructure.set.BigLinkedList;
-import com.ebp.owat.lib.utils.rand.BigIntegerGenerator;
+import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
+import com.ebp.owat.lib.utils.rand.LongGenerator;
 
-import java.math.BigInteger;
 import java.util.ListIterator;
 
 /**
@@ -17,7 +16,7 @@ import java.util.ListIterator;
  */
 public abstract class ScramblingMatrix<T extends Node> extends Matrix {
 	/** The random number generator to use for scrambling.  */
-	private BigIntegerGenerator randGenerator;
+	private LongGenerator randGenerator;
 	
 	/**
 	 * Constructor to build using a provided node.
@@ -26,7 +25,7 @@ public abstract class ScramblingMatrix<T extends Node> extends Matrix {
 	 *
 	 * @param nodeIn The node to use to build this object.
 	 */
-	public ScramblingMatrix(Node nodeIn, BigIntegerGenerator randGenerator) {
+	public ScramblingMatrix(Node nodeIn, LongGenerator randGenerator) {
 		super(nodeIn);
 		this.setRandomGenerator(randGenerator);
 	}
@@ -37,7 +36,7 @@ public abstract class ScramblingMatrix<T extends Node> extends Matrix {
 	 * @param readerIn The reader to use to read the data in.
 	 * @param readIn   If we are to read the data in immediately or not.
 	 */
-	public ScramblingMatrix(NodeReader readerIn, boolean readIn, BigIntegerGenerator randGenerator) {
+	public ScramblingMatrix(NodeReader readerIn, boolean readIn, LongGenerator randGenerator) {
 		super(readerIn, readIn);
 		this.setRandomGenerator(randGenerator);
 	}
@@ -47,7 +46,7 @@ public abstract class ScramblingMatrix<T extends Node> extends Matrix {
 	 *
 	 * @param readerIn The reader to get the nodes from.
 	 */
-	public ScramblingMatrix(NodeReader readerIn, BigIntegerGenerator randGenerator) {
+	public ScramblingMatrix(NodeReader readerIn, LongGenerator randGenerator) {
 		super(readerIn);
 		this.setRandomGenerator(randGenerator);
 	}
@@ -57,7 +56,7 @@ public abstract class ScramblingMatrix<T extends Node> extends Matrix {
 	 * @param randIn The random number generator to use.
 	 * @throws NullPointerException If the random number generator in is null.
 	 */
-	public void setRandomGenerator(BigIntegerGenerator randIn){
+	public void setRandomGenerator(LongGenerator randIn){
 		if(randIn == null){
 			throw new NullPointerException("The random number generator in cannot be null.");
 		}
@@ -76,22 +75,22 @@ public abstract class ScramblingMatrix<T extends Node> extends Matrix {
 			throw new OwatMatrixException("Cannot read data in. Data already read in.");
 		}
 		
-		BigLinkedList<T> newNodes = this.dataReader.getAllNodes(); //This should always be correct
+		LongLinkedList<T> newNodes = this.dataReader.getAllNodes(); //This should always be correct
 		
 		this.setupOriginalLengthWidth(newNodes.listSize());
 		
-		BigInteger curRow = BigInteger.ZERO;
-		BigInteger curCol = BigInteger.ZERO;
+		long curRow = 0L;
+		long curCol = 0L;
 		
 		ListIterator<T> listIterator = newNodes.listIterator();
-		BigLinkedList<T> curRowToAdd;
+		LongLinkedList<T> curRowToAdd;
 		while(listIterator.hasNext()) {
 			//TODO:: add nodes
 			
 			
 			
 			
-			System.out.println(listIterator.next());
+			System.out.println(listIterator.next());//TODO:: use logger
 		}
 		
 		
@@ -101,43 +100,13 @@ public abstract class ScramblingMatrix<T extends Node> extends Matrix {
 		this.dataIn = true;
 	}
 	
-	private void setupOriginalLengthWidth(BigInteger numNodes){
-		BigInteger sqrtNum = bigIntSqRootCeil(numNodes);
-		this.randGenerator.setBounds(sqrtNum.subtract(BigInteger.ONE), BigInteger.ONE);
-		BigInteger numToSquishBy = this.randGenerator.next();
+	private void setupOriginalLengthWidth(long numNodes){
+		long sqrtNum = (long)Math.ceil(Math.sqrt(numNodes));
+		this.randGenerator.setBounds(sqrtNum - 1L, 1);
+		long numToSquishBy = this.randGenerator.next();
 		
-		this.origDataLength = sqrtNum.add(numToSquishBy);
-		this.origDataWidth = sqrtNum.subtract(numToSquishBy);
+		this.origDataLength = sqrtNum + numToSquishBy;
+		this.origDataWidth = sqrtNum - numToSquishBy;
 	}
 	
-	/**
-	 * Function to get the square root of a Bigint
-	 * @param x The Bigint to get the square root of.
-	 * @return The square root of the Bigint given.
-	 * @throws IllegalArgumentException If the number given is less than zero.
-	 */
-	private static BigInteger bigIntSqRootCeil(BigInteger x) throws IllegalArgumentException {
-		if(x == null){
-			throw new IllegalArgumentException("BigInteger is null.");
-		}
-		if (x.compareTo(BigInteger.ZERO) < 0) {
-			throw new IllegalArgumentException("Negative argument.");
-		}
-		// square roots of 0 and 1 are trivial and
-		// y == 0 will cause a divide-by-zero exception
-		if (x.compareTo(BigInteger.ZERO) == 0 || x.compareTo(BigInteger.ONE) == 0 ){
-			return x;
-		} // end if
-		BigInteger two = BigInteger.valueOf(2L);
-		BigInteger y;
-		// starting with y = x / 2 avoids magnitude issues with x squared
-		for (y = x.divide(two);
-		     y.compareTo(x.divide(y)) > 0;
-		     y = ((x.divide(y)).add(y)).divide(two));
-		if (x.compareTo(y.multiply(y)) == 0) {
-			return y;
-		} else {
-			return y.add(BigInteger.ONE);
-		}
-	} // end bigIntSqRootCeil
 }

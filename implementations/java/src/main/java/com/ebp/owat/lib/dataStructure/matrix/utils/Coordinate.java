@@ -3,8 +3,6 @@ package com.ebp.owat.lib.dataStructure.matrix.utils;
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
 
-import java.math.BigInteger;
-
 /**
  * Describes a coordinate on a matrix.
  *
@@ -14,9 +12,9 @@ public class Coordinate {
 	/** The matrix this coordinate is on. */
 	private final Matrix matrix;
 	/** The X value (which col) of this coordinate. */
-	private BigInteger x;
+	private long x;
 	/** The Y value (which row) of this coordinate. */
-	private BigInteger y;
+	private long y;
 	
 	/**
 	 * Constructs a new coordinate with a matrix.
@@ -34,7 +32,7 @@ public class Coordinate {
 	 * @param yIn The Y value (which row) of this coordinate.
 	 * @throws OwatMatrixException If the values in are out of bounds.
 	 */
-	public Coordinate(Matrix matrix, BigInteger xIn, BigInteger yIn) throws OwatMatrixException{
+	public Coordinate(Matrix matrix, long xIn, long yIn) throws OwatMatrixException{
 		this(matrix);
 		this.setX(xIn).setY(yIn);
 	}
@@ -45,7 +43,7 @@ public class Coordinate {
 	 * @return This Coordinate.
 	 * @throws OwatMatrixException If the value in is out of bounds.
 	 */
-	public Coordinate setX(BigInteger xIn) throws OwatMatrixException{
+	public Coordinate setX(long xIn) throws OwatMatrixException{
 		matrix.checkValidColNumber(xIn);
 		return this;
 	}
@@ -56,7 +54,7 @@ public class Coordinate {
 	 * @return This Coordinate.
 	 * @throws OwatMatrixException If the value in is out of bounds.
 	 */
-	public Coordinate setY(BigInteger yIn) throws OwatMatrixException{
+	public Coordinate setY(long yIn) throws OwatMatrixException{
 		matrix.checkValidColNumber(yIn);
 		return this;
 	}
@@ -65,7 +63,7 @@ public class Coordinate {
 	 * Gets the X value (which col) of this coordinate.
 	 * @return The X value (which col) of this coordinate.
 	 */
-	public BigInteger getX(){
+	public long getX(){
 		return this.x;
 	}
 	
@@ -73,7 +71,7 @@ public class Coordinate {
 	 * Gets the y value (which row) of this coordinate.
 	 * @return The y value (which row) of this coordinate.
 	 */
-	public BigInteger getY(){
+	public long getY(){
 		return this.y;
 	}
 }
