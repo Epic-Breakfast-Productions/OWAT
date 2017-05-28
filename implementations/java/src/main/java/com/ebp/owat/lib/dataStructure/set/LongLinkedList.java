@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * Defines a big linked list, to work well with large numbers of nodes.
+ * Defines a long linked list, a linked list that inherently works using a long instead of int.
  *
  * Created by Greg Stewart on 4/1/17.
  */
@@ -13,16 +13,26 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	private LongListNode<E> first;
 	private LongListNode<E> last;
 	
-	
-	
 	@Override
 	public void addFirst(E e) {
-		//TODO
+		if(this.first == null){
+			this.first = new LongListNode<>(e);
+			this.last = this.first;
+		}else{
+			this.first.setPrev(new LongListNode<>(e));
+			this.first = this.first.prev();
+		}
 	}
 	
 	@Override
 	public void addLast(E e) {
-		//TODO
+		if(this.last == null){
+			this.last = new LongListNode<>(e);
+			this.first = this.last;
+		}else{
+			this.last.setNext(new LongListNode<>(e));
+			this.last = this.last.next();
+		}
 	}
 	
 	@Override
@@ -134,12 +144,6 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public E pop() {
-		//TODO
-		return null;
-	}
-	
-	@Override
-	public Iterator<E> descendingIterator() {
 		//TODO
 		return null;
 	}
@@ -271,7 +275,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public void clear() {
-		//TODO
+		this.first = null;
+		this.last = null;
+		this.length = 0;
 	}
 	
 	@Override
@@ -303,8 +309,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return it;
 	}
 	
-	public Iterator<E> revIterator() {
-		Iterator<E> it = new Iterator<E>() {
+	@Override
+	public Iterator<E> descendingIterator() {
+		return new Iterator<E>() {
 			private LongListNode<E> curNode = last;
 			private boolean startedIt = false;
 			@Override
@@ -328,6 +335,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 				throw new UnsupportedOperationException();
 			}
 		};
-		return it;
 	}
+	
+	//TODO:: private iterators that return nodes, not values
 }
