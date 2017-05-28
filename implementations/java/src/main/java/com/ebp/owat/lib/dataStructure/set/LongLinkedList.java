@@ -1,168 +1,282 @@
 package com.ebp.owat.lib.dataStructure.set;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Defines a big linked list, to work well with large numbers of nodes.
  *
  * Created by Greg Stewart on 4/1/17.
  */
-public class LongLinkedList<E> extends LinkedList {
-	/**
-	 * The types of lists a NodeList can be.
-	 */
-	public enum Type {
-		ROW,COL,NA
-	}
+public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, Collection<E>, Deque<E>, List<E>, Queue<E> {
+	private long length = 0;
+	private LongListNode<E> first;
+	private LongListNode<E> last;
 	
-	/**
-	 * The type of list this is.
-	 */
-	private final Type type;
 	
-	/**
-	 * Basic constructor. Sets the type to NA.
-	 */
-	public LongLinkedList(){
-		this.type = Type.NA;
-	}
 	
-	/**
-	 * Creates an empty NodeList and sets its type.
-	 * @param typeIn The type to set this to.
-	 */
-	public LongLinkedList(Type typeIn){
-		this.type = typeIn;
-	}
-	
-	/**
-	 * Gets the type of list this is.
-	 *
-	 * @return The type of list this is.
-	 */
-	public Type getType(){
-		return this.type;
-	}
-	
-	/**
-	 * DO NOT USE, use listSize() instead.
-	 * @return nothing. Always throws OwatNodeSetException saying to use listSize() instead.
-	 */
 	@Override
-	public int size() throws OwatNodeSetException{
-		throw new OwatNodeSetException("Due to the fact that this can return values greater than MAXINT, please use the separate function, listSize();.");
-	}
-	
-	/**
-	 * Gets the size of this list.
-	 *
-	 * @return The size of this list.
-	 */
-	public long listSize(){
-		if(super.size() != Integer.MAX_VALUE){
-			return super.size();
-		}
-		ListIterator<E> curSpot = this.listIterator(Integer.MAX_VALUE);
-		long curCount = Integer.MAX_VALUE;
-		
-		while(curSpot.hasNext()){
-			curCount++;
-		}
-		return curCount;
-	}
-	
-	/**
-	 * Gets a sub list of this list.
-	 *
-	 * @param numToGet The number of nodes to get. If not enough nodes, just puts in as many as are there.
-	 * @param cutListOff If we are to remove these nodes from the list.
-	 * @return The list of nodes from this list.
-	 */
-	public LongLinkedList<E> getSubList(long numToGet, boolean cutListOff){
-		LongLinkedList<E> output = new LongLinkedList<>();
-		
-		if(cutListOff){
-			long listSize = this.listSize();
-			for(long cur = 0; cur < numToGet && listSize > 0; cur++){
-				output.add(this.removeFirst());
-			}
-		}else{
-			Iterator<E> it = this.listIterator();
-			long cur = 0;
-			while(cur < numToGet && it.hasNext()){
-				output.add(it.next());
-				cur++;
-			}
-		}
-		return output;
+	public void addFirst(E e) {
+		//TODO
 	}
 	
 	@Override
-	public boolean addAll(int i, Collection collection) {
-		//TODO:: redo this to work with our way of doing this long linked list
-		return super.addAll(i, collection);
+	public void addLast(E e) {
+		//TODO
 	}
 	
 	@Override
-	public Object get(int i) {
-		return super.get(i);
-	}
-	
-	public Object get(long i){//TODO:: test
-		if(i < Integer.MAX_VALUE){
-			return super.get((int)i);
-		}
-		if(i > this.listSize()){
-			throw new IndexOutOfBoundsException();
-		}
-		Iterator<E> it = this.iterator();
-		long count = 0;
-		E curVal;
-		while(it.hasNext()){
-			curVal = it.next();
-			if(count == i){
-				return curVal;
-			}
-			count++;
-		}
-		throw new OwatNodeSetException("Did not get to i in get(long). This should not happen.");
+	public boolean offerFirst(E e) {
+		//TODO
+		return false;
 	}
 	
 	@Override
-	public Object set(int i, Object o) {
-		//TODO:: redo this to work with our way of doing this long linked list
-		return super.set(i, o);
+	public boolean offerLast(E e) {
+		//TODO
+		return false;
 	}
 	
 	@Override
-	public void add(int i, Object o) {
-		//TODO:: redo this to work with our way of doing this long linked list
-		super.add(i, o);
+	public E removeFirst() {
+		//TODO
+		return null;
 	}
 	
 	@Override
-	public Object remove(int i) {
-		//TODO:: redo this to work with our way of doing this long linked list
-		return super.remove(i);
+	public E removeLast() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public E pollFirst() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public E pollLast() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public E getFirst() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public E getLast() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public E peekFirst() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public E peekLast() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public boolean removeFirstOccurrence(Object o) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public boolean removeLastOccurrence(Object o) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public boolean offer(E e) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public E remove() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public E poll() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public E element() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public E peek() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public void push(E e) {
+		//TODO
+	}
+	
+	@Override
+	public E pop() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public Iterator<E> descendingIterator() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public boolean addAll(int i, Collection<? extends E> collection) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public E get(int i) {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public E set(int i, E e) {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public void add(int i, E e) {
+		//TODO
+	}
+	
+	@Override
+	public E remove(int i) {
+		//TODO
+		return null;
 	}
 	
 	@Override
 	public int indexOf(Object o) {
-		//TODO:: redo this to work with our way of doing this long linked list
-		return super.indexOf(o);
+		//TODO
+		return 0;
 	}
 	
 	@Override
 	public int lastIndexOf(Object o) {
-		//TODO:: redo this to work with our way of doing this long linked list
-		return super.lastIndexOf(o);
+		//TODO
+		return 0;
+	}
+	
+	@Override
+	public ListIterator<E> listIterator() {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public ListIterator<E> listIterator(int i) {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public List<E> subList(int i, int i1) {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public int size() {
+		//TODO
+		return 0;
 	}
 	
 	@Override
 	public boolean isEmpty() {
-		return this.listSize() == 0;
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public boolean contains(Object o) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public Object[] toArray() {
+		//TODO
+		return new Object[0];
+	}
+	
+	@Override
+	public <T> T[] toArray(T[] ts) {
+		//TODO
+		return null;
+	}
+	
+	@Override
+	public boolean add(E e) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public boolean remove(Object o) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public boolean containsAll(Collection<?> collection) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public boolean addAll(Collection<? extends E> collection) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public boolean removeAll(Collection<?> collection) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public boolean retainAll(Collection<?> collection) {
+		//TODO
+		return false;
+	}
+	
+	@Override
+	public void clear() {
+		//TODO
+	}
+	
+	@Override
+	public Iterator<E> iterator() {
+		//TODO
+		return null;
 	}
 }
