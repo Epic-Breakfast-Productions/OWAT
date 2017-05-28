@@ -132,4 +132,12 @@ class LongListNode<T> implements Serializable, Cloneable{
 		this.setPrev(prev);
 		return curPrev;
 	}
+	
+	public boolean hasPrev(){
+		return this.prev() != null;
+	}
+	
+	public boolean hasNext(){
+		return this.next() != null;
+	}
 }

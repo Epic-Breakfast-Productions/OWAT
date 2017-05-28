@@ -276,7 +276,58 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public Iterator<E> iterator() {
-		//TODO
-		return null;
+		Iterator<E> it = new Iterator<E>() {
+			private LongListNode<E> curNode = first;
+			private boolean startedIt = false;
+			@Override
+			public boolean hasNext() {
+				return curNode != null ? curNode.hasNext() : false;
+			}
+			@Override
+			public E next() {
+				if(!this.hasNext()){
+					throw new NoSuchElementException("No more elements to iterate through.");
+				}
+				if(!startedIt){
+					startedIt = true;
+					return curNode.getData();
+				}
+				curNode = curNode.next();
+				return curNode.getData();
+			}
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
+		return it;
+	}
+	
+	public Iterator<E> revIterator() {
+		Iterator<E> it = new Iterator<E>() {
+			private LongListNode<E> curNode = last;
+			private boolean startedIt = false;
+			@Override
+			public boolean hasNext() {
+				return curNode != null ? curNode.hasPrev() : false;
+			}
+			@Override
+			public E next() {
+				if(!this.hasNext()){
+					throw new NoSuchElementException("No more elements to iterate through.");
+				}
+				if(!startedIt){
+					startedIt = true;
+					return curNode.getData();
+				}
+				curNode = curNode.prev();
+				return curNode.getData();
+			}
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
+		return it;
 	}
 }
