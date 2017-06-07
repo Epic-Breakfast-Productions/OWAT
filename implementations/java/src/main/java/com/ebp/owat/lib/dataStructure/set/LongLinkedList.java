@@ -9,6 +9,7 @@ import java.util.*;
  * Created by Greg Stewart on 4/1/17.
  */
 public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, Collection<E>, Deque<E>, List<E>, Queue<E> {
+	private long capacity = -1;
 	private long length = 0;
 	private LongListNode<E> first;
 	private LongListNode<E> last;
@@ -190,18 +191,6 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public ListIterator<E> listIterator() {
-		//TODO
-		return null;
-	}
-	
-	@Override
-	public ListIterator<E> listIterator(int i) {
-		//TODO
-		return null;
-	}
-	
-	@Override
 	public List<E> subList(int i, int i1) {
 		//TODO
 		return null;
@@ -282,31 +271,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public Iterator<E> iterator() {
-		Iterator<E> it = new Iterator<E>() {
-			private LongListNode<E> curNode = first;
-			private boolean startedIt = false;
-			@Override
-			public boolean hasNext() {
-				return curNode != null ? curNode.hasNext() : false;
-			}
-			@Override
-			public E next() {
-				if(!this.hasNext()){
-					throw new NoSuchElementException("No more elements to iterate through.");
-				}
-				if(!startedIt){
-					startedIt = true;
-					return curNode.getData();
-				}
-				curNode = curNode.next();
-				return curNode.getData();
-			}
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-		return it;
+		return this.listIterator();
 	}
 	
 	@Override
@@ -335,6 +300,89 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 				throw new UnsupportedOperationException();
 			}
 		};
+	}
+	
+	@Override
+	public ListIterator<E> listIterator() {//TODO:: test
+		return new ListIterator<E>() {
+			private LongListNode<E> curNode = first;
+			private boolean startedIt = false;
+			@Override
+			public boolean hasNext() {
+				return curNode != null ? curNode.hasNext() : false;
+			}
+			@Override
+			public E next() {
+				if(!this.hasNext()){
+					throw new NoSuchElementException("No more elements to iterate through.");
+				}
+				if(!startedIt){
+					startedIt = true;
+					return curNode.getData();
+				}
+				curNode = curNode.next();
+				return curNode.getData();
+			}
+			
+			@Override
+			public boolean hasPrevious() {
+				return curNode != null ? curNode.hasPrev() : false;
+			}
+			
+			@Override
+			public E previous() {
+				if(!this.hasPrevious()){
+					throw new NoSuchElementException("No more elements to iterate through.");
+				}
+				curNode = curNode.prev();
+				return curNode.getData();
+			}
+			
+			@Override
+			public int nextIndex() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public int previousIndex() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void set(E e) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void add(E e) {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
+	
+	@Override
+	public ListIterator<E> listIterator(int i) {
+		return this.listIterator((long)i);
+	}
+	
+	/**
+	 * Same as {@link #listIterator(int) listIterator(int)}, except uses long, as per this class.
+	 * @param i The index the ListIterator should be at.
+	 * @return A ListIterator already at the element at the index given.
+	 */
+	public ListIterator<E> listIterator(long i) {//TODO:: test
+		ListIterator<E> it = this.listIterator();
+		
+		for(long j = 0; j < i; j++){
+			it.next();
+		}
+		
+		return it;
 	}
 	
 	//TODO:: private iterators that return nodes, not values
