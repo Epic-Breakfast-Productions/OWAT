@@ -9,13 +9,44 @@ import java.util.*;
  * Created by Greg Stewart on 4/1/17.
  */
 public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, Collection<E>, Deque<E>, List<E>, Queue<E> {
-	private long capacity = -1;
+	/** The capacity this list should be set to. Default capacity is {@link Long#MAX_VALUE Long.MAX_VALUE}. */
+	private long capacity = Long.MAX_VALUE;
+	/** The length of the list. */
 	private long length = 0;
+	/** The first node in this list. */
 	private LongListNode<E> first;
+	/** The last node in this list. */
 	private LongListNode<E> last;
 	
+	/**
+	 * Determines if this list is at capacity or not. Will always return false if no capacity specified.
+	 * @return False if not at capacity, true if at capacity.
+	 */
+	public boolean atCapacity(){//TODO:: test
+		return this.length > capacity;
+	}
+	
+	/**
+	 * Throws an IllegalStateException if the list is at capacity. Use before any operation that adds elements to the list.
+	 */
+	private void throwIfAtCapacity(){//TODO:: test
+		if(this.atCapacity()){
+			throw new IllegalStateException("List is already at capacity. Cannot add more to the list.");
+		}
+	}
+	
+	/**
+	 * Throws an IllegalStateException if the list is empty. Use before any operation that removes elements from the list.
+	 */
+	private void throwIfEmpty(){
+		if(this.isEmpty()){
+			throw new IllegalStateException("List is empty. Cannot remove a node.");
+		}
+	}
+	
 	@Override
-	public void addFirst(E e) {
+	public void addFirst(E e) {//TODO:: test
+		this.throwIfAtCapacity();
 		if(this.first == null){
 			this.first = new LongListNode<>(e);
 			this.last = this.first;
@@ -26,7 +57,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public void addLast(E e) {
+	public void addLast(E e) {//TODO:: test
+		this.throwIfAtCapacity();
 		if(this.last == null){
 			this.last = new LongListNode<>(e);
 			this.first = this.last;
@@ -37,15 +69,23 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean offerFirst(E e) {
-		//TODO
-		return false;
+	public boolean offerFirst(E e) {//TODO:: test
+		try{
+			this.addFirst(e);
+		}catch (IllegalStateException ex){
+			return false;
+		}
+		return true;
 	}
 	
 	@Override
 	public boolean offerLast(E e) {
-		//TODO
-		return false;
+		try{
+			this.addLast(e);
+		}catch (IllegalStateException ex){
+			return false;
+		}
+		return true;
 	}
 	
 	@Override
