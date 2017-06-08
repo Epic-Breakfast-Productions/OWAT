@@ -23,7 +23,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @return False if not at capacity, true if at capacity.
 	 */
 	public boolean atCapacity(){//TODO:: test
-		return this.length > capacity;
+		return this.length >= capacity;
 	}
 	
 	/**
@@ -36,17 +36,35 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	/**
-	 * Throws an IllegalStateException if the list is empty. Use before any operation that removes elements from the list.
+	 * Throws an NoSuchElementException if the list is empty. Use before any operation that removes elements from the list.
 	 */
 	private void throwIfEmpty(){
 		if(this.isEmpty()){
-			throw new IllegalStateException("List is empty. Cannot remove a node.");
+			throw new NoSuchElementException("List is empty. Cannot remove a node.");
+		}
+	}
+	
+	/**
+	 * Determines if this list's length is greater than Integer.MAX_INT
+	 * @return If this list's length is greater than Integer.MAX_INT
+	 */
+	public boolean lengthGTMaxInt(){
+		return this.length > Integer.MAX_VALUE;
+	}
+	
+	/**
+	 * Throws an IllegalStateException if the list has more than Integer.MAX_INT elements in it.
+	 */
+	private void throwIfLengthGTMaxInt(){
+		if(this.lengthGTMaxInt()){
+			throw new IllegalStateException("List has more elements than Integer.MAX_VALUE. Please use the other similarly named method made for longs.");
 		}
 	}
 	
 	@Override
 	public void addFirst(E e) {//TODO:: test
 		this.throwIfAtCapacity();
+		this.length++;
 		if(this.first == null){
 			this.first = new LongListNode<>(e);
 			this.last = this.first;
@@ -59,6 +77,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	@Override
 	public void addLast(E e) {//TODO:: test
 		this.throwIfAtCapacity();
+		this.length++;
 		if(this.last == null){
 			this.last = new LongListNode<>(e);
 			this.first = this.last;
@@ -89,51 +108,69 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public E removeFirst() {
-		//TODO
-		return null;
+	public E removeFirst() {//TODO:: test
+		this.throwIfEmpty();
+		this.length--;
+		E value = this.first.getData();
+		this.first = this.first.next();
+		return value;
 	}
 	
 	@Override
-	public E removeLast() {
-		//TODO
-		return null;
+	public E removeLast() {//TODO:: test
+		this.throwIfEmpty();
+		this.length--;
+		E value = this.last.getData();
+		this.last = this.last.prev();
+		return value;
 	}
 	
 	@Override
-	public E pollFirst() {
-		//TODO
-		return null;
+	public E pollFirst() {//TODO:: test
+		try{
+			return this.removeFirst();
+		}catch (NoSuchElementException ex){
+			return null;
+		}
 	}
 	
 	@Override
-	public E pollLast() {
-		//TODO
-		return null;
+	public E pollLast() {//TODO:: test
+		try{
+			return this.removeLast();
+		}catch (NoSuchElementException ex){
+			return null;
+		}
 	}
 	
 	@Override
-	public E getFirst() {
-		//TODO
-		return null;
+	public E getFirst() {//TODO:: test
+		this.throwIfEmpty();
+		return this.first.getData();
 	}
 	
 	@Override
-	public E getLast() {
-		//TODO
-		return null;
+	public E getLast() {//TODO:: test
+		this.throwIfEmpty();
+		return this.last.getData();
 	}
 	
 	@Override
-	public E peekFirst() {
-		//TODO
-		return null;
+	public E peekFirst() {//TODO:: test
+		try{
+			return this.getFirst();
+		}catch (NoSuchElementException ex){
+			return null;
+		}
 	}
 	
 	@Override
-	public E peekLast() {
-		//TODO
-		return null;
+	public E peekLast() {//TODO:: test
+		try{
+			return this.getLast();
+		}catch (NoSuchElementException ex){
+			return null;
+		}
 	}
 	
 	@Override
@@ -156,64 +193,79 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public E remove() {
-		//TODO
-		return null;
+		return this.removeFirst();
 	}
 	
 	@Override
 	public E poll() {
-		//TODO
-		return null;
+		return this.pollFirst();
 	}
 	
 	@Override
 	public E element() {
-		//TODO
-		return null;
+		return this.getFirst();
 	}
 	
 	@Override
 	public E peek() {
-		//TODO
-		return null;
+		return this.peekFirst();
 	}
 	
 	@Override
 	public void push(E e) {
-		//TODO
+		this.addFirst(e);
 	}
 	
 	@Override
 	public E pop() {
-		//TODO
-		return null;
+		return removeFirst();
 	}
 	
 	@Override
 	public boolean addAll(int i, Collection<? extends E> collection) {
+		return this.addAll((long)i, collection);
+	}
+	
+	public boolean addAll(long i, Collection<? extends E> collection) {
 		//TODO
 		return false;
 	}
 	
 	@Override
 	public E get(int i) {
+		return this.get((long)i);
+	}
+	
+	public E get(long i){
 		//TODO
 		return null;
 	}
 	
 	@Override
 	public E set(int i, E e) {
+		return this.set((long)i, e);
+	}
+	
+	public E set(long i, E e) {
 		//TODO
 		return null;
 	}
 	
 	@Override
 	public void add(int i, E e) {
+		this.add((long)i, e);
+	}
+	
+	public void add(long i, E e) {
 		//TODO
 	}
 	
 	@Override
 	public E remove(int i) {
+		return this.remove((long)i);
+	}
+	
+	public E remove(long i) {
 		//TODO
 		return null;
 	}
@@ -224,28 +276,47 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return 0;
 	}
 	
+	public long indexOfL(Object o) {
+		//TODO
+		return 0;
+	}
+	
 	@Override
 	public int lastIndexOf(Object o) {
 		//TODO
 		return 0;
 	}
 	
-	@Override
-	public List<E> subList(int i, int i1) {
-		//TODO
-		return null;
-	}
-	
-	@Override
-	public int size() {
+	public long lastIndexOfL(Object o) {
 		//TODO
 		return 0;
 	}
 	
 	@Override
-	public boolean isEmpty() {
+	public List<E> subList(int i, int i1) {
+		return this.subList((long) i, (long) i1);
+	}
+	
+	public List<E> subList(long i, long i1) {
 		//TODO
-		return false;
+		return null;
+	}
+	
+	@Override
+	public int size() {//TODO:: test
+		if(this.lengthGTMaxInt()){
+			return Integer.MAX_VALUE;
+		}
+		return (int)this.length;
+	}
+	
+	public long sizeL() {
+		return this.length;
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return this.length == 0;
 	}
 	
 	@Override
@@ -267,9 +338,18 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean add(E e) {
-		//TODO
-		return false;
+	public boolean add(E e) {//TODO:: test
+		if(this.atCapacity()){
+			return false;
+		}
+		
+		this.length++;
+		this.last = new LongListNode<>(
+				e,
+				this.last,
+				null
+		);
+		return true;
 	}
 	
 	@Override
@@ -425,5 +505,69 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return it;
 	}
 	
-	//TODO:: private iterators that return nodes, not values
+	/**
+	 * Iterator that returns the actual nodes and not just the values. Used for internal methods only.
+	 * @return ListIterator that returns nodes not values.
+	 */
+	private ListIterator<LongListNode<E>> listNodeIterator() {
+		return new ListIterator<LongListNode<E>>() {
+			private LongListNode<E> curNode = first;
+			private boolean startedIt = false;
+			@Override
+			public boolean hasNext() {
+				return curNode != null ? curNode.hasNext() : false;
+			}
+			@Override
+			public LongListNode<E> next() {
+				if(!this.hasNext()){
+					throw new NoSuchElementException("No more elements to iterate through.");
+				}
+				if(!startedIt){
+					startedIt = true;
+					return curNode;
+				}
+				curNode = curNode.next();
+				return curNode;
+			}
+			
+			@Override
+			public boolean hasPrevious() {
+				return curNode != null ? curNode.hasPrev() : false;
+			}
+			
+			@Override
+			public LongListNode<E> previous() {
+				if(!this.hasPrevious()){
+					throw new NoSuchElementException("No more elements to iterate through.");
+				}
+				curNode = curNode.prev();
+				return curNode;
+			}
+			
+			@Override
+			public int nextIndex() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public int previousIndex() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void set(LongListNode<E> e) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void add(LongListNode<E> e) {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
 }
