@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.dataStructure.set;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.io.Serializable;
 import java.util.*;
@@ -19,9 +20,44 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	/** The length of the list. */
 	private long length = 0;
 	/** The first node in this list. */
-	private LongListNode<E> first;
+	private LongListNode<E> first = null;
 	/** The last node in this list. */
-	private LongListNode<E> last;
+	private LongListNode<E> last = null;
+	
+	/**
+	 * Default constructor. Creates an empty list.
+	 */
+	public LongLinkedList(){
+	
+	}
+	
+	/**
+	 * Constructor that creates a list containing the elements given.
+	 * @param c The collection of elements to put into the list.
+	 */
+	public LongLinkedList(@NotNull Collection<E> c){
+		this();
+		this.addAll(c);
+	}
+	
+	/**
+	 * Constructor to create a list with the capacity given.
+	 * @param l The capacity this list should max out at.
+	 */
+	public LongLinkedList(long l){
+		this();
+		this.capacity = l;
+	}
+	
+	/**
+	 * Constructor to create this list with a set max capacity and a beginning set of elements.
+	 * @param l The max capacity to give this list.
+	 * @param c The collection of elements to start this list off with.
+	 */
+	public LongLinkedList(long l, @NotNull Collection<E> c){
+		this(l);
+		this.addAll(c);
+	}
 	
 	/**
 	 * Determines if this list is at capacity or not.
@@ -314,18 +350,18 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param collection
 	 * @return
 	 */
-	public boolean addAll(long i, Collection<? extends E> collection) {
+	public boolean addAll(long i, Collection<? extends E> collection) {//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
 		this.throwIfAtCapacity(collection.size());
 		ListIterator<LongListNode<E>> it = this.listNodeIterator();
-		
-		//TODO:: finish
-		
-		return false;
-	}
-	
-	public boolean addAll(long i, LongLinkedList<? extends E> collection){
-		//TODO:: do
+		LongListNode<E> nodeToInsertAt = this.getNode(i);
+		for(E curElement : collection){
+			new LongListNode<E>(
+					curElement,
+					nodeToInsertAt.prev(),
+					nodeToInsertAt
+			);
+		}
 		return false;
 	}
 	
@@ -342,7 +378,6 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	public E get(long i){//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
 		ListIterator<E> it = this.listIterator();
-		
 		long count = 0;
 		while(it.hasNext()){
 			if(count == i){
@@ -352,6 +387,27 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			count++;
 		}
 		return null;
+	}
+	
+	/**
+	 * Gets the actual node from the list at the index.
+	 * @param i The index of the node to get.
+	 * @return The LongListNode at the given index
+	 * @throws IndexOutOfBoundsException If the index given is out of bounds.
+	 */
+	@NotNull
+	private LongListNode<E> getNode(long i){
+		this.throwIfIndexOutOfBounds(i);
+		ListIterator<LongListNode<E>> it = this.listNodeIterator();
+		long count = 0;
+		while(it.hasNext()){
+			if(count == i){
+				return it.next();
+			}
+			it.next();
+			count++;
+		}
+		throw new IllegalStateException("Did not return with a LongListNode. This should not happen.");
 	}
 	
 	@Override
@@ -396,7 +452,6 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		this.throwIfIndexOutOfBounds(i);
 		this.throwIfAtCapacity();
 		ListIterator<LongListNode<E>> it = this.listNodeIterator();
-		
 		long count = 0;
 		while(it.hasNext()){
 			if(count == i){
@@ -530,9 +585,14 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public Object[] toArray() {
-		//TODO:: do
-		return new Object[0];
+	public Object[] toArray() {//TODO:: test
+		this.throwIfLengthGTMaxInt();
+		Object[] output = new Object[(int)this.length];
+		ListIterator<E> it = this.listIterator();
+		for(int i = 0; i < output.length && it.hasNext(); i++){
+			output[i] = it.next();
+		}
+		return output;
 	}
 	
 	@Override
@@ -562,15 +622,52 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean containsAll(Collection<?> collection) {
-		//TODO:: do
-		return false;
+	public boolean containsAll(Collection<?> collection) {//TODO:: test
+		Iterator<?> it = collection.iterator();
+		while(it.hasNext())
+			if (!this.contains(it.next()))
+				return false;
+		return true;
+	}
+	
+	/**
+	 * Determines if all of the elements given are inside this list. Acts the same as {@link LongLinkedList#containsAll(Collection) containsAll(Collection)}, but runs in O(n) instead of O(n*m).
+	 * @param collection The collection of objects to determine if they are in the list.
+	 * @return If all of the elements given are inside this list.
+	 */
+	public boolean containsAllElements(Collection<E> collection){//TODO:: test
+		Map<E, Boolean> tracker = new HashMap<>();
+		
+		Iterator<E> it = collection.iterator();
+		while (it.hasNext()){
+			tracker.put(it.next(), false);
+		}
+		
+		it = this.listIterator();
+		while (it.hasNext()){
+			E curVal = it.next();
+			if(tracker.containsKey(curVal)){
+				tracker.replace(curVal, true);
+			}
+		}
+		
+		for(Map.Entry<E, Boolean> curEntry : tracker.entrySet()){
+			if(!curEntry.getValue()){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@Override
-	public boolean addAll(Collection<? extends E> collection) {
-		//TODO:: do
-		return false;
+	public boolean addAll(Collection<? extends E> collection) {//TODO:: test
+		this.throwIfAtCapacity(collection.size());
+		for(E curElement : collection){
+			if(!this.add(curElement)){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@Override
@@ -817,7 +914,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * Descending iterator that returns the actual nodes and not just the values. Used for internal methods only.
 	 * @return Descending ListIterator that returns nodes not values.
 	 */
-	private ListIterator<LongListNode<E>> descendingListNodeIterator() { //TODO:: test
+	private ListIterator<LongListNode<E>> descendingListNodeIterator() {
 		return new ListIterator<LongListNode<E>>() {
 			private LongListNode<E> curNode = last;
 			private boolean startedIt = false;
