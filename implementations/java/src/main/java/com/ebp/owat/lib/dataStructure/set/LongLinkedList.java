@@ -8,6 +8,9 @@ import java.util.*;
 /**
  * Defines a long linked list, a linked list that inherently works using a long instead of int.
  *
+ * TODO:: Organize methods on what type of operation they perform (add/remove/etc)
+ * TODO:: Create constructors
+ *
  * Created by Greg Stewart on 4/1/17.
  */
 public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, Collection<E>, Deque<E>, List<E>, Queue<E> {
@@ -21,7 +24,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	private LongListNode<E> last;
 	
 	/**
-	 * Determines if this list is at capacity or not. Will always return false if no capacity specified.
+	 * Determines if this list is at capacity or not.
 	 * @return False if not at capacity, true if at capacity.
 	 */
 	public boolean atCapacity(){//TODO:: test
@@ -29,10 +32,29 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	/**
+	 * Determines if this list is at capacity or not after adding a theoretical number of nodes.
+	 * @param l The theoretical number of nodes to be added.
+	 * @return If this list is at capacity or not after adding a theoretical number of nodes.
+	 */
+	public boolean atCapacity(long l){//TODO:: test
+		return this.length + l >= capacity;
+	}
+	
+	/**
 	 * Throws an IllegalStateException if the list is at capacity. Use before any operation that adds elements to the list.
 	 */
 	private void throwIfAtCapacity(){//TODO:: test
 		if(this.atCapacity()){
+			throw new IllegalStateException("List is already at capacity. Cannot add more to the list.");
+		}
+	}
+	
+	/**
+	 * Throws an IllegalStateException if the list is at capacity, or will be if l number of nodes are added. Use before any operation that adds elements to the list.
+	 * @param l The theoretical number of nodes to be added.
+	 */
+	private void throwIfAtCapacity(long l){//TODO:: test
+		if(this.atCapacity(l)){
 			throw new IllegalStateException("List is already at capacity. Cannot add more to the list.");
 		}
 	}
@@ -55,11 +77,11 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	/**
-	 * Throws an IllegalStateException if the list has more than Integer.MAX_INT elements in it.
+	 * Throws an IllegalStateException if the list has more than {@link Integer#MAX_VALUE Integer.MAX_VALUE} elements in it.
 	 */
 	private void throwIfLengthGTMaxInt(){
 		if(this.lengthGTMaxInt()){
-			throw new IllegalStateException("List has more elements than Integer.MAX_VALUE. Please use the other similarly named method made for longs.");
+			throw new IllegalStateException("List has more elements than Integer.MAX_INT. Please use the other similarly named method made for longs.");
 		}
 	}
 	
@@ -286,8 +308,24 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return this.addAll((long)i, collection);
 	}
 	
+	/**
+	 * Same as {@link LongLinkedList#addAll(int, Collection) addAll(int, Collection)}, except uses a long instead of an int.
+	 * @param i
+	 * @param collection
+	 * @return
+	 */
 	public boolean addAll(long i, Collection<? extends E> collection) {
-		//TODO
+		this.throwIfIndexOutOfBounds(i);
+		this.throwIfAtCapacity(collection.size());
+		ListIterator<LongListNode<E>> it = this.listNodeIterator();
+		
+		//TODO:: finish
+		
+		return false;
+	}
+	
+	public boolean addAll(long i, LongLinkedList<? extends E> collection){
+		//TODO:: do
 		return false;
 	}
 	
@@ -296,6 +334,11 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return this.get((long)i);
 	}
 	
+	/**
+	 * Same as {@link LongLinkedList#get(int) get(int)}, except uses a long instead of an int.
+	 * @param i
+	 * @return
+	 */
 	public E get(long i){//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
 		ListIterator<E> it = this.listIterator();
@@ -316,16 +359,21 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return this.set((long)i, e);
 	}
 	
+	/**
+	 * Same as {@link LongLinkedList#set(int, E) set(int, E)}, except that this takes a long instead of an int.
+	 * @param i
+	 * @param e
+	 * @return
+	 */
 	public E set(long i, E e) {//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
 		ListIterator<LongListNode<E>> it = this.listNodeIterator();
-		
 		long count = 0;
 		while(it.hasNext()){
 			if(count == i){
 				LongListNode<E> curNode = it.next();
 				E val = curNode.getData();
-				curNode.setData(val);
+				curNode.setData(e);
 				return val;
 			}
 			it.next();
@@ -339,15 +387,21 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		this.add((long)i, e);
 	}
 	
+	/**
+	 * Same as {@link LongLinkedList#add(int, E) add(int, E)}, except uses a long instead of an int.
+	 * @param i
+	 * @param e
+	 */
 	public void add(long i, E e) {//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
+		this.throwIfAtCapacity();
 		ListIterator<LongListNode<E>> it = this.listNodeIterator();
 		
 		long count = 0;
 		while(it.hasNext()){
 			if(count == i){
 				LongListNode<E> curNode = it.next();
-				curNode.setData(e);
+				new LongListNode<>(e, curNode.prev(), curNode);
 				return;
 			}
 			it.next();
@@ -362,6 +416,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	public E remove(long i) {//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
+		this.throwIfEmpty();
 		ListIterator<LongListNode<E>> it = this.listNodeIterator();
 		
 		long count = 0;
@@ -379,25 +434,61 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public int indexOf(Object o) {
-		//TODO
-		return 0;
+	public int indexOf(Object o) {//TODO:: test
+		this.throwIfLengthGTMaxInt();
+		return (int)this.indexOfL(o);
 	}
 	
-	public long indexOfL(Object o) {
-		//TODO
-		return 0;
+	/**
+	 * Same as {@link LongLinkedList#indexOf(Object) indexOf(Object)}, except returns a long instead of an int.
+	 * @param o
+	 * @return
+	 */
+	public long indexOfL(Object o) {//TODO:: test
+		Iterator<E> it = this.iterator();
+		long count = 0;
+		while(it.hasNext()){
+			if(o == null) {
+				if (it.next() == null) {
+					return count;
+				}
+			}else{
+				if(o.equals(it.next())){
+					return count;
+				}
+			}
+			count++;
+		}
+		return -1;
 	}
 	
 	@Override
 	public int lastIndexOf(Object o) {
-		//TODO
-		return 0;
+		this.throwIfLengthGTMaxInt();
+		return (int)this.lastIndexOfL(o);
 	}
 	
-	public long lastIndexOfL(Object o) {
-		//TODO
-		return 0;
+	/**
+	 * Same as {@link LongLinkedList#lastIndexOf(Object) lastIndexOf(Object)}, except returns a long instead of int.
+	 * @param o
+	 * @return
+	 */
+	public long lastIndexOfL(Object o) {//TODO:: test
+		Iterator<E> it = this.descendingIterator();
+		long count = this.length;
+		while(it.hasNext()){
+			if(o == null) {
+				if (it.next() == null) {
+					return count;
+				}
+			}else{
+				if(o.equals(it.next())){
+					return count;
+				}
+			}
+			count--;
+		}
+		return -1;
 	}
 	
 	@Override
@@ -405,8 +496,14 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return this.subList((long) i, (long) i1);
 	}
 	
+	/**
+	 * Same as {@link LongLinkedList#subList(int, int) subList(int, int)}, except uses longs instead of ints.
+	 * @param i
+	 * @param i1
+	 * @return
+	 */
 	public List<E> subList(long i, long i1) {
-		//TODO
+		//TODO:: do
 		return null;
 	}
 	
@@ -429,19 +526,18 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public boolean contains(Object o) {
-		//TODO
-		return false;
+		return this.indexOfL(o) != -1;
 	}
 	
 	@Override
 	public Object[] toArray() {
-		//TODO
+		//TODO:: do
 		return new Object[0];
 	}
 	
 	@Override
 	public <T> T[] toArray(T[] ts) {
-		//TODO
+		//TODO:: do
 		return null;
 	}
 	
@@ -462,31 +558,30 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public boolean remove(Object o) {
-		//TODO
-		return false;
+		return this.removeFirstOccurrence(o);
 	}
 	
 	@Override
 	public boolean containsAll(Collection<?> collection) {
-		//TODO
+		//TODO:: do
 		return false;
 	}
 	
 	@Override
 	public boolean addAll(Collection<? extends E> collection) {
-		//TODO
+		//TODO:: do
 		return false;
 	}
 	
 	@Override
 	public boolean removeAll(Collection<?> collection) {
-		//TODO
+		//TODO:: do
 		return false;
 	}
 	
 	@Override
 	public boolean retainAll(Collection<?> collection) {
-		//TODO
+		//TODO:: do
 		return false;
 	}
 	
