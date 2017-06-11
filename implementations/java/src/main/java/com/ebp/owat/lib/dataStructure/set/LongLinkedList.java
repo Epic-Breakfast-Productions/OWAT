@@ -1,5 +1,7 @@
 package com.ebp.owat.lib.dataStructure.set;
 
+import com.sun.istack.internal.NotNull;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -59,6 +61,34 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		if(this.lengthGTMaxInt()){
 			throw new IllegalStateException("List has more elements than Integer.MAX_VALUE. Please use the other similarly named method made for longs.");
 		}
+	}
+	
+	/**
+	 * Throws an IndexOutOfBoundsException if the index given is out of bounds.
+	 * @param i The index to test.
+	 */
+	private void throwIfIndexOutOfBounds(long i){
+		if(i > this.length || i < 0){
+			throw new IndexOutOfBoundsException("Index given is out of bounds.");
+		}
+	}
+	
+	/**
+	 * Removes a given node. Assumes the node is part of this list.
+	 * @param node The node in this list that is to be removed.
+	 */
+	private void removeNode(@NotNull LongListNode<E> node){//TODO:: test
+		this.throwIfEmpty();
+		if(this.first == node){
+			this.first = node.next();
+			this.first.setPrev(null);
+		}else if(this.last == node){
+			this.last = node.prev();
+			this.last.setNext(null);
+		}else{
+			node.prev().setNext(node.next());
+		}
+		this.length--;
 	}
 	
 	@Override
@@ -174,21 +204,51 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean removeFirstOccurrence(Object o) {
-		//TODO
+	public boolean removeFirstOccurrence(Object o) {//TODO:: test
+		ListIterator<LongListNode<E>> it = this.listNodeIterator();
+		
+		while(it.hasNext()){
+			LongListNode<E> curNode = it.next();
+			E curVal = curNode.getData();
+			if(o == null){
+				if(curVal == null){
+					this.removeNode(curNode);
+					return true;
+				}
+			}else{
+				if(curVal.equals(o)){
+					this.removeNode(curNode);
+					return true;
+				}
+			}
+		}//foreach node
 		return false;
 	}
 	
 	@Override
 	public boolean removeLastOccurrence(Object o) {
-		//TODO
+		ListIterator<LongListNode<E>> it = this.descendingListNodeIterator();
+		while(it.hasNext()){
+			LongListNode<E> curNode = it.next();
+			E curVal = curNode.getData();
+			if(o == null){
+				if(curVal == null){
+					this.removeNode(curNode);
+					return true;
+				}
+			}else{
+				if(curVal.equals(o)){
+					this.removeNode(curNode);
+					return true;
+				}
+			}
+		}//foreach node
 		return false;
 	}
 	
 	@Override
 	public boolean offer(E e) {
-		//TODO
-		return false;
+		return this.offerLast(e);
 	}
 	
 	@Override
@@ -236,8 +296,18 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return this.get((long)i);
 	}
 	
-	public E get(long i){
-		//TODO
+	public E get(long i){//TODO:: test
+		this.throwIfIndexOutOfBounds(i);
+		ListIterator<E> it = this.listIterator();
+		
+		long count = 0;
+		while(it.hasNext()){
+			if(count == i){
+				return it.next();
+			}
+			it.next();
+			count++;
+		}
 		return null;
 	}
 	
@@ -246,8 +316,21 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return this.set((long)i, e);
 	}
 	
-	public E set(long i, E e) {
-		//TODO
+	public E set(long i, E e) {//TODO:: test
+		this.throwIfIndexOutOfBounds(i);
+		ListIterator<LongListNode<E>> it = this.listNodeIterator();
+		
+		long count = 0;
+		while(it.hasNext()){
+			if(count == i){
+				LongListNode<E> curNode = it.next();
+				E val = curNode.getData();
+				curNode.setData(val);
+				return val;
+			}
+			it.next();
+			count++;
+		}
 		return null;
 	}
 	
@@ -256,8 +339,20 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		this.add((long)i, e);
 	}
 	
-	public void add(long i, E e) {
-		//TODO
+	public void add(long i, E e) {//TODO:: test
+		this.throwIfIndexOutOfBounds(i);
+		ListIterator<LongListNode<E>> it = this.listNodeIterator();
+		
+		long count = 0;
+		while(it.hasNext()){
+			if(count == i){
+				LongListNode<E> curNode = it.next();
+				curNode.setData(e);
+				return;
+			}
+			it.next();
+			count++;
+		}
 	}
 	
 	@Override
@@ -265,8 +360,21 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return this.remove((long)i);
 	}
 	
-	public E remove(long i) {
-		//TODO
+	public E remove(long i) {//TODO:: test
+		this.throwIfIndexOutOfBounds(i);
+		ListIterator<LongListNode<E>> it = this.listNodeIterator();
+		
+		long count = 0;
+		while(it.hasNext()){
+			if(count == i){
+				LongListNode<E> curNode = it.next();
+				E val = curNode.getData();
+				curNode.prev().setNext(curNode.next());
+				return val;
+			}
+			it.next();
+			count++;
+		}
 		return null;
 	}
 	
@@ -396,30 +504,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public Iterator<E> descendingIterator() {
-		return new Iterator<E>() {
-			private LongListNode<E> curNode = last;
-			private boolean startedIt = false;
-			@Override
-			public boolean hasNext() {
-				return curNode != null ? curNode.hasPrev() : false;
-			}
-			@Override
-			public E next() {
-				if(!this.hasNext()){
-					throw new NoSuchElementException("No more elements to iterate through.");
-				}
-				if(!startedIt){
-					startedIt = true;
-					return curNode.getData();
-				}
-				curNode = curNode.prev();
-				return curNode.getData();
-			}
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
+		return this.descendingListIterator();
 	}
 	
 	@Override
@@ -485,6 +570,70 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		};
 	}
 	
+	public ListIterator<E> descendingListIterator(){
+		return new ListIterator<E>() {
+			private LongListNode<E> curNode = last;
+			private boolean startedIt = false;
+			
+			@Override
+			public boolean hasNext() {
+				return curNode != null ? curNode.hasPrev() : false;
+			}
+			
+			@Override
+			public E next() {
+				if(!this.hasNext()){
+					throw new NoSuchElementException("No more elements to iterate through.");
+				}
+				if(!startedIt){
+					startedIt = true;
+					return curNode.getData();
+				}
+				curNode = curNode.prev();
+				return curNode.getData();
+			}
+			
+			@Override
+			public boolean hasPrevious() {
+				return curNode != null ? curNode.hasNext() : false;
+			}
+			
+			@Override
+			public E previous() {
+				if(!this.hasPrevious()){
+					throw new NoSuchElementException("No more elements to iterate through.");
+				}
+				curNode = curNode.next();
+				return curNode.getData();
+			}
+			
+			@Override
+			public int nextIndex() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public int previousIndex() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void set(E e) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void add(E e) {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
+	
 	@Override
 	public ListIterator<E> listIterator(int i) {
 		return this.listIterator((long)i);
@@ -497,11 +646,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 */
 	public ListIterator<E> listIterator(long i) {//TODO:: test
 		ListIterator<E> it = this.listIterator();
-		
 		for(long j = 0; j < i; j++){
 			it.next();
 		}
-		
 		return it;
 	}
 	
@@ -541,6 +688,74 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 					throw new NoSuchElementException("No more elements to iterate through.");
 				}
 				curNode = curNode.prev();
+				return curNode;
+			}
+			
+			@Override
+			public int nextIndex() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public int previousIndex() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void set(LongListNode<E> e) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void add(LongListNode<E> e) {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
+	
+	/**
+	 * Descending iterator that returns the actual nodes and not just the values. Used for internal methods only.
+	 * @return Descending ListIterator that returns nodes not values.
+	 */
+	private ListIterator<LongListNode<E>> descendingListNodeIterator() { //TODO:: test
+		return new ListIterator<LongListNode<E>>() {
+			private LongListNode<E> curNode = last;
+			private boolean startedIt = false;
+			
+			@Override
+			public boolean hasNext() {
+				return curNode != null ? curNode.hasPrev() : false;
+			}
+			
+			@Override
+			public LongListNode<E> next() {
+				if(!this.hasNext()){
+					throw new NoSuchElementException("No more elements to iterate through.");
+				}
+				if(!startedIt){
+					startedIt = true;
+					return curNode;
+				}
+				curNode = curNode.prev();
+				return curNode;
+			}
+			
+			@Override
+			public boolean hasPrevious() {
+				return curNode != null ? curNode.hasNext() : false;
+			}
+			
+			@Override
+			public LongListNode<E> previous() {
+				if(!this.hasPrevious()){
+					throw new NoSuchElementException("No more elements to iterate through.");
+				}
+				curNode = curNode.next();
 				return curNode;
 			}
 			
