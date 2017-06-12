@@ -134,6 +134,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	/**
 	 * Removes a given node. Assumes the node is part of this list.
 	 * @param node The node in this list that is to be removed.
+	 * @throws NoSuchElementException If the list is empty.
 	 */
 	private void removeNode(@NotNull LongListNode<E> node){//TODO:: test
 		this.throwIfEmpty();
@@ -553,13 +554,29 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	/**
 	 * Same as {@link LongLinkedList#subList(int, int) subList(int, int)}, except uses longs instead of ints.
+	 *
+	 * Throws IndexOutOfBoundsException if either is out of bounds.
 	 * @param i
 	 * @param i1
 	 * @return
 	 */
-	public List<E> subList(long i, long i1) {
-		//TODO:: do
-		return null;
+	public List<E> subList(long i, long i1) {//TODO:: test
+		if(i > i1){
+			throw new IllegalArgumentException("i can not be greater than i1.");
+		}
+		this.throwIfIndexOutOfBounds(i);
+		this.throwIfIndexOutOfBounds(i1);
+		long numToGet = i1 - i;
+		
+		LongLinkedList<E> output = new LongLinkedList<>();
+		
+		LongListNode<E> curNode = this.getNode(i);
+		for(int j = 0; j < numToGet; j++){
+			output.addLast(curNode.getData());
+			curNode = curNode.next();
+		}
+		
+		return output;
 	}
 	
 	@Override
@@ -597,8 +614,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public <T> T[] toArray(T[] ts) {
-		//TODO:: do
-		return null;
+		throw new UnsupportedOperationException("This method is unsupported, and is not currently planned to be supported. If you need this method to be supported, please contact the developer.");
 	}
 	
 	@Override
@@ -671,15 +687,61 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean removeAll(Collection<?> collection) {
-		//TODO:: do
-		return false;
+	public boolean removeAll(Collection<?> collection) {//TODO:: test
+		Iterator<?> it = collection.iterator();
+		boolean changed = false;
+		while(it.hasNext()){
+			try {
+				this.remove(it.next());
+				changed = true;
+			}catch(NoSuchElementException e){
+				break;
+			}
+		}
+		return changed;
 	}
 	
 	@Override
-	public boolean retainAll(Collection<?> collection) {
-		//TODO:: do
-		return false;
+	public boolean retainAll(Collection<?> collection) {//TODO:: test
+		LongListNode curNode = this.first;
+		
+		if(this.length == 0){
+			return false;
+		}
+		if(this.length == 1){
+			if(!collection.contains(curNode.getData())){
+				this.clear();
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+		boolean changed = false;
+		while (curNode != null){
+			if(!collection.contains(curNode.getData())){
+				changed = true;
+				boolean isFirst = curNode == this.first;
+				boolean isLast = curNode == this.first;
+				
+				if(isFirst && isLast){
+					this.clear();
+					break;
+				}else if(isFirst){
+					curNode = curNode.next();
+					this.removeFirst();
+				}else if(isLast){
+					this.removeLast();
+					curNode = null;
+				}else{
+					curNode.next().setPrev(curNode.prev());
+					curNode = curNode.next();
+				}
+			}else{
+				curNode = curNode.next();
+			}
+		}
+		return changed;
 	}
 	
 	@Override
