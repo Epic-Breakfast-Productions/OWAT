@@ -2,6 +2,7 @@ package tests.structure.set;
 
 import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
 import com.ebp.owat.lib.dataStructure.set.OwatNodeSetException;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,6 +10,9 @@ import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import testModels.structure.set.LongLinkedListTestModels;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,60 +23,42 @@ import static org.junit.Assert.assertTrue;
  * Created by Greg Stewart on 4/1/17.
  */
 public class LongLinkedListTest {
-	private Logger LOGGER = LoggerFactory.getLogger(LongLinkedListTest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LongLinkedListTest.class);
 	
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	
 	private LongLinkedList<Boolean> testingNodeList;
 	
-	@Test(expected = OwatNodeSetException.class)
+	/*@Test(expected = OwatNodeSetException.class)
 	public void nodeListSizeExceptionTest(){
 		testingNodeList = LongLinkedListTestModels.getTestingNodeList(false);
 		testingNodeList.size();
+	}*/
+	
+	@Before
+	public void setup(){
+		testingNodeList = null;
 	}
 	
 	@Test
-	public void smallNodeListSizeTest(){
-		testingNodeList = LongLinkedListTestModels.getTestingNodeList(false);
-		assertTrue("Smaller node list size is wrong. Expected: " + LongLinkedListTestModels.testSize + " Actual: " + testingNodeList.listSize(), LongLinkedListTestModels.testSize == testingNodeList.listSize());
-	}
-	
-	@Ignore
-	@Test
-	public void largeNodeListSizeTest(){
-		LongLinkedList<Boolean> testingBigNodeList = LongLinkedListTestModels.getTestingNodeList(true);
-		assertTrue("Larger node list size is wrong. Expected: " + LongLinkedListTestModels.bigTestSize + " Actual: " + testingBigNodeList.listSize(), LongLinkedListTestModels.bigTestSize == testingBigNodeList.listSize());
-	}
-	
-	@Test public void nodeListTypeTest(){
-		LOGGER.info("Testing that NodeLists can correctly get their set types.");
-		testingNodeList = new LongLinkedList<>(LongLinkedList.Type.COL);
-		assertEquals(LongLinkedList.Type.COL, testingNodeList.getType());
-		testingNodeList = new LongLinkedList<>(LongLinkedList.Type.ROW);
-		assertEquals(LongLinkedList.Type.ROW, testingNodeList.getType());
-		testingNodeList = new LongLinkedList<>(LongLinkedList.Type.NA);
-		assertEquals(LongLinkedList.Type.NA, testingNodeList.getType());
+	public void testLongLinkedListConstructors(){
+		LOGGER.info("Testing the constructors of the LongLinkedList");
+		
 		testingNodeList = new LongLinkedList<>();
-		assertEquals(LongLinkedList.Type.NA, testingNodeList.getType());
+		assertEquals("Basic constructor didn't set the default capacity correctly.", LongLinkedList.DEFAULT_CAPACITY, testingNodeList.getCapacity());
+		assertEquals("Basic constructor somehow has nodes in it.", 0, testingNodeList.sizeL());
+		
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingCapacity);
+		assertEquals("Constructor didn't set the capacity correctly.", LongLinkedListTestModels.testingCapacity, testingNodeList.getCapacity());
+		
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		assertEquals("Constructor has wrong number of nodes.", LongLinkedListTestModels.testingArray.size(), testingNodeList.sizeL());
+		
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingCapacity, LongLinkedListTestModels.testingArray);
+		assertEquals("Constructor has wrong number of nodes.", LongLinkedListTestModels.testingArray.size(), testingNodeList.sizeL());
+		assertEquals("Constructor didn't set the capacity correctly.", LongLinkedListTestModels.testingCapacity, testingNodeList.getCapacity());
 	}
 	
-	@Test
-	public void nodeListSubListTest(){
-		testingNodeList = LongLinkedListTestModels.getTestingNodeList(false);
-		
-		long originalSize = LongLinkedListTestModels.testSize;
-		
-		LongLinkedList<Boolean> sublist = testingNodeList.getSubList(0, false);
-		assertTrue("Getting a sublist of 0 entries returned a list that was not empty.", sublist.isEmpty());
-		
-		long numToGet = 5;
-		
-		sublist = testingNodeList.getSubList(numToGet, false);
-		assertTrue("The sublist returned was the wrong length. Expected: " + numToGet + " Was: "+sublist.listSize(), sublist.listSize() == numToGet);
-		
-		sublist = testingNodeList.getSubList(numToGet, true);
-		assertTrue("The sublist returned was the wrong length. Expected: " + numToGet + " Was: "+sublist.listSize(), sublist.listSize() == numToGet);
-		assertTrue("The original list after cutoff was the wrong length. Expected: " + (originalSize - numToGet) + " Was: "+testingNodeList.listSize(), testingNodeList.listSize() == originalSize - numToGet);
-	}
+	
 }

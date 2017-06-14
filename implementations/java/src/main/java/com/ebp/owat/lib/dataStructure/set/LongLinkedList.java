@@ -1,8 +1,5 @@
 package com.ebp.owat.lib.dataStructure.set;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.io.Serializable;
 import java.util.*;
 
@@ -15,8 +12,9 @@ import java.util.*;
  * Created by Greg Stewart on 4/1/17.
  */
 public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, Collection<E>, Deque<E>, List<E>, Queue<E> {
+	public static final long DEFAULT_CAPACITY = Long.MAX_VALUE;
 	/** The capacity this list should be set to. Default capacity is {@link Long#MAX_VALUE Long.MAX_VALUE}. */
-	private long capacity = Long.MAX_VALUE;
+	private long capacity = DEFAULT_CAPACITY;
 	/** The length of the list. */
 	private long length = 0;
 	/** The first node in this list. */
@@ -27,15 +25,13 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	/**
 	 * Default constructor. Creates an empty list.
 	 */
-	public LongLinkedList(){
-	
-	}
+	public LongLinkedList(){}
 	
 	/**
 	 * Constructor that creates a list containing the elements given.
 	 * @param c The collection of elements to put into the list.
 	 */
-	public LongLinkedList(@NotNull Collection<E> c){
+	public LongLinkedList(Collection<E> c){
 		this();
 		this.addAll(c);
 	}
@@ -54,9 +50,17 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param l The max capacity to give this list.
 	 * @param c The collection of elements to start this list off with.
 	 */
-	public LongLinkedList(long l, @NotNull Collection<E> c){
+	public LongLinkedList(long l, Collection<E> c){
 		this(l);
 		this.addAll(c);
+	}
+	
+	/**
+	 * Gets the capacity this list is set to.
+	 * @return The capacity of this list.
+	 */
+	public long getCapacity(){
+		return this.capacity;
 	}
 	
 	/**
@@ -136,7 +140,10 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param node The node in this list that is to be removed.
 	 * @throws NoSuchElementException If the list is empty.
 	 */
-	private void removeNode(@NotNull LongListNode<E> node){//TODO:: test
+	private void removeNode(LongListNode<E> node){//TODO:: test
+		if(node == null){
+			throw new IllegalArgumentException("Node given cannot be null.");
+		}
 		this.throwIfEmpty();
 		if(this.first == node){
 			this.first = node.next();
@@ -396,7 +403,6 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @return The LongListNode at the given index
 	 * @throws IndexOutOfBoundsException If the index given is out of bounds.
 	 */
-	@NotNull
 	private LongListNode<E> getNode(long i){
 		this.throwIfIndexOutOfBounds(i);
 		ListIterator<LongListNode<E>> it = this.listNodeIterator();
@@ -624,11 +630,18 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		}
 		
 		this.length++;
-		this.last = new LongListNode<>(
-				e,
-				this.last,
-				null
-		);
+		if(this.first == null){
+			this.first = new LongListNode<>(
+					e
+			);
+			this.last = this.first;
+		}else {
+			this.last = new LongListNode<>(
+					e,
+					this.last,
+					null
+			);
+		}
 		return true;
 	}
 	
@@ -677,6 +690,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public boolean addAll(Collection<? extends E> collection) {//TODO:: test
+		if(collection == null){
+			return false;
+		}
 		this.throwIfAtCapacity(collection.size());
 		for(E curElement : collection){
 			if(!this.add(curElement)){

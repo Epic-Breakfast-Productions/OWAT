@@ -84,7 +84,7 @@ class LongListNode<T> implements Serializable, Cloneable{
 	 */
 	public LongListNode<T> setNext(LongListNode<T> next){
 		this.nextNode = next;
-		if(this.nextNode != null){
+		if(this.nextNode != null && this.nextNode.prev() != this){
 			this.nextNode.setPrev(this);
 		}
 		return this;
@@ -116,7 +116,7 @@ class LongListNode<T> implements Serializable, Cloneable{
 	 */
 	public LongListNode<T> setPrev(LongListNode<T> prev){
 		this.prevNode = prev;
-		if(this.prevNode != null){
+		if(this.prevNode != null && this.prevNode.next() != this){
 			this.prevNode.setNext(this);
 		}
 		return this;
