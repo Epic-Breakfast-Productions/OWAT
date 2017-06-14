@@ -77,7 +77,7 @@ public abstract class ScramblingMatrix<T extends Node> extends Matrix {
 		
 		LongLinkedList<T> newNodes = this.dataReader.getAllNodes(); //This should always be correct
 		
-		this.setupOriginalLengthWidth(newNodes.listSize());
+		this.setupOriginalLengthWidth(newNodes.sizeL());
 		
 		long curRow = 0L;
 		long curCol = 0L;

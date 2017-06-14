@@ -4,6 +4,7 @@ import com.ebp.owat.lib.dataStructure.io.NodeReader;
 import com.ebp.owat.lib.dataStructure.io.NodeWriter;
 import com.ebp.owat.lib.dataStructure.node.Node;
 import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
+import com.ebp.owat.lib.dataStructure.set.NodeList;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -118,7 +119,7 @@ public abstract class Matrix<T extends Node> {
 	}
 	
 	public void addRow(LongLinkedList<T> listIn){
-		if(this.numCols != listIn.listSize()){
+		if(this.numCols != listIn.sizeL()){
 			throw new OwatMatrixException("List given is the wrong size to use to add to the matrix.");
 		}
 		//TODO: add row, ensuring that they all connect to what they need to.
@@ -126,7 +127,7 @@ public abstract class Matrix<T extends Node> {
 	}
 	
 	public void addCol(LongLinkedList<T> listIn){
-		if(this.numRows != listIn.listSize()){
+		if(this.numRows != listIn.sizeL()){
 			throw new OwatMatrixException("List given is the wrong size to use to add to the matrix.");
 		}
 		//TODO: add column, ensuring that they all connect to what they need to.
@@ -336,11 +337,11 @@ public abstract class Matrix<T extends Node> {
 	 * @return A list of nodes that is the whole row.
 	 * @throws OwatMatrixException If the row number is greater than the number of rows.
 	 */
-	public LongLinkedList<T> getRow(long row) throws OwatMatrixException{
+	public NodeList<T> getRow(long row) throws OwatMatrixException{
 		checkValidRowNumber(row);
 		T endNode = this.getNode(row, 0L);
 		//now have leftmost node in row
-		LongLinkedList<T> output = new LongLinkedList<>(LongLinkedList.Type.ROW);
+		NodeList<T> output = new NodeList<>(NodeList.Type.ROW);
 		T curNode = endNode;
 		while(curNode != null){
 			output.addLast(curNode);
@@ -355,11 +356,11 @@ public abstract class Matrix<T extends Node> {
 	 * @return A list of nodes that is the column in the structure.
 	 * @throws OwatMatrixException If the column number given is out of bounds of the structure.
 	 */
-	public LongLinkedList<T> getCol(long col) throws OwatMatrixException{
+	public NodeList<T> getCol(long col) throws OwatMatrixException{
 		checkValidColNumber(col);
 		T topNode = this.getNode(0L, col);
 		//now have leftmost node in row
-		LongLinkedList<T> output = new LongLinkedList<>(LongLinkedList.Type.ROW);
+		NodeList<T> output = new NodeList<>(NodeList.Type.ROW);
 		T curNode = topNode;
 		while(curNode != null){
 			output.addLast(curNode);
