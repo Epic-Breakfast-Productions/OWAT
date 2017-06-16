@@ -7,7 +7,6 @@ import java.util.*;
  * Defines a long linked list, a linked list that inherently works using a long instead of int.
  *
  * TODO:: Organize methods on what type of operation they perform (add/remove/etc)
- * TODO:: Create constructors
  *
  * Created by Greg Stewart on 4/1/17.
  */
@@ -83,7 +82,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	/**
 	 * Throws an IllegalStateException if the list is at capacity. Use before any operation that adds elements to the list.
 	 */
-	private void throwIfAtCapacity(){//TODO:: test
+	private void throwIfAtCapacity(){
 		if(this.atCapacity()){
 			throw new IllegalStateException("List is already at capacity. Cannot add more to the list.");
 		}

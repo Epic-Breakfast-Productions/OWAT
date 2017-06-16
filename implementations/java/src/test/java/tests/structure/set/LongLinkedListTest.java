@@ -30,12 +30,6 @@ public class LongLinkedListTest {
 	
 	private LongLinkedList<Boolean> testingNodeList;
 	
-	/*@Test(expected = OwatNodeSetException.class)
-	public void nodeListSizeExceptionTest(){
-		testingNodeList = LongLinkedListTestModels.getTestingNodeList(false);
-		testingNodeList.size();
-	}*/
-	
 	@Before
 	public void setup(){
 		testingNodeList = null;
@@ -58,6 +52,11 @@ public class LongLinkedListTest {
 		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingCapacity, LongLinkedListTestModels.testingArray);
 		assertEquals("Constructor has wrong number of nodes.", LongLinkedListTestModels.testingArray.size(), testingNodeList.sizeL());
 		assertEquals("Constructor didn't set the capacity correctly.", LongLinkedListTestModels.testingCapacity, testingNodeList.getCapacity());
+	}
+	
+	@Test(expected = IllegalStateException.class)
+	public void testFullListThrowsException(){
+		//TODO
 	}
 	
 	
