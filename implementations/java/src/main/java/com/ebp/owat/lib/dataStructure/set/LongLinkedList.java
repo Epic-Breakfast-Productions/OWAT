@@ -366,9 +366,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	/**
 	 * Same as {@link LongLinkedList#addAll(int, Collection) addAll(int, Collection)}, except uses a long instead of an int.
-	 * @param i
-	 * @param collection
-	 * @return
+	 * @param i the index to insert the collection into.
+	 * @param collection The collection to insert.
+	 * @return If the list was changed as a result.
 	 */
 	public boolean addAll(long i, Collection<? extends E> collection) {//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
@@ -392,8 +392,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	/**
 	 * Same as {@link LongLinkedList#get(int) get(int)}, except uses a long instead of an int.
-	 * @param i
-	 * @return
+	 * @param i The index of the element to get.
+	 * @return The element at the index.
 	 */
 	public E get(long i){//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
@@ -436,9 +436,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	/**
 	 * Same as {@link LongLinkedList#set(int, E) set(int, E)}, except that this takes a long instead of an int.
-	 * @param i
-	 * @param e
-	 * @return
+	 * @param i The index of the element to set.
+	 * @param e The element to set the node with.
+	 * @return The old value.
 	 */
 	public E set(long i, E e) {//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
@@ -464,8 +464,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	/**
 	 * Same as {@link LongLinkedList#add(int, E) add(int, E)}, except uses a long instead of an int.
-	 * @param i
-	 * @param e
+	 * @param i The index to insert the element at.
+	 * @param e The value to insert.
 	 */
 	public void add(long i, E e) {//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
@@ -488,6 +488,11 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return this.remove((long)i);
 	}
 	
+	/**
+	 * Same as {@link LongLinkedList#remove(int) remove(int)}, but takes a long instead of an int
+	 * @param i The index of the element to remove.
+	 * @return The element at the index.
+	 */
 	public E remove(long i) {//TODO:: test
 		this.throwIfIndexOutOfBounds(i);
 		this.throwIfEmpty();
@@ -515,8 +520,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	/**
 	 * Same as {@link LongLinkedList#indexOf(Object) indexOf(Object)}, except returns a long instead of an int.
-	 * @param o
-	 * @return
+	 * @param o The element to get the index of.
+	 * @return The index of the object given.
 	 */
 	public long indexOfL(Object o) {//TODO:: test
 		Iterator<E> it = this.iterator();
@@ -544,8 +549,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	/**
 	 * Same as {@link LongLinkedList#lastIndexOf(Object) lastIndexOf(Object)}, except returns a long instead of int.
-	 * @param o
-	 * @return
+	 * @param o The object to get the last index of.
+	 * @return The last index of the given object.
 	 */
 	public long lastIndexOfL(Object o) {//TODO:: test
 		Iterator<E> it = this.descendingIterator();
@@ -574,9 +579,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * Same as {@link LongLinkedList#subList(int, int) subList(int, int)}, except uses longs instead of ints.
 	 *
 	 * Throws IndexOutOfBoundsException if either is out of bounds.
-	 * @param i
-	 * @param i1
-	 * @return
+	 * @param i The beginning index of the nodes to get.
+	 * @param i1 The ending index of the nodes to get.
+	 * @return The sublist of this list.
 	 */
 	public List<E> subList(long i, long i1) {//TODO:: test
 		if(i > i1){
@@ -808,7 +813,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			private boolean startedIt = false;
 			@Override
 			public boolean hasNext() {
-				return curNode != null ? curNode.hasNext() : false;
+				return curNode != null && curNode.hasNext();
 			}
 			@Override
 			public E next() {
@@ -825,7 +830,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			
 			@Override
 			public boolean hasPrevious() {
-				return curNode != null ? curNode.hasPrev() : false;
+				return curNode != null && curNode.hasPrev();
 			}
 			
 			@Override
@@ -864,6 +869,10 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		};
 	}
 	
+	/**
+	 * Gets a descending list iterator for this list.
+	 * @return A descending list iterator for this list.
+	 */
 	public ListIterator<E> descendingListIterator(){
 		return new ListIterator<E>() {
 			private LongListNode<E> curNode = last;
@@ -871,7 +880,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			
 			@Override
 			public boolean hasNext() {
-				return curNode != null ? curNode.hasPrev() : false;
+				return curNode != null && curNode.hasPrev();
 			}
 			
 			@Override
@@ -889,7 +898,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			
 			@Override
 			public boolean hasPrevious() {
-				return curNode != null ? curNode.hasNext() : false;
+				return curNode != null && curNode.hasNext();
 			}
 			
 			@Override
@@ -956,7 +965,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			private boolean startedIt = false;
 			@Override
 			public boolean hasNext() {
-				return curNode != null ? curNode.hasNext() : false;
+				return curNode != null && curNode.hasNext();
 			}
 			@Override
 			public LongListNode<E> next() {
@@ -973,7 +982,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			
 			@Override
 			public boolean hasPrevious() {
-				return curNode != null ? curNode.hasPrev() : false;
+				return curNode != null && curNode.hasPrev();
 			}
 			
 			@Override
@@ -1023,7 +1032,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			
 			@Override
 			public boolean hasNext() {
-				return curNode != null ? curNode.hasPrev() : false;
+				return curNode != null && curNode.hasPrev();
 			}
 			
 			@Override
@@ -1041,7 +1050,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			
 			@Override
 			public boolean hasPrevious() {
-				return curNode != null ? curNode.hasNext() : false;
+				return curNode != null && curNode.hasNext();
 			}
 			
 			@Override
