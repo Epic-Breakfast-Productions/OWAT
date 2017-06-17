@@ -212,4 +212,37 @@ public class LongLinkedListTest {
 		assertEquals("Wrong value returned.",valReturned, LongLinkedListTestModels.testingArray.get(0));
 	}
 	
+	
+	@Test
+	public void testLongLinkedListQueueMethodsRemoveFirstLastOccurrence(){
+		LOGGER.info("Testing the remove first/last occurrence methods.");
+		
+		testingNodeList = new LongLinkedList<>();
+		assertFalse("returned true when should have returned false in empty list.", testingNodeList.removeFirstOccurrence(0L));
+		assertFalse("returned true when should have returned false in empty list.", testingNodeList.removeLastOccurrence(0L));
+		
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		testingNodeList.addAll(LongLinkedListTestModels.testingArray);
+		
+		long origLength = testingNodeList.size();
+		
+		assertFalse("returned true when should have returned false in populated list.", testingNodeList.removeFirstOccurrence(-1L));
+		assertFalse("returned true when should have returned false in populated list.", testingNodeList.removeLastOccurrence(-1L));
+		
+		assertTrue("", testingNodeList.removeFirstOccurrence(0L));
+		assertEquals(testingNodeList.size(), origLength - 1);
+		
+		assertTrue("", testingNodeList.removeLastOccurrence(0L));
+		assertEquals(testingNodeList.size(), origLength - 2);
+		
+		testingNodeList.addAll(LongLinkedListTestModels.testingArrayWithNulls);
+		origLength = testingNodeList.size();
+		
+		assertTrue("", testingNodeList.removeFirstOccurrence(null));
+		assertEquals(testingNodeList.size(), origLength - 1);
+		
+		assertTrue("", testingNodeList.removeLastOccurrence(null));
+		assertEquals(testingNodeList.size(), origLength - 2);
+	}
+	
 }

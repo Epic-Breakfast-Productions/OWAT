@@ -276,7 +276,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean removeFirstOccurrence(Object o) {//TODO:: test
+	public boolean removeFirstOccurrence(Object o) {
 		ListIterator<LongListNode<E>> it = this.listNodeIterator();
 		
 		while(it.hasNext()){
