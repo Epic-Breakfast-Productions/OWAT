@@ -210,7 +210,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public E removeFirst() {//TODO:: test
+	public E removeFirst() {
 		this.throwIfEmpty();
 		this.length--;
 		E value = this.first.getData();
@@ -219,7 +219,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public E removeLast() {//TODO:: test
+	public E removeLast() {
 		this.throwIfEmpty();
 		this.length--;
 		E value = this.last.getData();

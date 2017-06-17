@@ -10,6 +10,7 @@ import testModels.structure.set.LongLinkedListTestModels;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -121,5 +122,30 @@ public class LongLinkedListTest {
 		assertFalse("offerLast returned true after list being full", testingNodeList.offerLast(0L));
 	}
 	
-	
+	@Test
+	public void testLongLinkedListQueueMethodsRemoveFirstLast(){
+		LOGGER.info("Testing LongLinkedList's remove first/last methods.");
+		
+		LOGGER.info("Testing that it throws on empty list.");
+		testingNodeList = new LongLinkedList<>();
+		try{
+			testingNodeList.removeFirst();
+			Assert.fail("Failed to throw when removing from empty list.");
+		}catch(NoSuchElementException e){}
+		try{
+			testingNodeList.removeLast();
+			Assert.fail("Failed to throw when removing from empty list.");
+		}catch(NoSuchElementException e){}
+		
+		LOGGER.info("Testing that the LongLinkedList appropriately removes elements.");
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		
+		Long valReturned = testingNodeList.removeLast();
+		assertEquals("Wrong value returned.",valReturned, LongLinkedListTestModels.testingArray.get(LongLinkedListTestModels.testingArray.size() - 1));
+		assertEquals("Resulting size was wrong.", testingNodeList.size(), LongLinkedListTestModels.testingArray.size() - 1);
+		
+		valReturned = testingNodeList.removeFirst();
+		assertEquals("Wrong value returned.",valReturned, LongLinkedListTestModels.testingArray.get(0));
+		assertEquals("Resulting size was wrong.", testingNodeList.size(), LongLinkedListTestModels.testingArray.size() - 2);
+	}
 }
