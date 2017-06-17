@@ -12,9 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests the LongLinkedList class.
@@ -148,4 +146,70 @@ public class LongLinkedListTest {
 		assertEquals("Wrong value returned.",valReturned, LongLinkedListTestModels.testingArray.get(0));
 		assertEquals("Resulting size was wrong.", testingNodeList.size(), LongLinkedListTestModels.testingArray.size() - 2);
 	}
+	
+	@Test
+	public void testLongLinkedListQueueMethodsPollFirstLast(){
+		LOGGER.info("Testing LongLinkedList's poll first/last methods.");
+		
+		LOGGER.info("Testing that it returns null on empty list.");
+		testingNodeList = new LongLinkedList<>();
+		assertNull("Empty list failed to return null on poll.", testingNodeList.pollFirst());
+		assertNull("Empty list failed to return null on poll.", testingNodeList.pollLast());
+		
+		LOGGER.info("Testing that the LongLinkedList appropriately polls elements.");
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		
+		Long valReturned = testingNodeList.pollLast();
+		assertEquals("Wrong value returned.",valReturned, LongLinkedListTestModels.testingArray.get(LongLinkedListTestModels.testingArray.size() - 1));
+		assertEquals("Resulting size was wrong.", testingNodeList.size(), LongLinkedListTestModels.testingArray.size() - 1);
+		
+		valReturned = testingNodeList.pollFirst();
+		assertEquals("Wrong value returned.",valReturned, LongLinkedListTestModels.testingArray.get(0));
+		assertEquals("Resulting size was wrong.", testingNodeList.size(), LongLinkedListTestModels.testingArray.size() - 2);
+	}
+	
+	
+	@Test
+	public void testLongLinkedListQueueMethodsGetFirstLast(){
+		LOGGER.info("Testing LongLinkedList's get first/last methods.");
+		
+		LOGGER.info("Testing that it throws on empty list.");
+		testingNodeList = new LongLinkedList<>();
+		try{
+			testingNodeList.getFirst();
+			Assert.fail("Failed to throw when getting from empty list.");
+		}catch(NoSuchElementException e){}
+		try{
+			testingNodeList.getLast();
+			Assert.fail("Failed to throw when getting from empty list.");
+		}catch(NoSuchElementException e){}
+		
+		LOGGER.info("Testing that the LongLinkedList appropriately gets elements.");
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		
+		Long valReturned = testingNodeList.getLast();
+		assertEquals("Wrong value returned.",valReturned, LongLinkedListTestModels.testingArray.get(LongLinkedListTestModels.testingArray.size() - 1));
+		
+		valReturned = testingNodeList.getFirst();
+		assertEquals("Wrong value returned.",valReturned, LongLinkedListTestModels.testingArray.get(0));
+	}
+	
+	@Test
+	public void testLongLinkedListQueueMethodsPeekFirstLast(){
+		LOGGER.info("Testing LongLinkedList's peek first/last methods.");
+		
+		LOGGER.info("Testing that it returns null on empty list.");
+		testingNodeList = new LongLinkedList<>();
+		assertNull("Empty list failed to return null on peek.", testingNodeList.peekFirst());
+		assertNull("Empty list failed to return null on peek.", testingNodeList.peekLast());
+		
+		LOGGER.info("Testing that the LongLinkedList appropriately peeks elements.");
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		
+		Long valReturned = testingNodeList.peekLast();
+		assertEquals("Wrong value returned.",valReturned, LongLinkedListTestModels.testingArray.get(LongLinkedListTestModels.testingArray.size() - 1));
+		valReturned = testingNodeList.peekFirst();
+		assertEquals("Wrong value returned.",valReturned, LongLinkedListTestModels.testingArray.get(0));
+	}
+	
 }

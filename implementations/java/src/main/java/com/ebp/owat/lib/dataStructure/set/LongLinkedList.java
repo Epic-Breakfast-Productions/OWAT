@@ -228,7 +228,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public E pollFirst() {//TODO:: test
+	public E pollFirst() {
 		try{
 			return this.removeFirst();
 		}catch (NoSuchElementException ex){
@@ -237,7 +237,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public E pollLast() {//TODO:: test
+	public E pollLast() {
 		try{
 			return this.removeLast();
 		}catch (NoSuchElementException ex){
@@ -246,19 +246,19 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public E getFirst() {//TODO:: test
+	public E getFirst() {
 		this.throwIfEmpty();
 		return this.first.getData();
 	}
 	
 	@Override
-	public E getLast() {//TODO:: test
+	public E getLast() {
 		this.throwIfEmpty();
 		return this.last.getData();
 	}
 	
 	@Override
-	public E peekFirst() {//TODO:: test
+	public E peekFirst() {
 		try{
 			return this.getFirst();
 		}catch (NoSuchElementException ex){
@@ -267,7 +267,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public E peekLast() {//TODO:: test
+	public E peekLast() {
 		try{
 			return this.getLast();
 		}catch (NoSuchElementException ex){
