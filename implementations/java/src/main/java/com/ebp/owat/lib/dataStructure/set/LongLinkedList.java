@@ -130,7 +130,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param i The index to test.
 	 */
 	private void throwIfIndexOutOfBounds(long i){
-		if(i > this.length || i < 0){
+		if(i >= this.length || i < 0){
 			throw new IndexOutOfBoundsException("Index given is out of bounds.");
 		}
 	}
@@ -395,7 +395,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param i The index of the element to get.
 	 * @return The element at the index.
 	 */
-	public E get(long i){//TODO:: test
+	public E get(long i){
 		this.throwIfIndexOutOfBounds(i);
 		ListIterator<E> it = this.listIterator();
 		long count = 0;
@@ -406,7 +406,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			it.next();
 			count++;
 		}
-		return null;
+		throw new IllegalStateException("Iterated through all nodes and did not get to the index given. This should not happen.");
 	}
 	
 	/**

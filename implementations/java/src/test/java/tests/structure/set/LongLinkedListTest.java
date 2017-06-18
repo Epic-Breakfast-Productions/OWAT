@@ -245,4 +245,47 @@ public class LongLinkedListTest {
 		assertEquals(testingNodeList.size(), origLength - 2);
 	}
 	
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////// List methods //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Test
+	public void testLongLinkedListListMethodsAddAll(){
+		//TODO
+	}
+	
+	@Test
+	public void testLongLinkedListListMethodsGet(){
+		LOGGER.info("Testing the get method for LongLinkedList.");
+		
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		
+		LOGGER.info("Testing that methods throws appropriately on bad index.");
+		try{
+			testingNodeList.get((int)-1);
+			Assert.fail("Failed to throw on negative index.");
+		}catch (IndexOutOfBoundsException e){}
+		try{
+			int outOfBoundsIndex = testingNodeList.size();
+			testingNodeList.get(outOfBoundsIndex);
+			LOGGER.error("Numbers: Index given: {}, Size of list: {}", outOfBoundsIndex, testingNodeList.size());
+			Assert.fail("Failed to throw on out of bounds index.");
+		}catch (IndexOutOfBoundsException e){}
+		
+		LOGGER.info("Testing that we get correct values back.");
+		
+		for(int i = 0; i < testingNodeList.size(); i++){
+			assertEquals(
+				"The value returned by the LongLinkedList was wrong.",
+				LongLinkedListTestModels.testingArray.get(i),
+				testingNodeList.get(i)
+			);
+		}
+	}
+	
+	
+	
 }
