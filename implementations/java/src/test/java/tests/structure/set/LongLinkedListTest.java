@@ -8,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import testModels.structure.set.LongLinkedListTestModels;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -29,6 +27,32 @@ public class LongLinkedListTest {
 	
 	private boolean thrown = false;
 	private boolean done = false;
+	
+	/**
+	 * Tests that the different lists are the same.
+	 * @param listInQuestion The list we are testing
+	 * @param verifyingLists The list(s) that, which combined, will be used to test the list against.
+	 */
+	private void testListsAreTheSame(List listInQuestion, boolean testLengths, List... verifyingLists){
+		List verifyingList = new ArrayList();
+		
+		for(List curList : verifyingLists){
+			verifyingList.addAll(curList);
+		}
+		
+		if(testLengths) {
+			assertEquals("The lists are of different lengths.", listInQuestion.size(), verifyingList.size());
+		}
+		
+		for(int i = 0; i < listInQuestion.size(); i++){
+			assertEquals(
+					"The values inserted were wrong.",
+					listInQuestion.get(i),
+					verifyingList.get(i)
+			);
+		}
+	}
+	
 	
 	@Before
 	public void setup(){
@@ -254,7 +278,25 @@ public class LongLinkedListTest {
 	
 	@Test
 	public void testLongLinkedListListMethodsAddAll(){
-		//TODO
+		LOGGER.info("Testing the (List)addAll method for LongLinkedList.");
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		LOGGER.info("Testing that methods throws appropriately on bad index.");
+		try{
+			testingNodeList.get((int)-1);
+			Assert.fail("Failed to throw on negative index.");
+		}catch (IndexOutOfBoundsException e){}
+		try{
+			int outOfBoundsIndex = testingNodeList.size();
+			testingNodeList.get(outOfBoundsIndex);
+			LOGGER.error("Numbers: Index given: {}, Size of list: {}", outOfBoundsIndex, testingNodeList.size());
+			Assert.fail("Failed to throw on out of bounds index.");
+		}catch (IndexOutOfBoundsException e){}
+		
+		LOGGER.info("Testing that nodes can be appropriately be inserted into empty list.");
+		testingNodeList.addAll(0, LongLinkedListTestModels.testingArray);
+		testListsAreTheSame(testingNodeList, true, LongLinkedListTestModels.testingArray);
+		
+		//TODO:: test inserting in start, middle, end makes appropriate list. Test at capacity.
 	}
 	
 	@Test
@@ -276,7 +318,6 @@ public class LongLinkedListTest {
 		}catch (IndexOutOfBoundsException e){}
 		
 		LOGGER.info("Testing that we get correct values back.");
-		
 		for(int i = 0; i < testingNodeList.size(); i++){
 			assertEquals(
 				"The value returned by the LongLinkedList was wrong.",
