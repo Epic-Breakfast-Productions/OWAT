@@ -33,8 +33,8 @@ public class LongLinkedListTest {
 	 * @param listInQuestion The list we are testing
 	 * @param verifyingLists The list(s) that, which combined, will be used to test the list against.
 	 */
-	private void testListsAreTheSame(List listInQuestion, boolean testLengths, List... verifyingLists){
-		List verifyingList = new ArrayList();
+	private void testListsAreTheSame(List listInQuestion, boolean testLengths, List<Long>... verifyingLists){
+		List<Long> verifyingList = new ArrayList<>();
 		
 		for(List curList : verifyingLists){
 			verifyingList.addAll(curList);
@@ -282,21 +282,28 @@ public class LongLinkedListTest {
 		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
 		LOGGER.info("Testing that methods throws appropriately on bad index.");
 		try{
-			testingNodeList.get((int)-1);
+			testingNodeList.addAll((int)-1, LongLinkedListTestModels.testingArray);
 			Assert.fail("Failed to throw on negative index.");
 		}catch (IndexOutOfBoundsException e){}
 		try{
 			int outOfBoundsIndex = testingNodeList.size();
-			testingNodeList.get(outOfBoundsIndex);
+			testingNodeList.addAll(outOfBoundsIndex, LongLinkedListTestModels.testingArray);
 			LOGGER.error("Numbers: Index given: {}, Size of list: {}", outOfBoundsIndex, testingNodeList.size());
 			Assert.fail("Failed to throw on out of bounds index.");
 		}catch (IndexOutOfBoundsException e){}
 		
+		testingNodeList = new LongLinkedList<>();
+		
 		LOGGER.info("Testing that nodes can be appropriately be inserted into empty list.");
-		testingNodeList.addAll(0, LongLinkedListTestModels.testingArray);
+		assertTrue(testingNodeList.addAll(0, LongLinkedListTestModels.testingArray));
 		testListsAreTheSame(testingNodeList, true, LongLinkedListTestModels.testingArray);
 		
 		//TODO:: test inserting in start, middle, end makes appropriate list. Test at capacity.
+		
+		assertTrue(testingNodeList.addAll(0, LongLinkedListTestModels.fullTestingArray));
+		testListsAreTheSame(testingNodeList, true, LongLinkedListTestModels.fullTestingArray, LongLinkedListTestModels.testingArray);
+		
+		
 	}
 	
 	@Test

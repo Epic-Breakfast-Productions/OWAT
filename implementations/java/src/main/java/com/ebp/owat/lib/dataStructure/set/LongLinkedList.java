@@ -371,18 +371,35 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @return If the list was changed as a result.
 	 */
 	public boolean addAll(long i, Collection<? extends E> collection) {//TODO:: test
-		this.throwIfIndexOutOfBounds(i);
+		if(i != 0) {
+			this.throwIfIndexOutOfBounds(i);
+		}
 		this.throwIfAtCapacity(collection.size());
 		boolean changed = false;
-		ListIterator<LongListNode<E>> it = this.listNodeIterator();
-		LongListNode<E> nodeToInsertAt = this.getNode(i);
-		for(E curElement : collection){
-			changed = true;
-			new LongListNode<E>(
-					curElement,
-					nodeToInsertAt.prev(),
-					nodeToInsertAt
-			);
+		if(i == 0 && this.isEmpty()){
+			for (E curElement : collection) {
+				changed = true;
+				this.add(curElement);
+			}
+		}else {
+			LongListNode<E> nodeToInsertAt = this.getNode(i);
+			for (E curElement : collection) {
+				changed = true;
+				this.length++;
+				if(nodeToInsertAt == this.first){
+					this.first = new LongListNode<E>(
+							curElement,
+							nodeToInsertAt.prev(),
+							nodeToInsertAt
+					);
+				}else{
+					new LongListNode<E>(
+							curElement,
+							nodeToInsertAt.prev(),
+							nodeToInsertAt
+					);
+				}
+			}
 		}
 		return changed;
 	}
