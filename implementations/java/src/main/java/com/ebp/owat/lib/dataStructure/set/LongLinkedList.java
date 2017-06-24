@@ -136,6 +136,16 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	/**
+	 * Throws an IllegalStateException if the index given is out of bounds, but allowing for plus one on the length, for methods where you want to add onto the end of the list using the index.
+	 * @param i The index to test.
+	 */
+	private void throwIfIndexOutOfBoundsAllowEndIndex(long i){
+		if(i >= (this.length + 1L) || i < 0){
+			throw new IndexOutOfBoundsException("Index given is out of bounds.");
+		}
+	}
+	
+	/**
 	 * Removes a given node. Assumes the node is part of this list.
 	 * @param node The node in this list that is to be removed.
 	 * @throws NoSuchElementException If the list is empty.
@@ -370,16 +380,21 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param collection The collection to insert.
 	 * @return If the list was changed as a result.
 	 */
-	public boolean addAll(long i, Collection<? extends E> collection) {//TODO:: test
+	public boolean addAll(long i, Collection<? extends E> collection) {
 		if(i != 0) {
-			this.throwIfIndexOutOfBounds(i);
+			this.throwIfIndexOutOfBoundsAllowEndIndex(i);
 		}
 		this.throwIfAtCapacity(collection.size());
 		boolean changed = false;
-		if(i == 0 && this.isEmpty()){
+		if(i == 0 && this.isEmpty()) {
 			for (E curElement : collection) {
 				changed = true;
 				this.add(curElement);
+			}
+		}else if(i == this.sizeL()){//if adding to end of list
+			for (E curElement : collection) {
+				changed = true;
+				this.addLast(curElement);
 			}
 		}else {
 			LongListNode<E> nodeToInsertAt = this.getNode(i);
