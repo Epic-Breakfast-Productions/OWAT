@@ -352,6 +352,33 @@ public class LongLinkedListTest {
 		}
 	}
 	
+	@Test
+	public void testLongLinkedListListMethodsSet(){
+		LOGGER.info("Testing the (List)Set method for LongLinkedList.");
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		LOGGER.info("Testing that methods throws appropriately on bad index.");
+		try{
+			testingNodeList.set((int)-1, 0L);
+			Assert.fail("Failed to throw on negative index.");
+		}catch (IndexOutOfBoundsException e){}
+		try{
+			int outOfBoundsIndex = testingNodeList.size() + 1;
+			testingNodeList.set(outOfBoundsIndex, 0L);
+			LOGGER.error("Numbers: Index given: {}, Size of list: {}", outOfBoundsIndex, testingNodeList.size());
+			Assert.fail("Failed to throw on out of bounds index.");
+		}catch (IndexOutOfBoundsException e){}
+		
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		ArrayList<Long> checkingArray = new ArrayList<>(LongLinkedListTestModels.testingArray);
+		
+		Random rand = new Random();
+		for(int i = 0; i < testingNodeList.size(); i++){
+			long curNumToSetWIth = rand.nextLong();
+			assertEquals(testingNodeList.set(i, curNumToSetWIth), checkingArray.get(i));
+			checkingArray.set(i, curNumToSetWIth);
+			testListsAreTheSame(testingNodeList, true, checkingArray);
+		}
+	}
 	
 	
 }

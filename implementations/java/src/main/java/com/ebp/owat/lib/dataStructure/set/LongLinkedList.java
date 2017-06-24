@@ -145,6 +145,10 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		}
 	}
 	
+	private void throwIllegalStateDueToGettingToWhereItShouldnt(String reason){
+		throw new IllegalStateException(reason + " This should not happen.");
+	}
+	
 	/**
 	 * Removes a given node. Assumes the node is part of this list.
 	 * @param node The node in this list that is to be removed.
@@ -440,7 +444,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			it.next();
 			count++;
 		}
-		throw new IllegalStateException("Iterated through all nodes and did not get to the index given. This should not happen.");
+		throwIllegalStateDueToGettingToWhereItShouldnt("Iterated through all nodes and did not get to the index given.");
+		return null;
 	}
 	
 	/**
@@ -460,7 +465,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			it.next();
 			count++;
 		}
-		throw new IllegalStateException("Did not return with a LongListNode. This should not happen.");
+		throwIllegalStateDueToGettingToWhereItShouldnt("Did not return with a LongListNode.");
+		return null;
 	}
 	
 	@Override
@@ -474,7 +480,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param e The element to set the node with.
 	 * @return The old value.
 	 */
-	public E set(long i, E e) {//TODO:: test
+	public E set(long i, E e) {
 		this.throwIfIndexOutOfBounds(i);
 		ListIterator<LongListNode<E>> it = this.listNodeIterator();
 		long count = 0;
@@ -488,6 +494,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			it.next();
 			count++;
 		}
+		throwIllegalStateDueToGettingToWhereItShouldnt("Iterated through all nodes and didn't get to the index given.");
 		return null;
 	}
 	
