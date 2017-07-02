@@ -380,5 +380,57 @@ public class LongLinkedListTest {
 		}
 	}
 	
-	
+	@Test
+	public void testLongLinkedListListMethodsAdd(){
+		LOGGER.info("Testing the (List)add method for LongLinkedList.");
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		LOGGER.info("Testing that methods throws appropriately on bad index.");
+		try{
+			testingNodeList.add((int)-1, 0L);
+			Assert.fail("Failed to throw on negative index.");
+		}catch (IndexOutOfBoundsException e){}
+		try{
+			int outOfBoundsIndex = testingNodeList.size() + 1;
+			testingNodeList.add(outOfBoundsIndex, 0L);
+			LOGGER.error("Numbers: Index given: {}, Size of list: {}", outOfBoundsIndex, testingNodeList.size());
+			Assert.fail("Failed to throw on out of bounds index.");
+		}catch (IndexOutOfBoundsException e){}
+		
+		testingNodeList = new LongLinkedList<>();
+		ArrayList<Long> checkingArray = new ArrayList<>();
+		
+		LOGGER.info("Testing that a node can be appropriately be inserted into empty list.");
+		testingNodeList.add(0, 0L);
+		checkingArray.add(0, 0L);
+		testListsAreTheSame(testingNodeList, true, checkingArray);
+		
+		//check inserting at start of populated list
+		LOGGER.info("Testing that nodes can be appropriately be inserted into beginning of populated list.");
+		testingNodeList.addAll(LongLinkedListTestModels.testingArray);
+		checkingArray.addAll(LongLinkedListTestModels.testingArray);
+		testingNodeList.add(0, 16L);
+		checkingArray.add(0, 16L);
+		testListsAreTheSame(testingNodeList, true, checkingArray);
+		
+		//check inserting in middle of populated list
+		LOGGER.info("Testing that a node can be appropriately be inserted into middle of populated list.");
+		testingNodeList.add(5, 0L);
+		checkingArray.add(5, 0L);
+		testListsAreTheSame(testingNodeList, true, checkingArray);
+		
+		//check inserting at end of populated list
+		LOGGER.info("Testing that a node can be appropriately be inserted onto end of populated list.");
+		testingNodeList.add(testingNodeList.size(), 0L);
+		checkingArray.add(checkingArray.size(), 0L);
+		testListsAreTheSame(testingNodeList, true, checkingArray);
+		
+		//test capacity bounds
+		LOGGER.info("Testing adding on capacity bounds.");
+		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingCapacity);
+		testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		try{
+			testingNodeList.add(0, 0L);
+			Assert.fail("Failed to throw exception when capacity bounds would be broken.");
+		}catch (IllegalStateException e){}
+	}
 }

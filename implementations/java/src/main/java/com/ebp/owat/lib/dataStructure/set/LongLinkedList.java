@@ -509,18 +509,30 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param e The value to insert.
 	 */
 	public void add(long i, E e) {//TODO:: test
-		this.throwIfIndexOutOfBounds(i);
+		if(i != 0) {
+			this.throwIfIndexOutOfBoundsAllowEndIndex(i);
+		}
 		this.throwIfAtCapacity();
-		ListIterator<LongListNode<E>> it = this.listNodeIterator();
-		long count = 0;
-		while(it.hasNext()){
-			if(count == i){
-				LongListNode<E> curNode = it.next();
-				new LongListNode<>(e, curNode.prev(), curNode);
-				return;
+		if(i == 0 && this.sizeL() == 0) {
+			this.add(e);
+		}else if(i == 0) {
+			this.addFirst(e);
+		}else if(i == this.length){
+			this.addLast(e);
+		}else {
+			this.length++;
+			ListIterator<LongListNode<E>> it = this.listNodeIterator();
+			long count = 0;
+			while (it.hasNext()) {
+				if (count == i) {
+					LongListNode<E> curNode = it.next();
+					new LongListNode<>(e, curNode.prev(), curNode);
+					return;
+				}
+				it.next();
+				count++;
 			}
-			it.next();
-			count++;
+			throwIllegalStateDueToGettingToWhereItShouldnt("Iterated through all nodes and didn't get to the index given.");
 		}
 	}
 	
@@ -695,9 +707,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		
 		this.length++;
 		if(this.first == null){
-			this.first = new LongListNode<>(
-					e
-			);
+			this.first = new LongListNode<>(e);
 			this.last = this.first;
 		}else {
 			this.last = new LongListNode<>(
@@ -854,6 +864,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			private boolean startedIt = false;
 			@Override
 			public boolean hasNext() {
+				if(!startedIt && curNode != null){
+					return true;
+				}
 				return curNode != null && curNode.hasNext();
 			}
 			@Override
@@ -921,6 +934,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			
 			@Override
 			public boolean hasNext() {
+				if(!startedIt && curNode != null){
+					return true;
+				}
 				return curNode != null && curNode.hasPrev();
 			}
 			
@@ -1006,6 +1022,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			private boolean startedIt = false;
 			@Override
 			public boolean hasNext() {
+				if(!startedIt && curNode != null){
+					return true;
+				}
 				return curNode != null && curNode.hasNext();
 			}
 			@Override
@@ -1073,6 +1092,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			
 			@Override
 			public boolean hasNext() {
+				if(!startedIt && curNode != null){
+					return true;
+				}
 				return curNode != null && curNode.hasPrev();
 			}
 			
