@@ -1,7 +1,6 @@
 package tests.structure.set;
 
 import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
-import com.ebp.owat.lib.dataStructure.set.OwatNodeSetException;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
@@ -24,6 +23,8 @@ public class LongLinkedListTest {
 	public final ExpectedException exception = ExpectedException.none();
 	
 	private LongLinkedList<Long> testingNodeList;
+	
+	private LinkedList<Long> checkingNodeList;
 	
 	private boolean thrown = false;
 	private boolean done = false;
@@ -59,6 +60,7 @@ public class LongLinkedListTest {
 		thrown = false;
 		done = false;
 		testingNodeList = null;
+		checkingNodeList = null;
 	}
 	
 	@Test
@@ -369,14 +371,14 @@ public class LongLinkedListTest {
 		}catch (IndexOutOfBoundsException e){}
 		
 		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
-		ArrayList<Long> checkingArray = new ArrayList<>(LongLinkedListTestModels.testingArray);
+		checkingNodeList = new LinkedList<>(LongLinkedListTestModels.testingArray);
 		
 		Random rand = new Random();
 		for(int i = 0; i < testingNodeList.size(); i++){
 			long curNumToSetWIth = rand.nextLong();
-			assertEquals(testingNodeList.set(i, curNumToSetWIth), checkingArray.get(i));
-			checkingArray.set(i, curNumToSetWIth);
-			testListsAreTheSame(testingNodeList, true, checkingArray);
+			assertEquals(testingNodeList.set(i, curNumToSetWIth), checkingNodeList.get(i));
+			checkingNodeList.set(i, curNumToSetWIth);
+			testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		}
 	}
 	
@@ -397,32 +399,32 @@ public class LongLinkedListTest {
 		}catch (IndexOutOfBoundsException e){}
 		
 		testingNodeList = new LongLinkedList<>();
-		ArrayList<Long> checkingArray = new ArrayList<>();
+		checkingNodeList = new LinkedList<>();
 		
 		LOGGER.info("Testing that a node can be appropriately be inserted into empty list.");
 		testingNodeList.add(0, 0L);
-		checkingArray.add(0, 0L);
-		testListsAreTheSame(testingNodeList, true, checkingArray);
+		checkingNodeList.add(0, 0L);
+		testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		
 		//check inserting at start of populated list
 		LOGGER.info("Testing that nodes can be appropriately be inserted into beginning of populated list.");
 		testingNodeList.addAll(LongLinkedListTestModels.testingArray);
-		checkingArray.addAll(LongLinkedListTestModels.testingArray);
+		checkingNodeList.addAll(LongLinkedListTestModels.testingArray);
 		testingNodeList.add(0, 16L);
-		checkingArray.add(0, 16L);
-		testListsAreTheSame(testingNodeList, true, checkingArray);
+		checkingNodeList.add(0, 16L);
+		testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		
 		//check inserting in middle of populated list
 		LOGGER.info("Testing that a node can be appropriately be inserted into middle of populated list.");
 		testingNodeList.add(5, 0L);
-		checkingArray.add(5, 0L);
-		testListsAreTheSame(testingNodeList, true, checkingArray);
+		checkingNodeList.add(5, 0L);
+		testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		
 		//check inserting at end of populated list
 		LOGGER.info("Testing that a node can be appropriately be inserted onto end of populated list.");
 		testingNodeList.add(testingNodeList.size(), 0L);
-		checkingArray.add(checkingArray.size(), 0L);
-		testListsAreTheSame(testingNodeList, true, checkingArray);
+		checkingNodeList.add(checkingNodeList.size(), 0L);
+		testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		
 		//test capacity bounds
 		LOGGER.info("Testing adding on capacity bounds.");
@@ -433,4 +435,88 @@ public class LongLinkedListTest {
 			Assert.fail("Failed to throw exception when capacity bounds would be broken.");
 		}catch (IllegalStateException e){}
 	}
+	
+	@Test
+	public void testLongLinkedListListMethodsRemove(){
+		LOGGER.info("Testing the remove(#) method.");
+		
+		this.testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingArray);
+		this.checkingNodeList = new LinkedList<>(LongLinkedListTestModels.testingArray);
+		
+		LOGGER.info("Testing removing the first element.");
+		assertEquals(this.testingNodeList.remove((int)0), this.checkingNodeList.remove((int)0));
+		testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		
+		LOGGER.info("Testing removing a middle element.");
+		assertEquals(this.testingNodeList.remove((int)testingNodeList.size()/2), this.checkingNodeList.remove((int) checkingNodeList.size()/2));
+		testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		
+		LOGGER.info("Testing removing the last element.");
+		assertEquals(this.testingNodeList.remove((int)testingNodeList.size() - 1), this.checkingNodeList.remove((int) checkingNodeList.size() - 1));
+		testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+	}
+	
+	@Test
+	public void testLongLinkedListListMethodsIndexOf(){
+	
+	}
+	
+	@Test
+	public void testLongLinkedListListMethodsSublist(){
+		LOGGER.info("Testing the sublist(#, #) method.");
+		
+		this.testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList = new LinkedList<>(LongLinkedListTestModels.fullTestingArray);
+		
+		LOGGER.info("Testing that methods throws appropriately on bad indexes.");
+		try{
+			testingNodeList.subList(-1, 1);
+			Assert.fail("Failed to throw on negative index.");
+		}catch (IndexOutOfBoundsException e){}
+		try{
+			testingNodeList.subList(1, -1);
+			Assert.fail("Failed to throw on negative index.");
+		}catch (IndexOutOfBoundsException | IllegalArgumentException e){}
+		try{
+			int outOfBoundsIndex = testingNodeList.size() + 1;
+			testingNodeList.subList(outOfBoundsIndex, 0L);
+			LOGGER.error("Numbers: Index given: {}, Size of list: {}", outOfBoundsIndex, testingNodeList.size());
+			Assert.fail("Failed to throw on out of bounds index.");
+		}catch (IndexOutOfBoundsException | IllegalArgumentException e){}
+		try{
+			int outOfBoundsIndex = testingNodeList.size() + 1;
+			testingNodeList.subList(0L, outOfBoundsIndex);
+			LOGGER.error("Numbers: Index given: {}, Size of list: {}", outOfBoundsIndex, testingNodeList.size());
+			Assert.fail("Failed to throw on out of bounds index.");
+		}catch (IndexOutOfBoundsException e){}
+		
+		LOGGER.info("Testing sublist starting at 0 are correct.");
+		testListsAreTheSame(
+				testingNodeList.subList(0, 1),
+				true,
+				checkingNodeList.subList(0,1)
+		);
+		
+		LOGGER.info("Testing sublist ending at end of list are correct.");
+		testListsAreTheSame(
+				testingNodeList.subList(1, testingNodeList.size() - 1),
+				true,
+				checkingNodeList.subList(1,checkingNodeList.size() - 1)
+		);
+		
+		LOGGER.info("Testing sublist of whole list is correct.");
+		testListsAreTheSame(
+				testingNodeList.subList(0, testingNodeList.size() - 1),
+				true,
+				checkingNodeList.subList(0,checkingNodeList.size() - 1)
+		);
+		
+		LOGGER.info("Testing sublist of one element is correct.");
+		testListsAreTheSame(
+				testingNodeList.subList(0, 0),
+				true,
+				checkingNodeList.subList(0,0)
+		);
+	}
+	
 }

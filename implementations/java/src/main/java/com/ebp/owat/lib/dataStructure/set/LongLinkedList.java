@@ -508,14 +508,14 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param i The index to insert the element at.
 	 * @param e The value to insert.
 	 */
-	public void add(long i, E e) {//TODO:: test
-		if(i != 0) {
+	public void add(long i, E e) {
+		if(i != 0L) {
 			this.throwIfIndexOutOfBoundsAllowEndIndex(i);
 		}
 		this.throwIfAtCapacity();
-		if(i == 0 && this.sizeL() == 0) {
+		if(i == 0L && this.sizeL() == 0L) {
 			this.add(e);
-		}else if(i == 0) {
+		}else if(i == 0L) {
 			this.addFirst(e);
 		}else if(i == this.length){
 			this.addLast(e);
@@ -546,11 +546,16 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param i The index of the element to remove.
 	 * @return The element at the index.
 	 */
-	public E remove(long i) {//TODO:: test
+	public E remove(long i) {
 		this.throwIfIndexOutOfBounds(i);
 		this.throwIfEmpty();
+		if(i == 0L){
+			return this.removeFirst();
+		}else if(i == this.size() - 1L){
+			return this.removeLast();
+		}
+		this.length--;
 		ListIterator<LongListNode<E>> it = this.listNodeIterator();
-		
 		long count = 0;
 		while(it.hasNext()){
 			if(count == i){
@@ -562,6 +567,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			it.next();
 			count++;
 		}
+		throwIllegalStateDueToGettingToWhereItShouldnt("Iterated through all nodes and didn't get to the index given.");
 		return null;
 	}
 	
