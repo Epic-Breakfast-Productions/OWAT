@@ -458,7 +458,22 @@ public class LongLinkedListTest {
 	
 	@Test
 	public void testLongLinkedListListMethodsIndexOf(){
-	
+		LOGGER.info("Testing indexOf methods");
+		
+		this.testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList = new LinkedList<>(LongLinkedListTestModels.fullTestingArray);
+		this.testingNodeList.addLast(null);
+		this.checkingNodeList.addLast(null);
+		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.testingNodeList.addLast(null);
+		this.checkingNodeList.addLast(null);
+		
+		for (long i = -1; i < this.testingNodeList.sizeL() + 1L; i++){
+			//LOGGER.info("Finding first/last index of {}", i);
+			assertEquals(this.checkingNodeList.indexOf(i), this.testingNodeList.indexOf(i));
+			assertEquals(this.checkingNodeList.lastIndexOf(i), this.testingNodeList.lastIndexOf(i));
+		}
 	}
 	
 	@Test

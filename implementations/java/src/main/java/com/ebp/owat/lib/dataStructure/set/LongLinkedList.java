@@ -572,7 +572,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public int indexOf(Object o) {//TODO:: test
+	public int indexOf(Object o) {
 		this.throwIfLengthGTMaxInt();
 		return (int)this.indexOfL(o);
 	}
@@ -582,7 +582,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param o The element to get the index of.
 	 * @return The index of the object given.
 	 */
-	public long indexOfL(Object o) {//TODO:: test
+	public long indexOfL(Object o) {
 		Iterator<E> it = this.iterator();
 		long count = 0;
 		while(it.hasNext()){
@@ -611,9 +611,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param o The object to get the last index of.
 	 * @return The last index of the given object.
 	 */
-	public long lastIndexOfL(Object o) {//TODO:: test
+	public long lastIndexOfL(Object o) {
 		Iterator<E> it = this.descendingIterator();
-		long count = this.length;
+		long count = this.length - 1L;
 		while(it.hasNext()){
 			if(o == null) {
 				if (it.next() == null) {
@@ -642,7 +642,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param i1 The ending index of the nodes to get.
 	 * @return The sublist of this list.
 	 */
-	public List<E> subList(long i, long i1) {//TODO:: test
+	public List<E> subList(long i, long i1) {
 		if(i > i1){
 			throw new IllegalArgumentException("i can not be greater than i1.");
 		}
