@@ -5,6 +5,7 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import testModels.structure.set.ListTestCheckers;
 import testModels.structure.set.LongLinkedListTestModels;
 
 import java.util.*;
@@ -19,11 +20,7 @@ import static org.junit.Assert.*;
 public class LongLinkedListTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LongLinkedListTest.class);
 	
-	@Rule
-	public final ExpectedException exception = ExpectedException.none();
-	
 	private LongLinkedList<Long> testingNodeList;
-	
 	private LinkedList<Long> checkingNodeList;
 	
 	private boolean thrown = false;
@@ -274,22 +271,22 @@ public class LongLinkedListTest {
 		LOGGER.info("Testing that nodes can be appropriately be inserted into empty list.");
 		assertTrue(testingNodeList.addAll(0, LongLinkedListTestModels.testingArray));
 		checkingArray.addAll(0, LongLinkedListTestModels.testingArray);
-		LongLinkedListTestModels.testListsAreTheSame(testingNodeList, true, checkingArray);
+		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingArray);
 		
 		//check inserting at start of populated list
 		assertTrue(testingNodeList.addAll(0, LongLinkedListTestModels.fullTestingArray));
 		checkingArray.addAll(0, LongLinkedListTestModels.fullTestingArray);
-		LongLinkedListTestModels.testListsAreTheSame(testingNodeList, true, checkingArray);
+		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingArray);
 		
 		//check inserting in middle of populated list
 		assertTrue(testingNodeList.addAll(5, LongLinkedListTestModels.fullTestingArray));
 		checkingArray.addAll(5, LongLinkedListTestModels.fullTestingArray);
-		LongLinkedListTestModels.testListsAreTheSame(testingNodeList, true, checkingArray);
+		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingArray);
 		
 		//check inserting at end of populated list
 		assertTrue(testingNodeList.addAll(testingNodeList.size(), LongLinkedListTestModels.fullTestingArray));
 		checkingArray.addAll(checkingArray.size(), LongLinkedListTestModels.fullTestingArray);
-		LongLinkedListTestModels.testListsAreTheSame(testingNodeList, true, checkingArray);
+		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingArray);
 		
 		//test capacity bounds
 		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingCapacity);
@@ -352,7 +349,7 @@ public class LongLinkedListTest {
 			long curNumToSetWIth = rand.nextLong();
 			assertEquals(testingNodeList.set(i, curNumToSetWIth), checkingNodeList.get(i));
 			checkingNodeList.set(i, curNumToSetWIth);
-			LongLinkedListTestModels.testListsAreTheSame(testingNodeList, true, checkingNodeList);
+			ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		}
 	}
 	
@@ -378,7 +375,7 @@ public class LongLinkedListTest {
 		LOGGER.info("Testing that a node can be appropriately be inserted into empty list.");
 		testingNodeList.add(0, 0L);
 		checkingNodeList.add(0, 0L);
-		LongLinkedListTestModels.testListsAreTheSame(testingNodeList, true, checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		
 		//check inserting at start of populated list
 		LOGGER.info("Testing that nodes can be appropriately be inserted into beginning of populated list.");
@@ -386,19 +383,19 @@ public class LongLinkedListTest {
 		checkingNodeList.addAll(LongLinkedListTestModels.testingArray);
 		testingNodeList.add(0, 16L);
 		checkingNodeList.add(0, 16L);
-		LongLinkedListTestModels.testListsAreTheSame(testingNodeList, true, checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		
 		//check inserting in middle of populated list
 		LOGGER.info("Testing that a node can be appropriately be inserted into middle of populated list.");
 		testingNodeList.add(5, 0L);
 		checkingNodeList.add(5, 0L);
-		LongLinkedListTestModels.testListsAreTheSame(testingNodeList, true, checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		
 		//check inserting at end of populated list
 		LOGGER.info("Testing that a node can be appropriately be inserted onto end of populated list.");
 		testingNodeList.add(testingNodeList.size(), 0L);
 		checkingNodeList.add(checkingNodeList.size(), 0L);
-		LongLinkedListTestModels.testListsAreTheSame(testingNodeList, true, checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		
 		//test capacity bounds
 		LOGGER.info("Testing adding on capacity bounds.");
@@ -419,15 +416,15 @@ public class LongLinkedListTest {
 		
 		LOGGER.info("Testing removing the first element.");
 		assertEquals(this.testingNodeList.remove((int)0), this.checkingNodeList.remove((int)0));
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 		
 		LOGGER.info("Testing removing a middle element.");
 		assertEquals(this.testingNodeList.remove((int)testingNodeList.size()/2), this.checkingNodeList.remove((int) checkingNodeList.size()/2));
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 		
 		LOGGER.info("Testing removing the last element.");
 		assertEquals(this.testingNodeList.remove((int)testingNodeList.size() - 1), this.checkingNodeList.remove((int) checkingNodeList.size() - 1));
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 	}
 	
 	@Test
@@ -480,28 +477,28 @@ public class LongLinkedListTest {
 		}catch (IndexOutOfBoundsException e){}
 		
 		LOGGER.info("Testing sublist starting at 0 are correct.");
-		LongLinkedListTestModels.testListsAreTheSame(
+		ListTestCheckers.testListsAreTheSame(
 				testingNodeList.subList(0, 1),
 				true,
 				checkingNodeList.subList(0,1)
 		);
 		
 		LOGGER.info("Testing sublist ending at end of list are correct.");
-		LongLinkedListTestModels.testListsAreTheSame(
+		ListTestCheckers.testListsAreTheSame(
 				testingNodeList.subList(1, testingNodeList.size() - 1),
 				true,
 				checkingNodeList.subList(1,checkingNodeList.size() - 1)
 		);
 		
 		LOGGER.info("Testing sublist of whole list is correct.");
-		LongLinkedListTestModels.testListsAreTheSame(
+		ListTestCheckers.testListsAreTheSame(
 				testingNodeList.subList(0, testingNodeList.size() - 1),
 				true,
 				checkingNodeList.subList(0,checkingNodeList.size() - 1)
 		);
 		
 		LOGGER.info("Testing sublist of one element is correct.");
-		LongLinkedListTestModels.testListsAreTheSame(
+		ListTestCheckers.testListsAreTheSame(
 				testingNodeList.subList(0, 0),
 				true,
 				checkingNodeList.subList(0,0)
@@ -567,12 +564,12 @@ public class LongLinkedListTest {
 		this.testingNodeList = new LongLinkedList<>();
 		this.checkingNodeList = new LinkedList<>();
 		
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList.toArray(), true, this.checkingNodeList.toArray());
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList.toArray(), true, this.checkingNodeList.toArray());
 		
 		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
 		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
 		
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList.toArray(), true, this.checkingNodeList.toArray());
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList.toArray(), true, this.checkingNodeList.toArray());
 	}
 	
 	@Test
@@ -588,7 +585,7 @@ public class LongLinkedListTest {
 		}catch (NullPointerException e){}
 		assertEquals(this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray), this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray));
 		
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 	}
 	
 	@Test
@@ -614,13 +611,13 @@ public class LongLinkedListTest {
 		this.checkingNodeList = new LinkedList<>();
 		
 		assertEquals(this.checkingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray), this.testingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray));
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 		
 		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
 		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
 		
 		assertEquals(this.checkingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray), this.testingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray));
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 		
 		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
 		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
@@ -628,7 +625,7 @@ public class LongLinkedListTest {
 		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
 		
 		assertEquals(this.checkingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray), this.testingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray));
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 		
 		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
 		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
@@ -636,29 +633,27 @@ public class LongLinkedListTest {
 		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
 		
 		assertEquals(this.checkingNodeList.retainAll(new ArrayList<Long>()), this.testingNodeList.retainAll(new ArrayList<Long>()));
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 		
 		this.testingNodeList.add(0L);
 		this.checkingNodeList.add(0L);
 		
 		assertEquals(this.checkingNodeList.retainAll(Arrays.asList(1L)), this.testingNodeList.retainAll(Arrays.asList(1L)));
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 		
 		this.testingNodeList.add(0L);
 		this.checkingNodeList.add(0L);
 		
 		assertEquals(this.checkingNodeList.retainAll(Arrays.asList(0L)), this.testingNodeList.retainAll(Arrays.asList(0L)));
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 		
 		this.testingNodeList.add(0L);
 		this.checkingNodeList.add(0L);
 		
 		assertEquals(this.checkingNodeList.retainAll(Arrays.asList(1L)), this.testingNodeList.retainAll(Arrays.asList(1L)));
-		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		ListTestCheckers.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
 		
 	}
-	
-	//TODO:: finish these
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

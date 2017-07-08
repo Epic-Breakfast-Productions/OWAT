@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
  *
  * Created by Greg Stewart on 4/1/17.
  */
-public class LongLinkedListTestModels {
+public class LongLinkedListTestModels{
 	static private final Logger LOGGER = LoggerFactory.getLogger(LongLinkedListTestModels.class);
 	/**
 	 * The nodes for testing.
@@ -27,38 +27,4 @@ public class LongLinkedListTestModels {
 	public static final List<Long> fullTestingArray = Arrays.asList(0L, 1L, 2L, 3L, 4L);
 	public static final List<Long> shortTestingArray = Arrays.asList(0L, 1L);
 	
-	/**
-	 * Tests that the different lists are the same.
-	 *
-	 * @param listInQuestion The list we are testing
-	 * @param verifyingLists The list(s) that, which combined, will be used to test the list against.
-	 */
-	public static void testListsAreTheSame(List<? extends Object> listInQuestion, boolean testLengths, List<? extends Object>... verifyingLists) {
-		List<? extends Object> verifyingList = new ArrayList<>();
-		
-		for (List curList : verifyingLists) {
-			verifyingList.addAll(curList);
-		}
-		
-		if (testLengths) {
-			assertEquals("The lists are of different lengths.", verifyingList.size(), listInQuestion.size());
-		}
-		
-		for (int i = 0; i < listInQuestion.size(); i++) {
-			assertEquals(
-					"The values inserted were wrong.",
-					verifyingList.get(i),
-					listInQuestion.get(i)
-			);
-		}
-	}
-	
-	public static void testListsAreTheSame(Object[] listInQuestion, boolean testLengths, Object[]... verifyingLists) {
-		List<Object> verifyingList = new ArrayList<>();
-		for (Object[] curList : verifyingLists) {
-			verifyingList.addAll(Arrays.asList(curList));
-		}
-		
-		testListsAreTheSame(Arrays.asList(listInQuestion), testLengths, verifyingList);
-	}
 }
