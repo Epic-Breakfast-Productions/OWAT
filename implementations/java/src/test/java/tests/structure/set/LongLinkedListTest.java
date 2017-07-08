@@ -577,7 +577,7 @@ public class LongLinkedListTest {
 	
 	@Test
 	public void testLongLinkedListCollectionMethodsAddAll(){
-		LOGGER.info("Testing the LongLinkedList's add(E) method.");
+		LOGGER.info("Testing the LongLinkedList's addAll(Collection) method.");
 		
 		this.testingNodeList = new LongLinkedList<>();
 		this.checkingNodeList = new LinkedList<>();
@@ -589,6 +589,73 @@ public class LongLinkedListTest {
 		assertEquals(this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray), this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray));
 		
 		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+	}
+	
+	@Test
+	public void testLongLinkedListCollectionMethodsRemoveAll(){
+		LOGGER.info("Testing the LongLinkedList's removeAll(Collection) method.");
+		
+		this.testingNodeList = new LongLinkedList<>();
+		this.checkingNodeList = new LinkedList<>();
+		
+		assertEquals(this.checkingNodeList.removeAll(LongLinkedListTestModels.shortTestingArray), this.testingNodeList.removeAll(LongLinkedListTestModels.shortTestingArray));
+		
+		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		
+		assertEquals(this.checkingNodeList.removeAll(LongLinkedListTestModels.shortTestingArray), this.testingNodeList.removeAll(LongLinkedListTestModels.shortTestingArray));
+	}
+	
+	@Test
+	public void testLongLinkedListCollectionMethodsRetainAll(){
+		LOGGER.info("Testing the LongLinkedList's retainAll(Collection) method.");
+		
+		this.testingNodeList = new LongLinkedList<>();
+		this.checkingNodeList = new LinkedList<>();
+		
+		assertEquals(this.checkingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray), this.testingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray));
+		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		
+		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		
+		assertEquals(this.checkingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray), this.testingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray));
+		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		
+		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		
+		assertEquals(this.checkingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray), this.testingNodeList.retainAll(LongLinkedListTestModels.shortTestingArray));
+		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		
+		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		
+		assertEquals(this.checkingNodeList.retainAll(new ArrayList<Long>()), this.testingNodeList.retainAll(new ArrayList<Long>()));
+		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		
+		this.testingNodeList.add(0L);
+		this.checkingNodeList.add(0L);
+		
+		assertEquals(this.checkingNodeList.retainAll(Arrays.asList(1L)), this.testingNodeList.retainAll(Arrays.asList(1L)));
+		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		
+		this.testingNodeList.add(0L);
+		this.checkingNodeList.add(0L);
+		
+		assertEquals(this.checkingNodeList.retainAll(Arrays.asList(0L)), this.testingNodeList.retainAll(Arrays.asList(0L)));
+		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		
+		this.testingNodeList.add(0L);
+		this.checkingNodeList.add(0L);
+		
+		assertEquals(this.checkingNodeList.retainAll(Arrays.asList(1L)), this.testingNodeList.retainAll(Arrays.asList(1L)));
+		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+		
 	}
 	
 	//TODO:: finish these

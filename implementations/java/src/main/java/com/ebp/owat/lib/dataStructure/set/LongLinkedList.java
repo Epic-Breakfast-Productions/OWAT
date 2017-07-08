@@ -767,25 +767,26 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean removeAll(Collection<?> collection) {//TODO:: test
+	public boolean removeAll(Collection<?> collection) {
 		Iterator<?> it = collection.iterator();
 		boolean changed = false;
 		while(it.hasNext()){
-			try {
-				this.remove(it.next());
-				changed = true;
-			}catch(NoSuchElementException e){}
+			changed |= this.remove(it.next());
 		}
 		return changed;
 	}
 	
 	@Override
 	public boolean retainAll(Collection<?> collection) {//TODO:: test
-		LongListNode curNode = this.first;
-		
+		if(collection.isEmpty()){
+			boolean changed = !this.isEmpty();
+			this.clear();
+			return changed;
+		}
 		if(this.length == 0){
 			return false;
 		}
+		LongListNode curNode = this.first;
 		if(this.length == 1){
 			if(!collection.contains(curNode.getData())){
 				this.clear();
@@ -800,7 +801,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			if(!collection.contains(curNode.getData())){
 				changed = true;
 				boolean isFirst = curNode == this.first;
-				boolean isLast = curNode == this.first;
+				boolean isLast = curNode == this.last;
 				
 				if(isFirst && isLast){
 					this.clear();
@@ -812,8 +813,10 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 					this.removeLast();
 					curNode = null;
 				}else{
+					this.length--;
+					LongListNode next = curNode.next();
 					curNode.next().setPrev(curNode.prev());
-					curNode = curNode.next();
+					curNode = next;
 				}
 			}else{
 				curNode = curNode.next();

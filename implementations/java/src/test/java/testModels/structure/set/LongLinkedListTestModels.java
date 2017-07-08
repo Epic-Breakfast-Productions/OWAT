@@ -41,14 +41,14 @@ public class LongLinkedListTestModels {
 		}
 		
 		if (testLengths) {
-			assertEquals("The lists are of different lengths.", listInQuestion.size(), verifyingList.size());
+			assertEquals("The lists are of different lengths.", verifyingList.size(), listInQuestion.size());
 		}
 		
 		for (int i = 0; i < listInQuestion.size(); i++) {
 			assertEquals(
 					"The values inserted were wrong.",
-					listInQuestion.get(i),
-					verifyingList.get(i)
+					verifyingList.get(i),
+					listInQuestion.get(i)
 			);
 		}
 	}
