@@ -2,7 +2,6 @@ package tests.structure.set;
 
 import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
 import org.junit.*;
-import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import testModels.structure.set.ListTestCheckers;
@@ -23,13 +22,8 @@ public class LongLinkedListTest {
 	private LongLinkedList<Long> testingNodeList;
 	private LinkedList<Long> checkingNodeList;
 	
-	private boolean thrown = false;
-	private boolean done = false;
-	
 	@Before
 	public void setup(){
-		thrown = false;
-		done = false;
 		testingNodeList = null;
 		checkingNodeList = null;
 	}
@@ -51,6 +45,24 @@ public class LongLinkedListTest {
 		testingNodeList = new LongLinkedList<>(LongLinkedListTestModels.testingCapacity, LongLinkedListTestModels.fullTestingArray);
 		assertEquals("Constructor has wrong number of nodes.", LongLinkedListTestModels.fullTestingArray.size(), testingNodeList.sizeL());
 		assertEquals("Constructor didn't set the capacity correctly.", LongLinkedListTestModels.testingCapacity, testingNodeList.getCapacity());
+	}
+	
+	@Ignore("Ignored due to the fact that this will take too much time to run in a normal test, and will probably fail due to running out of memory.")
+	@Test
+	public void testLongLinkedListMakeSizeGTIntSize(){
+		LOGGER.info("Attempting to make a LongLinkedList that is longer than Integer.MAX_VALUE ({}) values long. MIGHT take a while (if you have enough memory to run it completely)......", Integer.MAX_VALUE);
+		LOGGER.info("Recommended to keep this test ignored (add the '@Ignore' annotation to the method) in order to keep the tests sane.");
+		
+		Boolean valToAdd = true;
+		LongLinkedList<Boolean> testList = new LongLinkedList<>();
+		long goalLength = (long)Integer.MAX_VALUE + 1L;
+		for(long i = 0; i <= goalLength; i++){
+			testList.addLast(valToAdd);
+		}
+		LOGGER.info("Built to the end of the list! Congratulations!");
+		assertTrue(testList.lengthGTMaxInt());
+		assertEquals(goalLength, testList.sizeL());
+		assertEquals(Integer.MAX_VALUE, testList.size());
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
