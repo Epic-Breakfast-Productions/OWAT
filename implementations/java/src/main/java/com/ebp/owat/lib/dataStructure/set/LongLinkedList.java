@@ -6,8 +6,6 @@ import java.util.*;
 /**
  * Defines a long linked list, a linked list that inherently works using a long instead of int.
  *
- * TODO:: Organize methods on what type of operation they perform (add/remove/etc)
- *
  * Created by Greg Stewart on 4/1/17.
  */
 public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, Collection<E>, Deque<E>, List<E>, Queue<E> {
@@ -76,7 +74,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param l The theoretical number of nodes to be added.
 	 * @return If this list is at capacity or not after adding a theoretical number of nodes.
 	 */
-	public boolean atCapacity(long l){//TODO:: test
+	public boolean atCapacity(long l){
 		return this.length + l > capacity;
 	}
 	

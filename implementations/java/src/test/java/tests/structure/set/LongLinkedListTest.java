@@ -534,4 +534,39 @@ public class LongLinkedListTest {
 		);
 	}
 	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////// Collection methods ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Test
+	public void testLongLinkedListCollectionMethodsMisc(){
+	
+	}
+	
+	@Test
+	public void testLongLinkedListCollectionMethodsContains(){
+		LOGGER.info("Testing the LongLinkedList's contains(Obj) method");
+		
+		this.testingNodeList = new LongLinkedList<>();
+		this.checkingNodeList = new LinkedList<>();
+		
+		LOGGER.info("Testing that the empty list returns appropriately.");
+		assertEquals(this.testingNodeList.contains(0L), this.checkingNodeList.contains(0L));
+		
+		LOGGER.info("Testing that a populated list returns appropriately.");
+		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		
+		for(long i = -1; i <= this.testingNodeList.size(); i++){
+			assertEquals(this.testingNodeList.contains(i), this.checkingNodeList.contains(i));
+		}
+		
+		LOGGER.info("Testing that a populated list with nulls returns appropriately.");
+		this.testingNodeList.add(null);
+		this.checkingNodeList.add(null);
+		
+		assertEquals(this.testingNodeList.contains(null), this.checkingNodeList.contains(null));
+	}
 }
