@@ -20,4 +20,5 @@ public class LongLinkedListTestModels {
 	public static final List<Long> testingArray = Arrays.asList(0L, 1L, 2L, 3L);
 	public static final List<Long> testingArrayWithNulls = Arrays.asList(0L, null, 2L, null);
 	public static final List<Long> fullTestingArray = Arrays.asList(0L, 1L, 2L, 3L, 4L);
+	public static final List<Long> shortTestingArray = Arrays.asList(0L, 1L);
 }

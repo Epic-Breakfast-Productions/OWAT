@@ -569,4 +569,20 @@ public class LongLinkedListTest {
 		
 		assertEquals(this.testingNodeList.contains(null), this.checkingNodeList.contains(null));
 	}
+	
+	@Test
+	public void testLongLinkedListCollectionMethodsContainsAll(){
+		LOGGER.info("Testing the LongLinkedList's containsAll(Collection) method.");
+		
+		this.testingNodeList = new LongLinkedList<>();
+		this.checkingNodeList = new LinkedList<>();
+		
+		assertEquals(this.testingNodeList.containsAll(LongLinkedListTestModels.shortTestingArray), this.checkingNodeList.containsAll(LongLinkedListTestModels.shortTestingArray));
+		
+		this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
+		
+		assertEquals(this.testingNodeList.containsAll(LongLinkedListTestModels.shortTestingArray), this.checkingNodeList.containsAll(LongLinkedListTestModels.shortTestingArray));
+		assertEquals(this.testingNodeList.containsAll(LongLinkedListTestModels.fullTestingArray), this.checkingNodeList.containsAll(LongLinkedListTestModels.fullTestingArray));
+	}
 }

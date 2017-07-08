@@ -688,6 +688,15 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
+	public boolean containsAll(Collection<?> collection) {
+		Iterator<?> it = collection.iterator();
+		while(it.hasNext())
+			if (!this.contains(it.next()))
+				return false;
+		return true;
+	}
+	
+	@Override
 	public Object[] toArray() {//TODO:: test
 		this.throwIfLengthGTMaxInt();
 		Object[] output = new Object[(int)this.length];
@@ -726,15 +735,6 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	@Override
 	public boolean remove(Object o) {
 		return this.removeFirstOccurrence(o);
-	}
-	
-	@Override
-	public boolean containsAll(Collection<?> collection) {//TODO:: test
-		Iterator<?> it = collection.iterator();
-		while(it.hasNext())
-			if (!this.contains(it.next()))
-				return false;
-		return true;
 	}
 	
 	/**
