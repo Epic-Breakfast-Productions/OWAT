@@ -666,7 +666,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
-	public int size() {//TODO:: test
+	public int size() {
 		if(this.lengthGTMaxInt()){
 			return Integer.MAX_VALUE;
 		}
@@ -688,53 +688,12 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean containsAll(Collection<?> collection) {//TODO:: test
+	public boolean containsAll(Collection<?> collection) {
 		Iterator<?> it = collection.iterator();
 		while(it.hasNext())
 			if (!this.contains(it.next()))
 				return false;
 		return true;
-	}
-	
-	@Override
-	public Object[] toArray() {//TODO:: test
-		this.throwIfLengthGTMaxInt();
-		Object[] output = new Object[(int)this.length];
-		ListIterator<E> it = this.listIterator();
-		for(int i = 0; i < output.length && it.hasNext(); i++){
-			output[i] = it.next();
-		}
-		return output;
-	}
-	
-	@Override
-	public <T> T[] toArray(T[] ts) {
-		throw new UnsupportedOperationException("This method is unsupported, and is not currently planned to be supported. If you need this method to be supported, please contact the developer.");
-	}
-	
-	@Override
-	public boolean add(E e) {
-		if(this.atCapacity()){
-			return false;
-		}
-		
-		this.length++;
-		if(this.first == null){
-			this.first = new LongListNode<>(e);
-			this.last = this.first;
-		}else {
-			this.last = new LongListNode<>(
-					e,
-					this.last,
-					null
-			);
-		}
-		return true;
-	}
-	
-	@Override
-	public boolean remove(Object o) {
-		return this.removeFirstOccurrence(o);
 	}
 	
 	/**
@@ -770,17 +729,41 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
+	public Object[] toArray() {
+		this.throwIfLengthGTMaxInt();
+		Object[] output = new Object[(int)this.length];
+		ListIterator<E> it = this.listIterator();
+		for(int i = 0; i < output.length && it.hasNext(); i++){
+			output[i] = it.next();
+		}
+		return output;
+	}
+	
+	@Override
+	public <T> T[] toArray(T[] ts) {
+		throw new UnsupportedOperationException("This method is unsupported, and is not currently planned to be supported. If you need this method to be supported, please contact the developer.");
+	}
+	
+	@Override
+	public boolean add(E e) {
+		return this.offerLast(e);
+	}
+	
+	@Override
 	public boolean addAll(Collection<? extends E> collection) {//TODO:: test
 		if(collection == null){
-			return false;
+			throw new NullPointerException("The collection given to addAll(Collection) was null.");
 		}
 		this.throwIfAtCapacity(collection.size());
 		for(E curElement : collection){
-			if(!this.add(curElement)){
-				return false;
-			}
+			this.add(curElement);
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean remove(Object o) {
+		return this.removeFirstOccurrence(o);
 	}
 	
 	@Override
@@ -791,9 +774,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			try {
 				this.remove(it.next());
 				changed = true;
-			}catch(NoSuchElementException e){
-				break;
-			}
+			}catch(NoSuchElementException e){}
 		}
 		return changed;
 	}

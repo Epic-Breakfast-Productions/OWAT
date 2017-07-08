@@ -575,6 +575,22 @@ public class LongLinkedListTest {
 		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList.toArray(), true, this.checkingNodeList.toArray());
 	}
 	
+	@Test
+	public void testLongLinkedListCollectionMethodsAddAll(){
+		LOGGER.info("Testing the LongLinkedList's add(E) method.");
+		
+		this.testingNodeList = new LongLinkedList<>();
+		this.checkingNodeList = new LinkedList<>();
+		
+		try {
+			this.testingNodeList.addAll(null);
+			fail("Failed to throw a nullPointer Exception when trying to addAll(null)");
+		}catch (NullPointerException e){}
+		assertEquals(this.testingNodeList.addAll(LongLinkedListTestModels.fullTestingArray), this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray));
+		
+		LongLinkedListTestModels.testListsAreTheSame(this.testingNodeList, true, this.checkingNodeList);
+	}
+	
 	//TODO:: finish these
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
