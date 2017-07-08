@@ -688,7 +688,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean containsAll(Collection<?> collection) {
+	public boolean containsAll(Collection<?> collection) {//TODO:: test
 		Iterator<?> it = collection.iterator();
 		while(it.hasNext())
 			if (!this.contains(it.next()))
@@ -739,10 +739,13 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	/**
 	 * Determines if all of the elements given are inside this list. Acts the same as {@link LongLinkedList#containsAll(Collection) containsAll(Collection)}, but runs in O(n) instead of O(n*m).
+	 *
+	 * Exists because of the asinine oversights generics introduce (cannot determine if ? is E or not)
+	 *
 	 * @param collection The collection of objects to determine if they are in the list.
 	 * @return If all of the elements given are inside this list.
 	 */
-	public boolean containsAllElements(Collection<E> collection){//TODO:: test
+	public boolean containsAllElements(Collection<E> collection){
 		Map<E, Boolean> tracker = new HashMap<>();
 		
 		Iterator<E> it = collection.iterator();
