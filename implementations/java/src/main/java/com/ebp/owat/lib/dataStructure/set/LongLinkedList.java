@@ -750,7 +750,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean addAll(Collection<? extends E> collection) {//TODO:: test
+	public boolean addAll(Collection<? extends E> collection) {
 		if(collection == null){
 			throw new NullPointerException("The collection given to addAll(Collection) was null.");
 		}
@@ -777,7 +777,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public boolean retainAll(Collection<?> collection) {//TODO:: test
+	public boolean retainAll(Collection<?> collection) {
 		if(collection.isEmpty()){
 			boolean changed = !this.isEmpty();
 			this.clear();
@@ -849,7 +849,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	@Override
-	public ListIterator<E> listIterator() {//TODO:: test
+	public ListIterator<E> listIterator() {
 		return new ListIterator<E>() {
 			private LongListNode<E> curNode = first;
 			private boolean startedIt = false;
