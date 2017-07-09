@@ -5,7 +5,7 @@ Configutation:
     Property:
       -
         name: archiveTriggeringSize
-        value: 2 MB
+        value: 1 KB
       -
         name: archiveMaxFiles
         value: 5
@@ -52,7 +52,7 @@ Configutation:
           -
             name: LogFileOutput
             fileName: ${logFile}
-            filePattern: "${logPath}${logArchivePath}${logFile}${logArchiveStampFormat}"
+            filePattern: "${logPath}${logArchivePath}${logFileName}${logArchiveStampFormat}"
             PatternLayout:
               pattern: "${logPatternDetailed}"
             Policies:
@@ -63,7 +63,7 @@ Configutation:
           -
             name: ErrorLogFileOutput
             fileName: ${errorLogFile}
-            filePattern: "${logPath}${logArchivePath}${errorLogFile}${logArchiveStampFormat}"
+            filePattern: "${logPath}${logArchivePath}${errorLogFileName}${logArchiveStampFormat}"
             PatternLayout:
               pattern: "${logPatternDetailed}"
             Policies:
