@@ -29,3 +29,8 @@ dependencies {
 
 //config for the application plugin
 mainClassName = "com.ebp.owat.app.Main"
+
+//specify gradle version (for when  we recreate the wrapper)
+task wrapper(type: Wrapper) {
+	gradleVersion = '4.0.1'
+}
