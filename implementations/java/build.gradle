@@ -16,9 +16,14 @@ repositories {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-	// The production code uses the SLF4J logging API at compile time
-	compile 'org.slf4j:slf4j-api:1.7.+'
-	compile 'org.slf4j:slf4j-log4j12:1.7.+'
+	//logging dependencies
+	compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.+'
+	compile 'org.apache.logging.log4j:log4j-api:2.+'
+	compile 'org.apache.logging.log4j:log4j-core:2.+'
+	compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2+'
+	compile 'com.fasterxml.jackson.core:jackson-databind:2+'
+
+	//test dependencies
 	testCompile 'junit:junit:4.12'
 }
 
