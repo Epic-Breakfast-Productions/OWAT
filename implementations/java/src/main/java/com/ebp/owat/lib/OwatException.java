@@ -12,11 +12,11 @@ public class OwatException extends RuntimeException {
 		super(s);
 	}
 	
-	public OwatException(String s, Throwable throwable) {
-		super(s, throwable);
-	}
-	
 	public OwatException(Throwable throwable) {
 		super(throwable);
+	}
+	
+	public OwatException(String s, Throwable throwable) {
+		super(s, throwable);
 	}
 }
