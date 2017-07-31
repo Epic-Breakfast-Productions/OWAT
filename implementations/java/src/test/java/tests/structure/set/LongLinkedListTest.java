@@ -582,6 +582,11 @@ public class LongLinkedListTest {
 		this.checkingNodeList.addAll(LongLinkedListTestModels.fullTestingArray);
 		
 		ListTestCheckers.testListsAreTheSame(this.testingNodeList.toArray(), true, this.checkingNodeList.toArray());
+		
+		try {
+			this.testingNodeList.toArray(new Long[0]);
+			fail("Failed to throw a UnsupportedOperationException when calling toArray([])");
+		}catch (UnsupportedOperationException e){}
 	}
 	
 	@Test
