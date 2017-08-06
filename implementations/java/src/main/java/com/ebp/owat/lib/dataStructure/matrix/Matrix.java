@@ -20,9 +20,9 @@ public class Matrix<T> {
 	 */
 	public enum FixedNodePos{
 		TOP_LEFT(MatrixNode.NodeDir.NORTH, MatrixNode.NodeDir.WEST),
-		TOP_RIGHT,
-		BOT_LEFT,
-		BOT_RIGHT;
+		TOP_RIGHT(MatrixNode.NodeDir.NORTH, MatrixNode.NodeDir.EAST),
+		BOT_LEFT(MatrixNode.NodeDir.SOUTH, MatrixNode.NodeDir.WEST),
+		BOT_RIGHT(MatrixNode.NodeDir.SOUTH, MatrixNode.NodeDir.EAST);
 		
 		private List<MatrixNode.NodeDir> toBorder = new LinkedList<>();
 		
@@ -75,6 +75,9 @@ public class Matrix<T> {
 		return null;
 	}
 	
+	/**
+	 * Resets the fixed points in the
+	 */
 	private void resetFixedPoints(){
 		//TODO
 	}

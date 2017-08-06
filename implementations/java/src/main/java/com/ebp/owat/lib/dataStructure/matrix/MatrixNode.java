@@ -62,7 +62,7 @@ public class MatrixNode<T> {
 	 * @param nodeIn The node to set to the direction given.
 	 * @return This Node.
 	 */
-	public MatrixNode<T> setNode(NodeDir dirIn, MatrixNode<T> nodeIn){
+	public MatrixNode<T> setNeighbor(NodeDir dirIn, MatrixNode<T> nodeIn){
 		switch (dirIn) {
 			case NORTH:
 				this.north = nodeIn;
@@ -79,6 +79,9 @@ public class MatrixNode<T> {
 			default:
 				throw new OwatNodeException(BAD_DIR_GIVEN_ERR_MESSAGE + dirIn);
 		}
+		if(nodeIn != null && !nodeIn.borders(this, dirIn.opposite())){
+			nodeIn.setNeighbor(dirIn.opposite(), this);
+		}
 		return this;
 	}
 	
@@ -90,11 +93,11 @@ public class MatrixNode<T> {
 	public MatrixNode<T> removeNeighbor(NodeDir dirIn){
 		MatrixNode<T> nodeToRemove = this.getNeighbor(dirIn);
 		if(nodeToRemove != null){
-			nodeToRemove.setNode(dirIn.opposite(), null);
+			nodeToRemove.setNeighbor(dirIn.opposite(), null);
 		}else{
 			return null;
 		}
-		this.setNode(dirIn, null);
+		this.setNeighbor(dirIn, null);
 		return nodeToRemove;
 	}
 	
