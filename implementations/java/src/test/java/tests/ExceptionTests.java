@@ -4,6 +4,7 @@ import com.ebp.owat.lib.OwatException;
 import com.ebp.owat.lib.dataStructure.OwatStructureException;
 import com.ebp.owat.lib.dataStructure.io.OwatNodeIOException;
 import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
+import com.ebp.owat.lib.dataStructure.matrix.utils.OwatMatrixUtilException;
 import com.ebp.owat.lib.dataStructure.node.OwatNodeException;
 import com.ebp.owat.lib.dataStructure.node.value.OwatNodeValueException;
 import com.ebp.owat.lib.dataStructure.set.OwatNodeSetException;
@@ -33,7 +34,8 @@ public class ExceptionTests {
 			OwatNodeSetException.class,
 			OwatScramblerException.class,
 			OwatUtilException.class,
-			OwatRandException.class
+			OwatRandException.class,
+			OwatMatrixUtilException.class
 	);
 	
 	private static final Throwable TEST_THROWABLE = new Throwable("Test throwable message");

@@ -1,4 +1,4 @@
-package com.ebp.owat.lib.dataStructure.matrix.utils;
+package com.ebp.owat.lib.dataStructure.matrix.utils.coordinate;
 
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
@@ -10,7 +10,7 @@ import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
  */
 public class Coordinate {
 	/** The matrix this coordinate is on. */
-	private final Matrix matrix;
+	public final Matrix matrix;
 	/** The X value (which col) of this coordinate. */
 	private long x;
 	/** The Y value (which row) of this coordinate. */
@@ -30,9 +30,9 @@ public class Coordinate {
 	 * @param matrix The matrix this coordinate is on.
 	 * @param xIn The X value (which col) of this coordinate.
 	 * @param yIn The Y value (which row) of this coordinate.
-	 * @throws OwatMatrixException If the values in are out of bounds.
+	 * @throws IllegalArgumentException If the values in are out of bounds.
 	 */
-	public Coordinate(Matrix matrix, long xIn, long yIn) throws OwatMatrixException{
+	public Coordinate(Matrix matrix, long xIn, long yIn) throws IllegalArgumentException{
 		this(matrix);
 		this.setX(xIn).setY(yIn);
 	}
@@ -44,7 +44,10 @@ public class Coordinate {
 	 * @throws OwatMatrixException If the value in is out of bounds.
 	 */
 	public Coordinate setX(long xIn) throws OwatMatrixException{
-		matrix.checkValidColNumber(xIn);
+		if(!matrix.isValidColIndex(xIn)){
+			throw new IllegalArgumentException("Invalid x(column) index given. Index given: " + xIn + " # rows: " + matrix.getNumCols());
+		}
+		this.x = xIn;
 		return this;
 	}
 	
@@ -54,8 +57,11 @@ public class Coordinate {
 	 * @return This Coordinate.
 	 * @throws OwatMatrixException If the value in is out of bounds.
 	 */
-	public Coordinate setY(long yIn) throws OwatMatrixException{
-		matrix.checkValidColNumber(yIn);
+	public Coordinate setY(long yIn) {
+		if(!matrix.isValidRowIndex(yIn)){
+			throw new IllegalArgumentException("Invalid y(row) index given. Index given: " + yIn + " # rows: " + matrix.getNumRows());
+		}
+		this.y = yIn;
 		return this;
 	}
 	
@@ -73,5 +79,41 @@ public class Coordinate {
 	 */
 	public long getY(){
 		return this.y;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == null){
+			return false;
+		}
+		Coordinate c;
+		try{
+			c = (Coordinate)o;
+		}catch(ClassCastException e){
+			return false;
+		}
+		return (
+			this.matrix != c.matrix ||
+			this.x != c.getX() ||
+			this.y != c.getY()
+		);
+	}
+	
+	@Override
+	protected Coordinate clone(){
+		return new Coordinate(this.matrix, this.x, this.y);
+	}
+	
+	@Override
+	public String toString() {
+		return "Coordinate. Values: X(col)=" + this.x + " Y(row)=" + this.y + " Matrix: " + this.matrix;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = matrix.toString().hashCode();
+		result = 31 * result + (int) (x ^ (x >>> 32));
+		result = 31 * result + (int) (y ^ (y >>> 32));
+		return result;
 	}
 }

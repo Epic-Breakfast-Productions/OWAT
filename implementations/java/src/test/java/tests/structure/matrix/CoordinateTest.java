@@ -1,6 +1,6 @@
 package tests.structure.matrix;
 
-import com.ebp.owat.lib.dataStructure.matrix.utils.Coordinate;
+import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

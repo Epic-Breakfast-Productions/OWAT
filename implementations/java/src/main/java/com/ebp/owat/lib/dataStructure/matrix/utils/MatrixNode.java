@@ -1,6 +1,4 @@
-package com.ebp.owat.lib.dataStructure.matrix;
-
-import com.ebp.owat.lib.dataStructure.node.OwatNodeException;
+package com.ebp.owat.lib.dataStructure.matrix.utils;
 
 /**
  * Abstract class for a single node of the matrix.
@@ -8,24 +6,7 @@ import com.ebp.owat.lib.dataStructure.node.OwatNodeException;
  * Created by Greg Stewart on 3/23/17.
  */
 public class MatrixNode<T> {
-	private static final String BAD_DIR_GIVEN_ERR_MESSAGE = "Somehow gave a bad direction in. Dir in: ";
 	
-	/**
-	 * Node Direction, use this to tell a node which direction you mean.
-	 */
-	public enum NodeDir {
-		NORTH,SOUTH,EAST,WEST;
-		private NodeDir opposite;
-		static {
-			NORTH.opposite = SOUTH;
-			SOUTH.opposite = NORTH;
-			EAST.opposite = WEST;
-			WEST.opposite = EAST;
-		}
-		public NodeDir opposite(){
-			return this.opposite;
-		}
-	}
 	
 	/** The Node that is 'north' or 'above' this node. */
 	private MatrixNode<T> north = null;
@@ -77,7 +58,7 @@ public class MatrixNode<T> {
 				this.north = nodeIn;
 				break;
 			default:
-				throw new OwatNodeException(BAD_DIR_GIVEN_ERR_MESSAGE + dirIn);
+				throw new IllegalArgumentException(NodeDir.BAD_DIR_GIVEN_ERR_MESSAGE + dirIn);
 		}
 		if(nodeIn != null && !nodeIn.borders(this, dirIn.opposite())){
 			nodeIn.setNeighbor(dirIn.opposite(), this);
@@ -130,7 +111,7 @@ public class MatrixNode<T> {
 			case WEST:
 				return this.west;
 		}
-		throw new OwatNodeException(BAD_DIR_GIVEN_ERR_MESSAGE + dirIn);
+		throw new IllegalArgumentException(NodeDir.BAD_DIR_GIVEN_ERR_MESSAGE + dirIn);
 	}
 	
 	/**
@@ -191,7 +172,7 @@ public class MatrixNode<T> {
 			case WEST:
 				return (this.west == null);
 			default:
-				throw new OwatNodeException(BAD_DIR_GIVEN_ERR_MESSAGE + sideBorder);
+				throw new IllegalArgumentException(NodeDir.BAD_DIR_GIVEN_ERR_MESSAGE + sideBorder);
 		}
 	}
 	
@@ -224,7 +205,7 @@ public class MatrixNode<T> {
 			case WEST:
 				return this.west == nodeIn;
 		}
-		throw new OwatNodeException(BAD_DIR_GIVEN_ERR_MESSAGE + dirIn);
+		throw new IllegalArgumentException(NodeDir.BAD_DIR_GIVEN_ERR_MESSAGE + dirIn);
 	}
 	
 	/**
@@ -249,5 +230,29 @@ public class MatrixNode<T> {
 		T temp = nodeIn.getValue();
 		nodeIn.setValue(this);
 		this.setValue(temp);
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		
+		MatrixNode<?> that = (MatrixNode<?>) o;
+		
+		if (north != null ? !north.equals(that.north) : that.north != null) return false;
+		if (south != null ? !south.equals(that.south) : that.south != null) return false;
+		if (east != null ? !east.equals(that.east) : that.east != null) return false;
+		if (west != null ? !west.equals(that.west) : that.west != null) return false;
+		return getValue() != null ? getValue().equals(that.getValue()) : that.getValue() == null;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = north != null ? north.hashCode() : 0;
+		result = 31 * result + (south != null ? south.hashCode() : 0);
+		result = 31 * result + (east != null ? east.hashCode() : 0);
+		result = 31 * result + (west != null ? west.hashCode() : 0);
+		result = 31 * result + (getValue() != null ? getValue().hashCode() : 0);
+		return result;
 	}
 }//Node
