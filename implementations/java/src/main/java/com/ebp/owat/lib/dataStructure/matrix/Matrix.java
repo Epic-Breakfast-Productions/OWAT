@@ -29,6 +29,9 @@ public class Matrix<T> {
 	/** The number of columns held by this object. */
 	protected long numCols = 0L;
 	
+	/** The number of elements held by this object. I.E., the number of nodes that are not null. */
+	protected long numElementsHeld = 0L;
+	
 	/**
 	 * Basic Constructor.
 	 */
@@ -47,13 +50,12 @@ public class Matrix<T> {
 			throw new IllegalStateException("Can't initialize the matrix if it already is initialized. Probably shouldn't be able to get to this.");
 		}
 		
-		this.numRows++;
-		this.numCols++;
+		this.numRows = 1;
+		this.numCols = 1;
 		this.headNode = new MatrixNode<>();
 		
-		//TODO:: add to the nodePosList
+		//Add to the node position list.
 		this.nodePosList = new LongLinkedList<>();
-		
 		for (NodePos.FixedNodePos curFixedPos : NodePos.FixedNodePos.values()){
 			this.nodePosList.add(
 				new FixedNodePos<>(this, curFixedPos)
@@ -64,32 +66,39 @@ public class Matrix<T> {
 	public void addRow(){
 		if(this.nodePosList.isEmpty()){
 			initFirstNode();
-		}else{
-			//TODO
+			return;
 		}
+		//TODO
 		resetFixedPoints();
 	}
 	
 	public void addCol(){
 		if(this.nodePosList.isEmpty()){
 			initFirstNode();
-		}else{
-			//TODO
 		}
+		//TODO
 		resetFixedPoints();
 	}
 	
-	public void addRow(List<T> valuesIn){
+	public void addRows(List<T> valuesIn){
 		//TODO: add rows til we are done adding from values
 	}
 	
-	public void addCol(List<T> valuesIn){
+	public void addCols(List<T> valuesIn){
 		//TODO: add cols til we are done adding from values
 	}
 	
-	public List<List<T>> to2dArray(){
-		//TODO
-		return null;
+	/**
+	 * Returns this matrix as a 2d array.
+	 * @return
+	 */
+	public Object[][] to2dArray(){
+		Object[][] output = new Object[(int)this.numRows][(int)this.getNumCols()];
+		
+		
+		
+		
+		return output;
 	}
 	
 	/**
@@ -144,30 +153,72 @@ public class Matrix<T> {
 	}
 	
 	/**
+	 * Gets the total number of spots in the matrix.
+	 * @return The total number of spots in the matrix.
+	 */
+	public long size(){
+		return this.numRows * this.numCols;
+	}
+	
+	/**
+	 * Gets the number of elements held by this matrix.
+	 * @return The number of elements held by this matrix.
+	 */
+	public long numElements(){
+		return this.numElementsHeld;
+	}
+	
+	/**
+	 * Determines if pos1 is closer to pos2 to the coordinates given.
+	 * @param pos1 The node we are testing to see if it is closer.
+	 * @param pos2 The node we are comparing to the first one.
+	 * @param coordIn The coordinate we are comparing to.
+	 * @return If pos1 is closer to the goal coordinates than pos2
+	 */
+	private boolean nodeIsCloserThan(NodePos<T> pos1, NodePos<T> pos2, Coordinate coordIn){
+		if(pos2 == null){
+			return true;
+		}
+		return pos1.isCloserTo(pos2, coordIn);
+	}
+	
+	/**
+	 * Gets the closest NodePos we keep track of to the coords given.
+	 * @param coordIn The coordinate we are trying to get the closest node to.
+	 * @return The closest NodePos we keep track of to the coords given.
+	 */
+	private NodePos<T> getClosestNodePos(Coordinate coordIn){
+		NodePos<T> curClosest = null;
+		for ( NodePos<T> curPos : this.nodePosList ) {
+			if(curClosest == null || this.nodeIsCloserThan(curPos, curClosest, coordIn)){
+				curClosest = curPos;
+			}
+		}
+		return curClosest;
+	}
+	
+	/**
 	 * Gets a node at the coordinates given.
-	 * @param xIn The index of the column of the node to get.
-	 * @param yIn The index of the row of the node to get.
+	 * @param coordToGet The coordinate of the node to get.
 	 * @param usePoints If we are to use the points in the list of points we keep track of.
 	 * @return The node at the coords given.
 	 */
-	public MatrixNode<T> getNode(long xIn, long yIn, boolean usePoints){
-		if(!this.isValidColIndex(xIn) || !this.isValidRowIndex(yIn)){
-			throw new IllegalArgumentException("Invalid index(es) given. Given: X="+xIn+" Y="+yIn+" Actual Max Index: X="+(this.numCols - 1)+" Y="+ this.numRows + "");
+	public MatrixNode<T> getNode(Coordinate coordToGet, boolean usePoints){
+		if(coordToGet.matrix == this){
+			throw new IllegalArgumentException("Coordinate given is not on this matrix.");
 		}
-		if(usePoints){
-			//TODO
+		MatrixNode<T> output = null;
+		if(usePoints && this.nodePosList.size() > 0){
+			NodePos<T> closestNodePos = this.getClosestNodePos(coordToGet);
+			//TODO goto node from closest pos
 		}else{
-			//TODO
+			//TODO go to node from head node.
 		}
-		return null;
-	}
-	
-	public MatrixNode<T> getNode(Coordinate coord, boolean usePoints){
-		return this.getNode(coord.getX(), coord.getY(), usePoints);
+		return output;
 	}
 	
 	public T get(long xIn, long yIn){
-		return this.getNode(xIn, yIn, true).getValue();
+		return this.getNode(new Coordinate(this, xIn, yIn), true).getValue();
 	}
 	
 	public T get(Coordinate coord){

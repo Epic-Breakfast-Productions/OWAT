@@ -10,6 +10,9 @@ import java.util.List;
 
 /**
  * Describes a node on a matrix, holding the node on the matrix and provides functionality to update that position automatically based on what kind of position this is and how the matrix grows/shrinks.
+ *
+ * TODO:: organize and ensure x/y coords are set
+ *
  * @param <T> The type held by the matrix. Needed to ensure proper typing of the MatrixNode.
  */
 public abstract class NodePos<T> extends Coordinate {
@@ -40,7 +43,7 @@ public abstract class NodePos<T> extends Coordinate {
 	 * Most basic constructor for a NodePos.
 	 * @param matrix The matrix this potision is a part of.
 	 */
-	public NodePos(Matrix<T> matrix){
+	private NodePos(Matrix<T> matrix){
 		super(matrix);
 	}
 	
@@ -58,12 +61,23 @@ public abstract class NodePos<T> extends Coordinate {
 	 * Constructs a new NodePositon with all the values set.
 	 *
 	 * @param matrix The matrix this coordinate is on.
+	 * @param coord The coordinate of the node to get.
+	 * @throws IllegalArgumentException If the values in are out of bounds.
+	 */
+	public NodePos(Matrix<T> matrix, Coordinate coord) throws IllegalArgumentException {
+		this(matrix, matrix.getNode(coord, false));
+	}
+	
+	/**
+	 * Constructs a new NodePositon with all the values set.
+	 *
+	 * @param matrix The matrix this coordinate is on.
 	 * @param xIn    The X value (which col) of this coordinate.
 	 * @param yIn    The Y value (which row) of this coordinate.
 	 * @throws IllegalArgumentException If the values in are out of bounds.
 	 */
 	public NodePos(Matrix<T> matrix, long xIn, long yIn) throws IllegalArgumentException {
-		this(matrix, matrix.getNode(xIn, yIn, false));
+		this(matrix, matrix.getNode(new Coordinate(matrix, xIn, yIn), false));
 	}
 	
 	/**
@@ -74,7 +88,16 @@ public abstract class NodePos<T> extends Coordinate {
 	public NodePos<T> setNode(MatrixNode<T> nodeIn){
 		//TODO:: check if node is in matrix?
 		this.node = nodeIn;
+		//TODO:: determine x/y pos
 		return this;
+	}
+	
+	/**
+	 * Gets the node held at this position.
+	 * @return The node at this position.
+	 */
+	public MatrixNode<T> getNode() {
+		return this.node;
 	}
 	
 	/**
