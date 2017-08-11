@@ -2,6 +2,8 @@ package com.ebp.owat.lib.dataStructure.matrix.utils.coordinate;
 
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
+import com.ebp.owat.lib.dataStructure.matrix.utils.Plane;
+import com.ebp.owat.lib.dataStructure.matrix.utils.MatrixValidator;
 
 /**
  * Describes a coordinate on a matrix.
@@ -10,12 +12,8 @@ import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
  */
 public class Coordinate {
 	
-	public enum DistanceCalcMethod{
-		MANHATTAN,EUCLIDIAN;
-	}
-	
 	/** The default method of finding distances from one coordinate to another. */
-	public static final DistanceCalcMethod DEFAULT_DISTANCE_CALC_METHOD = DistanceCalcMethod.MANHATTAN;
+	public static final DistanceCalc.Method DEFAULT_DISTANCE_CALC_METHOD = DistanceCalc.Method.MANHATTAN;
 	
 	/** The matrix this coordinate is on. */
 	public final Matrix matrix;
@@ -52,9 +50,7 @@ public class Coordinate {
 	 * @throws OwatMatrixException If the value in is out of bounds.
 	 */
 	public Coordinate setX(long xIn) throws OwatMatrixException{
-		if(!matrix.isValidColIndex(xIn)){
-			throw new IllegalArgumentException("Invalid x(column) index given. Index given: " + xIn + " # rows: " + matrix.getNumCols());
-		}
+		MatrixValidator.throwIfBadIndex(this.matrix, xIn, Plane.X);
 		this.x = xIn;
 		return this;
 	}
@@ -66,9 +62,7 @@ public class Coordinate {
 	 * @throws OwatMatrixException If the value in is out of bounds.
 	 */
 	public Coordinate setY(long yIn) {
-		if(!matrix.isValidRowIndex(yIn)){
-			throw new IllegalArgumentException("Invalid y(row) index given. Index given: " + yIn + " # rows: " + matrix.getNumRows());
-		}
+		MatrixValidator.throwIfBadIndex(this.matrix, yIn, Plane.Y);
 		this.y = yIn;
 		return this;
 	}
@@ -95,44 +89,50 @@ public class Coordinate {
 	 * @return If this and the coordinate given is on the same matrix or not.
 	 */
 	public boolean isOnSameMatrix(Coordinate coordIn){
-		return coordIn != null && this.matrix == coordIn.matrix;
+		return MatrixValidator.isOnSameMatrix(this, coordIn);
 	}
 	
-	/**
-	 * Throws an exception if the coordinate given is not on the same matrix as this one.
-	 * @param coordIn The coordinate to test against.
-	 * @throws IllegalArgumentException If the coordinate given is not on the same matrix as this one.
-	 */
-	private void throwIfNotOnSameMatrix(Coordinate coordIn){
-		if(!this.isOnSameMatrix(coordIn)){
-			throw new IllegalArgumentException("Coordinate given is not on the same matrix as this coordinate.");
-		}
-	}
 	
 	/**
-	 * Gets the euclidian distance from this coordiate to another.
-	 *
-	 * @param coordIn The coordinate to get the distance to.
-	 * @return The euclidian distance to the coordinate given.
+	 * Gets the x distance to the index given.
+	 * @param xIndex The column index.
+	 * @return The distance from this coordinate to the index given.
 	 */
-	public long eucDistTo(Coordinate coordIn){
-		this.throwIfNotOnSameMatrix(coordIn);
+	public long xDistanceTo(long xIndex){
+		MatrixValidator.throwIfBadIndex(this.matrix, xIndex, Plane.X);
 		//TODO
-		long distanceX = 0L;
-		long distanceY = 0L;
-		//average distances
-		return (distanceX + distanceY)/2L;
+		return 0L;
 	}
 	
 	/**
-	 * Gets the manhattan distance from this coordinate to another.
-	 * @param coordIn
-	 * @return
+	 * Gets the x distance to the index given.
+	 * @param coordIn The coordinate to get the x-index from.
+	 * @return The distance from this coordinate to the coordinate given's x index.
 	 */
-	public long manDistanceTo(Coordinate coordIn){
-		this.throwIfNotOnSameMatrix(coordIn);
-		//TODO:: this
+	public long xDistanceTo(Coordinate coordIn){
+		MatrixValidator.throwIfNotOnSameMatrix(this, coordIn);
+		return this.xDistanceTo(coordIn.getX());
+	}
+	
+	/**
+	 * Gets the y distance to the index given.
+	 * @param yIndex The row index.
+	 * @return The distance from this coordinate to the index given.
+	 */
+	public long yDistanceTo(long yIndex){
+		MatrixValidator.throwIfBadIndex(this.matrix, yIndex, Plane.Y);
+		//TODO
 		return 0L;
+	}
+	
+	/**
+	 * Gets the y distance to the index given.
+	 * @param coordIn The coordinate to get the y-index from.
+	 * @return The distance from this coordinate to the coordinate given's y index.
+	 */
+	public long yDistanceTo(Coordinate coordIn){
+		MatrixValidator.throwIfNotOnSameMatrix(this, coordIn);
+		return yDistanceTo(coordIn.y);
 	}
 	
 	/**
@@ -141,14 +141,8 @@ public class Coordinate {
 	 * @param method The method of distance calculation to use.
 	 * @return The distance from this coordinate to the one given.
 	 */
-	public long distanceTo(Coordinate coordIn, DistanceCalcMethod method){
-		switch (method){
-			case EUCLIDIAN:
-				return this.eucDistTo(coordIn);
-			case MANHATTAN:
-				return this.manDistanceTo(coordIn);
-		}
-		throw new IllegalArgumentException("Somehow got a bad method. This should not happen.");
+	public double distanceTo(Coordinate coordIn, DistanceCalc.Method method){
+		return DistanceCalc.calculateDistance(method, this, coordIn);
 	}
 	
 	/**
@@ -156,7 +150,7 @@ public class Coordinate {
 	 * @param coordIn The coordinate to get the distance to.
 	 * @return The distance to the other coordinate.
 	 */
-	public long distanceTo(Coordinate coordIn){
+	public double distanceTo(Coordinate coordIn){
 		return this.distanceTo(coordIn, DEFAULT_DISTANCE_CALC_METHOD);
 	}
 	
@@ -168,12 +162,13 @@ public class Coordinate {
 	 * @param method The method this should use to determine distance.
 	 * @return If this coordinate is closer to a point on the matrix than another given. If the other coordinate given is null, returns true.
 	 */
-	public boolean isCloserTo(Coordinate coordIn, Coordinate coordTo, DistanceCalcMethod method){
+	public boolean isCloserTo(Coordinate coordIn, Coordinate coordTo, DistanceCalc.Method method){
 		if(coordIn == null){
 			return true;
 		}
-		this.throwIfNotOnSameMatrix(coordIn);
-		this.throwIfNotOnSameMatrix(coordTo);
+		MatrixValidator.throwIfNotOnSameMatrix(this, coordIn);
+		MatrixValidator.throwIfNotOnSameMatrix(this, coordTo);
+		
 		
 		return this.distanceTo(coordTo, method) < this.distanceTo(coordIn, method);
 	}

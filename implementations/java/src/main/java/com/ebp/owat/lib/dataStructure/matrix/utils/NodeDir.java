@@ -9,10 +9,6 @@ public enum NodeDir {
 	EAST(Plane.Y, IncDec.INC),
 	WEST(Plane.Y, IncDec.DEC);
 	
-	public enum Plane {
-		X,Y
-	}
-	
 	public enum IncDec {
 		INC,DEC,NA;
 		
@@ -25,9 +21,9 @@ public enum NodeDir {
 		public static long incDecValue(IncDec incDecIn, long valIn){
 			switch (incDecIn){
 				case INC:
-					return valIn++;
+					return ++valIn;
 				case DEC:
-					return valIn--;
+					return ++valIn;
 			}
 			throw new IllegalStateException("Somehow got bad IncDec. Should not get this.");
 		}
@@ -39,6 +35,7 @@ public enum NodeDir {
 	/** The opposite direction of the direction this direction is. Initialized in the static initializer field. */
 	private NodeDir opposite;
 	
+	public final Plane plane;
 	private final IncDec incDecX;
 	private final IncDec incDecY;
 	
@@ -50,6 +47,7 @@ public enum NodeDir {
 	}
 	
 	private NodeDir(Plane plane, IncDec incDec){
+		this.plane = plane;
 		if(plane == Plane.X){
 			incDecX = incDec;
 			incDecY = IncDec.NA;
@@ -75,6 +73,15 @@ public enum NodeDir {
 				return IncDec.incDecValue(this.incDecY, valToDec);
 		}
 		throw new IllegalStateException("Somehow got bad plane. Should not get this.");
+	}
+	
+	/**
+	 * Increments or decrements a value based on what plane this direction is on and what it is setup to do.
+	 * @param valToDec The value to increment or decrement.
+	 * @return The ncremented/decremented value.
+	 */
+	public long incDec(long valToDec){
+		return this.incDec(this.plane, valToDec);
 	}
 	
 	/**

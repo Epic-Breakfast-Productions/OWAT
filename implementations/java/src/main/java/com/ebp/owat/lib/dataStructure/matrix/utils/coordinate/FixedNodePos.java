@@ -2,6 +2,7 @@ package com.ebp.owat.lib.dataStructure.matrix.utils.coordinate;
 
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.utils.NodeDir;
+import com.ebp.owat.lib.dataStructure.matrix.utils.Plane;
 
 public class FixedNodePos<T> extends NodePos<T>{
 	/** The fixed position this node is. */
@@ -36,10 +37,10 @@ public class FixedNodePos<T> extends NodePos<T>{
 			while(!this.node.isBorder(curDirToGo)){
 				this.node = this.node.getNeighbor(curDirToGo);
 				this.setX(
-						curDirToGo.incDec(NodeDir.Plane.X, this.getX())
+						curDirToGo.incDec(Plane.X, this.getX())
 				);
 				this.setY(
-						curDirToGo.incDec(NodeDir.Plane.Y, this.getY())
+						curDirToGo.incDec(Plane.Y, this.getY())
 				);
 			}
 		}

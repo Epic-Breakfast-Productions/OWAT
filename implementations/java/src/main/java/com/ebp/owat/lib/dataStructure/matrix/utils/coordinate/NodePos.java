@@ -133,4 +133,21 @@ public abstract class NodePos<T> extends Coordinate {
 	public Coordinate getCoordinate(){
 		return (Coordinate)super.clone();
 	}
+	
+	/**
+	 * Method to move this position one increment in one direction.
+	 * @param dirToGo The direction this position is to go.
+	 * @return If the position was able to move or not. Would return false if this position is a border on the side given.
+	 */
+	public boolean go(NodeDir dirToGo){
+		if(this.node.isBorder(dirToGo)){
+			return false;
+		}
+		//set the new node, x&y coord
+		this.node = this.node.getNeighbor(dirToGo);
+		this.setX(dirToGo.incDec(this.getX()));
+		this.setY(dirToGo.incDec(this.getY()));
+		
+		return true;
+	}
 }

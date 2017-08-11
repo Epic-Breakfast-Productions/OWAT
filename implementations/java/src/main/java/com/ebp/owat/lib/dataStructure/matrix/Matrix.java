@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.dataStructure.matrix;
 
 import com.ebp.owat.lib.dataStructure.matrix.utils.MatrixNode;
+import com.ebp.owat.lib.dataStructure.matrix.utils.NodeDir;
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.FixedNodePos;
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.NodePos;
@@ -198,21 +199,54 @@ public class Matrix<T> {
 	}
 	
 	/**
+	 * Given a node position, adjusts that position to be at the coordinates given.
+	 * @param coordToGet The coordinates we want to go to.
+	 * @param curPoint The point we are starting at.
+	 * @return The Node at the coordinates given.
+	 */
+	private MatrixNode<T> getNodeFromPos(Coordinate coordToGet, NodePos<T> curPoint){
+		if(coordToGet == null || curPoint == null){
+			throw new IllegalArgumentException("Coord to get or start point given was null.");
+		}
+		if(coordToGet.matrix != this || curPoint.matrix != this){
+			throw new IllegalArgumentException("Coord or start point given not on this matrix.");
+		}
+		
+		while(!curPoint.equals(coordToGet)){
+			if(coordToGet.getX() > curPoint.getX()){
+				curPoint.go(NodeDir.EAST);
+			}else if(coordToGet.getX() < curPoint.getX()){
+				curPoint.go(NodeDir.WEST);
+			}
+			
+			if(coordToGet.getY() > curPoint.getY()){
+				curPoint.go(NodeDir.NORTH);
+			}else if(coordToGet.getY() < curPoint.getY()){
+				curPoint.go(NodeDir.SOUTH);
+			}
+		}
+		return curPoint.getNode();
+	}
+	
+	/**
 	 * Gets a node at the coordinates given.
 	 * @param coordToGet The coordinate of the node to get.
 	 * @param usePoints If we are to use the points in the list of points we keep track of.
 	 * @return The node at the coords given.
 	 */
 	public MatrixNode<T> getNode(Coordinate coordToGet, boolean usePoints){
+		if(coordToGet == null){
+			throw new IllegalArgumentException("Coordinate given is null.");
+		}
 		if(coordToGet.matrix == this){
 			throw new IllegalArgumentException("Coordinate given is not on this matrix.");
 		}
 		MatrixNode<T> output = null;
 		if(usePoints && this.nodePosList.size() > 0){
 			NodePos<T> closestNodePos = this.getClosestNodePos(coordToGet);
-			//TODO goto node from closest pos
+			output = this.getNodeFromPos(coordToGet, closestNodePos);
 		}else{
-			//TODO go to node from head node.
+			output = this.getNodeFromPos(coordToGet, new FixedNodePos<>(this, NodePos.FixedNodePos.TOP_LEFT));
 		}
 		return output;
 	}
