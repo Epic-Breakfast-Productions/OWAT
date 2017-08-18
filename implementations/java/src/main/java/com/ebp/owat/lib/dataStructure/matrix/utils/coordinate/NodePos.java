@@ -88,7 +88,7 @@ public abstract class NodePos<T> extends Coordinate {
 	public NodePos<T> setNode(MatrixNode<T> nodeIn){
 		//TODO:: check if node is in matrix?
 		this.node = nodeIn;
-		//TODO:: determine x/y pos
+		this.determinePos();
 		return this;
 	}
 	
@@ -101,7 +101,7 @@ public abstract class NodePos<T> extends Coordinate {
 	}
 	
 	/**
-	 * Method used by the position to recalculate and update the appropriate position of this node.
+	 * Method used by the position to recalculate and update the appropriate position (x/y coordinates) of this node.
 	 *
 	 * Sets the x&y coordinates
 	 */
@@ -150,4 +150,6 @@ public abstract class NodePos<T> extends Coordinate {
 		
 		return true;
 	}
+	
+	
 }
