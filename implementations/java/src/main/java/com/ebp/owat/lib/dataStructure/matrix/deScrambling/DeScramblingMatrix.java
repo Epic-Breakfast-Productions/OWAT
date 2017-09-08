@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.dataStructure.matrix.deScrambling;
 
 import com.ebp.owat.lib.dataStructure.io.NodeReader;
-import com.ebp.owat.lib.dataStructure.matrix.Matrix;
+import com.ebp.owat.lib.dataStructure.matrix.LinkedMatrix;
 import com.ebp.owat.lib.dataStructure.node.Node;
 
 /**
@@ -9,7 +9,7 @@ import com.ebp.owat.lib.dataStructure.node.Node;
  *
  * Created by Greg Stewart on 3/28/17.
  */
-public abstract class DeScramblingMatrix<T extends Node> extends Matrix {
+public abstract class DeScramblingMatrix<T extends Node> extends LinkedMatrix {
 	/**
 	 * Constructor to build using a provided node.
 	 * <p>

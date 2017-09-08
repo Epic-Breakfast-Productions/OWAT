@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.dataStructure.matrix.utils.coordinate;
 
+import com.ebp.owat.lib.dataStructure.matrix.LinkedMatrix;
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
 import com.ebp.owat.lib.dataStructure.matrix.utils.Plane;
@@ -38,7 +39,7 @@ public class Coordinate {
 	 * @param yIn The Y value (which row) of this coordinate.
 	 * @throws IllegalArgumentException If the values in are out of bounds.
 	 */
-	public Coordinate(Matrix matrix, long xIn, long yIn) throws IllegalArgumentException{
+	public Coordinate(LinkedMatrix matrix, long xIn, long yIn) throws IllegalArgumentException{
 		this(matrix);
 		this.setX(xIn).setY(yIn);
 	}
@@ -208,7 +209,7 @@ public class Coordinate {
 	
 	@Override
 	public String toString() {
-		return "Coordinate. Values: X(col)=" + this.x + " Y(row)=" + this.y + " Matrix: " + this.matrix;
+		return "Coordinate. Values: X(col)=" + this.x + " Y(row)=" + this.y + " LinkedMatrix: " + this.matrix;
 	}
 	
 	@Override

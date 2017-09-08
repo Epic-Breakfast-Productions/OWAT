@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.scrambler.move;
 
+import com.ebp.owat.lib.dataStructure.matrix.LinkedMatrix;
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
-import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 
 /**
  * Created by stewy on 4/4/17.
@@ -12,7 +12,7 @@ public class SwapNodes extends ScrambleMove {
 	 *
 	 * @param matrixIn The matrix this move is dealing with.
 	 */
-	public SwapNodes(Matrix matrixIn) {
+	public SwapNodes(LinkedMatrix matrixIn) {
 		super(matrixIn);
 	}
 	
@@ -22,7 +22,7 @@ public class SwapNodes extends ScrambleMove {
 	 * @param matrixIn The matrix this move is dealing with.
 	 * @param dirIn    The direction this move is to do.
 	 */
-	public SwapNodes(Matrix matrixIn, Direction dirIn) {
+	public SwapNodes(LinkedMatrix matrixIn, Direction dirIn) {
 		super(matrixIn, dirIn);
 	}
 	

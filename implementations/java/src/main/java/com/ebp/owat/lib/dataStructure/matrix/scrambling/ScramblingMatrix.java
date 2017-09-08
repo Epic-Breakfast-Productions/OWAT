@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.dataStructure.matrix.scrambling;
 
 import com.ebp.owat.lib.dataStructure.io.NodeReader;
-import com.ebp.owat.lib.dataStructure.matrix.Matrix;
+import com.ebp.owat.lib.dataStructure.matrix.LinkedMatrix;
 import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
 import com.ebp.owat.lib.dataStructure.node.Node;
 import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
@@ -14,7 +14,7 @@ import java.util.ListIterator;
  *
  * Created by Greg Stewart on 3/28/17.
  */
-public abstract class ScramblingMatrix<T extends Node> extends Matrix {
+public abstract class ScramblingMatrix<T extends Node> extends LinkedMatrix {
 	/** The random number generator to use for scrambling.  */
 	private LongGenerator randGenerator;
 	

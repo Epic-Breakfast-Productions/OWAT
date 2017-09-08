@@ -1,274 +1,210 @@
 package com.ebp.owat.lib.dataStructure.matrix;
 
 import com.ebp.owat.lib.dataStructure.matrix.utils.MatrixNode;
-import com.ebp.owat.lib.dataStructure.matrix.utils.NodeDir;
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
-import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.FixedNodePos;
-import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.NodePos;
-import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 /**
- *  Abstract class of a matrix to hold all the information and perform scrambling operations on.
+ * General Matrix class.
  *
- * Created by Greg Stewart on 3/23/17.
+ * For reference:
+ *
+ * <pre>
+ *            Top
+ *          (north)
+ *         0 1 2 3 ...
+ *       0 ---------
+ *       1 |+++++++|
+ * Left  2 |+++++++|Right
+ * (west)3 |+++++++|(east)
+ *       . |+++++++|
+ *       . ---------
+ *       .   Bottom
+ *           (south)
+ *</pre>
+ * {@code}
+ *
+ *
+ *
+ * @param <T> The type of value this matrix holds.
  */
-public class Matrix<T> {
-	
+public abstract class Matrix<T> implements Iterable<T> {
 	/**
-	 * A set of nodes that we know the positions of.
+	 * The default value to set new elements where values are not specified.
 	 */
-	protected List<NodePos<T>> nodePosList = Collections.emptyList();
-	
-	/** 0,0 of this matrix. needs to be updated with removals/additions */
-	protected MatrixNode<T> headNode;
-	
-	/** The number of rows held by this object. */
-	protected long numRows = 0L;
-	/** The number of columns held by this object. */
-	protected long numCols = 0L;
-	
-	/** The number of elements held by this object. I.E., the number of nodes that are not null. */
-	protected long numElementsHeld = 0L;
+	protected T defaultValue = null;
 	
 	/**
-	 * Basic Constructor.
+	 * Sets the {@link #defaultValue default value}.
+	 * @param valIn The value to set.
 	 */
-	private Matrix(){}
-	
-	public Matrix(LongLinkedList<T> valuesIn){
-		this();
-		//TODO:: this
+	protected void setDefaultValue(T valIn){
+		this.defaultValue = valIn;
 	}
 	
 	/**
-	 * Initializes the matrix, adding a single node and setup initial node positions.
+	 * Adds a row to the matrix. Will be added to the right of the existing matrix.
 	 */
-	private void initFirstNode(){
-		if(!this.isEmpty()){
-			throw new IllegalStateException("Can't initialize the matrix if it already is initialized. Probably shouldn't be able to get to this.");
-		}
-		
-		this.numRows = 1;
-		this.numCols = 1;
-		this.headNode = new MatrixNode<>();
-		
-		//Add to the node position list.
-		this.nodePosList = new LongLinkedList<>();
-		for (NodePos.FixedNodePos curFixedPos : NodePos.FixedNodePos.values()){
-			this.nodePosList.add(
-				new FixedNodePos<>(this, curFixedPos)
-			);
-		}
-	}
-	
-	public void addRow(){
-		if(this.nodePosList.isEmpty()){
-			initFirstNode();
-			return;
-		}
-		//TODO
-		resetFixedPoints();
-	}
-	
-	public void addCol(){
-		if(this.nodePosList.isEmpty()){
-			initFirstNode();
-		}
-		//TODO
-		resetFixedPoints();
-	}
-	
-	public void addRows(List<T> valuesIn){
-		//TODO: add rows til we are done adding from values
-	}
-	
-	public void addCols(List<T> valuesIn){
-		//TODO: add cols til we are done adding from values
-	}
+	public abstract void addRow();
 	
 	/**
-	 * Returns this matrix as a 2d array.
-	 * @return
+	 * Adds rows to the matrix until capacity is added for all the values given to be added, and the values are added. Values are added top-down on the new rows.
+	 * @param valuesIn The values to add to the rows.
+	 * @return If all the rows added were added completely by the values given.
 	 */
-	public Object[][] to2dArray(){
-		Object[][] output = new Object[(int)this.numRows][(int)this.getNumCols()];
-		
-		
-		
-		
-		return output;
-	}
+	public abstract boolean addRows(Collection<T> valuesIn);
 	
 	/**
-	 * Resets the fixed points in the matrix. Use after any modification to the matrix (add/remove row/cols).
+	 * Adds the number of rows specified. Adds rows to the right of the existing matrix.
+	 * @param numRows The number of rows to add.
 	 */
-	private void resetFixedPoints(){
-		for (NodePos<T> curEntry : this.nodePosList) {
-			curEntry.resetNodePos();
-		}
-	}
+	public abstract void addRows(long numRows);
 	
 	/**
-	 * Determines if the number given is a valid row index (Is greater than -1, and is less than or equal to the number of rows - 1).
-	 * @param rowNumIn The number to test.
-	 * @return If the number given is a valid row index.
+	 * Adds a column to the matrix. Will be added to the bottom of the existing matrix.
 	 */
-	public boolean isValidRowIndex(long rowNumIn){
-		return (rowNumIn > -1) && ((this.numRows -1) >= rowNumIn);
-	}
+	public abstract void addCol();
 	
 	/**
-	 * Determines if the number given is a valid column index (Is greater than -1, and is less than or equal to the number of columns - 1).
-	 * @param colNumIn The number to test.
-	 * @return If the number given is a valid column index.
+	 * Adds columns to the matrix until capacity is added for all the values given to be added, and the values are added to those rows. Values are added left to right to the new columns.
+	 * @param valuesIn The values to add to the rows.
+	 * @return If all the columns added were added completely by the values given.
 	 */
-	public boolean isValidColIndex(long colNumIn){
-		return (colNumIn > -1) && ((this.numCols -1) >= colNumIn);
-	}
+	public abstract void addCols(Collection<T> valuesIn);
 	
 	/**
-	 * Determines if this matrix is empty or not. Empty is defined as not having any nodes, as opposed to having nodes, but none of them having a value.
-	 * @return If this matrix is empty or not.
+	 * Adds the number of rows specified. Adds rows to the right of the existing matrix.
+	 * @param numCols The number of columns to add.
+	 */
+	public abstract void addCols(long numCols);
+	
+	/**
+	 * Adds rows and columns until all the items in the collection are added.
+	 *
+	 * Starts by adding a column, then a row, and keeps switching between adding cols and rows.
+	 *
+	 * @param valuesIn The values to add.
+	 */
+	public abstract void addRowsCols(Collection<T> valuesIn);
+	
+	//TODO:: row/col removal methods
+	
+	/**
+	 * Determines if the column index given is valid or not.
+	 * @param colNumIn The column number to determine if it is valid.
+	 * @return If the number given if a valid column number or not.
+	 */
+	public abstract boolean isValidColIndex(long colNumIn);
+	
+	/**
+	 * Determines if the row index given is valid or not.
+	 * @param rowNumIn The row number to determine if it is valid.
+	 * @return If the number given if a valid row number or not.
+	 */
+	public abstract boolean isValidRowIndex(long rowNumIn);
+	
+	/**
+	 * Determines if this matrix holds any elements.
+	 *
+	 * Equivalent to calling {@link Matrix#numElements() numElements()} > 0
+	 *
+	 * @return If this matrix holds any elements.
 	 */
 	public boolean isEmpty(){
-		return this.numCols == 0 && this.numRows == 0;
+		return this.numElements() > 0;
 	}
 	
 	/**
-	 * Gets the number of rows held by this matrix.
-	 * @return The number of rows held by this matrix.
+	 * Determines if the matrix is full.
+	 *
+	 * Definition of full: All spaces in the matrix hold a value.
+	 *
+	 * @return If the matrix is full.
 	 */
-	public long getNumRows(){
-		return numRows;
+	public boolean isFull(){
+		return this.size() == numElements();
 	}
 	
 	/**
 	 * Gets the number of columns held by this matrix.
 	 * @return The number of columns held by this matrix.
 	 */
-	public long getNumCols(){
-		return numCols;
-	}
+	public abstract long getNumCols();
 	
 	/**
-	 * Gets the total number of spots in the matrix.
-	 * @return The total number of spots in the matrix.
+	 * Gets the number of rows held by this matrix.
+	 * @return The number of rows held by this matrix.
+	 */
+	public abstract long getNumRows();
+	
+	/**
+	 * Gets the number of spots in this matrix to hold elements.
+	 *
+	 * @return The number of spots in this matrix to hold elements.
 	 */
 	public long size(){
-		return this.numRows * this.numCols;
+		return this.getNumCols() * this.getNumRows();
 	}
 	
 	/**
-	 * Gets the number of elements held by this matrix.
-	 * @return The number of elements held by this matrix.
+	 * Gets the number of elements actually held in the matrix.
+	 * @return The number of elements in the matrix.
 	 */
-	public long numElements(){
-		return this.numElementsHeld;
-	}
+	public abstract long numElements();
 	
 	/**
-	 * Determines if pos1 is closer to pos2 to the coordinates given.
-	 * @param pos1 The node we are testing to see if it is closer.
-	 * @param pos2 The node we are comparing to the first one.
-	 * @param coordIn The coordinate we are comparing to.
-	 * @return If pos1 is closer to the goal coordinates than pos2
+	 * Gets a value from this matrix.
+	 * @param xIn The x index of the node to get
+	 * @param yIn The y index of the node to get
+	 * @return The value at the point given.
+	 * @throws IndexOutOfBoundsException If either of the indexes are out of bounds.
 	 */
-	private boolean nodeIsCloserThan(NodePos<T> pos1, NodePos<T> pos2, Coordinate coordIn){
-		if(pos2 == null){
-			return true;
-		}
-		return pos1.isCloserTo(pos2, coordIn);
-	}
+	public abstract T get(long xIn, long yIn) throws IndexOutOfBoundsException;
 	
 	/**
-	 * Gets the closest NodePos we keep track of to the coords given.
-	 * @param coordIn The coordinate we are trying to get the closest node to.
-	 * @return The closest NodePos we keep track of to the coords given.
+	 * Gets a value from this matrix.
+	 * @param coordIn The coordinate to use. Coordinate must be on this matrix.
+	 * @return The value at the coordinate given.
 	 */
-	private NodePos<T> getClosestNodePos(Coordinate coordIn){
-		NodePos<T> curClosest = null;
-		for ( NodePos<T> curPos : this.nodePosList ) {
-			if(curClosest == null || this.nodeIsCloserThan(curPos, curClosest, coordIn)){
-				curClosest = curPos;
-			}
-		}
-		return curClosest;
-	}
+	public abstract T get(Coordinate coordIn);
 	
 	/**
-	 * Given a node position, adjusts that position to be at the coordinates given.
-	 * @param coordToGet The coordinates we want to go to.
-	 * @param curPoint The point we are starting at.
-	 * @return The Node at the coordinates given.
+	 * Gets a column of this matrix.
+	 * @param xIn The index of the column to get.
+	 * @return The list of elements in the column.
+	 * @throws IndexOutOfBoundsException If the index given is out of bounds.
 	 */
-	private MatrixNode<T> getNodeFromPos(Coordinate coordToGet, NodePos<T> curPoint){
-		if(coordToGet == null || curPoint == null){
-			throw new IllegalArgumentException("Coord to get or start point given was null.");
-		}
-		if(coordToGet.matrix != this || curPoint.matrix != this){
-			throw new IllegalArgumentException("Coord or start point given not on this matrix.");
-		}
-		
-		while(!curPoint.equals(coordToGet)){
-			if(coordToGet.getX() > curPoint.getX()){
-				curPoint.go(NodeDir.EAST);
-			}else if(coordToGet.getX() < curPoint.getX()){
-				curPoint.go(NodeDir.WEST);
-			}
-			
-			if(coordToGet.getY() > curPoint.getY()){
-				curPoint.go(NodeDir.NORTH);
-			}else if(coordToGet.getY() < curPoint.getY()){
-				curPoint.go(NodeDir.SOUTH);
-			}
-		}
-		return curPoint.getNode();
-	}
+	public abstract List<T> getCol(long xIn) throws IndexOutOfBoundsException;
 	
 	/**
-	 * Gets a node at the coordinates given.
-	 * @param coordToGet The coordinate of the node to get.
-	 * @param usePoints If we are to use the points in the list of points we keep track of.
-	 * @return The node at the coords given.
+	 * Gets the row the coordinate is on.
+	 * @param coordIn The coordinate to get the column from.
+	 * @return The list of elements in the column specified.
 	 */
-	public MatrixNode<T> getNode(Coordinate coordToGet, boolean usePoints){
-		if(coordToGet == null){
-			throw new IllegalArgumentException("Coordinate given is null.");
-		}
-		if(coordToGet.matrix == this){
-			throw new IllegalArgumentException("Coordinate given is not on this matrix.");
-		}
-		MatrixNode<T> output = null;
-		if(usePoints && this.nodePosList.size() > 0){
-			NodePos<T> closestNodePos = this.getClosestNodePos(coordToGet);
-			output = this.getNodeFromPos(coordToGet, closestNodePos);
-		}else{
-			output = this.getNodeFromPos(coordToGet, new FixedNodePos<>(this, NodePos.FixedNodePos.TOP_LEFT));
-		}
-		return output;
-	}
+	public abstract List<T> getCol(Coordinate coordIn);
 	
-	public T get(long xIn, long yIn){
-		return this.getNode(new Coordinate(this, xIn, yIn), true).getValue();
-	}
+	/**
+	 * Gets a row of this matrix.
+	 * @param yIn The index of the column to get.
+	 * @return The list of elements in the column.
+	 * @throws IndexOutOfBoundsException If the index given is out of bounds.
+	 */
+	public abstract List<T> getRow(long yIn) throws IndexOutOfBoundsException;
 	
-	public T get(Coordinate coord){
-		return this.getNode(coord, true).getValue();
-	}
+	/**
+	 * Gets the row the coordinate is on.
+	 * @param coordIn The coordinate to get the row from.
+	 * @return The list of elements in the row specified.
+	 */
+	public abstract List<T> getRow(Coordinate coordIn);
 	
-	public LongLinkedList<T> getCol(long xIn){
-		//TODO
-		return null;
-	}
+	/**
+	 * Gets this matrix represented as a two dimensional matrix.
+	 * @return This matrix as a 2d array.
+	 */
+	public abstract Object[][] to2dArray();
 	
-	public LongLinkedList<T> getRow(long yIn){
-		//TODO
-		return null;
-	}
-	
-	//TODO:: iterator(s)
-	
-}//Matrix
+	//TODO:: basic iterators
+}

@@ -1,6 +1,6 @@
 package com.ebp.owat.lib.scrambler.move;
 
-import com.ebp.owat.lib.dataStructure.matrix.Matrix;
+import com.ebp.owat.lib.dataStructure.matrix.LinkedMatrix;
 
 /**
  * General things for each scramble move.
@@ -13,14 +13,14 @@ public abstract class ScrambleMove {
 		BACKWARD
 	}
 	
-	private final Matrix matrixToScramble;
+	private final LinkedMatrix matrixToScramble;
 	private final Direction direction;
 	/**
 	 * Constructor to set the matrix we are dealing with.
 	 *
 	 * @param matrixIn The matrix this move is dealing with.
 	 */
-	public ScrambleMove(Matrix matrixIn){
+	public ScrambleMove(LinkedMatrix matrixIn){
 		this.matrixToScramble = matrixIn;
 		this.direction = Direction.FORWARD;
 	}
@@ -31,7 +31,7 @@ public abstract class ScrambleMove {
 	 * @param matrixIn The matrix this move is dealing with.
 	 * @param dirIn The direction this move is to do.
 	 */
-	public ScrambleMove(Matrix matrixIn, Direction dirIn){
+	public ScrambleMove(LinkedMatrix matrixIn, Direction dirIn){
 		this.matrixToScramble = matrixIn;
 		this.direction = dirIn;
 	}

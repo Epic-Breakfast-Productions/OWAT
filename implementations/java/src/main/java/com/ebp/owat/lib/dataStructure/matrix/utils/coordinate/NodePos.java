@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.dataStructure.matrix.utils.coordinate;
 
+import com.ebp.owat.lib.dataStructure.matrix.LinkedMatrix;
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.utils.MatrixNode;
 import com.ebp.owat.lib.dataStructure.matrix.utils.NodeDir;
@@ -52,7 +53,7 @@ public abstract class NodePos<T> extends Coordinate {
 	 * @param matrix The matrix this position is a part of.
 	 * @param nodeIn The node this position holds.
 	 */
-	public NodePos(Matrix<T> matrix, MatrixNode<T> nodeIn){
+	public NodePos(LinkedMatrix<T> matrix, MatrixNode<T> nodeIn){
 		this(matrix);
 		this.setNode(nodeIn);
 	}
@@ -64,7 +65,7 @@ public abstract class NodePos<T> extends Coordinate {
 	 * @param coord The coordinate of the node to get.
 	 * @throws IllegalArgumentException If the values in are out of bounds.
 	 */
-	public NodePos(Matrix<T> matrix, Coordinate coord) throws IllegalArgumentException {
+	public NodePos(LinkedMatrix<T> matrix, Coordinate coord) throws IllegalArgumentException {
 		this(matrix, matrix.getNode(coord, false));
 	}
 	
@@ -76,7 +77,7 @@ public abstract class NodePos<T> extends Coordinate {
 	 * @param yIn    The Y value (which row) of this coordinate.
 	 * @throws IllegalArgumentException If the values in are out of bounds.
 	 */
-	public NodePos(Matrix<T> matrix, long xIn, long yIn) throws IllegalArgumentException {
+	public NodePos(LinkedMatrix<T> matrix, long xIn, long yIn) throws IllegalArgumentException {
 		this(matrix, matrix.getNode(new Coordinate(matrix, xIn, yIn), false));
 	}
 	

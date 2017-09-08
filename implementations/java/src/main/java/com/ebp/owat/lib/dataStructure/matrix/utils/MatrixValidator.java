@@ -1,10 +1,11 @@
 package com.ebp.owat.lib.dataStructure.matrix.utils;
 
+import com.ebp.owat.lib.dataStructure.matrix.LinkedMatrix;
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
 
 /**
- * Validating methods for the various Matrix related classes.
+ * Validating methods for the various LinkedMatrix related classes.
  */
 public class MatrixValidator {
 	
@@ -24,7 +25,7 @@ public class MatrixValidator {
 	 * @param coordIn The coordinate being tested.
 	 * @return If the coordinate given is on the matrix given.
 	 */
-	public static boolean isOnMatrix(Matrix matrix, Coordinate coordIn){
+	public static boolean isOnMatrix(LinkedMatrix matrix, Coordinate coordIn){
 		return matrix == coordIn.matrix;
 	}
 	
@@ -34,9 +35,9 @@ public class MatrixValidator {
 	 * @param coordinates The coordinates to test.
 	 * @return If the set of coordinates given are on the matrix given.
 	 */
-	public static boolean areOnMatrix(Matrix matrix, Coordinate ... coordinates){
+	public static boolean areOnMatrix(LinkedMatrix matrix, Coordinate ... coordinates){
 		if(matrix == null){
-			throw new NullPointerException("Null matrix given to MatrixValidator.areOnMatrix(Matrix, Coordinate...).");
+			throw new NullPointerException("Null matrix given to MatrixValidator.areOnMatrix(LinkedMatrix, Coordinate...).");
 		}
 		for(Coordinate curCoord : coordinates){
 			if(curCoord == null || !isOnMatrix(matrix, curCoord)){
