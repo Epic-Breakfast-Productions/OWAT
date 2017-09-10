@@ -4,7 +4,9 @@ import com.ebp.owat.lib.dataStructure.matrix.utils.MatrixNode;
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * General Matrix class.
@@ -89,7 +91,34 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 */
 	public abstract void addRowsCols(Collection<T> valuesIn);
 	
-	//TODO:: row/col removal methods
+	/**
+	 * Removes a row from this matrix.
+	 * @return The elements that comprised the row.
+	 * @throws IndexOutOfBoundsException If the row index given is out of bounds.
+	 */
+	public abstract Collection<T> removeRow(long rowIndex) throws IndexOutOfBoundsException;
+	
+	/**
+	 * Removes a column from this matrix.
+	 * @return The elements that comprised the column.
+	 * @throws IndexOutOfBoundsException If the column index given is out of bounds.
+	 */
+	public abstract Collection<T> removeCol(long colIndex) throws IndexOutOfBoundsException;
+	
+	/**
+	 * Trims the matrix to a given size. Trims from the largest indexes in.
+	 * @param numCols The number of columns to remove.
+	 * @param numRows The number of rows to remove.
+	 */
+	public void trim(long numCols, long numRows){
+		for(long i = 0; i < numCols; i++){
+			this.removeCol(this.getNumCols() - 1);
+		}
+		
+		for(long i = 0; i < numRows; i++){
+			this.removeRow(this.getNumRows() - 1);
+		}
+	}
 	
 	/**
 	 * Determines if the column index given is valid or not.
@@ -124,7 +153,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return If the matrix is full.
 	 */
 	public boolean isFull(){
-		return this.size() == numElements();
+		return this.size() == this.numElements();
 	}
 	
 	/**
@@ -206,5 +235,39 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 */
 	public abstract Object[][] to2dArray();
 	
-	//TODO:: basic iterators
+	/**
+	 * Returns a basic functional iterator. Does this by using {@link #get(long, long)}. Should work, but may not be efficient for your implementation by any means. Recommended to override in implementation if this would be a terribly inefficient way to iterate.
+	 * <br />
+	 *
+	 * Iterates by going right->left, top->bottom. So, a row would be returned starting the left side, going right, continuing to the next row, and so on.
+	 *
+	 * @return A basic functional iterator.
+	 */
+	@Override
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
+			private long curRow = 0;
+			private long curCol = 0;
+			
+			@Override
+			public boolean hasNext() {
+				return isValidRowIndex(this.curRow);
+			}
+			
+			@Override
+			public T next() {
+				if(!isValidColIndex(curCol + 1)){
+					curRow++;
+					curCol = -1;//-1 so we can increment before returning
+				}
+				
+				if(!isValidRowIndex(this.curRow)){
+					throw new NoSuchElementException("No more to iterate through.");
+				}
+				
+				curCol++;
+				return get(curCol, curRow);
+			}
+		};
+	}
 }
