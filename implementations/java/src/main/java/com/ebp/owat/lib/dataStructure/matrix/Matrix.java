@@ -1,6 +1,5 @@
 package com.ebp.owat.lib.dataStructure.matrix;
 
-import com.ebp.owat.lib.dataStructure.matrix.utils.MatrixNode;
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
 
 import java.util.Collection;
@@ -96,14 +95,38 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return The elements that comprised the row.
 	 * @throws IndexOutOfBoundsException If the row index given is out of bounds.
 	 */
-	public abstract Collection<T> removeRow(long rowIndex) throws IndexOutOfBoundsException;
+	public abstract List<T> removeRow(long rowIndex) throws IndexOutOfBoundsException;
 	
 	/**
 	 * Removes a column from this matrix.
 	 * @return The elements that comprised the column.
 	 * @throws IndexOutOfBoundsException If the column index given is out of bounds.
 	 */
-	public abstract Collection<T> removeCol(long colIndex) throws IndexOutOfBoundsException;
+	public abstract List<T> removeCol(long colIndex) throws IndexOutOfBoundsException;
+	
+	/**
+	 * Replaces a particular node's value.
+	 * @param nodeToReplace The coordinate of the node to replace.
+	 * @param newValue The value to replace.
+	 * @return The previously held value.
+	 */
+	public abstract T replaceNode(Coordinate nodeToReplace, T newValue);
+	
+	/**
+	 * Replaces a row of values.
+	 * @param rowIndex The index of the row to replace.
+	 * @param newValues The values to use to replace the row.
+	 * @return The values this method replaced. Ordered top to bottom.
+	 */
+	public abstract List<T> replaceRow(long rowIndex, Collection<T> newValues) throws IndexOutOfBoundsException;
+	
+	/**
+	 * Replaces a column of values.
+	 * @param colIndex The index of the column to replace.
+	 * @param newValues The values to use to replace the column.
+	 * @return The values this method replaced. Ordered left to right.
+	 */
+	public abstract List<T> replaceCol(long colIndex, Collection<T> newValues) throws IndexOutOfBoundsException;
 	
 	/**
 	 * Trims the matrix to a given size. Trims from the largest indexes in.
