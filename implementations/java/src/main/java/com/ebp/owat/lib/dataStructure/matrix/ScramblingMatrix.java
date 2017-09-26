@@ -8,6 +8,8 @@ package com.ebp.owat.lib.dataStructure.matrix;
  * Created by Greg Stewart on 3/28/17.
  */
 public abstract class ScramblingMatrix<T> extends Matrix<T> {
+	private static final Type DEFAULT_TYPE = Type.SCRAMBLING;
+	
 	/**
 	 * The type of scrambling matrix this is.
 	 */

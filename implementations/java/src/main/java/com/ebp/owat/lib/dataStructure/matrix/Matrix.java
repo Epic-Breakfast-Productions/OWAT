@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.dataStructure.matrix;
 
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.NodePos;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -27,11 +28,17 @@ import java.util.NoSuchElementException;
  *</pre>
  * {@code}
  *
- *
- *
  * @param <T> The type of value this matrix holds.
  */
 public abstract class Matrix<T> implements Iterable<T> {
+	/** The number of rows held by this object. */
+	protected long numRows = 0L;
+	/** The number of columns held by this object. */
+	protected long numCols = 0L;
+	
+	/** The number of elements held by this object. I.E., the number of nodes that are not null. */
+	protected long numElementsHeld = 0L;
+	
 	/**
 	 * The default value to set new elements where values are not specified.
 	 */
@@ -148,14 +155,18 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param colNumIn The column number to determine if it is valid.
 	 * @return If the number given if a valid column number or not.
 	 */
-	public abstract boolean isValidColIndex(long colNumIn);
+	public boolean isValidColIndex(long colNumIn){
+		return (colNumIn > -1) && ((this.numCols -1) >= colNumIn);
+	}
 	
 	/**
 	 * Determines if the row index given is valid or not.
 	 * @param rowNumIn The row number to determine if it is valid.
 	 * @return If the number given if a valid row number or not.
 	 */
-	public abstract boolean isValidRowIndex(long rowNumIn);
+	public boolean isValidRowIndex(long rowNumIn){
+		return (rowNumIn > -1) && ((this.numRows -1) >= rowNumIn);
+	}
 	
 	/**
 	 * Determines if this matrix holds any elements.
@@ -183,13 +194,17 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * Gets the number of columns held by this matrix.
 	 * @return The number of columns held by this matrix.
 	 */
-	public abstract long getNumCols();
+	public long getNumCols(){
+		return this.numCols;
+	}
 	
 	/**
 	 * Gets the number of rows held by this matrix.
 	 * @return The number of rows held by this matrix.
 	 */
-	public abstract long getNumRows();
+	public long getNumRows(){
+		return this.numRows;
+	}
 	
 	/**
 	 * Gets the number of spots in this matrix to hold elements.
@@ -204,7 +219,9 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * Gets the number of elements actually held in the matrix.
 	 * @return The number of elements in the matrix.
 	 */
-	public abstract long numElements();
+	public long numElements(){
+		return this.numElementsHeld;
+	}
 	
 	/**
 	 * Gets a value from this matrix.
@@ -257,6 +274,16 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return This matrix as a 2d array.
 	 */
 	public abstract Object[][] to2dArray();
+	
+	
+	/**
+	 * Determines if pos1 is closer to pos2 to the coordinates given.
+	 * @param pos1 The node we are testing to see if it is closer.
+	 * @param pos2 The node we are comparing to the first one.
+	 * @param coordIn The coordinate we are comparing to.
+	 * @return If pos1 is closer to the goal coordinates than pos2
+	 */
+	public abstract boolean nodeIsCloserThan(NodePos<T> pos1, NodePos<T> pos2, Coordinate coordIn);
 	
 	/**
 	 * Returns a basic functional iterator. Does this by using {@link #get(long, long)}. Should work, but may not be efficient for your implementation by any means. Recommended to override in implementation if this would be a terribly inefficient way to iterate.
