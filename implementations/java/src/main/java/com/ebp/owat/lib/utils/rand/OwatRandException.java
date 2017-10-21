@@ -1,6 +1,5 @@
 package com.ebp.owat.lib.utils.rand;
 
-import com.ebp.owat.lib.OwatException;
 import com.ebp.owat.lib.utils.OwatUtilException;
 
 /**

@@ -1,13 +1,13 @@
 package tests;
 
 import com.ebp.owat.lib.OwatException;
-import com.ebp.owat.lib.dataStructure.OwatStructureException;
-import com.ebp.owat.lib.dataStructure.io.OwatNodeIOException;
-import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
-import com.ebp.owat.lib.dataStructure.matrix.utils.OwatMatrixUtilException;
-import com.ebp.owat.lib.dataStructure.node.OwatNodeException;
-import com.ebp.owat.lib.dataStructure.node.value.OwatNodeValueException;
-import com.ebp.owat.lib.dataStructure.set.OwatNodeSetException;
+import com.ebp.owat.lib.datastructure.OwatStructureException;
+import com.ebp.owat.lib.datastructure.io.OwatNodeIOException;
+import com.ebp.owat.lib.datastructure.matrix.OwatMatrixException;
+import com.ebp.owat.lib.datastructure.matrix.utils.OwatMatrixUtilException;
+import com.ebp.owat.lib.datastructure.node.OwatNodeException;
+import com.ebp.owat.lib.datastructure.node.value.OwatNodeValueException;
+import com.ebp.owat.lib.datastructure.set.OwatNodeSetException;
 import com.ebp.owat.lib.utils.OwatUtilException;
 import com.ebp.owat.lib.utils.rand.OwatRandException;
 import org.junit.Test;

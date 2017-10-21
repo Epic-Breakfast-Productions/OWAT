@@ -1,6 +1,6 @@
 package tests.structure.set;
 
-import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
+import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
