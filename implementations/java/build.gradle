@@ -29,6 +29,7 @@ dependencies {
 
 //config for the application plugin
 mainClassName = "com.ebp.owat.app.Main"
+applicationName = "owatj"
 
 //specify gradle version (for when  we recreate the wrapper)
 task wrapper(type: Wrapper) {
