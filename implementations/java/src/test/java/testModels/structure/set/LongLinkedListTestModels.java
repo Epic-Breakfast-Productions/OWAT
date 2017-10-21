@@ -1,15 +1,10 @@
 package testModels.structure.set;
 
-import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Class to build the necessary objects to make the LongLinkedList tests work.

@@ -1,21 +1,21 @@
-package com.ebp.owat.lib.dataStructure.matrix.utils;
+package com.ebp.owat.lib.dataStructure.matrix.Linked;
+
+import com.ebp.owat.lib.dataStructure.matrix.utils.NodeDir;
 
 /**
  * Abstract class for a single node of the matrix.
  *
  * Created by Greg Stewart on 3/23/17.
  */
-public class MatrixNode<T> {
-	
-	
+public class LinkedMatrixNode<T> {
 	/** The Node that is 'north' or 'above' this node. */
-	private MatrixNode<T> north = null;
+	private LinkedMatrixNode<T> north = null;
 	/** The node that is 'south' or 'below' this node */
-	private MatrixNode<T> south = null;
+	private LinkedMatrixNode<T> south = null;
 	/** The node that is 'east' or 'to the right of' this node */
-	private MatrixNode<T> east = null;
+	private LinkedMatrixNode<T> east = null;
 	/** The node that is 'west' or 'to the left of' this node */
-	private MatrixNode<T> west = null;
+	private LinkedMatrixNode<T> west = null;
 	
 	/** The value this node holds. */
 	private T value = null;
@@ -23,13 +23,13 @@ public class MatrixNode<T> {
 	/**
 	 * Basic constructor. Does not set any values.
 	 */
-	public MatrixNode(){}
+	public LinkedMatrixNode(){}
 	
 	/**
 	 * Constructor that sets this node's value.
 	 * @param nodeValue The value to set this node to.
 	 */
-	public MatrixNode(T nodeValue){
+	public LinkedMatrixNode(T nodeValue){
 		this();
 		this.value = nodeValue;
 	}
@@ -43,7 +43,7 @@ public class MatrixNode<T> {
 	 * @param nodeIn The node to set to the direction given.
 	 * @return This Node.
 	 */
-	public MatrixNode<T> setNeighbor(NodeDir dirIn, MatrixNode<T> nodeIn){
+	public LinkedMatrixNode<T> setNeighbor(NodeDir dirIn, LinkedMatrixNode<T> nodeIn){
 		switch (dirIn) {
 			case NORTH:
 				this.north = nodeIn;
@@ -71,8 +71,8 @@ public class MatrixNode<T> {
 	 * @param dirIn The direction to remove this from.
 	 * @return The node removed.
 	 */
-	public MatrixNode<T> removeNeighbor(NodeDir dirIn){
-		MatrixNode<T> nodeToRemove = this.getNeighbor(dirIn);
+	public LinkedMatrixNode<T> removeNeighbor(NodeDir dirIn){
+		LinkedMatrixNode<T> nodeToRemove = this.getNeighbor(dirIn);
 		if(nodeToRemove != null){
 			nodeToRemove.setNeighbor(dirIn.opposite(), null);
 		}else{
@@ -87,7 +87,7 @@ public class MatrixNode<T> {
 	 *
 	 * @return This node.
 	 */
-	public MatrixNode<T> removeSelf(){
+	public LinkedMatrixNode<T> removeSelf(){
 		for(NodeDir curDir : NodeDir.values()){
 			this.removeNeighbor(curDir);
 		}
@@ -100,7 +100,7 @@ public class MatrixNode<T> {
 	 * @param dirIn The direction to get.
 	 * @return This node.
 	 */
-	public MatrixNode<T> getNeighbor(NodeDir dirIn){
+	public LinkedMatrixNode<T> getNeighbor(NodeDir dirIn){
 		switch (dirIn){
 			case NORTH:
 				return this.north;
@@ -127,7 +127,7 @@ public class MatrixNode<T> {
 	 * @param valueIn The value to set this node with.
 	 * @return This node object.
 	 */
-	public MatrixNode<T> setValue(T valueIn){
+	public LinkedMatrixNode<T> setValue(T valueIn){
 		this.value = valueIn;
 		return this;
 	}
@@ -137,7 +137,7 @@ public class MatrixNode<T> {
 	 * @param nodeIn The node to get the value from to set this node's value to.
 	 * @return This node object.
 	 */
-	public MatrixNode<T> setValue(MatrixNode<T> nodeIn){
+	public LinkedMatrixNode<T> setValue(LinkedMatrixNode<T> nodeIn){
 		this.value = nodeIn.getValue();
 		return this;
 	}
@@ -181,7 +181,7 @@ public class MatrixNode<T> {
 	 * @param nodeIn The node to see if it borders this node.
 	 * @return If the given node borders this one.
 	 */
-	public boolean borders(MatrixNode<T> nodeIn){
+	public boolean borders(LinkedMatrixNode<T> nodeIn){
 		return this.north == nodeIn ||
 				this.south == nodeIn ||
 				this.east == nodeIn ||
@@ -194,7 +194,7 @@ public class MatrixNode<T> {
 	 * @param dirIn The direction to test on.
 	 * @return If the node given borders this node in the direction given.
 	 */
-	public boolean borders(MatrixNode<T> nodeIn, NodeDir dirIn){
+	public boolean borders(LinkedMatrixNode<T> nodeIn, NodeDir dirIn){
 		switch (dirIn){
 			case NORTH:
 				return this.north == nodeIn;
@@ -226,7 +226,7 @@ public class MatrixNode<T> {
 	 *
 	 * @param nodeIn The node to trade values with.
 	 */
-	public void tradeValuesWith(MatrixNode<T> nodeIn){
+	public void tradeValuesWith(LinkedMatrixNode<T> nodeIn){
 		T temp = nodeIn.getValue();
 		nodeIn.setValue(this);
 		this.setValue(temp);
@@ -237,7 +237,7 @@ public class MatrixNode<T> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		
-		MatrixNode<?> that = (MatrixNode<?>) o;
+		LinkedMatrixNode<?> that = (LinkedMatrixNode<?>) o;
 		
 		if (north != null ? !north.equals(that.north) : that.north != null) return false;
 		if (south != null ? !south.equals(that.south) : that.south != null) return false;

@@ -1,6 +1,5 @@
 package com.ebp.owat.lib.dataStructure.matrix.utils.coordinate;
 
-import com.ebp.owat.lib.dataStructure.matrix.LinkedMatrix;
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.OwatMatrixException;
 import com.ebp.owat.lib.dataStructure.matrix.utils.Plane;
@@ -39,9 +38,15 @@ public class Coordinate {
 	 * @param yIn The Y value (which row) of this coordinate.
 	 * @throws IllegalArgumentException If the values in are out of bounds.
 	 */
-	public Coordinate(LinkedMatrix matrix, long xIn, long yIn) throws IllegalArgumentException{
+	public Coordinate(Matrix matrix, long xIn, long yIn) throws IllegalArgumentException{
 		this(matrix);
 		this.setX(xIn).setY(yIn);
+	}
+	
+	public void checkCoordOnMatrix() throws IllegalStateException{
+		if(!this.matrix.isValidColIndex(this.x) || !this.matrix.isValidRowIndex(this.y)){
+			throw new IllegalStateException("Bad x index given.");
+		}
 	}
 	
 	/**
@@ -133,7 +138,7 @@ public class Coordinate {
 	 */
 	public long yDistanceTo(Coordinate coordIn){
 		MatrixValidator.throwIfNotOnSameMatrix(this, coordIn);
-		return yDistanceTo(coordIn.y);
+		return this.yDistanceTo(coordIn.getY());
 	}
 	
 	/**

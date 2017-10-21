@@ -1,118 +1,36 @@
-package com.ebp.owat.lib.dataStructure.matrix;
+package com.ebp.owat.lib.dataStructure.matrix.Hash;
 
-import com.ebp.owat.lib.dataStructure.matrix.utils.MatrixNode;
-import com.ebp.owat.lib.dataStructure.matrix.utils.NodeDir;
+import com.ebp.owat.lib.dataStructure.matrix.ScramblingMatrix;
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
-import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.FixedNodePos;
-import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.NodePos;
-import com.ebp.owat.lib.dataStructure.set.LongLinkedList;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
- *  Abstract class of a matrix to hold all the information and perform scrambling operations on.
+ * Matrix created by inserting elements into a {@link java.util.HashMap}, with a {@link com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate Coordinate} as the key for the value.
  *
- * Created by Greg Stewart on 3/23/17.
+ * Best used for smaller matrices.
+ *
+ * Created by Greg Stewart on 10/15/17.
+ *
+ * @param <T> The type of object this matrix holds.
  */
-public class LinkedMatrix<T> extends ScramblingMatrix<T>{
-	/**
-	 * A set of nodes that we know the positions of.
-	 */
-	protected List<NodePos<T>> nodePosList = Collections.emptyList();
-	
-	/** 0,0 of this matrix. needs to be updated with removals/additions */
-	protected MatrixNode<T> headNode;
+public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	
 	/**
-	 * Basic Constructor.
+	 * The map of values the matrix holds.
 	 */
-	private LinkedMatrix(Type type){
+	private HashMap<Coordinate, T> valueMap = new HashMap<>();
+	
+	/**
+	 * Constructor to set if this matrix is a scrambling one.
+	 *
+	 * @param type If this is a scrambling matrix or a de-scrambling one
+	 */
+	protected HashedMatrix(Type type) {
 		super(type);
 	}
-	
-	
-	public LinkedMatrix(Type type, LongLinkedList<T> valuesIn){
-		this(type);
-		//TODO:: this
-	}
-	
-	/**
-	 * Initializes the matrix, adding a single node and setup initial node positions.
-	 */
-	private void initFirstNode(){
-		if(!this.isEmpty()){
-			throw new IllegalStateException("Can't initialize the matrix if it already is initialized. Probably shouldn't be able to get to this.");
-		}
-		
-		this.numRows = 1;
-		this.numCols = 1;
-		this.headNode = new MatrixNode<>();
-		
-		//Add to the node position list.
-		this.nodePosList = new LongLinkedList<>();
-		for (NodePos.FixedNodePos curFixedPos : NodePos.FixedNodePos.values()){
-			this.nodePosList.add(
-				new FixedNodePos<>(this, curFixedPos)
-			);
-		}
-	}
-	
-	/**
-	 * Resets the fixed points in the matrix. Use after any modification to the matrix (add/remove row/cols).
-	 */
-	private void resetFixedPoints(){
-		for (NodePos<T> curEntry : this.nodePosList) {
-			curEntry.resetNodePos();
-		}
-	}
-	
-	/**
-	 * Gets the closest NodePos we keep track of to the coords given.
-	 * @param coordIn The coordinate we are trying to get the closest node to.
-	 * @return The closest NodePos we keep track of to the coords given.
-	 */
-	private NodePos<T> getClosestNodePos(Coordinate coordIn){
-		NodePos<T> curClosest = null;
-		for ( NodePos<T> curPos : this.nodePosList ) {
-			if(curClosest == null || this.nodeIsCloserThan(curPos, curClosest, coordIn)){
-				curClosest = curPos;
-			}
-		}
-		return curClosest;
-	}
-	
-	/**
-	 * Given a node position, adjusts that position to be at the coordinates given.
-	 * @param coordToGet The coordinates we want to go to.
-	 * @param curPoint The point we are starting at.
-	 * @return The Node at the coordinates given.
-	 */
-	private MatrixNode<T> getNodeFromPos(Coordinate coordToGet, NodePos<T> curPoint){
-		if(coordToGet == null || curPoint == null){
-			throw new IllegalArgumentException("Coord to get or start point given was null.");
-		}
-		if(coordToGet.matrix != this || curPoint.matrix != this){
-			throw new IllegalArgumentException("Coord or start point given not on this matrix.");
-		}
-		
-		while(!curPoint.equals(coordToGet)){
-			if(coordToGet.getX() > curPoint.getX()){
-				curPoint.go(NodeDir.EAST);
-			}else if(coordToGet.getX() < curPoint.getX()){
-				curPoint.go(NodeDir.WEST);
-			}
-			
-			if(coordToGet.getY() > curPoint.getY()){
-				curPoint.go(NodeDir.NORTH);
-			}else if(coordToGet.getY() < curPoint.getY()){
-				curPoint.go(NodeDir.SOUTH);
-			}
-		}
-		return curPoint.getNode();
-	}
-	
 	
 	/**
 	 * Adds a row to the matrix. Will be added to the right of the existing matrix.
@@ -336,18 +254,4 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T>{
 		//TODO
 		return new Object[0][];
 	}
-	
-	/**
-	 * Determines if pos1 is closer to pos2 to the coordinates given.
-	 *
-	 * @param pos1    The node we are testing to see if it is closer.
-	 * @param pos2    The node we are comparing to the first one.
-	 * @param coordIn The coordinate we are comparing to.
-	 * @return If pos1 is closer to the goal coordinates than pos2
-	 */
-	@Override
-	public boolean nodeIsCloserThan(NodePos<T> pos1, NodePos<T> pos2, Coordinate coordIn) {
-		//TODO
-		return false;
-	}
-}//LinkedMatrix
+}

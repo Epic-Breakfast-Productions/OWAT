@@ -8,7 +8,6 @@ import com.ebp.owat.lib.dataStructure.matrix.utils.OwatMatrixUtilException;
 import com.ebp.owat.lib.dataStructure.node.OwatNodeException;
 import com.ebp.owat.lib.dataStructure.node.value.OwatNodeValueException;
 import com.ebp.owat.lib.dataStructure.set.OwatNodeSetException;
-import com.ebp.owat.lib.scrambler.OwatScramblerException;
 import com.ebp.owat.lib.utils.OwatUtilException;
 import com.ebp.owat.lib.utils.rand.OwatRandException;
 import org.junit.Test;
@@ -32,7 +31,6 @@ public class ExceptionTests {
 			OwatNodeException.class,
 			OwatNodeValueException.class,
 			OwatNodeSetException.class,
-			OwatScramblerException.class,
 			OwatUtilException.class,
 			OwatRandException.class,
 			OwatMatrixUtilException.class

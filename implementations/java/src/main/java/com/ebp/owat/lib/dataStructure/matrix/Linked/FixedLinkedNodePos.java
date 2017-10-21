@@ -1,19 +1,24 @@
-package com.ebp.owat.lib.dataStructure.matrix.utils.coordinate;
+package com.ebp.owat.lib.dataStructure.matrix.Linked;
 
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.utils.NodeDir;
 import com.ebp.owat.lib.dataStructure.matrix.utils.Plane;
 
-public class FixedNodePos<T> extends NodePos<T>{
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+public class FixedLinkedNodePos<T> extends LinkedNodePos<T> {
+	
 	/** The fixed position this node is. */
-	public final NodePos.FixedNodePos pos;
+	public final FixedNodePosition pos;
 	
 	/**
-	 * Most basic constructor for a NodePos.
+	 * Most basic constructor for a LinkedNodePos.
 	 *
 	 * @param matrix The matrix this potision is a part of.
 	 */
-	public FixedNodePos(Matrix<T> matrix, NodePos.FixedNodePos posIn) {
+	public FixedLinkedNodePos(Matrix<T> matrix, FixedNodePosition posIn) {
 		super(matrix);
 		this.pos = posIn;
 		this.determinePos();

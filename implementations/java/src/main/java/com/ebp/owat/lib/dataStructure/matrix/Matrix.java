@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.dataStructure.matrix;
 
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
-import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.NodePos;
+import com.ebp.owat.lib.dataStructure.matrix.Linked.LinkedNodePos;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -274,16 +274,6 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return This matrix as a 2d array.
 	 */
 	public abstract Object[][] to2dArray();
-	
-	
-	/**
-	 * Determines if pos1 is closer to pos2 to the coordinates given.
-	 * @param pos1 The node we are testing to see if it is closer.
-	 * @param pos2 The node we are comparing to the first one.
-	 * @param coordIn The coordinate we are comparing to.
-	 * @return If pos1 is closer to the goal coordinates than pos2
-	 */
-	public abstract boolean nodeIsCloserThan(NodePos<T> pos1, NodePos<T> pos2, Coordinate coordIn);
 	
 	/**
 	 * Returns a basic functional iterator. Does this by using {@link #get(long, long)}. Should work, but may not be efficient for your implementation by any means. Recommended to override in implementation if this would be a terribly inefficient way to iterate.

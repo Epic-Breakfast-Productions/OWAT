@@ -1,6 +1,5 @@
 package com.ebp.owat.lib.dataStructure.matrix.utils;
 
-import com.ebp.owat.lib.dataStructure.matrix.LinkedMatrix;
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
 import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
 
@@ -25,7 +24,7 @@ public class MatrixValidator {
 	 * @param coordIn The coordinate being tested.
 	 * @return If the coordinate given is on the matrix given.
 	 */
-	public static boolean isOnMatrix(LinkedMatrix matrix, Coordinate coordIn){
+	public static boolean isOnMatrix(Matrix matrix, Coordinate coordIn){
 		return matrix == coordIn.matrix;
 	}
 	
@@ -35,7 +34,7 @@ public class MatrixValidator {
 	 * @param coordinates The coordinates to test.
 	 * @return If the set of coordinates given are on the matrix given.
 	 */
-	public static boolean areOnMatrix(LinkedMatrix matrix, Coordinate ... coordinates){
+	public static boolean areOnMatrix(Matrix matrix, Coordinate ... coordinates){
 		if(matrix == null){
 			throw new NullPointerException("Null matrix given to MatrixValidator.areOnMatrix(LinkedMatrix, Coordinate...).");
 		}
@@ -57,7 +56,7 @@ public class MatrixValidator {
 			return true;
 		}
 		if(listContainsNullVals((Object[]) coordinates)){
-			//TODO
+			//TODO:: throw?
 		}
 		return areOnMatrix(coordinates[0].matrix, coordinates);
 	}
@@ -76,11 +75,11 @@ public class MatrixValidator {
 	
 	/**
 	 * Throws an exception if the coordinate given is not on the same matrix as this one.
-	 * @param coordIn The coordinate to test against.
+	 * @param coordinates The coordinates to test against.
 	 * @throws IllegalArgumentException If the coordinate given is not on the same matrix as this one.
 	 */
-	public static void throwIfNotOnSameMatrix(Coordinate coordOne, Coordinate coordTwo){
-		if(!isOnSameMatrix(coordOne, coordTwo)){
+	public static void throwIfNotOnSameMatrix(Coordinate ... coordinates){
+		if(!areOnSameMatrix(coordinates)){
 			throw new IllegalArgumentException("Coordinates are not on the same matrix.");
 		}
 	}

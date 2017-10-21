@@ -1,59 +1,35 @@
-package com.ebp.owat.lib.dataStructure.matrix.utils.coordinate;
+package com.ebp.owat.lib.dataStructure.matrix.Linked;
 
-import com.ebp.owat.lib.dataStructure.matrix.LinkedMatrix;
 import com.ebp.owat.lib.dataStructure.matrix.Matrix;
-import com.ebp.owat.lib.dataStructure.matrix.utils.MatrixNode;
 import com.ebp.owat.lib.dataStructure.matrix.utils.NodeDir;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import com.ebp.owat.lib.dataStructure.matrix.utils.coordinate.Coordinate;
 
 /**
  * Describes a node on a matrix, holding the node on the matrix and provides functionality to update that position automatically based on what kind of position this is and how the matrix grows/shrinks.
  *
  * TODO:: organize and ensure x/y coords are set
  *
- * @param <T> The type held by the matrix. Needed to ensure proper typing of the MatrixNode.
+ * @param <T> The type held by the matrix. Needed to ensure proper typing of the LinkedMatrixNode.
  */
-public abstract class NodePos<T> extends Coordinate {
-	/**
-	 * Enum to describe which node is held in the spot in the hashmap.
-	 */
-	public enum FixedNodePos{
-		TOP_LEFT(NodeDir.NORTH, NodeDir.WEST),
-		TOP_RIGHT(NodeDir.NORTH, NodeDir.EAST),
-		BOT_LEFT(NodeDir.SOUTH, NodeDir.WEST),
-		BOT_RIGHT(NodeDir.SOUTH, NodeDir.EAST);
-		
-		private List<NodeDir> toBorder = new LinkedList<>();
-		
-		FixedNodePos(NodeDir ... directionsToBorder){
-			toBorder.addAll(Arrays.asList(directionsToBorder));
-		}
-		
-		public List<NodeDir> getBorderDirs(){
-			return new LinkedList<>(this.toBorder);
-		}
-	}
+public abstract class LinkedNodePos<T> extends Coordinate {
 	
-	/** The node this position holds. Can be updated by {@link NodePos#determinePos() determinePos()}. */
-	protected MatrixNode<T> node;
+	/** The node this position holds. Can be updated by {@link LinkedNodePos#determinePos() determinePos()}. */
+	protected LinkedMatrixNode<T> node;
 	
 	/**
-	 * Most basic constructor for a NodePos.
+	 * Most basic constructor for a LinkedNodePos.
 	 * @param matrix The matrix this potision is a part of.
 	 */
-	private NodePos(Matrix<T> matrix){
+	public LinkedNodePos(Matrix<T> matrix){
 		super(matrix);
 	}
 	
 	/**
-	 * Constructor that takes in a matrix and a node. Calls {@link NodePos#determinePos() determinePos()} automatically.
+	 * Constructor that takes in a matrix and a node. Calls {@link LinkedNodePos#determinePos() determinePos()} automatically.
 	 * @param matrix The matrix this position is a part of.
 	 * @param nodeIn The node this position holds.
 	 */
-	public NodePos(LinkedMatrix<T> matrix, MatrixNode<T> nodeIn){
+	public LinkedNodePos(LinkedMatrix<T> matrix, LinkedMatrixNode<T> nodeIn){
 		this(matrix);
 		this.setNode(nodeIn);
 	}
@@ -65,8 +41,8 @@ public abstract class NodePos<T> extends Coordinate {
 	 * @param coord The coordinate of the node to get.
 	 * @throws IllegalArgumentException If the values in are out of bounds.
 	 */
-	public NodePos(LinkedMatrix<T> matrix, Coordinate coord) throws IllegalArgumentException {
-		this(matrix, matrix.getNode(coord, false));
+	public LinkedNodePos(LinkedMatrix<T> matrix, Coordinate coord) throws IllegalArgumentException {
+		this(matrix, matrix.getNode(coord, true));
 	}
 	
 	/**
@@ -77,16 +53,16 @@ public abstract class NodePos<T> extends Coordinate {
 	 * @param yIn    The Y value (which row) of this coordinate.
 	 * @throws IllegalArgumentException If the values in are out of bounds.
 	 */
-	public NodePos(LinkedMatrix<T> matrix, long xIn, long yIn) throws IllegalArgumentException {
-		this(matrix, matrix.getNode(new Coordinate(matrix, xIn, yIn), false));
+	public LinkedNodePos(LinkedMatrix<T> matrix, long xIn, long yIn) throws IllegalArgumentException {
+		this(matrix, matrix.getNode(new Coordinate(matrix, xIn, yIn), true));
 	}
 	
 	/**
-	 * Sets the node held by this position. Calls {@link NodePos#determinePos() determinePos()} automatically.
+	 * Sets the node held by this position. Calls {@link LinkedNodePos#determinePos() determinePos()} automatically.
 	 * @param nodeIn The node to set.
 	 * @return This Node position.
 	 */
-	public NodePos<T> setNode(MatrixNode<T> nodeIn){
+	public LinkedNodePos<T> setNode(LinkedMatrixNode<T> nodeIn){
 		//TODO:: check if node is in matrix?
 		this.node = nodeIn;
 		this.determinePos();
@@ -97,7 +73,7 @@ public abstract class NodePos<T> extends Coordinate {
 	 * Gets the node held at this position.
 	 * @return The node at this position.
 	 */
-	public MatrixNode<T> getNode() {
+	public LinkedMatrixNode<T> getNode() {
 		return this.node;
 	}
 	
@@ -116,7 +92,7 @@ public abstract class NodePos<T> extends Coordinate {
 	public boolean resetNodePos(){
 		long origX = this.getX();
 		long origY = this.getY();
-		MatrixNode<T> origNode = this.node;
+		LinkedMatrixNode<T> origNode = this.node;
 		
 		this.determinePos();
 		
@@ -151,6 +127,4 @@ public abstract class NodePos<T> extends Coordinate {
 		
 		return true;
 	}
-	
-	
 }
