@@ -28,7 +28,7 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 *
 	 * @param type If this is a scrambling matrix or a de-scrambling one
 	 */
-	protected HashedMatrix(Type type) {
+	public HashedMatrix(Type type) {
 		super(type);
 	}
 	
@@ -37,7 +37,7 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 */
 	@Override
 	public void addRow() {
-		//TODO
+		this.numRows++;
 	}
 	
 	/**
@@ -59,7 +59,10 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 */
 	@Override
 	public void addRows(long numRows) {
-		//TODO
+		if(numRows < 0){
+			throw new IllegalArgumentException("Cannot add a negative number of rows.");
+		}
+		this.numRows += numRows;
 	}
 	
 	/**
@@ -67,7 +70,7 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 */
 	@Override
 	public void addCol() {
-		//TODO
+		this.numCols++;
 	}
 	
 	/**
@@ -88,7 +91,10 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 */
 	@Override
 	public void addCols(long numCols) {
-		//TODO
+		if(numCols < 0){
+			throw new IllegalArgumentException("Cannot add a negative number of rows.");
+		}
+		this.numCols += numCols;
 	}
 	
 	/**
