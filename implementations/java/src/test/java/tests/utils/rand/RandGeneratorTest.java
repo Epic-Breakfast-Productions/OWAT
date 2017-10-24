@@ -5,7 +5,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.assertTrue;
+import java.util.Random;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Test to test the RandGenerator to get random longs.
@@ -15,47 +18,27 @@ import static org.junit.Assert.assertTrue;
 public class RandGeneratorTest {
 	private Logger LOGGER = LoggerFactory.getLogger(RandGeneratorTest.class);
 	
-	private long testLower = 1231L;
-	private long testUpper = 9929L;
-	private long testLowerBig = (long)Integer.MAX_VALUE * 10L;
-	private long testUpperBig = (long)Integer.MAX_VALUE * 100L;
-	
-	private static final int NUM_TEST_ITERATIONS = 10000000;
-	
-	private RandGenerator test;
-	private long cur;
+	private static final long testLower = 1231L;
+	private static final long testUpper = 9929L;
 	
 	@Test
-	public void testRandGeneratorWithinIntRange(){
-		test = new RandGenerator(testUpper, testLower);
+	public void testRandGeneratorExtraConstructors(){
+		LOGGER.info("Testing RandGenerator extra constructors.");
+		RandGenerator test = new RandGenerator();
 		
-		LOGGER.info("Testing getting numbers within the integer range.");
-		for(int i = 0; i < NUM_TEST_ITERATIONS; i++){
-			cur = test.next();
-			assertTrue("Number greater than the upper bounds." + " Iteration: " +i, cur >= testLower);
-			assertTrue("Number lower than the lower bounds." + " Iteration: " +i, cur <= testUpper);
-		}
-	}
-	
-	@Test
-	public void testRandGeneratorOutsideIntRange(){
-		test = new RandGenerator(testUpperBig, testLowerBig);
-		LOGGER.info("Testing getting numbers outside the integer range.");
-		for(int i = 0; i < NUM_TEST_ITERATIONS; i++){
-			cur = test.next();
-			assertTrue("Number greater than the upper bounds." + " Iteration: " +i, cur >= testLowerBig);
-			assertTrue("Number lower than the lower bounds." + " Iteration: " +i,cur <= testUpperBig);
-		}
-	}
-	
-	@Test
-	public void testRandGeneratorMixedRange(){
-		test = new RandGenerator(testUpperBig, testLower);
-		LOGGER.info("Testing getting numbers mixed around the integer range.");
-		for(int i = 0; i < NUM_TEST_ITERATIONS; i++){
-			cur = test.next();
-			assertTrue("Number greater than the upper bounds." + " Iteration: " +i, cur >= testLower);
-			assertTrue("Number lower than the lower bounds." + " Iteration: " +i,cur <= testUpperBig);
-		}
+		assertNotNull(test.getRandom());
+		
+		Random rand = new Random();
+		test = new RandGenerator(rand);
+		
+		assertEquals("Random set by constructor is not the same as the one given to the constructor.", rand, test.getRandom());
+		
+		rand = new Random();
+		
+		test = new RandGenerator(rand, testUpper, testLower);
+		
+		assertEquals("Random set by constructor is not the same as the one given to the constructor.", rand, test.getRandom());
+		assertEquals("Upper bound set by constructor is not the same as the one given to the constructor.", testUpper, test.getUpperBound());
+		assertEquals("Random set by constructor is not the same as the one given to the constructor.", testLower, test.getLowerBound());
 	}
 }

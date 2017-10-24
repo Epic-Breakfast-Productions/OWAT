@@ -27,7 +27,7 @@ public class RandGenerator extends LongGenerator {
 	 */
 	public RandGenerator(long upperIn, long lowerIn) {
 		super(upperIn, lowerIn);
-		this.rand = new Random();
+		this.setRandom(null);
 	}
 	
 	/**
@@ -62,6 +62,14 @@ public class RandGenerator extends LongGenerator {
 			this.rand = randIn;
 		}
 		return this;
+	}
+	
+	/**
+	 * Gets the Random generator this uses.
+	 * @return The Random generator this uses.
+	 */
+	public Random getRandom(){
+		return this.rand;
 	}
 	
 	@Override
