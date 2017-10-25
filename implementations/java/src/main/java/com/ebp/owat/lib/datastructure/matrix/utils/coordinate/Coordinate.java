@@ -11,10 +11,6 @@ import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
  * Created by Greg Stewart on 4/4/17.
  */
 public class Coordinate {
-	
-	/** The default method of finding distances from one coordinate to another. */
-	public static final DistanceCalc.Method DEFAULT_DISTANCE_CALC_METHOD = DistanceCalc.Method.MANHATTAN;
-	
 	/** The matrix this coordinate is on. */
 	public final Matrix matrix;
 	/** The X value (which col) of this coordinate. */
@@ -43,19 +39,13 @@ public class Coordinate {
 		this.setX(xIn).setY(yIn);
 	}
 	
-	public void checkCoordOnMatrix(){
-		if(!this.matrix.isValidColIndex(this.x) || !this.matrix.isValidRowIndex(this.y)){
-			throw new IllegalStateException("Bad x index given.");
-		}
-	}
-	
 	/**
 	 * Sets the X value (which col) of this coordinate.
 	 * @param xIn The X value (which col) of this coordinate.
 	 * @return This Coordinate.
-	 * @throws OwatMatrixException If the value in is out of bounds.
+	 * @throws IllegalArgumentException If the value in is out of bounds.
 	 */
-	public Coordinate setX(long xIn) throws OwatMatrixException{
+	public Coordinate setX(long xIn) {
 		MatrixValidator.throwIfBadIndex(this.matrix, xIn, Plane.X);
 		this.x = xIn;
 		return this;
@@ -98,97 +88,6 @@ public class Coordinate {
 		return MatrixValidator.isOnSameMatrix(this, coordIn);
 	}
 	
-	
-	/**
-	 * Gets the x distance to the index given.
-	 * @param xIndex The column index.
-	 * @return The distance from this coordinate to the index given.
-	 */
-	public long xDistanceTo(long xIndex){
-		MatrixValidator.throwIfBadIndex(this.matrix, xIndex, Plane.X);
-		//TODO
-		return 0L;
-	}
-	
-	/**
-	 * Gets the x distance to the index given.
-	 * @param coordIn The coordinate to get the x-index from.
-	 * @return The distance from this coordinate to the coordinate given's x index.
-	 */
-	public long xDistanceTo(Coordinate coordIn){
-		MatrixValidator.throwIfNotOnSameMatrix(this, coordIn);
-		return this.xDistanceTo(coordIn.getX());
-	}
-	
-	/**
-	 * Gets the y distance to the index given.
-	 * @param yIndex The row index.
-	 * @return The distance from this coordinate to the index given.
-	 */
-	public long yDistanceTo(long yIndex){
-		MatrixValidator.throwIfBadIndex(this.matrix, yIndex, Plane.Y);
-		//TODO
-		return 0L;
-	}
-	
-	/**
-	 * Gets the y distance to the index given.
-	 * @param coordIn The coordinate to get the y-index from.
-	 * @return The distance from this coordinate to the coordinate given's y index.
-	 */
-	public long yDistanceTo(Coordinate coordIn){
-		MatrixValidator.throwIfNotOnSameMatrix(this, coordIn);
-		return this.yDistanceTo(coordIn.getY());
-	}
-	
-	/**
-	 * Gets the distance to another coordinate.
-	 * @param coordIn The coordinate to get the distance to.
-	 * @param method The method of distance calculation to use.
-	 * @return The distance from this coordinate to the one given.
-	 */
-	public double distanceTo(Coordinate coordIn, DistanceCalc.Method method){
-		return DistanceCalc.calculateDistance(method, this, coordIn);
-	}
-	
-	/**
-	 * Gets the distance to another coordinate using the {@link Coordinate#DEFAULT_DISTANCE_CALC_METHOD the default method}.
-	 * @param coordIn The coordinate to get the distance to.
-	 * @return The distance to the other coordinate.
-	 */
-	public double distanceTo(Coordinate coordIn){
-		return this.distanceTo(coordIn, DEFAULT_DISTANCE_CALC_METHOD);
-	}
-	
-	/**
-	 * Determines if this coordinate is closer to a point on the matrix than another coordinate.
-	 *
-	 * @param coordIn The coordinate we are comparing distance to.
-	 * @param coordTo The coordinate we are getting the distances to.
-	 * @param method The method this should use to determine distance.
-	 * @return If this coordinate is closer to a point on the matrix than another given. If the other coordinate given is null, returns true.
-	 */
-	public boolean isCloserTo(Coordinate coordIn, Coordinate coordTo, DistanceCalc.Method method){
-		if(coordIn == null){
-			return true;
-		}
-		MatrixValidator.throwIfNotOnSameMatrix(this, coordIn);
-		MatrixValidator.throwIfNotOnSameMatrix(this, coordTo);
-		
-		
-		return this.distanceTo(coordTo, method) < this.distanceTo(coordIn, method);
-	}
-	
-	/**
-	 * Determines if this coordinate is closer to a point on the matrix than another coordinate using the {@link Coordinate#DEFAULT_DISTANCE_CALC_METHOD the default method}.
-	 * @param coordIn The coordinate we are comparing distance to.
-	 * @param coordTo The coordinate we are getting the distances to.
-	 * @return If this coordinate is closer to a point on the matrix than another given. If the other coordinate given is null, returns true.
-	 */
-	public boolean isCloserTo(Coordinate coordIn, Coordinate coordTo){
-		return this.isCloserTo(coordIn, coordTo, DEFAULT_DISTANCE_CALC_METHOD);
-	}
-	
 	@Override
 	public boolean equals(Object o) {
 		if(o == null){
@@ -201,14 +100,14 @@ public class Coordinate {
 			return false;
 		}
 		return (
-			this.matrix != c.matrix ||
-			this.x != c.getX() ||
-			this.y != c.getY()
+			this.matrix == c.matrix &&
+			this.x == c.getX() &&
+			this.y == c.getY()
 		);
 	}
 	
 	@Override
-	protected Coordinate clone(){
+	public Coordinate clone(){
 		return new Coordinate(this.matrix, this.x, this.y);
 	}
 	

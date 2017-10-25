@@ -20,7 +20,8 @@ public class DistanceCalc {
 	 */
 	public static long xDistance(Coordinate coordOne, Coordinate coordTwo) {
 		throwIfNotOnSameMatrix(coordOne, coordTwo);
-		return coordOne.xDistanceTo(coordTwo);
+		//TODO
+		return 0;
 	}
 	
 	/**
@@ -31,7 +32,8 @@ public class DistanceCalc {
 	 */
 	public static long yDistance(Coordinate coordOne, Coordinate coordTwo) {
 		throwIfNotOnSameMatrix(coordOne, coordTwo);
-		return coordOne.yDistanceTo(coordTwo);
+		//TODO
+		return 0;
 	}
 	
 	/**
@@ -53,7 +55,7 @@ public class DistanceCalc {
 	 * @return The manhattan distance to the coordinate given.
 	 */
 	public static long manDistanceTo(Coordinate coordOne, Coordinate coordTwo) {
-		return coordOne.xDistanceTo(coordTwo) + coordOne.yDistanceTo(coordTwo);
+		return xDistance(coordOne, coordTwo) + yDistance(coordOne, coordTwo);
 	}
 	
 	/**
