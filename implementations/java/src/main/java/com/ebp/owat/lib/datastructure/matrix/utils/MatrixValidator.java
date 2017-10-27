@@ -73,6 +73,12 @@ public class MatrixValidator {
 		return coordOne.matrix == coordTwo.matrix;
 	}
 	
+	public static void throwIfNotOnMatrix(Matrix matrix, Coordinate ... coordinates){
+		if(!areOnMatrix(matrix, coordinates)){
+			throw new IllegalArgumentException("Coordinate(s) not on the matrix.");
+		}
+	}
+	
 	/**
 	 * Throws an exception if the coordinate given is not on the same matrix as this one.
 	 * @param coordinates The coordinates to test against.
@@ -94,12 +100,12 @@ public class MatrixValidator {
 		switch (plane){
 			case X:
 				if(!matrix.isValidColIndex(index)){
-					throw new IllegalArgumentException("Bad x index given.");
+					throw new IndexOutOfBoundsException("Bad x index given.");
 				}
 				break;
 			case Y:
 				if(!matrix.isValidRowIndex(index)){
-					throw new IllegalArgumentException("Bad y index given.");
+					throw new IndexOutOfBoundsException("Bad y index given.");
 				}
 				break;
 		}

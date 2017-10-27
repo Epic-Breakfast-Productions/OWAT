@@ -1,8 +1,6 @@
 package tests.structure.matrix;
 
-import com.ebp.owat.lib.datastructure.matrix.Linked.LinkedNodePos;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.OwatMatrixException;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import org.junit.Assert;
 import org.junit.experimental.theories.DataPoints;
@@ -36,10 +34,6 @@ public class CoordinateTest {
 			//, LinkedNodePos.class // can't test, presumably due to type issues
 	);
 	
-	private Coordinate testingCoord;
-	
-	//TODO:: do when the matrix tests are done, or at least the models. so we can use them
-	
 	private Coordinate getCoordInstance(Class<? extends Coordinate> curClass, Matrix m, long x, long y){
 		try {
 			return curClass.getConstructor(Matrix.class, Long.TYPE, Long.TYPE).newInstance(m, x, y);
@@ -55,19 +49,28 @@ public class CoordinateTest {
 		
 		Matrix<Long> matrix = new TestMatrix();
 		
-		Coordinate coord = constBase.newInstance(matrix);
+		Coordinate coord;
+		
+		try {
+			coord = constBase.newInstance(matrix);
+			Assert.fail();
+		} catch (Throwable e) {
+			if (!(e.getCause() instanceof IllegalStateException)) {
+				Assert.fail();
+			}
+		}
 		
 		try {
 			coord = constCoords.newInstance(matrix, 0, 0);
 			Assert.fail();
 		} catch (Throwable e) {
-			if (!(e.getCause() instanceof IllegalArgumentException)) {
+			if (!(e.getCause() instanceof IllegalStateException)) {
 				Assert.fail();
 			}
 		}
 		
 		matrix.addRow();
-		
+		coord = constBase.newInstance(matrix);
 		coord = constCoords.newInstance(matrix, 0, 0);
 	}
 	
@@ -78,7 +81,6 @@ public class CoordinateTest {
 		matrix.addRow();
 
 		Coordinate coord = this.getCoordInstance(curClass, matrix, 0, 0);
-		
 		assertEquals("", 0L, coord.getX());
 		assertEquals("", 0L, coord.getY());
 		
@@ -99,19 +101,18 @@ public class CoordinateTest {
 		try{
 			coord.setX(2);
 			Assert.fail();
-		}catch (IllegalArgumentException e){
+		}catch (IndexOutOfBoundsException e){
 			//nothing to do
 		}
 		
 		try{
 			coord.setY(2);
 			Assert.fail();
-		}catch (IllegalArgumentException e){
+		}catch (IndexOutOfBoundsException e){
 			//nothing to do
 		}
 		
 	}
-	
 	
 	@Theory
 	public void testCoordinateEquals(Class<? extends Coordinate> curClass) throws Throwable {

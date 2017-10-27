@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.datastructure.matrix.Hash;
 
 import com.ebp.owat.lib.datastructure.matrix.ScramblingMatrix;
+import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 
 import java.util.Collection;
@@ -37,6 +38,9 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 */
 	@Override
 	public void addRow() {
+		if(this.numCols == 0){
+			this.numCols++;
+		}
 		this.numRows++;
 	}
 	
@@ -62,6 +66,9 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 		if(numRows < 0){
 			throw new IllegalArgumentException("Cannot add a negative number of rows.");
 		}
+		if(this.numCols == 0){
+			this.numCols++;
+		}
 		this.numRows += numRows;
 	}
 	
@@ -70,6 +77,9 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 */
 	@Override
 	public void addCol() {
+		if(this.numRows == 0){
+			this.numRows++;
+		}
 		this.numCols++;
 	}
 	
@@ -93,6 +103,9 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	public void addCols(long numCols) {
 		if(numCols < 0){
 			throw new IllegalArgumentException("Cannot add a negative number of rows.");
+		}
+		if(this.numRows == 0){
+			this.numRows++;
 		}
 		this.numCols += numCols;
 	}
@@ -143,9 +156,20 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 * @return The previously held value.
 	 */
 	@Override
-	public T replaceNode(Coordinate nodeToReplace, T newValue) {
-		//TODO
-		return null;
+	public T setValue(Coordinate nodeToReplace, T newValue) {
+		MatrixValidator.throwIfNotOnMatrix(this, nodeToReplace);
+		T valToReturn = this.get(nodeToReplace);
+		if(newValue == null) {
+			if (valToReturn != null) {
+				this.numElementsHeld--;
+			}
+		}else{
+			if(valToReturn == null){
+				this.numElementsHeld++;
+			}
+		}
+		this.valueMap.put(nodeToReplace, newValue);
+		return valToReturn;
 	}
 	
 	/**
@@ -183,9 +207,8 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 * @throws IndexOutOfBoundsException If either of the indexes are out of bounds.
 	 */
 	@Override
-	public T get(long xIn, long yIn) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
+	public T get(long xIn, long yIn) {
+		return this.get(new Coordinate(this, xIn, yIn));
 	}
 	
 	/**
@@ -196,8 +219,8 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 */
 	@Override
 	public T get(Coordinate coordIn) {
-		//TODO
-		return null;
+		MatrixValidator.throwIfNotOnMatrix(this, coordIn);
+		return this.valueMap.get(coordIn);
 	}
 	
 	/**

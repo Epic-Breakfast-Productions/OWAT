@@ -3,7 +3,9 @@ package tests.structure.matrix;
 import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.ScramblingMatrix;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.sun.istack.internal.Nullable;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
@@ -18,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * Created by Greg Stewart on 3/30/17.
@@ -37,29 +39,89 @@ public class MatrixTest {
 	}
 	
 	@Theory(nullsAccepted = false)
-	public void testAddRowCol(Class<? extends Matrix> matrixClass) throws Exception{
+	public void testMatrixAddRowCol(Class<? extends Matrix> matrixClass) throws Exception{
 		LOGGER.info("Testing adding rows and columns for {}", matrixClass);
 		Matrix<Integer> matrix = getTestingInstance(matrixClass);
 		assertThat(matrix.getNumCols(), is(0L));
 		assertThat(matrix.getNumRows(), is(0L));
 		matrix.addCol();
 		assertThat(matrix.getNumCols(), is(1L));
-		assertThat(matrix.getNumRows(), is(0L));
+		assertThat(matrix.getNumRows(), is(1L));
+		matrix = getTestingInstance(matrixClass);
 		matrix.addRow();
 		assertThat(matrix.getNumCols(), is(1L));
 		assertThat(matrix.getNumRows(), is(1L));
+		matrix.addRow();
+		assertThat(matrix.getNumCols(), is(1L));
+		assertThat(matrix.getNumRows(), is(2L));
 		matrix.addCols(2);
 		assertThat(matrix.getNumCols(), is(3L));
-		assertThat(matrix.getNumRows(), is(1L));
+		assertThat(matrix.getNumRows(), is(2L));
 		matrix.addRows(2);
 		assertThat(matrix.getNumCols(), is(3L));
-		assertThat(matrix.getNumRows(), is(3L));
+		assertThat(matrix.getNumRows(), is(4L));
+		matrix = getTestingInstance(matrixClass);
+		matrix.addCols(2);
+		assertThat(matrix.getNumCols(), is(2L));
+		assertThat(matrix.getNumRows(), is(1L));
+		matrix = getTestingInstance(matrixClass);
+		matrix.addRows(2);
+		assertThat(matrix.getNumCols(), is(1L));
+		assertThat(matrix.getNumRows(), is(2L));
+		
+		try{
+			matrix.addRows(-1L);
+			Assert.fail();
+		}catch (IllegalArgumentException e){
+			//no need to do anything
+		}
+		try{
+			matrix.addCols(-1L);
+			Assert.fail();
+		}catch (IllegalArgumentException e){
+			//no need to do anything
+		}
+		
 		//TODO:: finish with add__(Collection)
 	}
 	
-	//TODO:: test replace node values
-	//TODO:: test replace row/col values
-	//TODO:: test removing rows/cols
-	//TODO:: test getters
-	//TODO:: test default val set
+	@Theory(nullsAccepted = false)
+	public void testMatrixSettersGetters(Class<? extends Matrix> matrixClass) throws Exception{
+		LOGGER.info("Testing setters and getters for {}", matrixClass);
+		
+		Matrix<Integer> matrix = getTestingInstance(matrixClass);
+		
+		matrix.addRow();
+		
+		int firstVal = 1;
+		assertNull(matrix.setValue(new Coordinate(matrix, 0, 0), firstVal));
+		assertEquals((Integer)firstVal, matrix.get(0, 0));
+		assertEquals((Integer)firstVal, matrix.get(new Coordinate(matrix, 0, 0)));
+		assertEquals((Integer)firstVal, matrix.setValue(new Coordinate(matrix, 0, 0), 2));
+		try{
+			matrix.get(1, 0);
+			Assert.fail();
+		}catch (IndexOutOfBoundsException e){
+			//nothing to do
+		}
+		//TODO:: test getters & setters
+	}
+	
+	@Theory(nullsAccepted = false)
+	public void testMatrixRowColGettersSetters(Class<? extends Matrix> matrixClass) throws Exception {
+		LOGGER.info("Testing row/col getters and setters for {}", matrixClass);
+		//TODO:: test replace row/col values
+	}
+	
+	@Theory(nullsAccepted = false)
+	public void testMatrixRowColAddRem(Class<? extends Matrix> matrixClass) throws Exception {
+		LOGGER.info("Testing row/col adding/removing for {}", matrixClass);
+		//TODO:: test adding/removing rows/cols
+	}
+	
+	@Theory(nullsAccepted = false)
+	public void testMatrixDefaultVal(Class<? extends Matrix> matrixClass) throws Exception {
+		LOGGER.info("Testing default value for {}", matrixClass);
+		//TODO:: test default val set
+	}
 }

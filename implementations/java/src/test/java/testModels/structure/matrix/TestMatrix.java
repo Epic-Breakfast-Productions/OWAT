@@ -115,7 +115,7 @@ public class TestMatrix extends Matrix<Long> {
 	 * @return The previously held value.
 	 */
 	@Override
-	public Long replaceNode(Coordinate nodeToReplace, Long newValue) {
+	public Long setValue(Coordinate nodeToReplace, Long newValue) {
 		return null;
 	}
 	
