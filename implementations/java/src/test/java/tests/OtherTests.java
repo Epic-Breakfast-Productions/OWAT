@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public class OtherTests {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OtherTests.class);
 	
-	@Ignore
+	@Ignore("No need to test these unless someone is adjusting the logging configuration.")
 	@Test
 	public void testLogger(){
 		LOGGER.info("Testing for the configuration of the logs.");

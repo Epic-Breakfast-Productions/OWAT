@@ -1,21 +1,18 @@
 package tests.structure.matrix;
 
-import com.ebp.owat.lib.datastructure.matrix.Linked.LinkedNodePos;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.OwatMatrixException;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import org.junit.Assert;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import testModels.structure.matrix.TestMatrix;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,21 +23,18 @@ import static org.junit.Assert.assertTrue;
  *
  * Created by Greg Stewart on 3/30/17.
  */
-@RunWith(Theories.class)
+@RunWith(Parameterized.class)
 public class CoordinateTest {
 	private Logger LOGGER = LoggerFactory.getLogger(CoordinateTest.class);
 	
-	@DataPoints
-	public static List<Class<? extends Coordinate>> exceptionsToTest = Arrays.asList(
-			Coordinate.class
-			//, LinkedNodePos.class // can't test, presumably due to type issues
-	);
+	@Parameterized.Parameters
+	public static Collection exceptionsToTest() {
+		return Arrays.asList(new Object[][] {
+				{ Coordinate.class }
+		});
+	}
 	
-	private Coordinate testingCoord;
-	
-	//TODO:: do when the matrix tests are done, or at least the models. so we can use them
-	
-	private Coordinate getCoordInstance(Class<? extends Coordinate> curClass, Matrix m, long x, long y){
+	private static Coordinate getCoordInstance(Class<? extends Coordinate> curClass, Matrix m, long x, long y){
 		try {
 			return curClass.getConstructor(Matrix.class, Long.TYPE, Long.TYPE).newInstance(m, x, y);
 		} catch (Throwable e) {
@@ -48,10 +42,18 @@ public class CoordinateTest {
 		}
 	}
 	
-	@Theory
-	public void testCoordinateConstructors(Class<? extends Coordinate> curClass) throws Throwable {
-		Constructor<? extends Coordinate> constBase = curClass.getConstructor(Matrix.class);
-		Constructor<? extends Coordinate> constCoords = curClass.getConstructor(Matrix.class, Long.TYPE, Long.TYPE);
+	private Coordinate testingCoord;
+	
+	private final Class<? extends Coordinate> curCoordClass;
+	
+	public CoordinateTest(Class<? extends Coordinate> curCoordClass){
+		this.curCoordClass = curCoordClass;
+	}
+	
+	@Test
+	public void testCoordinateConstructors() throws Throwable {
+		Constructor<? extends Coordinate> constBase = curCoordClass.getConstructor(Matrix.class);
+		Constructor<? extends Coordinate> constCoords = curCoordClass.getConstructor(Matrix.class, Long.TYPE, Long.TYPE);
 		
 		Matrix<Long> matrix = new TestMatrix();
 		
@@ -71,13 +73,12 @@ public class CoordinateTest {
 		coord = constCoords.newInstance(matrix, 0, 0);
 	}
 	
-	
-	@Theory
-	public void testCoordinateSettersGetters(Class<? extends Coordinate> curClass) throws Throwable {
+	@Test
+	public void testCoordinateSettersGetters() throws Throwable {
 		Matrix<Long> matrix = new TestMatrix();
 		matrix.addRow();
 
-		Coordinate coord = this.getCoordInstance(curClass, matrix, 0, 0);
+		Coordinate coord = getCoordInstance(curCoordClass, matrix, 0, 0);
 		
 		assertEquals("", 0L, coord.getX());
 		assertEquals("", 0L, coord.getY());
@@ -112,14 +113,13 @@ public class CoordinateTest {
 		
 	}
 	
-	
-	@Theory
-	public void testCoordinateEquals(Class<? extends Coordinate> curClass) throws Throwable {
+	@Test
+	public void testCoordinateEquals() throws Throwable {
 		Matrix<Long> matrix = new TestMatrix();
 		matrix.addRow();
 		
-		Coordinate coordOne = this.getCoordInstance(curClass, matrix, 0, 0);
-		Coordinate coordTwo = this.getCoordInstance(curClass, matrix, 0, 0);
+		Coordinate coordOne = getCoordInstance(curCoordClass, matrix, 0, 0);
+		Coordinate coordTwo = getCoordInstance(curCoordClass, matrix, 0, 0);
 		
 		assertTrue(coordOne.equals(coordTwo));
 		
@@ -131,31 +131,30 @@ public class CoordinateTest {
 		assertFalse(coordOne.equals(new Object()));
 	}
 	
-	@Theory
-	public void testCoordinateClone(Class<? extends Coordinate> curClass) throws Throwable {
+	@Test
+	public void testCoordinateClone() throws Throwable {
 		Matrix<Long> matrix = new TestMatrix();
 		matrix.addRow();
 		
-		Coordinate coord = this.getCoordInstance(curClass, matrix, 0, 0);
+		Coordinate coord = getCoordInstance(curCoordClass, matrix, 0, 0);
 		
 		Coordinate clone = coord.clone();
 		assertTrue(coord.equals(clone));
 		assertFalse(coord == clone);
 	}
 	
-	@Theory
-	public void testCoordinateOther(Class<? extends Coordinate> curClass) throws Throwable {
+	@Test
+	public void testCoordinateOther() throws Throwable {
 		Matrix<Long> matrix = new TestMatrix();
 		matrix.addRow();
 		
-		Coordinate coord = this.getCoordInstance(curClass, matrix, 0, 0);
+		Coordinate coord = getCoordInstance(curCoordClass, matrix, 0, 0);
 		
 		LOGGER.debug("toString: \"{}\", Hash: \"{}\"", coord, coord.hashCode());
 		
-		Coordinate coordTwo = this.getCoordInstance(curClass, matrix, 0, 0);
+		Coordinate coordTwo = getCoordInstance(curCoordClass, matrix, 0, 0);
 		
 		
 		assertTrue(coord.isOnSameMatrix(coordTwo));
 	}
-	
 }
