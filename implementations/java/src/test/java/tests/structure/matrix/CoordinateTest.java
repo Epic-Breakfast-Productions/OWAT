@@ -57,13 +57,13 @@ public class CoordinateTest {
 		
 		Matrix<Long> matrix = new TestMatrix();
 		
-		Coordinate coord = constBase.newInstance(matrix);
-		
+		Coordinate coord;
+		//test that you can't make a coord on an empty matrix
 		try {
-			coord = constCoords.newInstance(matrix, 0, 0);
+			coord = constBase.newInstance(matrix);
 			Assert.fail();
 		} catch (Throwable e) {
-			if (!(e.getCause() instanceof IllegalArgumentException)) {
+			if (!(e.getCause() instanceof IllegalStateException)) {
 				Assert.fail();
 			}
 		}
@@ -100,14 +100,14 @@ public class CoordinateTest {
 		try{
 			coord.setX(2);
 			Assert.fail();
-		}catch (IllegalArgumentException e){
+		}catch (IndexOutOfBoundsException e){
 			//nothing to do
 		}
 		
 		try{
 			coord.setY(2);
 			Assert.fail();
-		}catch (IllegalArgumentException e){
+		}catch (IndexOutOfBoundsException e){
 			//nothing to do
 		}
 		

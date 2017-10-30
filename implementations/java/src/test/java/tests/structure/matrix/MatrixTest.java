@@ -4,7 +4,6 @@ import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.ScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
-import com.sun.istack.internal.Nullable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +15,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -51,7 +52,7 @@ public class MatrixTest {
 		matrix.addCol();
 		assertThat(matrix.getNumCols(), is(1L));
 		assertThat(matrix.getNumRows(), is(1L));
-		matrix = getTestingInstance(matrixClass);
+		matrix = getTestingInstance(curMatrixClass);
 		matrix.addRow();
 		assertThat(matrix.getNumCols(), is(1L));
 		assertThat(matrix.getNumRows(), is(1L));
@@ -64,11 +65,11 @@ public class MatrixTest {
 		matrix.addRows(2);
 		assertThat(matrix.getNumCols(), is(3L));
 		assertThat(matrix.getNumRows(), is(4L));
-		matrix = getTestingInstance(matrixClass);
+		matrix = getTestingInstance(curMatrixClass);
 		matrix.addCols(2);
 		assertThat(matrix.getNumCols(), is(2L));
 		assertThat(matrix.getNumRows(), is(1L));
-		matrix = getTestingInstance(matrixClass);
+		matrix = getTestingInstance(curMatrixClass);
 		matrix.addRows(2);
 		assertThat(matrix.getNumCols(), is(1L));
 		assertThat(matrix.getNumRows(), is(2L));
@@ -89,11 +90,11 @@ public class MatrixTest {
 		//TODO:: finish with add__(Collection)
 	}
 	
-	@Theory(nullsAccepted = false)
-	public void testMatrixSettersGetters(Class<? extends Matrix> matrixClass) throws Exception{
-		LOGGER.info("Testing setters and getters for {}", matrixClass);
+	@Test
+	public void testMatrixSettersGetters() throws Exception{
+		LOGGER.info("Testing setters and getters for {}", curMatrixClass);
 		
-		Matrix<Integer> matrix = getTestingInstance(matrixClass);
+		Matrix<Integer> matrix = getTestingInstance(curMatrixClass);
 		
 		matrix.addRow();
 		
@@ -111,21 +112,21 @@ public class MatrixTest {
 		//TODO:: test getters & setters
 	}
 	
-	@Theory(nullsAccepted = false)
-	public void testMatrixRowColGettersSetters(Class<? extends Matrix> matrixClass) throws Exception {
-		LOGGER.info("Testing row/col getters and setters for {}", matrixClass);
+	@Test
+	public void testMatrixRowColGettersSetters() throws Exception {
+		LOGGER.info("Testing row/col getters and setters for {}", curMatrixClass);
 		//TODO:: test replace row/col values
 	}
 	
-	@Theory(nullsAccepted = false)
-	public void testMatrixRowColAddRem(Class<? extends Matrix> matrixClass) throws Exception {
-		LOGGER.info("Testing row/col adding/removing for {}", matrixClass);
+	@Test
+	public void testMatrixRowColAddRem() throws Exception {
+		LOGGER.info("Testing row/col adding/removing for {}", curMatrixClass);
 		//TODO:: test adding/removing rows/cols
 	}
 	
-	@Theory(nullsAccepted = false)
-	public void testMatrixDefaultVal(Class<? extends Matrix> matrixClass) throws Exception {
-		LOGGER.info("Testing default value for {}", matrixClass);
+	@Test
+	public void testMatrixDefaultVal() throws Exception {
+		LOGGER.info("Testing default value for {}", curMatrixClass);
 		//TODO:: test default val set
 	}
 }
