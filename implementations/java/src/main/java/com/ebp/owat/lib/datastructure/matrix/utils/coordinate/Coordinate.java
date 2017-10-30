@@ -13,6 +13,7 @@ import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 public class Coordinate {
 	/** The matrix this coordinate is on. */
 	public final Matrix matrix;
+	
 	/** The X value (which col) of this coordinate. */
 	private long x;
 	/** The Y value (which row) of this coordinate. */
@@ -23,7 +24,11 @@ public class Coordinate {
 	 * @param matrix The matrix to give to this Coordinate.
 	 */
 	public Coordinate(Matrix matrix){
+		if(!matrix.hasRowsCols()){
+			throw new IllegalStateException("Cannot have a coordinate on an empty matrix.");
+		}
 		this.matrix = matrix;
+		this.setY(0).setX(0);
 	}
 	
 	/**

@@ -116,7 +116,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param newValue The value to replace.
 	 * @return The previously held value.
 	 */
-	public abstract T replaceNode(Coordinate nodeToReplace, T newValue);
+	public abstract T setValue(Coordinate nodeToReplace, T newValue);
 	
 	/**
 	 * Replaces a row of values.
@@ -212,6 +212,14 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 */
 	public long size(){
 		return this.getNumCols() * this.getNumRows();
+	}
+	
+	/**
+	 * Determines if this matrix actually has rows and columns.
+	 * @return If this matrix actually has rows and columns.
+	 */
+	public boolean hasRowsCols(){
+		return this.size() > 0;
 	}
 	
 	/**

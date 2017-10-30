@@ -226,7 +226,7 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 	 * @return The previously held value.
 	 */
 	@Override
-	public T replaceNode(Coordinate nodeToReplace, T newValue) {
+	public T setValue(Coordinate nodeToReplace, T newValue) {
 		//TODO
 		return null;
 	}
