@@ -175,7 +175,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return If this matrix holds any elements.
 	 */
 	public boolean isEmpty(){
-		return this.numElements() > 0;
+		return this.numElements() == 0;
 	}
 	
 	/**
