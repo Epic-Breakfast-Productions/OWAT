@@ -1,6 +1,5 @@
 package tests;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +12,9 @@ import org.slf4j.LoggerFactory;
 public class OtherTests {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OtherTests.class);
 	
-	@Ignore("No need to test these unless someone is adjusting the logging configuration.")
 	@Test
 	public void testLogger(){
 		LOGGER.info("Testing for the configuration of the logs.");
-		
 		LOGGER.info("Info level log");
 		LOGGER.debug("Debug level log");
 		LOGGER.warn("Warn level log");
