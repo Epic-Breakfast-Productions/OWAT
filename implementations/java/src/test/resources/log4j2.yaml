@@ -35,7 +35,7 @@ Configutation:
         value: "%d %-5p [%t] - %m%n"
       -
         name: logPatternDetailed
-        value: "%d %-5p [%t] (%l) - %m%n"
+        value: "%d %-5p [%t] (%-125l) - %m%n"
       -
         name: logPatternColored
         value: "%highlight{${logPattern}}{FATAL=red, ERROR=red, WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}"

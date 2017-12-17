@@ -23,15 +23,24 @@ dependencies {
 	compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2+'
 	compile 'com.fasterxml.jackson.core:jackson-databind:2+'
 
+	compile 'args4j:args4j:2.33'
+	compile 'args4j:args4j-site:2.33'
+
 	//test dependencies
 	testCompile 'junit:junit:4.12'
 }
-
-//config for the application plugin
-mainClassName = "com.ebp.owat.app.Main"
-applicationName = "owatj"
 
 //specify gradle version (for when  we recreate the wrapper)
 task wrapper(type: Wrapper) {
 	gradleVersion = '4.2.1'
 }
+
+run {
+	if (project.hasProperty("appArgs")) {
+		args Eval.me(appArgs)
+	}
+}
+
+//config for the application plugin
+mainClassName = "com.ebp.owat.app.Main"
+applicationName = "owatj"
