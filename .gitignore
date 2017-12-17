@@ -44,6 +44,7 @@ implementations/java/.gradletasknamecache
 implementations/java/.gradle/
 implementations/java/build/
 implementations/java/bin/
+implementations/java/true/
 
 #Logs from the project
-logs/
+implementations/java/out/
