@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.kohsuke.args4j.OptionHandlerFilter.ALL;
-
 /**
  *
  */
@@ -21,10 +19,7 @@ public class CommandLineOps {
 	
 	private final String[] argsGotten;
 	
-	@Option(name="-t", aliases = {"--test"},usage = "test thing")
-	private boolean test = true;
-	
-	@Option(name="-g", aliases = {"--gui-mode"},usage = "Runs the gui interface.")
+	@Option(name="-g", aliases = {"--gui-mode"},usage = "Flag that runs the gui interface. No other params needed.")
 	private boolean guiMode = false;
 	
 	// receives other command line parameters than options
@@ -40,28 +35,17 @@ public class CommandLineOps {
 			// parse the arguments.
 			parser.parseArgument(this.argsGotten);
 			
-			// you can parse additional arguments if you want.
-			// parser.parseArgument("more","args");
-			
-			// after parsing arguments, you should check
-			// if enough arguments are given.
-			if( arguments.isEmpty() )
-				throw new CmdLineException(parser,"No argument is given");
-			
+			if( this.argsGotten.length == 0 ) {
+				throw new CmdLineException(parser, new IllegalArgumentException("No argument was given"));
+			}
 		} catch( CmdLineException e ) {
-			// if there's a problem in the command line,
-			// you'll get this exception. this will report
-			// an error message.
-			System.err.println(e.getMessage());
-			System.err.println("java SampleMain [options...] arguments...");
+			System.err.println("Error parsing arguments:");
+			System.err.println("\t"+e.getMessage());
+			System.err.println("");
 			// print the list of available options
+			System.err.println("Available options:");
 			parser.printUsage(System.err);
 			System.err.println();
-			
-			// print option sample. This is useful some time
-			System.err.println("  Example: java SampleMain"+parser.printExample(ALL));
-			
-			return;
 		}
 	}
 	

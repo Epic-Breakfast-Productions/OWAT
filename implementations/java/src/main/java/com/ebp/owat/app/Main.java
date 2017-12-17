@@ -6,8 +6,6 @@ import com.ebp.owat.app.gui.MainGuiApp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Enumeration;
-
 import static com.ebp.owat.app.config.Globals.*;
 
 /**
@@ -23,7 +21,7 @@ public class Main {
 		
 		LOGGER.debug("Properties read in:");
 		for(PropertyKey curKey : Globals.PropertyKey.values()){
-			LOGGER.debug("Key : \"{}\", Value : \"{}\"", curKey, Globals.getProp(curKey));
+			LOGGER.debug("Key : \"{}\", Value : \"{}\"", curKey.propKey, Globals.getProp(curKey));
 		}
 		
 		LOGGER.info(
