@@ -47,8 +47,16 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * Sets the {@link #defaultValue default value}.
 	 * @param valIn The value to set.
 	 */
-	protected void setDefaultValue(T valIn){
+	public void setDefaultValue(T valIn){
 		this.defaultValue = valIn;
+	}
+	
+	/**
+	 * Gets the {@link #defaultValue default value}. Does NOT do a defensive copy.
+	 * @return {@link #defaultValue default value}
+	 */
+	public T getDefaultValue(){
+		return this.defaultValue;
 	}
 	
 	/**
