@@ -60,37 +60,37 @@ public abstract class Matrix<T> implements Iterable<T> {
 	}
 	
 	/**
-	 * Adds a row to the matrix. Will be added to the right of the existing matrix.
+	 * Adds a row to the matrix. Will be added below the existing matrix.
 	 */
 	public abstract void addRow();
 	
 	/**
 	 * Adds rows to the matrix until capacity is added for all the values given to be added, and the values are added. Values are added top-down on the new rows.
 	 * @param valuesIn The values to add to the rows.
-	 * @return If all the rows added were added completely by the values given.
+	 * @return If all the new rows added were filled completely by the values given.
 	 */
 	public abstract boolean addRows(Collection<T> valuesIn);
 	
 	/**
-	 * Adds the number of rows specified. Adds rows to the right of the existing matrix.
+	 * Adds the number of rows specified. Adds rows below the existing matrix.
 	 * @param numRows The number of rows to add.
 	 */
 	public abstract void addRows(long numRows);
 	
 	/**
-	 * Adds a column to the matrix. Will be added to the bottom of the existing matrix.
+	 * Adds a column to the matrix. Will be added to the right of the existing matrix.
 	 */
 	public abstract void addCol();
 	
 	/**
 	 * Adds columns to the matrix until capacity is added for all the values given to be added, and the values are added to those rows. Values are added left to right to the new columns.
 	 * @param valuesIn The values to add to the rows.
-	 * @return If all the columns added were added completely by the values given.
+	 * @return If all the new columns added were filled completely by the values given.
 	 */
 	public abstract void addCols(Collection<T> valuesIn);
 	
 	/**
-	 * Adds the number of rows specified. Adds rows to the right of the existing matrix.
+	 * Adds the number of columns specified. Adds columns to the right of the existing matrix.
 	 * @param numCols The number of columns to add.
 	 */
 	public abstract void addCols(long numCols);
@@ -101,8 +101,31 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * Starts by adding a column, then a row, and keeps switching between adding cols and rows.
 	 *
 	 * @param valuesIn The values to add.
+	 * @return If the collection given fully fills out the rows and columns added.
 	 */
-	public abstract void addRowsCols(Collection<T> valuesIn);
+	public boolean grow(Collection<T> valuesIn){
+		//TODO
+		return false;
+	}
+	
+	/**
+	 * Grows the matrix my the numbers specified.
+	 * @param numCols The number of columns to expand the matrix by.
+	 * @param numRows The number of rows to expand the matrix by.
+	 */
+	public void grow(long numCols, long numRows){
+		boolean startEmpty = !this.hasRowsCols();
+		this.addCols(numCols);
+		this.addRows(numRows - (startEmpty ? 1L : 0L));
+	}
+	
+	/**
+	 * Grows the matrix my the number specified.
+	 * @param numRowCols The number of rows and columns to expand the matrix by.
+	 */
+	public void grow(long numRowCols){
+		this.grow(numRowCols, numRowCols);
+	}
 	
 	/**
 	 * Removes a row from this matrix.
@@ -285,12 +308,6 @@ public abstract class Matrix<T> implements Iterable<T> {
 	public abstract List<T> getRow(Coordinate coordIn);
 	
 	/**
-	 * Gets this matrix represented as a two dimensional matrix.
-	 * @return This matrix as a 2d array.
-	 */
-	public abstract Object[][] to2dArray();
-	
-	/**
 	 * Returns a basic functional iterator. Does this by using {@link #get(long, long)}. Should work, but may not be efficient for your implementation by any means. Recommended to override in implementation if this would be a terribly inefficient way to iterate.
 	 * <br />
 	 *
@@ -299,10 +316,8 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return A basic functional iterator.
 	 */
 	@Override
-	public Iterator<T> iterator() {
-		return new Iterator<T>() {
-			private long curRow = 0;
-			private long curCol = 0;
+	public MatrixIterator<T> iterator() {
+		return new MatrixIterator<T>() {
 			
 			@Override
 			public boolean hasNext() {
@@ -324,5 +339,26 @@ public abstract class Matrix<T> implements Iterable<T> {
 				return get(curCol, curRow);
 			}
 		};
+	}
+	
+	/**
+	 * Gets this matrix represented as a two dimensional matrix.
+	 * @return This matrix as a 2d array.
+	 */
+	public Object[][] to2dArray(){
+		Object[][] output = new Object[(int)this.getNumRows()][(int)this.getNumCols()];
+		
+		MatrixIterator<T> it = this.iterator();
+		
+		int curCol = -1;
+		int curRow = 0;
+		while (it.hasNext()){
+			if(it.onNewRow()){
+				curRow++;
+				curCol = 0;
+			}
+			output[curRow][curCol] = it.next();
+		}
+		return output;
 	}
 }

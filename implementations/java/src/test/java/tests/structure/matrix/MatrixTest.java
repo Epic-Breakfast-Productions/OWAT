@@ -2,7 +2,6 @@ package tests.structure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.ScramblingMatrix;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -46,6 +45,6 @@ public abstract class MatrixTest {
 	@SuppressWarnings("unchecked")
 	protected Matrix<Integer> getTestingInstance() throws Exception{
 		LOGGER.debug("Getting instance of {} matrix.", this.curMatrixClass.getName());
-		return this.curMatrixClass.getConstructor(ScramblingMatrix.Type.class).newInstance(ScramblingMatrix.Type.SCRAMBLING);
+		return this.curMatrixClass.getConstructor().newInstance();
 	}
 }

@@ -181,18 +181,6 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 	}
 	
 	/**
-	 * Adds rows and columns until all the items in the collection are added.
-	 * <p>
-	 * Starts by adding a column, then a row, and keeps switching between adding cols and rows.
-	 *
-	 * @param valuesIn The values to add.
-	 */
-	@Override
-	public void addRowsCols(Collection<T> valuesIn) {
-		//TODO
-	}
-	
-	/**
 	 * Removes a row from this matrix.
 	 *
 	 * @param rowIndex

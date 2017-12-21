@@ -689,10 +689,11 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	
 	@Override
 	public boolean containsAll(Collection<?> collection) {
-		Iterator<?> it = collection.iterator();
-		while(it.hasNext())
-			if (!this.contains(it.next()))
+		for(Object o : collection) {
+			if (!this.contains(o)) {
 				return false;
+			}
+		}
 		return true;
 	}
 	
@@ -776,6 +777,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		return changed;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean retainAll(Collection<?> collection) {
 		if(collection.isEmpty()){

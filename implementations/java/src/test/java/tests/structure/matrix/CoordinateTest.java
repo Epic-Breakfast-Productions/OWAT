@@ -1,5 +1,6 @@
 package tests.structure.matrix;
 
+import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import org.junit.Assert;
@@ -8,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import testModels.structure.matrix.TestMatrix;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -55,7 +55,7 @@ public class CoordinateTest {
 		Constructor<? extends Coordinate> constBase = curCoordClass.getConstructor(Matrix.class);
 		Constructor<? extends Coordinate> constCoords = curCoordClass.getConstructor(Matrix.class, Long.TYPE, Long.TYPE);
 		
-		Matrix<Long> matrix = new TestMatrix();
+		Matrix<Long> matrix = new HashedMatrix<>();
 		
 		Coordinate coord;
 		//test that you can't make a coord on an empty matrix
@@ -75,7 +75,7 @@ public class CoordinateTest {
 	
 	@Test
 	public void testCoordinateSettersGetters() throws Throwable {
-		Matrix<Long> matrix = new TestMatrix();
+		Matrix<Long> matrix = new HashedMatrix<>();
 		matrix.addRow();
 
 		Coordinate coord = getCoordInstance(curCoordClass, matrix, 0, 0);
@@ -115,7 +115,7 @@ public class CoordinateTest {
 	
 	@Test
 	public void testCoordinateEquals() throws Throwable {
-		Matrix<Long> matrix = new TestMatrix();
+		Matrix<Long> matrix = new HashedMatrix<>();
 		matrix.addRow();
 		
 		Coordinate coordOne = getCoordInstance(curCoordClass, matrix, 0, 0);
@@ -133,7 +133,7 @@ public class CoordinateTest {
 	
 	@Test
 	public void testCoordinateClone() throws Throwable {
-		Matrix<Long> matrix = new TestMatrix();
+		Matrix<Long> matrix = new HashedMatrix<>();
 		matrix.addRow();
 		
 		Coordinate coord = getCoordInstance(curCoordClass, matrix, 0, 0);
@@ -145,7 +145,7 @@ public class CoordinateTest {
 	
 	@Test
 	public void testCoordinateOther() throws Throwable {
-		Matrix<Long> matrix = new TestMatrix();
+		Matrix<Long> matrix = new HashedMatrix<>();
 		matrix.addRow();
 		
 		Coordinate coord = getCoordInstance(curCoordClass, matrix, 0, 0);

@@ -1,12 +1,13 @@
 package com.ebp.owat.lib.datastructure.matrix.Hash;
 
-import com.ebp.owat.lib.datastructure.matrix.ScramblingMatrix;
+import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Matrix created by inserting elements into a {@link java.util.HashMap}, with a {@link com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate Coordinate} as the key for the value.
@@ -17,21 +18,12 @@ import java.util.List;
  *
  * @param <T> The type of object this matrix holds.
  */
-public class HashedMatrix<T>  extends ScramblingMatrix<T> {
+public class HashedMatrix<T>  extends Matrix<T> {
 	
 	/**
 	 * The map of values the matrix holds.
 	 */
-	private HashMap<Coordinate, T> valueMap = new HashMap<>();
-	
-	/**
-	 * Constructor to set if this matrix is a scrambling one.
-	 *
-	 * @param type If this is a scrambling matrix or a de-scrambling one
-	 */
-	public HashedMatrix(Type type) {
-		super(type);
-	}
+	protected HashMap<Coordinate, T> valueMap = new HashMap<>();
 	
 	/**
 	 * Adds a row to the matrix. Will be added to the right of the existing matrix.
@@ -111,28 +103,47 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	}
 	
 	/**
-	 * Adds rows and columns until all the items in the collection are added.
-	 * <p>
-	 * Starts by adding a column, then a row, and keeps switching between adding cols and rows.
-	 *
-	 * @param valuesIn The values to add.
-	 */
-	@Override
-	public void addRowsCols(Collection<T> valuesIn) {
-		//TODO
-	}
-	
-	/**
 	 * Removes a row from this matrix.
 	 *
-	 * @param rowIndex
+	 * @param rowIndex The index of the row to remove.
 	 * @return The elements that comprised the row.
 	 * @throws IndexOutOfBoundsException If the row index given is out of bounds.
 	 */
 	@Override
 	public List<T> removeRow(long rowIndex) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
+		if(!isValidRowIndex(rowIndex)){
+			throw new IndexOutOfBoundsException("Index given is invalid.");
+		}
+		
+		List<T> removedItems = this.getRow(rowIndex);
+		
+		this.numRows--;
+		if(this.numRows == 0){
+			this.valueMap.clear();
+		}else {
+			for(Map.Entry<Coordinate, T> curEntry : this.valueMap.entrySet()){
+				if(curEntry.getKey().getRow() >= rowIndex){
+					Coordinate curCoord = curEntry.getKey();
+					T curVal = curEntry.getValue();
+					
+					this.valueMap.remove(curCoord);
+					
+					curCoord.setY(curCoord.getRow() - 1);
+					this.valueMap.put(curCoord, curVal);
+				}
+			}
+		}
+		
+		for(T curElement : removedItems){
+			if(
+				this.defaultValue == null ||
+				!curElement.equals(this.defaultValue)
+			) {
+				this.numElementsHeld--;
+			}
+		}
+		
+		return removedItems;
 	}
 	
 	/**
@@ -144,8 +155,38 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	 */
 	@Override
 	public List<T> removeCol(long colIndex) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
+		if(!isValidColIndex(colIndex)){
+			throw new IndexOutOfBoundsException("Index given is invalid.");
+		}
+		
+		List<T> removedItems = this.getCol(colIndex);
+		
+		this.numCols--;
+		if(this.numRows == 0){
+			this.valueMap.clear();
+		}else {
+			for(Map.Entry<Coordinate, T> curEntry : this.valueMap.entrySet()){
+				if(curEntry.getKey().getCol() >= colIndex){
+					Coordinate curCoord = curEntry.getKey();
+					T curVal = curEntry.getValue();
+					
+					this.valueMap.remove(curCoord);
+					
+					curCoord.setX(curCoord.getCol() - 1);
+					this.valueMap.put(curCoord, curVal);
+				}
+			}
+		}
+		
+		for(T curElement : removedItems){
+			if(
+				this.defaultValue == null ||
+					!curElement.equals(this.defaultValue)
+				) {
+				this.numElementsHeld--;
+			}
+		}
+		return removedItems;
 	}
 	
 	/**
@@ -271,16 +312,5 @@ public class HashedMatrix<T>  extends ScramblingMatrix<T> {
 	public List<T> getRow(Coordinate coordIn) {
 		//TODO
 		return null;
-	}
-	
-	/**
-	 * Gets this matrix represented as a two dimensional matrix.
-	 *
-	 * @return This matrix as a 2d array.
-	 */
-	@Override
-	public Object[][] to2dArray() {
-		//TODO
-		return new Object[0][];
 	}
 }

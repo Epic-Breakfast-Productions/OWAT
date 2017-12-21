@@ -76,12 +76,19 @@ public class Coordinate {
 		return this.x;
 	}
 	
+	public long getCol(){
+		return this.getX();
+	}
+	
 	/**
 	 * Gets the y value (which row) of this coordinate.
 	 * @return The y value (which row) of this coordinate.
 	 */
 	public long getY(){
 		return this.y;
+	}
+	public long getRow(){
+		return this.getY();
 	}
 	
 	/**
