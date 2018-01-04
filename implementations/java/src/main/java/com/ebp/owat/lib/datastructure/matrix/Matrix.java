@@ -87,7 +87,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param valuesIn The values to add to the rows.
 	 * @return If all the new columns added were filled completely by the values given.
 	 */
-	public abstract void addCols(Collection<T> valuesIn);
+	public abstract boolean addCols(Collection<T> valuesIn);
 	
 	/**
 	 * Adds the number of columns specified. Adds columns to the right of the existing matrix.
@@ -142,12 +142,26 @@ public abstract class Matrix<T> implements Iterable<T> {
 	public abstract List<T> removeCol(long colIndex) throws IndexOutOfBoundsException;
 	
 	/**
-	 * Replaces a particular node's value.
+	 * Replaces a particular node's value. Not to be used to remove a node by setting it's value to null or the {@link Matrix#defaultValue}
 	 * @param nodeToReplace The coordinate of the node to replace.
 	 * @param newValue The value to replace.
 	 * @return The previously held value.
 	 */
 	public abstract T setValue(Coordinate nodeToReplace, T newValue);
+	
+	/**
+	 * Sets a value based on its x/y coordinates. This implementation creates a new {@link Coordinate} and passes it to the other method ({@link Matrix#setValue(Coordinate, Object)})
+	 * @param xIn The x index (column) of the spot to set.
+	 * @param yIn The y index (row) of the spot to set.
+	 * @param newValue The value to set the spot to.
+	 * @return The previously held value.
+	 */
+	public T setValue(long xIn, long yIn, T newValue){
+		return this.setValue(
+			new Coordinate(this, xIn, yIn),
+			newValue
+		);
+	}
 	
 	/**
 	 * Replaces a row of values.

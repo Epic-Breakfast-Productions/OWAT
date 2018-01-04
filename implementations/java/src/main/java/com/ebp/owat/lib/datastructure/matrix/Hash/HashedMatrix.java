@@ -2,12 +2,10 @@ package com.ebp.owat.lib.datastructure.matrix.Hash;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
+import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Matrix created by inserting elements into a {@link java.util.HashMap}, with a {@link com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate Coordinate} as the key for the value.
@@ -44,8 +42,22 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	 */
 	@Override
 	public boolean addRows(Collection<T> valuesIn) {
-		//TODO
-		return false;
+		Queue<T> valuesToAdd = new LinkedList<>(valuesIn);
+		
+		long curRow = this.getNumRows();
+		
+		while(!valuesToAdd.isEmpty()){
+			this.addRow();
+			for(long i = 0; i < this.getNumCols(); i++){
+				//add values to new row
+				if(valuesToAdd.isEmpty()){
+					return false;
+				}
+				this.setValue(i, curRow, valuesToAdd.poll());
+			}
+			curRow++;
+		}
+		return true;
 	}
 	
 	/**
@@ -82,8 +94,23 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	 * @return If all the columns added were added completely by the values given.
 	 */
 	@Override
-	public void addCols(Collection<T> valuesIn) {
-		//TODO
+	public boolean addCols(Collection<T> valuesIn) {
+		Queue<T> valuesToAdd = new LinkedList<>(valuesIn);
+		
+		long curCol = this.getNumCols();
+		
+		while(!valuesToAdd.isEmpty()){
+			this.addCol();
+			for(long i = 0; i < this.getNumRows(); i++){
+				//add values to new row
+				if(valuesToAdd.isEmpty()){
+					return false;
+				}
+				this.setValue(curCol, i, valuesToAdd.poll());
+			}
+			curCol++;
+		}
+		return true;
 	}
 	
 	/**
@@ -199,16 +226,12 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	@Override
 	public T setValue(Coordinate nodeToReplace, T newValue) {
 		MatrixValidator.throwIfNotOnMatrix(this, nodeToReplace);
-		T valToReturn = this.get(nodeToReplace);
-		if(newValue == null) {
-			if (valToReturn != null) {
-				this.numElementsHeld--;
-			}
-		}else{
-			if(valToReturn == null){
-				this.numElementsHeld++;
-			}
+		T valToReturn = this.valueMap.getOrDefault(nodeToReplace, this.defaultValue);
+		
+		if(!this.valueMap.containsKey(nodeToReplace)){
+			this.numElementsHeld++;
 		}
+		
 		this.valueMap.put(nodeToReplace, newValue);
 		return valToReturn;
 	}
@@ -273,8 +296,14 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	 */
 	@Override
 	public List<T> getCol(long xIn) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
+		MatrixValidator.throwIfBadIndex(this, xIn, Plane.X);
+		LinkedList<T> output = new LinkedList<>();
+		
+		for(long i = 0; i < this.getNumRows(); i++){
+			output.addLast(this.get(xIn, i));
+		}
+		
+		return output;
 	}
 	
 	/**
@@ -285,8 +314,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	 */
 	@Override
 	public List<T> getCol(Coordinate coordIn) {
-		//TODO
-		return null;
+		return this.getCol(coordIn.getX());
 	}
 	
 	/**
@@ -298,8 +326,14 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	 */
 	@Override
 	public List<T> getRow(long yIn) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
+		MatrixValidator.throwIfBadIndex(this, yIn, Plane.Y);
+		LinkedList<T> output = new LinkedList<>();
+		
+		for(long i = 0; i < this.getNumCols(); i++){
+			output.addLast(this.get(i, yIn));
+		}
+		
+		return output;
 	}
 	
 	/**
@@ -310,7 +344,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	 */
 	@Override
 	public List<T> getRow(Coordinate coordIn) {
-		//TODO
-		return null;
+		return this.getRow(coordIn.getY());
 	}
 }

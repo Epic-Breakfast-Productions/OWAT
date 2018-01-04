@@ -91,10 +91,11 @@ public class MatrixValidator {
 	}
 	
 	/**
-	 * Throws an IlegalArgumentException if a bad index is given.
+	 * Throws an IndexOutOfBounds if a bad index is given.
 	 *
 	 * @param index The index to test.
 	 * @param plane The plane the index is a part of.
+	 * @throws IndexOutOfBoundsException If the index given is invalid.
 	 */
 	public static void throwIfBadIndex(Matrix matrix, long index, Plane plane){
 		switch (plane){

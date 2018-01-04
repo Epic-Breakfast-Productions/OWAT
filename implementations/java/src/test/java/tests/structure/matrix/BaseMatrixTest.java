@@ -130,6 +130,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	//TODO:: test trim()
 	//TODO:: test isFull()
+	//TODO:: test setValue(long,long,T)
 	
 	@Test
 	public void testIterator() throws Exception {
