@@ -100,6 +100,17 @@ public class Coordinate {
 		return MatrixValidator.isOnSameMatrix(this, coordIn);
 	}
 	
+	/**
+	 * Determines if this coordinate is still on the matrix. It is possible to be not on the matrix if the matrix is shrunk after the coordinate has been created.
+	 * @return If this coordinate is still on the matrix.
+	 */
+	public boolean stillOnMatrix(){
+		return (
+			this.matrix.getNumRows() > this.getY() &&
+			this.matrix.getNumCols() > this.getX()
+		);
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if(o == null){

@@ -144,9 +144,29 @@ public class CoordinateTest {
 	}
 	
 	@Test
+	public void testCoordinateIsStillOnMatrix() throws Throwable {
+		Matrix<Long> matrix = new HashedMatrix<>();
+		matrix.grow(3);
+		
+		Coordinate coord = getCoordInstance(curCoordClass, matrix, 2, 2);
+		
+		assertTrue(coord.stillOnMatrix());
+		
+		matrix.addRow();
+		
+		assertTrue(coord.stillOnMatrix());
+		
+		matrix.trim(3,3);
+		
+		assertFalse(coord.stillOnMatrix());
+	}
+	
+	@Test
 	public void testCoordinateOther() throws Throwable {
 		Matrix<Long> matrix = new HashedMatrix<>();
+		Matrix<Long> matrixTwo = new HashedMatrix<>();
 		matrix.addRow();
+		matrixTwo.addRow();
 		
 		Coordinate coord = getCoordInstance(curCoordClass, matrix, 0, 0);
 		
@@ -154,7 +174,9 @@ public class CoordinateTest {
 		
 		Coordinate coordTwo = getCoordInstance(curCoordClass, matrix, 0, 0);
 		
-		
 		assertTrue(coord.isOnSameMatrix(coordTwo));
+		
+		coordTwo = getCoordInstance(curCoordClass, matrixTwo, 0, 0);
+		assertFalse(coord.isOnSameMatrix(coordTwo));
 	}
 }

@@ -236,30 +236,40 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		return valToReturn;
 	}
 	
-	/**
-	 * Replaces a row of values.
-	 *
-	 * @param rowIndex  The index of the row to replace.
-	 * @param newValues The values to use to replace the row.
-	 * @return The values this method replaced. Ordered top to bottom.
-	 */
 	@Override
-	public List<T> replaceRow(long rowIndex, Collection<T> newValues) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
+	public List<T> replaceRow(Coordinate coordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
+		MatrixValidator.throwIfNotOnMatrix(this, coordinate);
+		
+		List<T> output = this.getRow(coordinate);
+		
+		long curCol = 0;
+		for(T curVal : newValues){
+			this.setValue(curCol, coordinate.getY(), curVal);
+			curCol++;
+			if(!isValidColIndex(curCol)){
+				break;
+			}
+		}
+		
+		return output;
 	}
 	
-	/**
-	 * Replaces a column of values.
-	 *
-	 * @param colIndex  The index of the column to replace.
-	 * @param newValues The values to use to replace the column.
-	 * @return The values this method replaced. Ordered left to right.
-	 */
 	@Override
-	public List<T> replaceCol(long colIndex, Collection<T> newValues) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
+	public List<T> replaceCol(Coordinate coordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
+		MatrixValidator.throwIfNotOnMatrix(this, coordinate);
+		
+		List<T> output = this.getCol(coordinate);
+		
+		long curRow = 0;
+		for(T curVal : newValues){
+			this.setValue(coordinate.getY(), curRow, curVal);
+			curRow++;
+			if(!isValidRowIndex(curRow)){
+				break;
+			}
+		}
+		
+		return output;
 	}
 	
 	/**

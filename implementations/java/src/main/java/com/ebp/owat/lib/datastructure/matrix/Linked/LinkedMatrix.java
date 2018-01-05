@@ -159,16 +159,11 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 		//TODO
 	}
 	
-	/**
-	 * Adds columns to the matrix until capacity is added for all the values given to be added, and the values are added to those rows. Values are added left to right to the new columns.
-	 *
-	 * @param valuesIn The values to add to the rows.
-	 * @return If all the columns added were added completely by the values given.
-	 */
 	@Override
-	public void addCols(Collection<T> valuesIn) {
-		//TODO
+	public boolean addCols(Collection<T> valuesIn) {
+		return false;
 	}
+	
 	
 	/**
 	 * Adds the number of rows specified. Adds rows to the right of the existing matrix.
@@ -219,6 +214,11 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 		return null;
 	}
 	
+	@Override
+	public List<T> replaceRow(Coordinate coordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
+		return null;
+	}
+	
 	/**
 	 * Replaces a row of values.
 	 *
@@ -229,6 +229,11 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 	@Override
 	public List<T> replaceRow(long rowIndex, Collection<T> newValues) throws IndexOutOfBoundsException {
 		//TODO
+		return null;
+	}
+	
+	@Override
+	public List<T> replaceCol(Coordinate coordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
 		return null;
 	}
 	

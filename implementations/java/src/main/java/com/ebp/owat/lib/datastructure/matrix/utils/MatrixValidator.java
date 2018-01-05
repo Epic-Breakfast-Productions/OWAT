@@ -25,7 +25,7 @@ public class MatrixValidator {
 	 * @return If the coordinate given is on the matrix given.
 	 */
 	public static boolean isOnMatrix(Matrix matrix, Coordinate coordIn){
-		return matrix == coordIn.matrix;
+		return matrix == coordIn.matrix && coordIn.stillOnMatrix();
 	}
 	
 	/**
@@ -61,11 +61,6 @@ public class MatrixValidator {
 		return areOnMatrix(coordinates[0].matrix, coordinates);
 	}
 	
-	/**
-	 * Determines if the matrix of the coordinate given is the same as the one this coordinate is on. If either coordinate is null, returns false.
-	 * @param coordIn The coordinate to test against.
-	 * @return If this and the coordinate given is on the same matrix or not.
-	 */
 	public static boolean isOnSameMatrix(Coordinate coordOne, Coordinate coordTwo){
 		if(coordOne == null || coordTwo == null){
 			return false;

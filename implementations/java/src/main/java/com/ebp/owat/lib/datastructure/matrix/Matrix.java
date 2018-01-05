@@ -165,19 +165,59 @@ public abstract class Matrix<T> implements Iterable<T> {
 	
 	/**
 	 * Replaces a row of values.
+	 *
+	 * If not enough values given to fill row, only replaces those values it can (starting from the left, 0, working right).
+	 *
+	 * If given more values than needed to fill row, only the first number of values needed to fill row are used.
+	 *
+	 * @param coordinate A coordinate of the row to replace.
+	 * @param newValues The values to use to replace the row.
+	 * @return The values this method replaced. Ordered top to bottom.
+	 */
+	public abstract List<T> replaceRow(Coordinate coordinate, Collection<T> newValues) throws IndexOutOfBoundsException;
+	
+	/**
+	 * Replaces a row of values.
+	 *
+	 * If not enough values given to fill row, only replaces those values it can (starting from the left, 0, working right).
+	 *
+	 * If given more values than needed to fill row, only the first number of values needed to fill row are used.
+	 *
 	 * @param rowIndex The index of the row to replace.
 	 * @param newValues The values to use to replace the row.
 	 * @return The values this method replaced. Ordered top to bottom.
 	 */
-	public abstract List<T> replaceRow(long rowIndex, Collection<T> newValues) throws IndexOutOfBoundsException;
+	public List<T> replaceRow(long rowIndex, Collection<T> newValues) throws IndexOutOfBoundsException{
+		return this.replaceRow(new Coordinate(this, 0, rowIndex), newValues);
+	}
 	
 	/**
 	 * Replaces a column of values.
+	 *
+	 * If not enough values given to fill column, only replaces those values it can (starting from the top, 0, working down).
+	 *
+	 * If given more values than needed to fill column, only the first number of values needed to fill column are used.
+	 *
+	 * @param coordinate The coordinate of the column to replace.
+	 * @param newValues The values to use to replace the column.
+	 * @return The values this method replaced. Ordered left to right.
+	 */
+	public abstract List<T> replaceCol(Coordinate coordinate, Collection<T> newValues) throws IndexOutOfBoundsException;
+	
+	/**
+	 * Replaces a column of values.
+	 *
+	 * If not enough values given to fill column, only replaces those values it can (starting from the top, 0, working down).
+	 *
+	 * If given more values than needed to fill column, only the first number of values needed to fill column are used.
+	 *
 	 * @param colIndex The index of the column to replace.
 	 * @param newValues The values to use to replace the column.
 	 * @return The values this method replaced. Ordered left to right.
 	 */
-	public abstract List<T> replaceCol(long colIndex, Collection<T> newValues) throws IndexOutOfBoundsException;
+	public List<T> replaceCol(long colIndex, Collection<T> newValues) throws IndexOutOfBoundsException{
+		return this.replaceRow(new Coordinate(this, colIndex, 0), newValues);
+	}
 	
 	/**
 	 * Trims the matrix to a given size. Trims from the largest indexes in.
@@ -282,7 +322,9 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return The value at the point given.
 	 * @throws IndexOutOfBoundsException If either of the indexes are out of bounds.
 	 */
-	public abstract T get(long xIn, long yIn) throws IndexOutOfBoundsException;
+	public T get(long xIn, long yIn) throws IndexOutOfBoundsException{
+		return this.get(new Coordinate(this, xIn, yIn));
+	}
 	
 	/**
 	 * Gets a value from this matrix.
