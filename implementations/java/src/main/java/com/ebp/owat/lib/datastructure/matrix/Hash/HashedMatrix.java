@@ -237,6 +237,15 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	}
 	
 	@Override
+	public T clearNode(Coordinate nodeToClear) {
+		T clearedVal = this.get(nodeToClear);
+		
+		this.valueMap.remove(nodeToClear);
+		
+		return clearedVal;
+	}
+	
+	@Override
 	public List<T> replaceRow(Coordinate coordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
 		MatrixValidator.throwIfNotOnMatrix(this, coordinate);
 		

@@ -3,7 +3,6 @@ package com.ebp.owat.lib.datastructure.matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -161,6 +160,23 @@ public abstract class Matrix<T> implements Iterable<T> {
 			new Coordinate(this, xIn, yIn),
 			newValue
 		);
+	}
+	
+	/**
+	 * Clears the value at the coordinate given.
+	 * @param nodeToClear The coordinate of the node to clear the value of.
+	 * @return The value previously at the node. If nothing set, returns {@link Matrix#defaultValue}
+	 */
+	public abstract T clearNode(Coordinate nodeToClear);
+	
+	/**
+	 * Clears the value at the coordinate given.
+	 * @param xIn The x index of the node to clear the value of.
+	 * @param yIn The y index of the node to clear the value of.
+	 * @return The value previously at the node. If nothing set, returns {@link Matrix#defaultValue}
+	 */
+	public T clearNode(long xIn, long yIn){
+		return this.clearNode(new Coordinate(this, xIn, yIn));
 	}
 	
 	/**
@@ -382,17 +398,15 @@ public abstract class Matrix<T> implements Iterable<T> {
 			
 			@Override
 			public T next() {
-				if(!isValidColIndex(curCol + 1)){
-					curRow++;
-					curCol = -1;//-1 so we can increment before returning
-				}
-				
-				if(!isValidRowIndex(this.curRow)){
+				if(!this.hasNext()){
 					throw new NoSuchElementException("No more to iterate through.");
 				}
-				
-				curCol++;
-				return get(curCol, curRow);
+				T val = get(curCol++, curRow);
+				if(!isValidColIndex(curCol)){
+					curRow++;
+					curCol = 0;//-1 so we can increment before returning
+				}
+				return val;
 			}
 		};
 	}
@@ -406,14 +420,14 @@ public abstract class Matrix<T> implements Iterable<T> {
 		
 		MatrixIterator<T> it = this.iterator();
 		
-		int curCol = -1;
-		int curRow = 0;
+		int curCol = 0;
+		int curRow = -1;
 		while (it.hasNext()){
 			if(it.onNewRow()){
 				curRow++;
 				curCol = 0;
 			}
-			output[curRow][curCol] = it.next();
+			output[curRow][curCol++] = it.next();
 		}
 		return output;
 	}

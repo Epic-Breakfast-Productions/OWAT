@@ -7,7 +7,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
+import static testUtils.TestUtils.assert2dArrayEquals;
 
 /**
  * A test of methods from the abstract Matrix class that are already implemented in that class.
@@ -128,30 +131,85 @@ public class BaseMatrixTest extends MatrixTest {
 		//TODO
 	}
 	
+	//TODO:: test clearNode()
 	//TODO:: test trim()
 	//TODO:: test isFull()
 	//TODO:: test setValue(long,long,T)
 	
 	@Test
 	public void testIterator() throws Exception {
-		Matrix testingMatrix = this.getTestingInstance();
+		Matrix m = this.getTestingInstance();
 		
-		assertFalse(testingMatrix.iterator().hasNext());
+		assertFalse(m.iterator().hasNext());
 		
-		testingMatrix.grow(1);
+		m.grow(1);
 		
-		/* TODO:: after implementing getters
-		MatrixIterator it = testingMatrix.iterator();
+		Iterator it = m.iterator();
 		assertTrue(it.hasNext());
-		assertEquals(testingMatrix.getDefaultValue(), it.next());
-		assertFalse(testingMatrix.iterator().hasNext());
-		*/
+		assertEquals(m.getDefaultValue(), it.next());
+		assertFalse(it.hasNext());
 		
-		//TODO:: test with actual values and larger matrix
+		m.grow(1);
+		
+		it = m.iterator();
+		
+		while(it.hasNext()){
+			assertEquals(m.getDefaultValue(), it.next());
+		}
+		
+		m.setValue(0,0,1);
+		m.setValue(1,0,2);
+		m.setValue(0,1,3);
+		m.setValue(1,1,4);
+		
+		it = m.iterator();
+		
+		assertEquals(1,it.next());
+		assertEquals(2,it.next());
+		assertEquals(3,it.next());
+		assertEquals(4,it.next());
+		assertFalse(it.hasNext());
+		
 	}
 	
 	@Test
 	public void testTo2dArray() throws Exception {
-		//TODO:: test to2dArray()
+		Matrix m = this.getTestingInstance();
+		
+		m.addRow();
+		
+		Object[][] result = m.to2dArray();
+		
+		assert2dArrayEquals(
+			new Object[][]{{m.getDefaultValue()}},
+			result
+		);
+		
+		m.setValue(0,0,Integer.MAX_VALUE);
+		
+		result = m.to2dArray();
+		
+		assert2dArrayEquals(
+			new Object[][]{{Integer.MAX_VALUE}},
+			result
+		);
+		
+		m.grow(1);
+		result = m.to2dArray();
+		
+		assert2dArrayEquals(
+			new Object[][]{{Integer.MAX_VALUE,m.getDefaultValue()},{m.getDefaultValue(),m.getDefaultValue()}},
+			result
+		);
+		
+		m.setValue(1,0,new Integer(1));
+		m.setValue(0,1,new Integer(2));
+		m.setValue(1,1,new Integer(3));
+		result = m.to2dArray();
+		
+		assert2dArrayEquals(
+			new Object[][]{{Integer.MAX_VALUE,new Integer(1)},{new Integer(2),new Integer(3)}},
+			result
+		);
 	}
 }

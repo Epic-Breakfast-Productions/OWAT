@@ -215,6 +215,11 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 	}
 	
 	@Override
+	public T clearNode(Coordinate nodeToClear) {
+		return null;
+	}
+	
+	@Override
 	public List<T> replaceRow(Coordinate coordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
 		return null;
 	}
