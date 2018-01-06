@@ -95,19 +95,6 @@ public abstract class Matrix<T> implements Iterable<T> {
 	public abstract void addCols(long numCols);
 	
 	/**
-	 * Adds rows and columns until all the items in the collection are added.
-	 *
-	 * Starts by adding a column, then a row, and keeps switching between adding cols and rows.
-	 *
-	 * @param valuesIn The values to add.
-	 * @return If the collection given fully fills out the rows and columns added.
-	 */
-	public boolean grow(Collection<T> valuesIn){
-		//TODO
-		return false;
-	}
-	
-	/**
 	 * Grows the matrix my the numbers specified.
 	 * @param numCols The number of columns to expand the matrix by.
 	 * @param numRows The number of rows to expand the matrix by.
@@ -134,11 +121,33 @@ public abstract class Matrix<T> implements Iterable<T> {
 	public abstract List<T> removeRow(long rowIndex) throws IndexOutOfBoundsException;
 	
 	/**
+	 * Removes a single row from this matrix, removes the bottom most, highest indexed row.
+	 * @return The elements that comprised the row. Null if empty before removal.
+	 */
+	public List<T> removeRow(){
+		if(this.hasRowsCols()){
+			return this.removeRow(this.getNumRows() - 1);
+		}
+		return null;
+	}
+	
+	/**
 	 * Removes a column from this matrix.
 	 * @return The elements that comprised the column.
 	 * @throws IndexOutOfBoundsException If the column index given is out of bounds.
 	 */
 	public abstract List<T> removeCol(long colIndex) throws IndexOutOfBoundsException;
+	
+	/**
+	 * Removes a single column from this matrix, removes the rightmost, highest indexed column.
+	 * @return The elements that comprised the column. Null if empty before removal.
+	 */
+	public List<T> removeCol(){
+		if(this.hasRowsCols()){
+			return this.removeCol(this.getNumCols() - 1);
+		}
+		return null;
+	}
 	
 	/**
 	 * Replaces a particular node's value. Not to be used to remove a node by setting it's value to null or the {@link Matrix#defaultValue}
@@ -236,17 +245,30 @@ public abstract class Matrix<T> implements Iterable<T> {
 	}
 	
 	/**
-	 * Trims the matrix to a given size. Trims from the largest indexes in.
+	 * Trims the matrix by the number of rows and columns given. Trims from the largest indexes in.
 	 * @param numCols The number of columns to remove.
 	 * @param numRows The number of rows to remove.
 	 */
-	public void trim(long numCols, long numRows){
-		for(long i = 0; i < numCols; i++){
-			this.removeCol(this.getNumCols() - 1);
+	public void trimBy(long numCols, long numRows){
+		for(long i = 0; i < numCols && this.hasRowsCols(); i++){
+			this.removeCol();
 		}
-		
-		for(long i = 0; i < numRows; i++){
-			this.removeRow(this.getNumRows() - 1);
+		for(long i = 0; i < numRows && this.hasRowsCols(); i++){
+			this.removeRow();
+		}
+	}
+	
+	/**
+	 * Trims the matrix to a given size. Trims from the largest indexes in.
+	 * @param numCols The number of columns that should remain.
+	 * @param numRows The number of rows that should remain.
+	 */
+	public void trimTo(long numCols, long numRows){
+		while(this.getNumCols() > numCols){
+			this.removeCol();
+		}
+		while(this.getNumRows() > numRows){
+			this.removeRow();
 		}
 	}
 	
@@ -287,7 +309,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return If the matrix is full.
 	 */
 	public boolean isFull(){
-		return this.size() == this.numElements();
+		return !this.isEmpty() && this.size() == this.numElements();
 	}
 	
 	/**

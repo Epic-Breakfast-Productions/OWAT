@@ -1,13 +1,13 @@
 package tests.structure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 import static testUtils.TestUtils.assert2dArrayEquals;
@@ -33,27 +33,61 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testIsEmpty() throws Exception {
-		Matrix testingMatrix = this.getTestingInstance();
-		assertTrue("Newly instantiated matrix is not empty for some reason.", testingMatrix.isEmpty());
+		Matrix m = this.getTestingInstance();
+		assertTrue("Newly instantiated matrix is not empty for some reason.", m.isEmpty());
 		
-		//TODO:: test with elements inside
+		m.grow(1);
+		assertTrue(m.isEmpty());
+		
+		m.setValue(0,0,1);
+		assertFalse(m.isEmpty());
 	}
 	
 	@Test
 	public void testSize() throws Exception {
-		Matrix testingMatrix = this.getTestingInstance();
+		Matrix m = this.getTestingInstance();
 		
-		assertEquals(0,testingMatrix.size());
-		testingMatrix.grow(1);
-		assertEquals(1,testingMatrix.size());
+		assertEquals(0,m.size());
+		m.grow(1);
+		assertEquals(1,m.size());
 		
-		testingMatrix.grow(1);
-		assertEquals(4,testingMatrix.size());
+		m.grow(1);
+		assertEquals(4,m.size());
 		
-		testingMatrix.grow(1);
-		assertEquals(9,testingMatrix.size());
+		m.grow(1);
+		assertEquals(9,m.size());
 		
-		//TODO:: test when removing
+		m.removeCol(0);
+		
+		assertEquals(6,m.size());
+		
+		m.removeRow(0);
+		
+		assertEquals(4,m.size());
+	}
+	
+	@Test
+	public void testIsFull() throws Exception {
+		Matrix m = this.getTestingInstance();
+		
+		assertFalse(m.isFull());
+		
+		m.grow(1);
+		
+		assertFalse(m.isFull());
+		
+		m.setValue(0,0,1);
+		
+		assertTrue(m.isFull());
+		
+		m.grow(1);
+		assertFalse(m.isFull());
+		
+		m.setValue(1,0,1);
+		m.setValue(0,1,1);
+		m.setValue(1,1,1);
+		
+		assertTrue(m.isFull());
 	}
 	
 	@Test
@@ -75,51 +109,74 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testNumElementsHeld() throws Exception {
-		Matrix testingMatrix = this.getTestingInstance();
+		Matrix m = this.getTestingInstance();
 		
-		assertEquals(0, testingMatrix.numElements());
-		//TODO:: more thouroughly test
+		assertEquals(0, m.numElements());
+		
+		m.grow(1);
+		
+		assertEquals(0, m.numElements());
+		
+		m.setValue(0,0,1);
+		assertEquals(1, m.numElements());
+		
+		m.clearNode(0,0);
+		assertEquals(0, m.numElements());
+		
+		m.grow(1);
+		assertEquals(0, m.numElements());
+		m.setValue(0,0,1);
+		assertEquals(1, m.numElements());
+		m.setValue(1,0,1);
+		assertEquals(2, m.numElements());
+		m.setValue(0,1,1);
+		assertEquals(3, m.numElements());
+		m.setValue(1,1,1);
+		assertEquals(4, m.numElements());
 	}
 	
 	@Test
 	public void testDefaultVal() throws Exception {
-		Matrix testingMatrix = this.getTestingInstance();
+		Matrix m = this.getTestingInstance();
 		
-		Object obj = testingMatrix.getDefaultValue();
+		Object obj = m.getDefaultValue();
 		
 		assertNull(obj);
 		
 		Object testObj = "this is some value";
 		obj = testObj;
 		
-		testingMatrix.setDefaultValue(obj);
+		m.setDefaultValue(obj);
 		
-		assertEquals(testObj, testingMatrix.getDefaultValue());
-		//TODO:: test that newly added rows/cols get the default value
+		assertEquals(testObj, m.getDefaultValue());
+		
+		m.grow(1);
+		
+		assertEquals(testObj, m.get(0,0));
 	}
 	
 	@Test
 	public void testGrowWithNum() throws Exception{
-		Matrix testingMatrix = this.getTestingInstance();
+		Matrix m = this.getTestingInstance();
 		
-		testingMatrix.grow(1);
-		assertEquals(1, testingMatrix.getNumCols());
-		assertEquals(1, testingMatrix.getNumRows());
+		m.grow(1);
+		assertEquals(1, m.getNumCols());
+		assertEquals(1, m.getNumRows());
 		
-		testingMatrix.grow(1);
-		assertEquals(2, testingMatrix.getNumCols());
-		assertEquals(2, testingMatrix.getNumRows());
+		m.grow(1);
+		assertEquals(2, m.getNumCols());
+		assertEquals(2, m.getNumRows());
 		
-		testingMatrix.grow(2);
-		assertEquals(4, testingMatrix.getNumCols());
-		assertEquals(4, testingMatrix.getNumRows());
+		m.grow(2);
+		assertEquals(4, m.getNumCols());
+		assertEquals(4, m.getNumRows());
 		
-		testingMatrix.grow(0);
-		assertEquals(4, testingMatrix.getNumCols());
-		assertEquals(4, testingMatrix.getNumRows());
+		m.grow(0);
+		assertEquals(4, m.getNumCols());
+		assertEquals(4, m.getNumRows());
 		
 		try{
-			testingMatrix.grow(-1);
+			m.grow(-1);
 			Assert.fail();
 		}catch (IllegalArgumentException e){
 			//nothing to do
@@ -127,14 +184,41 @@ public class BaseMatrixTest extends MatrixTest {
 	}
 	
 	@Test
-	public void testGrowWithCollection() throws Exception {
-		//TODO
+	public void testClearNode() throws Exception {
+		Matrix m = this.getTestingInstance();
+		
+		m.grow(1);
+		
+		m.setValue(0,0,1);
+		
+		m.clearNode(0,0);
+		
+		assertEquals(m.getDefaultValue(), m.get(0,0));
 	}
 	
-	//TODO:: test clearNode()
-	//TODO:: test trim()
-	//TODO:: test isFull()
-	//TODO:: test setValue(long,long,T)
+	@Test
+	public void testTrimTo() throws Exception {
+		Matrix m = this.getTestingInstance();
+		
+		m.grow(5);
+		
+		m.trimTo(3,3);
+		
+		assertEquals(3, m.getNumCols());
+		assertEquals(3, m.getNumRows());
+	}
+	
+	@Test
+	public void testTrimBy() throws Exception {
+		Matrix m = this.getTestingInstance();
+		
+		m.grow(5);
+		
+		m.trimBy(3,3);
+		
+		assertEquals(2, m.getNumCols());
+		assertEquals(2, m.getNumRows());
+	}
 	
 	@Test
 	public void testIterator() throws Exception {
@@ -170,6 +254,12 @@ public class BaseMatrixTest extends MatrixTest {
 		assertEquals(4,it.next());
 		assertFalse(it.hasNext());
 		
+		try{
+			it.next();
+			Assert.fail();
+		}catch (NoSuchElementException e){
+			//nothing to do
+		}
 	}
 	
 	@Test

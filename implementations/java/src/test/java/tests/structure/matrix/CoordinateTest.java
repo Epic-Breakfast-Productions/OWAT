@@ -156,7 +156,7 @@ public class CoordinateTest {
 		
 		assertTrue(coord.stillOnMatrix());
 		
-		matrix.trim(3,3);
+		matrix.trimTo(0,0);
 		
 		assertFalse(coord.stillOnMatrix());
 	}

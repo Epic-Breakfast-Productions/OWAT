@@ -144,8 +144,19 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		
 		List<T> removedItems = this.getRow(rowIndex);
 		
+		for(T curElement : removedItems){
+			if(
+				this.defaultValue == null ||
+					!curElement.equals(this.defaultValue)
+				) {
+				this.numElementsHeld--;
+			}
+		}
+		
 		this.numRows--;
 		if(this.numRows == 0){
+			this.numCols = 0;
+			this.numElementsHeld = 0;
 			this.valueMap.clear();
 		}else {
 			for(Map.Entry<Coordinate, T> curEntry : this.valueMap.entrySet()){
@@ -158,15 +169,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 					curCoord.setY(curCoord.getRow() - 1);
 					this.valueMap.put(curCoord, curVal);
 				}
-			}
-		}
-		
-		for(T curElement : removedItems){
-			if(
-				this.defaultValue == null ||
-				!curElement.equals(this.defaultValue)
-			) {
-				this.numElementsHeld--;
 			}
 		}
 		
@@ -188,8 +190,19 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		
 		List<T> removedItems = this.getCol(colIndex);
 		
+		for(T curElement : removedItems){
+			if(
+				this.defaultValue == null ||
+					!curElement.equals(this.defaultValue)
+				) {
+				this.numElementsHeld--;
+			}
+		}
+		
 		this.numCols--;
-		if(this.numRows == 0){
+		if(this.numCols == 0){
+			this.numRows = 0;
+			this.numElementsHeld = 0;
 			this.valueMap.clear();
 		}else {
 			for(Map.Entry<Coordinate, T> curEntry : this.valueMap.entrySet()){
@@ -202,15 +215,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 					curCoord.setX(curCoord.getCol() - 1);
 					this.valueMap.put(curCoord, curVal);
 				}
-			}
-		}
-		
-		for(T curElement : removedItems){
-			if(
-				this.defaultValue == null ||
-					!curElement.equals(this.defaultValue)
-				) {
-				this.numElementsHeld--;
 			}
 		}
 		return removedItems;
@@ -240,7 +244,10 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	public T clearNode(Coordinate nodeToClear) {
 		T clearedVal = this.get(nodeToClear);
 		
-		this.valueMap.remove(nodeToClear);
+		if(this.valueMap.containsKey(nodeToClear)){
+			this.numElementsHeld--;
+			this.valueMap.remove(nodeToClear);
+		}
 		
 		return clearedVal;
 	}
@@ -284,26 +291,13 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	/**
 	 * Gets a value from this matrix.
 	 *
-	 * @param xIn The x index of the node to get
-	 * @param yIn The y index of the node to get
-	 * @return The value at the point given.
-	 * @throws IndexOutOfBoundsException If either of the indexes are out of bounds.
-	 */
-	@Override
-	public T get(long xIn, long yIn) {
-		return this.get(new Coordinate(this, xIn, yIn));
-	}
-	
-	/**
-	 * Gets a value from this matrix.
-	 *
 	 * @param coordIn The coordinate to use. Coordinate must be on this matrix.
 	 * @return The value at the coordinate given.
 	 */
 	@Override
 	public T get(Coordinate coordIn) {
 		MatrixValidator.throwIfNotOnMatrix(this, coordIn);
-		return this.valueMap.get(coordIn);
+		return this.valueMap.getOrDefault(coordIn, this.defaultValue);
 	}
 	
 	/**
