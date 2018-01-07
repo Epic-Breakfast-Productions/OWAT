@@ -332,7 +332,38 @@ public class OverriddenMatrixTest extends MatrixTest {
 		);
 	}
 	
-	//TODO: test setValue
+	@Test
+	public void setValueTest() throws Exception{
+		Matrix m = this.getTestingInstance();
+		Object d = m.getDefaultValue();
+		
+		m.grow(1);
+		
+		Object result = m.setValue(0,0,1);
+		
+		assertEquals(1, m.numElements());
+		assertEquals(m.getDefaultValue(), result);
+		
+		m.grow(3);
+		
+		m.setValue(3,3, 2);
+		m.setValue(1,2, 3);
+		assertEquals(3, m.numElements());
+		
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1,d,d,d},
+				{d,d,d,d},
+				{d,3,d,d},
+				{d,d,d,2},
+			},
+			m
+		);
+		
+		m.setValue(0,1,d);
+		assertEquals(4, m.numElements());
+	}
+	
 	//	//TODO: test get
 	//	//TODO: test getCol/Row
 	//TODO: test replaceRow/Col
