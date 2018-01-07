@@ -23,6 +23,7 @@ dependencies {
 	compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2+'
 	compile 'com.fasterxml.jackson.core:jackson-databind:2+'
 
+	//for processing command line arguments
 	compile 'args4j:args4j:2.33'
 	compile 'args4j:args4j-site:2.33'
 
@@ -31,8 +32,10 @@ dependencies {
 }
 
 //specify gradle version (for when  we recreate the wrapper)
-task wrapper(type: Wrapper) {
-	gradleVersion = '4.2.1'
+task updateWrapper(type: Wrapper) {
+	group "wrapper"
+	description "Rebuilds the wrapper with the version listed below. Use to update to new versions of Gradle"
+	gradleVersion = '4.4.1'
 }
 
 /*
