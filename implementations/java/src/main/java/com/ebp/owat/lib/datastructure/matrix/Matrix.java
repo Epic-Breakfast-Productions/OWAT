@@ -1,10 +1,9 @@
 package com.ebp.owat.lib.datastructure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * General Matrix class.
@@ -106,11 +105,44 @@ public abstract class Matrix<T> implements Iterable<T> {
 	}
 	
 	/**
-	 * Grows the matrix my the number specified.
+	 * Grows the matrix by the number specified.
 	 * @param numRowCols The number of rows and columns to expand the matrix by.
 	 */
 	public void grow(long numRowCols){
 		this.grow(numRowCols, numRowCols);
+	}
+	
+	/**
+	 * Grows the matrix using the collection of values given.
+	 *
+	 * Does this by alternating growing rows and columns until there is nothing else to add.
+	 *
+	 * @param valuesIn The values to add to the matrix
+	 */
+	public boolean grow(Collection<T> valuesIn){
+		boolean lastResult = false;
+		
+		Queue<T> valuesLeft = new LongLinkedList<>(valuesIn);
+		
+		boolean onRow = true;
+		while (!valuesLeft.isEmpty()){
+			long numToGive = (this.hasRowsCols() ? (onRow ? this.getNumCols() : this.getNumRows()) : 1);
+			
+			LongLinkedList<T> valuesToGive = new LongLinkedList<>();
+			
+			for(long i = 0; i < numToGive && !valuesLeft.isEmpty(); i++){
+				valuesToGive.addLast(valuesLeft.poll());
+			}
+			
+			if(onRow){
+				lastResult = this.addRows(valuesToGive);
+			}else{
+				lastResult = this.addCols(valuesToGive);
+			}
+			onRow = !onRow;
+		}
+		
+		return lastResult;
 	}
 	
 	/**

@@ -5,7 +5,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import testUtils.TestUtils;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -181,6 +183,43 @@ public class BaseMatrixTest extends MatrixTest {
 		}catch (IllegalArgumentException e){
 			//nothing to do
 		}
+	}
+	
+	@Test
+	public void testGrowWithCollection() throws Exception {
+		Matrix m = this.getTestingInstance();
+		
+		assertTrue(m.grow(Arrays.asList(1)));
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1}
+			},
+			m
+		);
+		
+		m = this.getTestingInstance();
+		
+		assertTrue(m.grow(Arrays.asList(1,2,3,4)));
+		
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1, 2},
+				{3, 4}
+			},
+			m
+		);
+		
+		m = this.getTestingInstance();
+		
+		assertFalse(m.grow(Arrays.asList(1,2,3,4,5)));
+		
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1, 2, 5},
+				{3, 4, m.getDefaultValue()}
+			},
+			m
+		);
 	}
 	
 	@Test
