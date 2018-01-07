@@ -4,6 +4,7 @@ import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
 import java.util.*;
 
@@ -145,10 +146,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		List<T> removedItems = this.getRow(rowIndex);
 		
 		for(T curElement : removedItems){
-			if(
-				this.defaultValue == null ||
-					!curElement.equals(this.defaultValue)
-				) {
+			if(curElement != this.defaultValue) {
 				this.numElementsHeld--;
 			}
 		}
@@ -159,16 +157,26 @@ public class HashedMatrix<T>  extends Matrix<T> {
 			this.numElementsHeld = 0;
 			this.valueMap.clear();
 		}else {
+			List<Coordinate> coordsToMove = new LongLinkedList<>();
+			List<Coordinate> coordsToRemove = new LongLinkedList<>();
+			
 			for(Map.Entry<Coordinate, T> curEntry : this.valueMap.entrySet()){
-				if(curEntry.getKey().getRow() >= rowIndex){
-					Coordinate curCoord = curEntry.getKey();
-					T curVal = curEntry.getValue();
-					
-					this.valueMap.remove(curCoord);
-					
-					curCoord.setY(curCoord.getRow() - 1);
-					this.valueMap.put(curCoord, curVal);
+				if(curEntry.getKey().getRow() > rowIndex){
+					coordsToMove.add(curEntry.getKey());
+				}else if(curEntry.getKey().getRow() == rowIndex){
+					coordsToRemove.add(curEntry.getKey());
 				}
+			}
+			
+			for(Coordinate curCoord : coordsToRemove) {
+				this.valueMap.remove(curCoord);
+			}
+			
+			for(Coordinate curCoord : coordsToMove){
+				T curVal = this.valueMap.remove(curCoord);
+				
+				curCoord.setY(curCoord.getRow() - 1);
+				this.valueMap.put(curCoord, curVal);
 			}
 		}
 		
@@ -191,10 +199,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		List<T> removedItems = this.getCol(colIndex);
 		
 		for(T curElement : removedItems){
-			if(
-				this.defaultValue == null ||
-					!curElement.equals(this.defaultValue)
-				) {
+			if(curElement != this.defaultValue) {
 				this.numElementsHeld--;
 			}
 		}
@@ -205,16 +210,26 @@ public class HashedMatrix<T>  extends Matrix<T> {
 			this.numElementsHeld = 0;
 			this.valueMap.clear();
 		}else {
+			List<Coordinate> coordsToMove = new LongLinkedList<>();
+			List<Coordinate> coordsToRemove = new LongLinkedList<>();
+			
 			for(Map.Entry<Coordinate, T> curEntry : this.valueMap.entrySet()){
-				if(curEntry.getKey().getCol() >= colIndex){
-					Coordinate curCoord = curEntry.getKey();
-					T curVal = curEntry.getValue();
-					
-					this.valueMap.remove(curCoord);
-					
-					curCoord.setX(curCoord.getCol() - 1);
-					this.valueMap.put(curCoord, curVal);
+				if(curEntry.getKey().getCol() > colIndex){
+					coordsToMove.add(curEntry.getKey());
+				}else if(curEntry.getKey().getCol() == colIndex){
+					coordsToRemove.add(curEntry.getKey());
 				}
+			}
+			
+			for(Coordinate curCoord : coordsToRemove) {
+				this.valueMap.remove(curCoord);
+			}
+			
+			for(Coordinate curCoord : coordsToMove){
+				T curVal = this.valueMap.remove(curCoord);
+				
+				curCoord.setX(curCoord.getCol() - 1);
+				this.valueMap.put(curCoord, curVal);
 			}
 		}
 		return removedItems;
@@ -230,7 +245,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	@Override
 	public T setValue(Coordinate nodeToReplace, T newValue) {
 		MatrixValidator.throwIfNotOnMatrix(this, nodeToReplace);
-		T valToReturn = this.valueMap.getOrDefault(nodeToReplace, this.defaultValue);
+		T valToReturn = this.get(nodeToReplace);
 		
 		if(!this.valueMap.containsKey(nodeToReplace)){
 			this.numElementsHeld++;
