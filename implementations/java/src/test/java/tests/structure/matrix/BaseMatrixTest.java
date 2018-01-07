@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import testUtils.TestUtils;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -198,8 +199,72 @@ public class BaseMatrixTest extends MatrixTest {
 		);
 		
 		m = this.getTestingInstance();
+		assertFalse(m.grow(Arrays.asList(1,2)));
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1,2},
+				{m.getDefaultValue(), m.getDefaultValue()}
+			},
+			m
+		);
 		
+		m = this.getTestingInstance();
 		assertTrue(m.grow(Arrays.asList(1,2,3,4)));
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1,2},
+				{3,4}
+			},
+			m
+		);
+		
+		m = this.getTestingInstance();
+		assertFalse(m.grow(Arrays.asList(1,2,3,4,5,6,7,8)));
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1,2,3},
+				{4,5,6},
+				{7,8,m.getDefaultValue()}
+			},
+			m
+		);
+		
+		m = this.getTestingInstance();
+		assertTrue(m.grow(Arrays.asList(1,2,3,4,5,6,7,8,9)));
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1,2,3},
+				{4,5,6},
+				{7,8,9}
+			},
+			m
+		);
+		
+		m = this.getTestingInstance();
+		assertTrue(m.grow(Arrays.asList(1)));
+		try{
+			assertTrue(m.grow(Arrays.asList(1)));
+			Assert.fail();
+		}catch (IllegalStateException e){
+		
+		}
+	}
+	
+	@Test
+	public void testGrowWithCollectionAlternating() throws Exception {
+		Matrix m = this.getTestingInstance();
+		
+		assertTrue(m.growAlternating(Arrays.asList(1)));
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1}
+			},
+			m
+		);
+		
+		m = this.getTestingInstance();
+		
+		assertTrue(m.growAlternating(Arrays.asList(1,2,3,4)));
 		
 		TestUtils.assertMatrix(
 			new Object[][]{
@@ -211,7 +276,7 @@ public class BaseMatrixTest extends MatrixTest {
 		
 		m = this.getTestingInstance();
 		
-		assertFalse(m.grow(Arrays.asList(1,2,3,4,5)));
+		assertFalse(m.growAlternating(Arrays.asList(1,2,3,4,5)));
 		
 		TestUtils.assertMatrix(
 			new Object[][]{
@@ -220,6 +285,18 @@ public class BaseMatrixTest extends MatrixTest {
 			},
 			m
 		);
+		
+		assertTrue(m.growAlternating(Arrays.asList(6,7,8,9,10,11)));
+		
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1, 2, 5, 9},
+				{3, 4, m.getDefaultValue(), 10},
+				{6, 7, 8, 11}
+			},
+			m
+		);
+		
 	}
 	
 	@Test

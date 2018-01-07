@@ -106,4 +106,21 @@ public class MatrixValidator {
 				break;
 		}
 	}
+	
+	/**
+	 * Throws an IllegalStateException if the matrix has no rows or columns.
+	 * @param matrix
+	 * @throws IllegalStateException
+	 */
+	public static void throwIfNoRowsCols(Matrix matrix) throws IllegalStateException{
+		if(!matrix.hasRowsCols()){
+			throw new IllegalStateException("Matrix has rows and columns.");
+		}
+	}
+	
+	public static void throwIfHasRowsCols(Matrix matrix) throws IllegalStateException{
+		if(matrix.hasRowsCols()){
+			throw new IllegalStateException("Matrix rows and columns.");
+		}
+	}
 }

@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.datastructure.matrix;
 
+import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
@@ -40,6 +41,45 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * The default value to set new elements where values are not specified.
 	 */
 	protected T defaultValue = null;
+	
+	/**
+	 * Basic Constructor.
+	 */
+	protected Matrix(){
+	
+	}
+	
+	/**
+	 *
+	 * @param valuesIn
+	 * @param numCols
+	 * @param numRows
+	 */
+	protected Matrix(Collection<T> valuesIn, long numCols, long numRows){
+		this();
+	}
+	
+	protected Matrix(Collection<T> valuesIn, long numRowsCols){
+		this(valuesIn, numRowsCols, numRowsCols);
+	}
+	
+	
+	/**
+	 * Constructor that takes in a collection of elements and builds a
+	 * @param valuesIn The values to give the matrix.
+	 */
+	protected Matrix(Collection<T> valuesIn){
+		this(valuesIn, calcSquareSize(valuesIn.size()));
+	}
+	
+	/**
+	 * Calculates the number of rows and columns needed to hold a particular number of elements.
+	 * @param numValues The number of values the matrix will need to hold.
+	 * @return The number of rows and columns needed (calculates for a square)
+	 */
+	protected static long calcSquareSize(long numValues){
+		return (long)Math.ceil(Math.sqrt((double)numValues));
+	}
 	
 	/**
 	 * Sets the {@link #defaultValue default value}.
@@ -113,13 +153,59 @@ public abstract class Matrix<T> implements Iterable<T> {
 	}
 	
 	/**
+	 * Grows a matrix to the size given, filling with the data given in a 'row first' manner.
+	 *
+	 * @param valuesIn The values to fill the matrix with.
+	 * @param numRows The number of rows the matrix should have.
+	 * @param numCols The number or cols the matrix should have.
+	 * @return If the matrix was filled with the values given.
+	 * @throws IllegalStateException If this is called and there are already rows or columns. Cannot be done due to the method of filling in the data used.
+	 */
+	public boolean grow(long numRows, long numCols, Collection<T> valuesIn) throws IllegalStateException{
+		MatrixValidator.throwIfHasRowsCols(this);
+		this.trimTo(0,0);//ensure
+		
+		this.addCols(numCols);
+		
+		//at this point, have 1 row with the # cols we need
+		
+		Queue<T> valuesToAdd = new LongLinkedList<>(valuesIn);
+		boolean firstFowFilled = valuesToAdd.size() >= this.getNumCols();
+		//add values to first row
+		this.replaceRow(0, collectionFromQueue(valuesToAdd, this.getNumCols()));
+		
+		//add rows and fill with data for rest
+		boolean lastFilled = firstFowFilled;
+		for(long i = 1; i < numRows; i++){
+			this.addRow();
+			if(!valuesToAdd.isEmpty()){
+				lastFilled = valuesToAdd.size() == this.getNumCols();
+				this.replaceRow(i, collectionFromQueue(valuesToAdd, this.getNumCols()));
+			}else{
+				lastFilled = false;
+			}
+		}
+		return lastFilled;
+	}
+	
+	/**
+	 *
+	 * @param valuesIn The values to give the object.
+	 * @throws IllegalStateException If the matrix is not empty when the method is called.
+	 */
+	public boolean grow(Collection<T> valuesIn) throws IllegalStateException{
+		long numRowsCols = calcSquareSize(valuesIn.size());
+		return this.grow(numRowsCols, numRowsCols, valuesIn);
+	}
+	
+	/**
 	 * Grows the matrix using the collection of values given.
 	 *
 	 * Does this by alternating growing rows and columns until there is nothing else to add.
 	 *
 	 * @param valuesIn The values to add to the matrix
 	 */
-	public boolean grow(Collection<T> valuesIn){
+	public boolean growAlternating(Collection<T> valuesIn){
 		boolean lastResult = false;
 		
 		Queue<T> valuesLeft = new LongLinkedList<>(valuesIn);
@@ -128,11 +214,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 		while (!valuesLeft.isEmpty()){
 			long numToGive = (this.hasRowsCols() ? (onRow ? this.getNumCols() : this.getNumRows()) : 1);
 			
-			LongLinkedList<T> valuesToGive = new LongLinkedList<>();
-			
-			for(long i = 0; i < numToGive && !valuesLeft.isEmpty(); i++){
-				valuesToGive.addLast(valuesLeft.poll());
-			}
+			Collection<T> valuesToGive = collectionFromQueue(valuesLeft, numToGive);
 			
 			if(onRow){
 				lastResult = this.addRows(valuesToGive);
@@ -482,6 +564,15 @@ public abstract class Matrix<T> implements Iterable<T> {
 				curCol = 0;
 			}
 			output[curRow][curCol++] = it.next();
+		}
+		return output;
+	}
+	
+	protected Collection<T> collectionFromQueue(Queue<T> queue, long numVals){
+		LongLinkedList<T> output = new LongLinkedList<>();
+		
+		for(long i = 0; i < numVals && !queue.isEmpty(); i++){
+			output.addLast(queue.poll());
 		}
 		return output;
 	}
