@@ -45,32 +45,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	/**
 	 * Basic Constructor.
 	 */
-	protected Matrix(){
-	
-	}
-	
-	/**
-	 *
-	 * @param valuesIn
-	 * @param numCols
-	 * @param numRows
-	 */
-	protected Matrix(Collection<T> valuesIn, long numCols, long numRows){
-		this();
-	}
-	
-	protected Matrix(Collection<T> valuesIn, long numRowsCols){
-		this(valuesIn, numRowsCols, numRowsCols);
-	}
-	
-	
-	/**
-	 * Constructor that takes in a collection of elements and builds a
-	 * @param valuesIn The values to give the matrix.
-	 */
-	protected Matrix(Collection<T> valuesIn){
-		this(valuesIn, calcSquareSize(valuesIn.size()));
-	}
+	protected Matrix(){}
 	
 	/**
 	 * Calculates the number of rows and columns needed to hold a particular number of elements.
@@ -355,7 +330,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return The values this method replaced. Ordered left to right.
 	 */
 	public List<T> replaceCol(long colIndex, Collection<T> newValues) throws IndexOutOfBoundsException{
-		return this.replaceRow(new Coordinate(this, colIndex, 0), newValues);
+		return this.replaceCol(new Coordinate(this, colIndex, 0), newValues);
 	}
 	
 	/**

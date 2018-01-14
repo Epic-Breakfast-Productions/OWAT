@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import testUtils.TestUtils;
 
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -417,5 +416,13 @@ public class BaseMatrixTest extends MatrixTest {
 			new Object[][]{{Integer.MAX_VALUE,new Integer(1)},{new Integer(2),new Integer(3)}},
 			result
 		);
+	}
+	
+	@Test
+	public void testRemoveRowColEmptyMatrix() throws Exception {
+		Matrix m = this.getTestingInstance();
+		
+		assertNull(m.removeCol());
+		assertNull(m.removeRow());
 	}
 }

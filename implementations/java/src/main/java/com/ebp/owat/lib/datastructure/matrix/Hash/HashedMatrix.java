@@ -139,9 +139,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	 */
 	@Override
 	public List<T> removeRow(long rowIndex) throws IndexOutOfBoundsException {
-		if(!isValidRowIndex(rowIndex)){
-			throw new IndexOutOfBoundsException("Index given is invalid.");
-		}
+		MatrixValidator.throwIfBadIndex(this, rowIndex, Plane.Y);
 		
 		List<T> removedItems = this.getRow(rowIndex);
 		
@@ -192,9 +190,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	 */
 	@Override
 	public List<T> removeCol(long colIndex) throws IndexOutOfBoundsException {
-		if(!isValidColIndex(colIndex)){
-			throw new IndexOutOfBoundsException("Index given is invalid.");
-		}
+		MatrixValidator.throwIfBadIndex(this, colIndex, Plane.X);
 		
 		List<T> removedItems = this.getCol(colIndex);
 		
@@ -293,7 +289,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		
 		long curRow = 0;
 		for(T curVal : newValues){
-			this.setValue(coordinate.getY(), curRow, curVal);
+			this.setValue(coordinate.getX(), curRow, curVal);
 			curRow++;
 			if(!isValidRowIndex(curRow)){
 				break;

@@ -1,4 +1,6 @@
-package com.ebp.owat.lib.datastructure.matrix.utils;
+package com.ebp.owat.lib.datastructure.matrix.Linked;
+
+import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 
 /**
  * Node Direction, use this to tell a node which direction you mean.

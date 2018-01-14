@@ -1,7 +1,6 @@
 package com.ebp.owat.lib.datastructure.matrix.Linked;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.utils.NodeDir;
 import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 
 public class FixedLinkedNodePos<T> extends LinkedNodePos<T> {

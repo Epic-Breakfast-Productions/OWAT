@@ -1,7 +1,5 @@
 package com.ebp.owat.lib.datastructure.matrix.Linked;
 
-import com.ebp.owat.lib.datastructure.matrix.utils.NodeDir;
-
 /**
  * Abstract class for a single node of the matrix.
  *

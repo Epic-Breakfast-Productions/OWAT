@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.Callable;
 
 /**
  * Created by Greg Stewart on 3/30/17.
@@ -43,7 +44,7 @@ public abstract class MatrixTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected Matrix<Integer> getTestingInstance() throws Exception{
+	protected Matrix<Integer> getTestingInstance() throws Exception {
 		LOGGER.debug("Getting instance of {} matrix.", this.curMatrixClass.getName());
 		return this.curMatrixClass.getConstructor().newInstance();
 	}

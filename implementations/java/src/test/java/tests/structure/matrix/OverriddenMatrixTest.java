@@ -10,9 +10,7 @@ import testUtils.TestUtils;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class OverriddenMatrixTest extends MatrixTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseMatrixTest.class);
@@ -210,13 +208,22 @@ public class OverriddenMatrixTest extends MatrixTest {
 		Matrix m = this.getTestingInstance();
 		Object d = m.getDefaultValue();
 		
+		m.grow(1);
+		m.setValue(0,0,1);
+		
+		assertEquals(Arrays.asList(1), m.removeCol());
+		
+		assertEquals(0, m.getNumCols());
+		assertEquals(0, m.getNumRows());
+		assertEquals(0, m.numElements());
+		
+		m = this.getTestingInstance();
 		m.grow(5);
 		
-		List<Object> result = m.removeCol();
+		assertEquals(Arrays.asList(d,d,d,d,d), m.removeCol());
 		
 		assertEquals(4, m.getNumCols());
 		assertEquals(5, m.getNumRows());
-		assertEquals(Arrays.asList(d,d,d,d,d), result);
 		
 		m.setValue(3,0,1);
 		m.setValue(3,1,2);
@@ -224,12 +231,11 @@ public class OverriddenMatrixTest extends MatrixTest {
 		m.setValue(3,3,4);
 		m.setValue(3,4,5);
 		
-		result = m.removeCol();
+		assertEquals(Arrays.asList(1,2,3,4,5), m.removeCol());
 		
 		assertEquals(3, m.getNumCols());
 		assertEquals(5, m.getNumRows());
 		assertEquals(0, m.numElements());
-		assertEquals(Arrays.asList(1,2,3,4,5), result);
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{d,d,d},
@@ -253,12 +259,11 @@ public class OverriddenMatrixTest extends MatrixTest {
 		m.setValue(2, 3, 9);
 		m.setValue(2, 4, 10);
 		
-		result = m.removeCol(1);
+		assertEquals(Arrays.asList(1,2,3,4,5), m.removeCol(1));
 		
 		assertEquals(2, m.getNumCols());
 		assertEquals(5, m.getNumRows());
 		assertEquals(5, m.numElements());
-		assertEquals(Arrays.asList(1,2,3,4,5), result);
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{d,6},
@@ -276,13 +281,22 @@ public class OverriddenMatrixTest extends MatrixTest {
 		Matrix m = this.getTestingInstance();
 		Object d = m.getDefaultValue();
 		
+		m.grow(1);
+		m.setValue(0,0,1);
+		
+		assertEquals(Arrays.asList(1), m.removeRow());
+		
+		assertEquals(0, m.getNumCols());
+		assertEquals(0, m.getNumRows());
+		assertEquals(0, m.numElements());
+		
+		m = this.getTestingInstance();
 		m.grow(5);
 		
-		List<Object> result = m.removeRow();
+		assertEquals(Arrays.asList(d,d,d,d,d), m.removeRow());
 		
 		assertEquals(4, m.getNumRows());
 		assertEquals(5, m.getNumCols());
-		assertEquals(Arrays.asList(d,d,d,d,d), result);
 		
 		m.setValue(0,3,1);
 		m.setValue(1,3,2);
@@ -290,12 +304,11 @@ public class OverriddenMatrixTest extends MatrixTest {
 		m.setValue(3,3,4);
 		m.setValue(4,3,5);
 		
-		result = m.removeRow();
+		assertEquals(Arrays.asList(1,2,3,4,5), m.removeRow());
 		
 		assertEquals(3, m.getNumRows());
 		assertEquals(5, m.getNumCols());
 		assertEquals(0, m.numElements());
-		assertEquals(Arrays.asList(1,2,3,4,5), result);
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{d,d,d,d,d},
@@ -317,12 +330,11 @@ public class OverriddenMatrixTest extends MatrixTest {
 		m.setValue(3, 2, 9);
 		m.setValue(4, 2, 10);
 		
-		result = m.removeRow(1);
+		assertEquals(Arrays.asList(1,2,3,4,5), m.removeRow(1));
 		
 		assertEquals(2, m.getNumRows());
 		assertEquals(5, m.getNumCols());
 		assertEquals(5, m.numElements());
-		assertEquals(Arrays.asList(1,2,3,4,5), result);
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{d,d,d,d,d},
@@ -364,7 +376,98 @@ public class OverriddenMatrixTest extends MatrixTest {
 		assertEquals(4, m.numElements());
 	}
 	
-	//	//TODO: test get
-	//	//TODO: test getCol/Row
-	//TODO: test replaceRow/Col
+	@Test
+	public void testGet() throws Exception{
+		Matrix m = this.getTestingInstance();
+		Object d = m.getDefaultValue();
+		
+		m.grow(1);
+		
+		assertEquals(d, m.get(0,0));
+		
+		m.setValue(0,0,1);
+		assertEquals(1, m.get(0,0));
+	}
+	
+	@Test
+	public void testGetRow() throws Exception{
+		Matrix m = this.getTestingInstance();
+		Object d = m.getDefaultValue();
+		
+		m.grow(1);
+		
+		assertEquals(Arrays.asList(d), m.getRow(0));
+		
+		m.addCols(Arrays.asList(1,2,3,4));
+		
+		assertEquals(Arrays.asList(d,1,2,3,4), m.getRow(0));
+		
+		m.addRow();
+		
+		assertEquals(Arrays.asList(d,d,d,d,d), m.getRow(1));
+	}
+	
+	@Test
+	public void testGetCol() throws Exception{
+		Matrix m = this.getTestingInstance();
+		Object d = m.getDefaultValue();
+		
+		m.grow(1);
+		
+		assertEquals(Arrays.asList(d), m.getCol(0));
+		
+		m.addRows(Arrays.asList(1,2,3,4));
+		
+		assertEquals(Arrays.asList(d,1,2,3,4), m.getCol(0));
+		
+		m.addCol();
+		
+		assertEquals(Arrays.asList(d,d,d,d,d), m.getCol(1));
+	}
+	
+	@Test
+	public void testReplaceRow() throws Exception {
+		Matrix m = this.getTestingInstance();
+		Object d = m.getDefaultValue();
+		
+		m.grow(5);
+		
+		List<Object> result = m.replaceRow(0, Arrays.asList(1,2,3,4,5));
+		
+		assertEquals(Arrays.asList(d,d,d,d,d), result);
+		assertEquals(Arrays.asList(1,2,3,4,5), m.getRow(0));
+		
+		result = m.replaceRow(3, Arrays.asList(5,4,3,2,1));
+		
+		assertEquals(Arrays.asList(d,d,d,d,d), result);
+		assertEquals(Arrays.asList(5,4,3,2,1), m.getRow(3));
+		
+		result = m.replaceRow(3, Arrays.asList(1,2,3,4,5));
+		
+		assertEquals(Arrays.asList(5,4,3,2,1), result);
+		assertEquals(Arrays.asList(1,2,3,4,5), m.getRow(3));
+	}
+	
+	@Test
+	public void testReplaceCol() throws Exception {
+		Matrix m = this.getTestingInstance();
+		Object d = m.getDefaultValue();
+		
+		m.grow(5);
+		
+		List<Object> result = m.replaceCol(0, Arrays.asList(1,2,3,4,5));
+		
+		assertEquals(Arrays.asList(d,d,d,d,d), result);
+		assertEquals(Arrays.asList(1,2,3,4,5), m.getCol(0));
+		
+		result = m.replaceCol(3, Arrays.asList(5,4,3,2,1));
+		
+		assertEquals(Arrays.asList(d,d,d,d,d), result);
+		assertEquals(Arrays.asList(5,4,3,2,1), m.getCol(3));
+		
+		result = m.replaceCol(3, Arrays.asList(1,2,3,4,5));
+		
+		assertEquals(Arrays.asList(5,4,3,2,1), result);
+		assertEquals(Arrays.asList(1,2,3,4,5), m.getCol(3));
+	}
 }
