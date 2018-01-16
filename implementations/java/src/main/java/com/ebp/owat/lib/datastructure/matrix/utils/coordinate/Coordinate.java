@@ -20,7 +20,7 @@ public class Coordinate {
 	private long y;
 	
 	/**
-	 * Constructs a new coordinate with a matrix.
+	 * Constructs a new coordinate with a matrix. Sets the coordinate to 0,0
 	 * @param matrix The matrix to give to this Coordinate.
 	 */
 	public Coordinate(Matrix matrix){

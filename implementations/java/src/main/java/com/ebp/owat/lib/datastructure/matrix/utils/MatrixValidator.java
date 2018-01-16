@@ -52,18 +52,18 @@ public class MatrixValidator {
 	 * @return If they are all on the same matrix or not.
 	 */
 	public static boolean areOnSameMatrix(Coordinate ... coordinates){
-		if(coordinates.length <= 1){//if there are no or one matrix, they are inmplicitly on the same metrix
-			return true;
-		}
 		if(listContainsNullVals((Object[]) coordinates)){
-			//TODO:: throw?
+			throw new NullPointerException("One or more of the coordinates given was null.");
+		}
+		if(coordinates.length <= 1){//if there are no or one matrix, they are implicitly on the same matrix
+			return true;
 		}
 		return areOnMatrix(coordinates[0].matrix, coordinates);
 	}
 	
 	public static boolean isOnSameMatrix(Coordinate coordOne, Coordinate coordTwo){
 		if(coordOne == null || coordTwo == null){
-			return false;
+			throw new NullPointerException("One or both coordinates given were null.");
 		}
 		return coordOne.matrix == coordTwo.matrix;
 	}
@@ -93,6 +93,7 @@ public class MatrixValidator {
 	 * @throws IndexOutOfBoundsException If the index given is invalid.
 	 */
 	public static void throwIfBadIndex(Matrix matrix, long index, Plane plane){
+		//don't use throwIfNoRowsCols() due to not quite being the right exception.
 		switch (plane){
 			case X:
 				if(!matrix.isValidColIndex(index)){
