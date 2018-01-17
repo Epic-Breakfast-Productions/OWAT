@@ -68,7 +68,8 @@ public class MatrixValidator {
 		return coordOne.matrix == coordTwo.matrix;
 	}
 	
-	public static void throwIfNotOnMatrix(Matrix matrix, Coordinate ... coordinates){
+	
+	public static void throwIfNotOnMatrix(Matrix matrix, Coordinate ... coordinates) throws IllegalArgumentException{
 		if(!areOnMatrix(matrix, coordinates)){
 			throw new IllegalArgumentException("Coordinate(s) not on the matrix.");
 		}
@@ -79,7 +80,7 @@ public class MatrixValidator {
 	 * @param coordinates The coordinates to test against.
 	 * @throws IllegalArgumentException If the coordinate given is not on the same matrix as this one.
 	 */
-	public static void throwIfNotOnSameMatrix(Coordinate ... coordinates){
+	public static void throwIfNotOnSameMatrix(Coordinate ... coordinates) throws IllegalArgumentException{
 		if(!areOnSameMatrix(coordinates)){
 			throw new IllegalArgumentException("Coordinates are not on the same matrix.");
 		}

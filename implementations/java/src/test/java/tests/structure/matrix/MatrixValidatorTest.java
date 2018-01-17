@@ -35,6 +35,13 @@ public class MatrixValidatorTest extends MatrixTest {
 		
 		assertTrue(MatrixValidator.isOnSameMatrix(new Coordinate(m), new Coordinate(m)));
 		assertFalse(MatrixValidator.isOnSameMatrix(new Coordinate(m), new Coordinate(n)));
+		
+		try{
+			MatrixValidator.isOnSameMatrix(new Coordinate(m), null);
+			Assert.fail();
+		}catch (NullPointerException e){
+			//nothing to do
+		}
 	}
 	
 	@Test
@@ -81,13 +88,31 @@ public class MatrixValidatorTest extends MatrixTest {
 		m.grow(1);
 		n.grow(1);
 		
-		//TODO:: finish MatrixValidator.throwIfNotOnMatrix();
-		
+		MatrixValidator.throwIfNotOnMatrix(m, new Coordinate(m));
+		try{
+			MatrixValidator.throwIfNotOnMatrix(m, new Coordinate(m), new Coordinate(n));
+			Assert.fail();
+		}catch (IllegalArgumentException e){
+			//nothing to do
+		}
 	}
 	
 	@Test
 	public void testThrowIfNotOnSameMatrix() throws Exception {
-		//TODO:: do
+		Matrix m = this.getTestingInstance();
+		Matrix n = this.getTestingInstance();
+		m.grow(1);
+		n.grow(1);
+		
+		MatrixValidator.throwIfNotOnSameMatrix(new Coordinate(m));
+		MatrixValidator.throwIfNotOnSameMatrix(new Coordinate(m), new Coordinate(m));
+		
+		try{
+			MatrixValidator.throwIfNotOnSameMatrix(new Coordinate(m), new Coordinate(n));
+			Assert.fail();
+		}catch (IllegalArgumentException e){
+			//nothing to do
+		}
 	}
 	
 	@Test
