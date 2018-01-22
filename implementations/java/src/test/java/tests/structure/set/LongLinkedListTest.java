@@ -384,7 +384,7 @@ public class LongLinkedListTest {
 		testingNodeList = new LongLinkedList<>();
 		checkingNodeList = new LinkedList<>();
 		
-		LOGGER.info("Testing that a node can be appropriately be inserted into empty list.");
+		LOGGER.info("Testing that a value can be appropriately be inserted into empty list.");
 		testingNodeList.add(0, 0L);
 		checkingNodeList.add(0, 0L);
 		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingNodeList);
@@ -398,13 +398,13 @@ public class LongLinkedListTest {
 		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		
 		//check inserting in middle of populated list
-		LOGGER.info("Testing that a node can be appropriately be inserted into middle of populated list.");
+		LOGGER.info("Testing that a value can be appropriately be inserted into middle of populated list.");
 		testingNodeList.add(5, 0L);
 		checkingNodeList.add(5, 0L);
 		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingNodeList);
 		
 		//check inserting at end of populated list
-		LOGGER.info("Testing that a node can be appropriately be inserted onto end of populated list.");
+		LOGGER.info("Testing that a value can be appropriately be inserted onto end of populated list.");
 		testingNodeList.add(testingNodeList.size(), 0L);
 		checkingNodeList.add(checkingNodeList.size(), 0L);
 		ListTestCheckers.testListsAreTheSame(testingNodeList, true, checkingNodeList);

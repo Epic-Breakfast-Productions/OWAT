@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Enum to describe which node is held in the spot in the hashmap.
+ * Enum to describe which value is held in the spot in the hashmap.
  */
 public enum FixedNodePosition {
 	TOP_LEFT(NodeDir.NORTH, NodeDir.WEST),

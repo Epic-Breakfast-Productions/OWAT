@@ -5,9 +5,8 @@ import com.ebp.owat.lib.datastructure.OwatStructureException;
 import com.ebp.owat.lib.datastructure.io.OwatNodeIOException;
 import com.ebp.owat.lib.datastructure.matrix.OwatMatrixException;
 import com.ebp.owat.lib.datastructure.matrix.utils.OwatMatrixUtilException;
-import com.ebp.owat.lib.datastructure.node.OwatNodeException;
-import com.ebp.owat.lib.datastructure.node.value.OwatNodeValueException;
-import com.ebp.owat.lib.datastructure.set.OwatNodeSetException;
+import com.ebp.owat.lib.datastructure.value.OwatValueException;
+import com.ebp.owat.lib.datastructure.set.OwatSetException;
 import com.ebp.owat.lib.utils.OwatUtilException;
 import com.ebp.owat.lib.utils.rand.OwatRandException;
 import org.junit.Test;
@@ -34,9 +33,8 @@ public class ExceptionTests {
 				{ OwatStructureException.class },
 				{ OwatNodeIOException.class },
 				{ OwatMatrixException.class },
-				{ OwatNodeException.class },
-				{ OwatNodeValueException.class },
-				{ OwatNodeSetException.class },
+				{ OwatValueException.class },
+				{ OwatSetException.class },
 				{ OwatUtilException.class },
 				{ OwatRandException.class },
 				{ OwatMatrixUtilException.class }

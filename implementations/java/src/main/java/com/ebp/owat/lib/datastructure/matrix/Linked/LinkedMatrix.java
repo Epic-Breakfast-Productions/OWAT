@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.datastructure.matrix.Linked;
 
+import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.ScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.DistanceCalc;
@@ -14,11 +15,11 @@ import java.util.List;
  * <br />
  * Ideally this will accommodate any number of values, up to until the VM runs out of memory.
  * <br />
- * Improves retrieval times by keeping a list of known positions on hand to work from instead of always coming from the head node.
+ * Improves retrieval times by keeping a list of known positions on hand to work from instead of always coming from the head value.
  *
  * Created by Greg Stewart on 3/23/17.
  */
-public class LinkedMatrix<T> extends ScramblingMatrix<T> {
+public class LinkedMatrix<T> extends Matrix<T> {
 	/**
 	 * A set of nodes that we know the positions of.
 	 */
@@ -27,20 +28,12 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 	/** 0,0 of this matrix. needs to be updated with removals/additions */
 	protected LinkedMatrixNode<T> headNode;
 	
-	/**
-	 * Basic Constructor.
-	 */
-	private LinkedMatrix(Type type){
-		super(type);
-	}
-	
-	public LinkedMatrix(Type type, LongLinkedList<T> valuesIn){
-		this(type);
+	public LinkedMatrix(LongLinkedList<T> valuesIn){
 		//TODO:: this
 	}
 	
 	/**
-	 * Initializes the matrix, adding a single node and setup initial node positions.
+	 * Initializes the matrix, adding a single value and setup initial value positions.
 	 */
 	private void initFirstNode(){
 		if(!this.isEmpty()){
@@ -51,7 +44,7 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 		this.numCols = 1;
 		this.headNode = new LinkedMatrixNode<>();
 		
-		//Add to the node position list.
+		//Add to the value position list.
 		this.linkedNodePosList = new LongLinkedList<>();
 		for (FixedNodePosition curFixedPos : FixedNodePosition.values()){
 			this.linkedNodePosList.add(
@@ -71,7 +64,7 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 	
 	/**
 	 * Gets the closest LinkedNodePos we keep track of to the coords given.
-	 * @param coordIn The coordinate we are trying to get the closest node to.
+	 * @param coordIn The coordinate we are trying to get the closest value to.
 	 * @return The closest LinkedNodePos we keep track of to the coords given.
 	 */
 	private LinkedNodePos<T> getClosestNodePos(Coordinate coordIn){
@@ -85,7 +78,7 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 	}
 	
 	/**
-	 * Given a node position, adjusts that position to be at the coordinates given.
+	 * Given a value position, adjusts that position to be at the coordinates given.
 	 * @param coordToGet The coordinates we want to go to.
 	 * @param curPoint The point we are starting at.
 	 * @return The Node at the coordinates given.
@@ -201,9 +194,9 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 	}
 	
 	/**
-	 * Replaces a particular node's value.
+	 * Replaces a particular value's value.
 	 *
-	 * @param nodeToReplace The coordinate of the node to replace.
+	 * @param nodeToReplace The coordinate of the value to replace.
 	 * @param newValue      The value to replace.
 	 * @return The previously held value.
 	 */
@@ -257,8 +250,8 @@ public class LinkedMatrix<T> extends ScramblingMatrix<T> {
 	/**
 	 * Gets a value from this matrix.
 	 *
-	 * @param xIn The x index of the node to get
-	 * @param yIn The y index of the node to get
+	 * @param xIn The x index of the value to get
+	 * @param yIn The y index of the value to get
 	 * @return The value at the point given.
 	 * @throws IndexOutOfBoundsException If either of the indexes are out of bounds.
 	 */

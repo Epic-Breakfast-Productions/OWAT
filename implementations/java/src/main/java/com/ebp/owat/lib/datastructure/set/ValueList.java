@@ -7,9 +7,9 @@ import java.util.Collection;
  *
  * Created by Greg Stewart on 5/28/17.
  */
-public class NodeList<Node> extends LongLinkedList<Node> {
+public class ValueList<Value> extends LongLinkedList<Value> {
 	/**
-	 * The types of lists a NodeList can be.
+	 * The types of lists a ValueList can be.
 	 */
 	public enum Type {
 		ROW,COL,NA
@@ -24,9 +24,9 @@ public class NodeList<Node> extends LongLinkedList<Node> {
 	public final Type type;
 	
 	/**
-	 * Basic constructor. Sets type to {@link NodeList#DEFAULT_TYPE DEFAULT_TYPE}
+	 * Basic constructor. Sets type to {@link ValueList#DEFAULT_TYPE DEFAULT_TYPE}
 	 */
-	public NodeList(){
+	public ValueList(){
 		this.type = DEFAULT_TYPE;
 	}
 	
@@ -34,7 +34,7 @@ public class NodeList<Node> extends LongLinkedList<Node> {
 	 * Constructor to set the type.
 	 * @param t The type to give this list.
 	 */
-	public NodeList(Type t){
+	public ValueList(Type t){
 		if(t == null){
 			this.type = DEFAULT_TYPE;
 		}else {
@@ -44,19 +44,19 @@ public class NodeList<Node> extends LongLinkedList<Node> {
 	
 	/**
 	 * Constructor to set the type, and an initial set of nodes.
-	 * @param t The type to give this list. If null, sets to {@link NodeList#DEFAULT_TYPE DEFAULT_TYPE}
+	 * @param t The type to give this list. If null, sets to {@link ValueList#DEFAULT_TYPE DEFAULT_TYPE}
 	 * @param collection The initial set to give the list.
 	 */
-	public NodeList(Type t, Collection<Node> collection){
+	public ValueList(Type t, Collection<Value> collection){
 		this(t);
 		this.addAll(collection);
 	}
 	
 	/**
-	 * Constructor to setup the list with an  initial set of nodes. Type defaults to {@link NodeList#DEFAULT_TYPE DEFAULT_TYPE}.
+	 * Constructor to setup the list with an  initial set of nodes. Type defaults to {@link ValueList#DEFAULT_TYPE DEFAULT_TYPE}.
 	 * @param collection The initial set to give the list.
 	 */
-	public NodeList(Collection<Node> collection){
+	public ValueList(Collection<Value> collection){
 		this();
 		this.addAll(collection);
 	}

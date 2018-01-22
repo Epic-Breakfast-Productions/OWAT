@@ -1,21 +1,20 @@
 package com.ebp.owat.lib.datastructure.io;
 
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
-import com.ebp.owat.lib.datastructure.node.BitNode;
-import com.ebp.owat.lib.datastructure.node.Node;
+import com.ebp.owat.lib.datastructure.value.BitValue;
 
 import java.io.File;
 import java.io.InputStream;
 
 /**
- * A BitNode reader to dead in BitNodes
+ * A BitValue reader to dead in BitNodes
  *
  * Created by Greg Stewart on 3/30/17.
  */
-public class BitNodeReader extends NodeReader<BitNode> {
+public class BitNodeReader extends NodeReader<BitValue> {
 	
 	/**
-	 * Creates this node creator.
+	 * Creates this value creator.
 	 *
 	 * @param streamIn The stream to use to get the information.
 	 */
@@ -24,7 +23,7 @@ public class BitNodeReader extends NodeReader<BitNode> {
 	}
 	
 	/**
-	 * Creates this node creator with a file.
+	 * Creates this value creator with a file.
 	 *
 	 * @param fileIn The file to get the input stream from.
 	 */
@@ -42,12 +41,12 @@ public class BitNodeReader extends NodeReader<BitNode> {
 	}
 	
 	/**
-	 * Gets the next node available.
+	 * Gets the next value available.
 	 *
-	 * @return The next node received.
+	 * @return The next value received.
 	 */
 	@Override
-	public Node getNextNode() {
+	public BitValue getNextNode() {
 		//TODO
 		return null;
 	}
@@ -58,7 +57,7 @@ public class BitNodeReader extends NodeReader<BitNode> {
 	 * @return All of the nodes available from the stream.
 	 */
 	@Override
-	public LongLinkedList<BitNode> getAllNodes() {
+	public LongLinkedList<BitValue> getAllNodes() {
 		//TODO
 		return null;
 	}

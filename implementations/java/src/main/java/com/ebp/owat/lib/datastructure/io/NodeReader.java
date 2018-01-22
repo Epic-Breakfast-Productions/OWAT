@@ -1,21 +1,21 @@
 package com.ebp.owat.lib.datastructure.io;
 
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
-import com.ebp.owat.lib.datastructure.node.Node;
+import com.ebp.owat.lib.datastructure.value.Value;
 
 import java.io.*;
 
 /**
- * Abstract class to define the behaviors of a node reader.
+ * Abstract class to define the behaviors of a value reader.
  *
  * Created by Greg Stewart on 3/30/17.
  */
-public abstract class NodeReader<T extends Node> {
+public abstract class NodeReader<T extends Value> {
 	/** The input stream to get the information from. */
 	private InputStream inStream;
 	
 	/**
-	 * Creates this node creator.
+	 * Creates this value creator.
 	 * @param streamIn The stream to use to get the information.
 	 */
 	public NodeReader(InputStream streamIn){
@@ -23,7 +23,7 @@ public abstract class NodeReader<T extends Node> {
 	}
 	
 	/**
-	 * Creates this node creator with a file.
+	 * Creates this value creator with a file.
 	 * @param fileIn The file to get the input stream from.
 	 */
 	public NodeReader(File fileIn){
@@ -71,10 +71,10 @@ public abstract class NodeReader<T extends Node> {
 	}
 	
 	/**
-	 * Gets the next node available.
-	 * @return The next node received.
+	 * Gets the next value available.
+	 * @return The next value received.
 	 */
-	public abstract Node getNextNode();
+	public abstract Value getNextNode();
 	
 	/**
 	 * Gets all nodes available from the stream.

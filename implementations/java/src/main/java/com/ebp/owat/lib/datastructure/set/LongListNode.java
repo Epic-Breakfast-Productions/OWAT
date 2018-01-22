@@ -3,7 +3,7 @@ package com.ebp.owat.lib.datastructure.set;
 import java.io.Serializable;
 
 /**
- * The node of the LongLinkedList class.
+ * The value of the LongLinkedList class.
  *
  * Created by Greg Stewart on 5/28/17.
  */
@@ -21,7 +21,7 @@ class LongListNode<T> implements Serializable, Cloneable{
 	
 	/**
 	 * Constructor to take in the data held.
-	 * @param data The data this node should hold.
+	 * @param data The data this value should hold.
 	 */
 	public LongListNode(T data){
 		this();
@@ -29,10 +29,10 @@ class LongListNode<T> implements Serializable, Cloneable{
 	}
 	
 	/**
-	 * Constructor to set all the elements of this node.
-	 * @param data The data this node is to hold.
-	 * @param previousNode The node before this node.
-	 * @param nextNode The node after this node.
+	 * Constructor to set all the elements of this value.
+	 * @param data The data this value is to hold.
+	 * @param previousNode The value before this value.
+	 * @param nextNode The value after this value.
 	 */
 	public LongListNode(T data, LongListNode<T> previousNode, LongListNode<T> nextNode){
 		this(data);
@@ -41,16 +41,16 @@ class LongListNode<T> implements Serializable, Cloneable{
 	}
 	
 	/**
-	 * Gets the data held by this node.
-	 * @return The data held by this node.
+	 * Gets the data held by this value.
+	 * @return The data held by this value.
 	 */
 	public T getData(){
 		return data;
 	}
 	
 	/**
-	 * Sets the data held by this node.
-	 * @param data The new data for this node.
+	 * Sets the data held by this value.
+	 * @param data The new data for this value.
 	 * @return This LongListNode object.
 	 */
 	public LongListNode<T> setData(T data){
@@ -59,9 +59,9 @@ class LongListNode<T> implements Serializable, Cloneable{
 	}
 	
 	/**
-	 * Replaces the data in this node. Semmantically the same as setData, but this returns the old data.
-	 * @param data The new data for this node.
-	 * @return The data that was held by this node.
+	 * Replaces the data in this value. Semmantically the same as setData, but this returns the old data.
+	 * @param data The new data for this value.
+	 * @return The data that was held by this value.
 	 */
 	public T replaceData(T data){
 		T curData = this.data;
@@ -70,16 +70,16 @@ class LongListNode<T> implements Serializable, Cloneable{
 	}
 	
 	/**
-	 * Gets the next node.
-	 * @return The next node.
+	 * Gets the next value.
+	 * @return The next value.
 	 */
 	public LongListNode<T> next(){
 		return this.nextNode;
 	}
 	
 	/**
-	 * Sets the next node. Automatically has the next node set this one to be its previous.
-	 * @param next The new node that is set to be next.
+	 * Sets the next value. Automatically has the next value set this one to be its previous.
+	 * @param next The new value that is set to be next.
 	 * @return This LongListNode object.
 	 */
 	public LongListNode<T> setNext(LongListNode<T> next){
@@ -91,9 +91,9 @@ class LongListNode<T> implements Serializable, Cloneable{
 	}
 	
 	/**
-	 * Replaces the next node. Semmantically the same as setNext(), but returns the node that was replaced.
-	 * @param next The node to set the next node to.
-	 * @return The former next node.
+	 * Replaces the next value. Semmantically the same as setNext(), but returns the value that was replaced.
+	 * @param next The value to set the next value to.
+	 * @return The former next value.
 	 */
 	public LongListNode<T> replaceNext(LongListNode<T> next){
 		LongListNode<T> curNext = this.nextNode;
@@ -102,16 +102,16 @@ class LongListNode<T> implements Serializable, Cloneable{
 	}
 	
 	/**
-	 * Gets the previous node.
-	 * @return The node previous to this one in the list.
+	 * Gets the previous value.
+	 * @return The value previous to this one in the list.
 	 */
 	public LongListNode<T> prev(){
 		return this.prevNode;
 	}
 	
 	/**
-	 * Sets the node previous to this one.
-	 * @param prev The new node to be previous to this one.
+	 * Sets the value previous to this one.
+	 * @param prev The new value to be previous to this one.
 	 * @return This LongListNode object.
 	 */
 	public LongListNode<T> setPrev(LongListNode<T> prev){
@@ -123,9 +123,9 @@ class LongListNode<T> implements Serializable, Cloneable{
 	}
 	
 	/**
-	 * Replaces the node previous to this one. Semmantically the same as setPrev(), but returns the former previous node.
-	 * @param prev The new node to be previous to this one.
-	 * @return The former previous node.
+	 * Replaces the value previous to this one. Semmantically the same as setPrev(), but returns the former previous value.
+	 * @param prev The new value to be previous to this one.
+	 * @return The former previous value.
 	 */
 	public LongListNode<T> replacePrev(LongListNode<T> prev){
 		LongListNode<T> curPrev = this.prevNode;

@@ -1,21 +1,21 @@
 package com.ebp.owat.lib.datastructure.matrix.Linked;
 
 /**
- * Abstract class for a single node of the matrix.
+ * Abstract class for a single value of the matrix.
  *
  * Created by Greg Stewart on 3/23/17.
  */
 public class LinkedMatrixNode<T> {
-	/** The Node that is 'north' or 'above' this node. */
+	/** The Node that is 'north' or 'above' this value. */
 	private LinkedMatrixNode<T> north = null;
-	/** The node that is 'south' or 'below' this node */
+	/** The value that is 'south' or 'below' this value */
 	private LinkedMatrixNode<T> south = null;
-	/** The node that is 'east' or 'to the right of' this node */
+	/** The value that is 'east' or 'to the right of' this value */
 	private LinkedMatrixNode<T> east = null;
-	/** The node that is 'west' or 'to the left of' this node */
+	/** The value that is 'west' or 'to the left of' this value */
 	private LinkedMatrixNode<T> west = null;
 	
-	/** The value this node holds. */
+	/** The value this value holds. */
 	private T value = null;
 	
 	/**
@@ -24,8 +24,8 @@ public class LinkedMatrixNode<T> {
 	public LinkedMatrixNode(){}
 	
 	/**
-	 * Constructor that sets this node's value.
-	 * @param nodeValue The value to set this node to.
+	 * Constructor that sets this value's value.
+	 * @param nodeValue The value to set this value to.
 	 */
 	public LinkedMatrixNode(T nodeValue){
 		this();
@@ -33,12 +33,12 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Sets a node to the node of the direction given.
+	 * Sets a value to the value of the direction given.
 	 *
 	 * Automatically sets the NodeIn's opposite direction to this.
 	 *
-	 * @param dirIn The direction of the node the nodeIn should be set to.
-	 * @param nodeIn The node to set to the direction given.
+	 * @param dirIn The direction of the value the nodeIn should be set to.
+	 * @param nodeIn The value to set to the direction given.
 	 * @return This Node.
 	 */
 	public LinkedMatrixNode<T> setNeighbor(NodeDir dirIn, LinkedMatrixNode<T> nodeIn){
@@ -65,9 +65,9 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Removes the node in the direction given from this node. Does removes this node from the other node.
+	 * Removes the value in the direction given from this value. Does removes this value from the other value.
 	 * @param dirIn The direction to remove this from.
-	 * @return The node removed.
+	 * @return The value removed.
 	 */
 	public LinkedMatrixNode<T> removeNeighbor(NodeDir dirIn){
 		LinkedMatrixNode<T> nodeToRemove = this.getNeighbor(dirIn);
@@ -81,9 +81,9 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Removes this node from the rest of the matrix.
+	 * Removes this value from the rest of the matrix.
 	 *
-	 * @return This node.
+	 * @return This value.
 	 */
 	public LinkedMatrixNode<T> removeSelf(){
 		for(NodeDir curDir : NodeDir.values()){
@@ -93,10 +93,10 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Gets the node at the direction given.
+	 * Gets the value at the direction given.
 	 *
 	 * @param dirIn The direction to get.
-	 * @return This node.
+	 * @return This value.
 	 */
 	public LinkedMatrixNode<T> getNeighbor(NodeDir dirIn){
 		switch (dirIn){
@@ -113,17 +113,17 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Gets the value held by this node.
-	 * @return The value held by this node.
+	 * Gets the value held by this value.
+	 * @return The value held by this value.
 	 */
 	public T getValue(){
 		return this.value;
 	}
 	
 	/**
-	 * Sets the value held by this node.
-	 * @param valueIn The value to set this node with.
-	 * @return This node object.
+	 * Sets the value held by this value.
+	 * @param valueIn The value to set this value with.
+	 * @return This value object.
 	 */
 	public LinkedMatrixNode<T> setValue(T valueIn){
 		this.value = valueIn;
@@ -131,9 +131,9 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Sets the value of this node with the value of another node.
-	 * @param nodeIn The node to get the value from to set this node's value to.
-	 * @return This node object.
+	 * Sets the value of this value with the value of another value.
+	 * @param nodeIn The value to get the value from to set this value's value to.
+	 * @return This value object.
 	 */
 	public LinkedMatrixNode<T> setValue(LinkedMatrixNode<T> nodeIn){
 		this.value = nodeIn.getValue();
@@ -141,9 +141,9 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Determines if the node is a border to any side.
+	 * Determines if the value is a border to any side.
 	 *
-	 * @return If the node is a border to any side.
+	 * @return If the value is a border to any side.
 	 */
 	public boolean isBorder(){
 		return (this.north == null ||
@@ -154,10 +154,10 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Determines if this node is a border on a specific side.
+	 * Determines if this value is a border on a specific side.
 	 *
-	 * @param sideBorder The side we are testing to see if the node is a border of.
-	 * @return If this node is a border to a specific side.
+	 * @param sideBorder The side we are testing to see if the value is a border of.
+	 * @return If this value is a border to a specific side.
 	 */
 	public boolean isBorder(NodeDir sideBorder){
 		switch (sideBorder){
@@ -175,9 +175,9 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Determines if the given node borders this one.
-	 * @param nodeIn The node to see if it borders this node.
-	 * @return If the given node borders this one.
+	 * Determines if the given value borders this one.
+	 * @param nodeIn The value to see if it borders this value.
+	 * @return If the given value borders this one.
 	 */
 	public boolean borders(LinkedMatrixNode<T> nodeIn){
 		return this.north == nodeIn ||
@@ -187,10 +187,10 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Determines if the node given borders this node in the direction given.
-	 * @param nodeIn The node to test if it borders.
+	 * Determines if the value given borders this value in the direction given.
+	 * @param nodeIn The value to test if it borders.
 	 * @param dirIn The direction to test on.
-	 * @return If the node given borders this node in the direction given.
+	 * @return If the value given borders this value in the direction given.
 	 */
 	public boolean borders(LinkedMatrixNode<T> nodeIn, NodeDir dirIn){
 		switch (dirIn){
@@ -207,8 +207,8 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Determines if this node is a corner node.
-	 * @return If this node is a corner node.
+	 * Determines if this value is a corner value.
+	 * @return If this value is a corner value.
 	 */
 	public boolean isCorner(){
 		return (
@@ -220,9 +220,9 @@ public class LinkedMatrixNode<T> {
 	}
 	
 	/**
-	 * Trades a value with another node.
+	 * Trades a value with another value.
 	 *
-	 * @param nodeIn The node to trade values with.
+	 * @param nodeIn The value to trade values with.
 	 */
 	public void tradeValuesWith(LinkedMatrixNode<T> nodeIn){
 		T temp = nodeIn.getValue();

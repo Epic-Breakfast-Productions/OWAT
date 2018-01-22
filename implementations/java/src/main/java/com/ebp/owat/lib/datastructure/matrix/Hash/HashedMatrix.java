@@ -232,9 +232,9 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	}
 	
 	/**
-	 * Replaces a particular node's value.
+	 * Replaces a particular value's value.
 	 *
-	 * @param nodeToReplace The coordinate of the node to replace.
+	 * @param nodeToReplace The coordinate of the value to replace.
 	 * @param newValue      The value to replace.
 	 * @return The previously held value.
 	 */

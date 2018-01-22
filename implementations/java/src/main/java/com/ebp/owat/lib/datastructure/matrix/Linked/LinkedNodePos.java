@@ -4,7 +4,7 @@ import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 
 /**
- * Describes a node on a matrix, holding the node on the matrix and provides functionality to update that position automatically based on what kind of position this is and how the matrix grows/shrinks.
+ * Describes a value on a matrix, holding the value on the matrix and provides functionality to update that position automatically based on what kind of position this is and how the matrix grows/shrinks.
  *
  * TODO:: organize and ensure x/y coords are set
  *
@@ -12,7 +12,7 @@ import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
  */
 public abstract class LinkedNodePos<T> extends Coordinate {
 	
-	/** The node this position holds. Can be updated by {@link LinkedNodePos#determinePos() determinePos()}. */
+	/** The value this position holds. Can be updated by {@link LinkedNodePos#determinePos() determinePos()}. */
 	protected LinkedMatrixNode<T> node;
 	
 	/**
@@ -24,9 +24,9 @@ public abstract class LinkedNodePos<T> extends Coordinate {
 	}
 	
 	/**
-	 * Constructor that takes in a matrix and a node. Calls {@link LinkedNodePos#determinePos() determinePos()} automatically.
+	 * Constructor that takes in a matrix and a value. Calls {@link LinkedNodePos#determinePos() determinePos()} automatically.
 	 * @param matrix The matrix this position is a part of.
-	 * @param nodeIn The node this position holds.
+	 * @param nodeIn The value this position holds.
 	 */
 	public LinkedNodePos(LinkedMatrix<T> matrix, LinkedMatrixNode<T> nodeIn){
 		this(matrix);
@@ -37,7 +37,7 @@ public abstract class LinkedNodePos<T> extends Coordinate {
 	 * Constructs a new NodePositon with all the values set.
 	 *
 	 * @param matrix The matrix this coordinate is on.
-	 * @param coord The coordinate of the node to get.
+	 * @param coord The coordinate of the value to get.
 	 * @throws IllegalArgumentException If the values in are out of bounds.
 	 */
 	public LinkedNodePos(LinkedMatrix<T> matrix, Coordinate coord) throws IllegalArgumentException {
@@ -57,36 +57,36 @@ public abstract class LinkedNodePos<T> extends Coordinate {
 	}
 	
 	/**
-	 * Sets the node held by this position. Calls {@link LinkedNodePos#determinePos() determinePos()} automatically.
-	 * @param nodeIn The node to set.
+	 * Sets the value held by this position. Calls {@link LinkedNodePos#determinePos() determinePos()} automatically.
+	 * @param nodeIn The value to set.
 	 * @return This Node position.
 	 */
 	public LinkedNodePos<T> setNode(LinkedMatrixNode<T> nodeIn){
-		//TODO:: check if node is in matrix?
+		//TODO:: check if value is in matrix?
 		this.node = nodeIn;
 		this.determinePos();
 		return this;
 	}
 	
 	/**
-	 * Gets the node held at this position.
-	 * @return The node at this position.
+	 * Gets the value held at this position.
+	 * @return The value at this position.
 	 */
 	public LinkedMatrixNode<T> getNode() {
 		return this.node;
 	}
 	
 	/**
-	 * Method used by the position to recalculate and update the appropriate position (x/y coordinates) of this node.
+	 * Method used by the position to recalculate and update the appropriate position (x/y coordinates) of this value.
 	 *
 	 * Sets the x&y coordinates
 	 */
 	protected abstract void determinePos();
 	
 	/**
-	 * Method used to reset this node's position. For use after the matrix is altered (row/col added/ removed). Can change both the node and coordinate held.
+	 * Method used to reset this value's position. For use after the matrix is altered (row/col added/ removed). Can change both the value and coordinate held.
 	 *
-	 * @return If the node's position actually changed or not.
+	 * @return If the value's position actually changed or not.
 	 */
 	public boolean resetNodePos(){
 		long origX = this.getX();
@@ -119,7 +119,7 @@ public abstract class LinkedNodePos<T> extends Coordinate {
 		if(this.node.isBorder(dirToGo)){
 			return false;
 		}
-		//set the new node, x&y coord
+		//set the new value, x&y coord
 		this.node = this.node.getNeighbor(dirToGo);
 		this.setX(dirToGo.incDec(this.getX()));
 		this.setY(dirToGo.incDec(this.getY()));

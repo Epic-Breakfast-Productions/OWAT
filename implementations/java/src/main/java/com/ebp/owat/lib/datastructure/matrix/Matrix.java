@@ -239,8 +239,8 @@ public abstract class Matrix<T> implements Iterable<T> {
 	}
 	
 	/**
-	 * Replaces a particular node's value. Not to be used to remove a node by setting it's value to null or the {@link Matrix#defaultValue}
-	 * @param nodeToReplace The coordinate of the node to replace.
+	 * Replaces a particular value's value. Not to be used to remove a value by setting it's value to null or the {@link Matrix#defaultValue}
+	 * @param nodeToReplace The coordinate of the value to replace.
 	 * @param newValue The value to replace.
 	 * @return The previously held value.
 	 */
@@ -262,16 +262,16 @@ public abstract class Matrix<T> implements Iterable<T> {
 	
 	/**
 	 * Clears the value at the coordinate given.
-	 * @param nodeToClear The coordinate of the node to clear the value of.
-	 * @return The value previously at the node. If nothing set, returns {@link Matrix#defaultValue}
+	 * @param nodeToClear The coordinate of the value to clear the value of.
+	 * @return The value previously at the value. If nothing set, returns {@link Matrix#defaultValue}
 	 */
 	public abstract T clearNode(Coordinate nodeToClear);
 	
 	/**
 	 * Clears the value at the coordinate given.
-	 * @param xIn The x index of the node to clear the value of.
-	 * @param yIn The y index of the node to clear the value of.
-	 * @return The value previously at the node. If nothing set, returns {@link Matrix#defaultValue}
+	 * @param xIn The x index of the value to clear the value of.
+	 * @param yIn The y index of the value to clear the value of.
+	 * @return The value previously at the value. If nothing set, returns {@link Matrix#defaultValue}
 	 */
 	public T clearNode(long xIn, long yIn){
 		return this.clearNode(new Coordinate(this, xIn, yIn));
@@ -444,8 +444,8 @@ public abstract class Matrix<T> implements Iterable<T> {
 	
 	/**
 	 * Gets a value from this matrix.
-	 * @param xIn The x index of the node to get
-	 * @param yIn The y index of the node to get
+	 * @param xIn The x index of the value to get
+	 * @param yIn The y index of the value to get
 	 * @return The value at the point given.
 	 * @throws IndexOutOfBoundsException If either of the indexes are out of bounds.
 	 */

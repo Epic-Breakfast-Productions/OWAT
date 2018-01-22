@@ -13,10 +13,10 @@ public class DistanceCalc {
 	public static final Method DEFAULT_CALC_METHOD = Method.MANHATTAN;
 	
 	/**
-	 * Gets the distance from one node to the other on the x axis
+	 * Gets the distance from one value to the other on the x axis
 	 * @param coordOne The coord we are dealing with.
 	 * @param coordTwo The coord we are getting the distance to.
-	 * @return The distance from one node to the other on the x axis
+	 * @return The distance from one value to the other on the x axis
 	 */
 	public static long xDistance(Coordinate coordOne, Coordinate coordTwo) {
 		throwIfNotOnSameMatrix(coordOne, coordTwo);
@@ -25,10 +25,10 @@ public class DistanceCalc {
 	}
 	
 	/**
-	 * Gets the distance from one node to the other on the y axis
+	 * Gets the distance from one value to the other on the y axis
 	 * @param coordOne The coord we are dealing with.
 	 * @param coordTwo The coord we are getting the distance to.
-	 * @return The distance from one node to the other on the y axis
+	 * @return The distance from one value to the other on the y axis
 	 */
 	public static long yDistance(Coordinate coordOne, Coordinate coordTwo) {
 		throwIfNotOnSameMatrix(coordOne, coordTwo);
@@ -111,8 +111,8 @@ public class DistanceCalc {
 	 * Determines if pos1 is closer to pos2 to the coordinates given.
 	 * @param method The method of distance calculation to use.
 	 * @param coordIn The coordinate we are comparing to.
-	 * @param pos1    The node we are testing to see if it is closer.
-	 * @param pos2    The node we are comparing to the first one.
+	 * @param pos1    The value we are testing to see if it is closer.
+	 * @param pos2    The value we are comparing to the first one.
 	 * @return True if pos1 is closer to the goal coordinates than pos2
 	 */
 	public static boolean nodeIsCloserThan(Method method, Coordinate coordIn, Coordinate pos1, Coordinate pos2) {
@@ -122,8 +122,8 @@ public class DistanceCalc {
 	/**
 	 * Determines if pos1 is closer to pos2 to the coordinates given, using the default calculation method.
 	 * @param coordIn The coordinate we are comparing to.
-	 * @param pos1    The node we are testing to see if it is closer.
-	 * @param pos2    The node we are comparing to the first one.
+	 * @param pos1    The value we are testing to see if it is closer.
+	 * @param pos2    The value we are comparing to the first one.
 	 * @return True if pos1 is closer to the goal coordinates than pos2
 	 */
 	public static boolean nodeIsCloserThan(Coordinate coordIn, Coordinate pos1, Coordinate pos2) {

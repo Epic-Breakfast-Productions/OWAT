@@ -15,9 +15,9 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	private long capacity = DEFAULT_CAPACITY;
 	/** The length of the list. */
 	private long length = 0;
-	/** The first node in this list. */
+	/** The first value in this list. */
 	private LongListNode<E> first = null;
-	/** The last node in this list. */
+	/** The last value in this list. */
 	private LongListNode<E> last = null;
 	
 	/**
@@ -102,7 +102,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 */
 	private void throwIfEmpty(){
 		if(this.isEmpty()){
-			throw new NoSuchElementException("List is empty. Cannot remove a node.");
+			throw new NoSuchElementException("List is empty. Cannot remove a value.");
 		}
 	}
 	
@@ -148,8 +148,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	/**
-	 * Removes a given node. Assumes the node is part of this list.
-	 * @param node The node in this list that is to be removed.
+	 * Removes a given value. Assumes the value is part of this list.
+	 * @param node The value in this list that is to be removed.
 	 * @throws NoSuchElementException If the list is empty.
 	 */
 	private void removeNode(LongListNode<E> node){
@@ -305,7 +305,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 					return true;
 				}
 			}
-		}//foreach node
+		}//foreach value
 		return false;
 	}
 	
@@ -326,7 +326,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 					return true;
 				}
 			}
-		}//foreach node
+		}//foreach value
 		return false;
 	}
 	
@@ -447,8 +447,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	}
 	
 	/**
-	 * Gets the actual node from the list at the index.
-	 * @param i The index of the node to get.
+	 * Gets the actual value from the list at the index.
+	 * @param i The index of the value to get.
 	 * @return The LongListNode at the given index
 	 * @throws IndexOutOfBoundsException If the index given is out of bounds.
 	 */
@@ -475,7 +475,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	/**
 	 * Same as {@link LongLinkedList#set(int, E) set(int, E)}, except that this takes a long instead of an int.
 	 * @param i The index of the element to set.
-	 * @param e The element to set the node with.
+	 * @param e The element to set the value with.
 	 * @return The old value.
 	 */
 	public E set(long i, E e) {

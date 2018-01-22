@@ -3,7 +3,7 @@ package com.ebp.owat.lib.datastructure.matrix.Linked;
 import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 
 /**
- * Node Direction, use this to tell a node which direction you mean.
+ * Node Direction, use this to tell a value which direction you mean.
  */
 public enum NodeDir {
 	NORTH(Plane.X, IncDec.INC),
