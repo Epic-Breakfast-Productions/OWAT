@@ -7,6 +7,6 @@ package com.ebp.owat.lib.datastructure.matrix;
  *
  * Created by Greg Stewart on 3/28/17.
  */
-public abstract class ScramblingMatrix extends Matrix {
+public interface DeScrambler {
 	//TODO:: add abstract scramble moves
 }

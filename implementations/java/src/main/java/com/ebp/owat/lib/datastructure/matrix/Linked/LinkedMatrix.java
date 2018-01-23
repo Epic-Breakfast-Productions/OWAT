@@ -1,7 +1,6 @@
 package com.ebp.owat.lib.datastructure.matrix.Linked;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.ScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.DistanceCalc;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
