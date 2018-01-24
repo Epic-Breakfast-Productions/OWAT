@@ -29,6 +29,7 @@ dependencies {
 
 	//test dependencies
 	testCompile 'junit:junit:4.12'
+	testCompile 'com.google.guava:guava:23.6-jre'
 }
 
 //specify gradle version (for when  we recreate the wrapper)

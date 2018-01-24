@@ -1,4 +1,4 @@
-package com.ebp.owat.lib.utils;
+package com.ebp.owat.lib.utils.scramble;
 
 public class ScrambleMove {
 	private final ScrambleMoves move;
