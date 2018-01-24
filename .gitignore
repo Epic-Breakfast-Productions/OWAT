@@ -49,4 +49,7 @@ implementations/java/true/
 #Logs from the project
 implementations/java/out/
 implamentations/java/logs/
+implamentations/java/OWAT-app/logs/
+implamentations/java/OWAT-lib/logs/
+implamentations/java/logs/
 logs/

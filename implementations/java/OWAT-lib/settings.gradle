@@ -16,7 +16,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'OWAT'
-
-include("OWAT-lib")
-include("OWAT-app")
+rootProject.name = 'OWAT-lib'
