@@ -2,15 +2,16 @@ package com.ebp.owat.lib.utils.scramble;
 
 import java.util.regex.Pattern;
 
+import static com.ebp.owat.lib.utils.scramble.ScrambleConstants.*;
+
 public enum ScrambleMoves {
-	SWAP(1,"sw",4, "\\s*sw\\s*:\\s*\\d+\\s*x\\s*\\d+\\s*,\\s*\\d+\\s*x\\s*\\d+\\s*;\\s*"),
-	SWAP_ROW(2,"swr",2, "\\s*swr\\s*:\\s*\\d+\\s*,\\s*\\d+\\s*;\\s*"),
-	SWAP_COL(3,"swc",2, "\\s*swc\\s*:\\s*\\d+\\s*,\\s*\\d+\\s*;\\s*"),
-	SLIDE_ROW(4,"slr",2, "\\s*slr\\s*:\\s*\\d+\\s*,\\s*\\d+\\s*;\\s*"),
-	SLIDE_COL(5,"slc",2, "\\s*slc\\s*:\\s*\\d+\\s*,\\s*\\d+\\s*;\\s*"),
-	ROT_CLOCK(6,"rcl",5, "\\s*rcl\\s*:\\s*(0|1|2|3)\\s*,\\s*\\d+\\s*x\\s*\\d+\\s*,\\s*\\d+\\s*x\\s*\\d+\\s*;\\s*"),
-	ROT_CCLOCK(7,"rcc",5, "\\s*rcc\\s*:\\s*(0|1|2|3)\\s*,\\s*\\d+\\s*x\\s*\\d+\\s*,\\s*\\d+\\s*x\\s*\\d+\\s*;\\s*");
-	private final int PATTERN_FLAG = Pattern.CASE_INSENSITIVE;
+	SWAP		(1,ScrambleConstants.SWAP,4, "\\s*("+ScrambleConstants.SWAP+"|1)\\s*"+OP_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*"),
+	SWAP_ROW	(2,ScrambleConstants.SWAP_ROW,2, "\\s*("+ScrambleConstants.SWAP_ROW+"|2)\\s*"+OP_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*"),
+	SWAP_COL	(3,ScrambleConstants.SWAP_COL,2, "\\s*("+ScrambleConstants.SWAP_COL+"|3)\\s*"+OP_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*"),
+	SLIDE_ROW	(4,ScrambleConstants.SLIDE_ROW,2, "\\s*("+ScrambleConstants.SLIDE_ROW+"|4)\\s*"+OP_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*"),
+	SLIDE_COL	(5,ScrambleConstants.SLIDE_COL,2, "\\s*("+ScrambleConstants.SLIDE_COL+"|5)\\s*"+OP_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*"),
+	ROT_CLOCK	(6,ScrambleConstants.ROT_CLOCK,5, "\\s*("+ScrambleConstants.ROT_CLOCK+"|6)\\s*"+OP_SEP+"\\s*(0|1|2|3)\\s*"+ARG_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*"),
+	ROT_CCLOCK	(7,ScrambleConstants.ROT_CCLOCK,5, "\\s*("+ScrambleConstants.ROT_CCLOCK+"|7)\\s*"+OP_SEP+"\\s*(0|1|2|3)\\s*"+ARG_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*");
 	
 	public final int opCode;
 	public final String opStr;
