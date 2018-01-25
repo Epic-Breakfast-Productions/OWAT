@@ -13,14 +13,14 @@ import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class ScrambleMovesTest {
-	private static final Collection<String> SWAP = Arrays.asList("sw:10x1,100x399;");
-	private static final Collection<String> SWAP_ROW = Arrays.asList("swr:10,100;");
-	private static final Collection<String> SWAP_COL = Arrays.asList("swc:100,399;");
-	private static final Collection<String> SLIDE_ROW = Arrays.asList("slr:100,399;");
-	private static final Collection<String> SLIDE_COL = Arrays.asList("slc:100,399;");
-	private static final Collection<String> ROT_CLOCK = Arrays.asList("rcl:1,1x2,3x4;");
-	private static final Collection<String> ROT_CCLOCK = Arrays.asList("rcc:1,1x2,3x4;");
-	private static final Collection<String> INVALID = Arrays.asList("");
+	private static final Collection<String> SWAP = Arrays.asList("sw:10x1,100x399;", " sw : 10 x 1 , 100 x 399 ; ");
+	private static final Collection<String> SWAP_ROW = Arrays.asList("swr:10,100;", " swr : 10 , 100 ; ");
+	private static final Collection<String> SWAP_COL = Arrays.asList("swc:100,399;", " swc : 100 , 399 ; ");
+	private static final Collection<String> SLIDE_ROW = Arrays.asList("slr:100,399;"," slr : 100 , 399 ; ");
+	private static final Collection<String> SLIDE_COL = Arrays.asList("slc:100,399;"," slc : 100 , 399 ; ");
+	private static final Collection<String> ROT_CLOCK = Arrays.asList("rcl:1,1x2,3x4;"," rcl : 1 , 1 x 2 , 3 x 4 ; ");
+	private static final Collection<String> ROT_CCLOCK = Arrays.asList("rcc:1,1x2,3x4;"," rcc : 1 , 1 x 2 , 3 x 4 ; ");
+	private static final Collection<String> INVALID = Arrays.asList("", "sw:10x1,100x399");
 	
 	private final ScrambleMoves sm;
 	private final Collection<String> validMatches;
