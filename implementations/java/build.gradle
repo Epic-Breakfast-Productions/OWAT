@@ -1,18 +1,3 @@
-/*
-allprojects {
-	repositories {
-		jcenter()
-	}
-	apply plugin: 'java'
-	//group = 'com.example.gradle'
-	//version = '0.1.0'
-}
-
-subprojects {
-	apply plugin: 'java'
-}
-*/
-
 //specify gradle version (for when  we recreate the wrapper)
 task updateWrapper(type: Wrapper) {
 	group "wrapper"
