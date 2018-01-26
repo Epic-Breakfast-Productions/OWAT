@@ -16,13 +16,13 @@ import java.util.*;
  *          (north)
  *         0 1 2 3 ...
  *       0 ---------
- *       1 |+++++++|
+ *       1 |+++++++| <-- rows
  * Left  2 |+++++++|Right
  * (west)3 |+++++++|(east)
  *       . |+++++++|
  *       . ---------
- *       .   Bottom
- *           (south)
+ *       . Bottom ^
+ *         (south)|cols
  *</pre>
  * {@code}
  *

@@ -22,22 +22,6 @@ public class RandGeneratorTest {
 	
 	@Test
 	public void testRandGeneratorExtraConstructors(){
-		LOGGER.info("Testing RandGenerator extra constructors.");
-		RandGenerator test = new RandGenerator();
-		
-		assertNotNull(test.getRandom());
-		
-		Random rand = new Random();
-		test = new RandGenerator(rand);
-		
-		assertEquals("Random set by constructor is not the same as the one given to the constructor.", rand, test.getRandom());
-		
-		rand = new Random();
-		
-		test = new RandGenerator(rand, testUpper, testLower);
-		
-		assertEquals("Random set by constructor is not the same as the one given to the constructor.", rand, test.getRandom());
-		assertEquals("Upper bound set by constructor is not the same as the one given to the constructor.", testUpper, test.getUpperBound());
-		assertEquals("Random set by constructor is not the same as the one given to the constructor.", testLower, test.getLowerBound());
+	
 	}
 }

@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.utils.rand;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -20,33 +21,11 @@ public class RandGenerator extends LongGenerator {
 	}
 	
 	/**
-	 * Constructor to set the upper and lower bounds.
-	 *
-	 * @param upperIn The upper bound to give this generator.
-	 * @param lowerIn The lower bound to give this generator.
-	 */
-	public RandGenerator(long upperIn, long lowerIn) {
-		super(upperIn, lowerIn);
-		this.setRandom(null);
-	}
-	
-	/**
 	 * Constructor to set the Random.
 	 * @param randIn The Random to give this object.
 	 */
 	public RandGenerator(Random randIn){
 		this();
-		this.setRandom(randIn);
-	}
-	
-	/**
-	 * Constructs a new RandGenerator.
-	 * @param randIn The Random to give this object.
-	 * @param upperIn The upper bounds.
-	 * @param lowerIn The lower bounds.
-	 */
-	public RandGenerator(Random randIn, long upperIn, long lowerIn){
-		this(upperIn, lowerIn);
 		this.setRandom(randIn);
 	}
 	
@@ -57,7 +36,7 @@ public class RandGenerator extends LongGenerator {
 	 */
 	public RandGenerator setRandom(Random randIn){
 		if(randIn == null){
-			this.rand = new Random();
+			this.rand = new SecureRandom();
 		}else{
 			this.rand = randIn;
 		}
@@ -74,6 +53,11 @@ public class RandGenerator extends LongGenerator {
 	
 	@Override
 	public long next() {
-		return this.getLowerBound()+((long)(this.rand.nextDouble()*(this.getUpperBound()-this.getLowerBound())));
+		return this.rand.nextLong();
+	}
+	
+	@Override
+	public long next(long upperBound) {
+		return (long)(this.rand.nextDouble()*upperBound);
 	}
 }
