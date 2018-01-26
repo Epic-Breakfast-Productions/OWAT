@@ -12,7 +12,7 @@ public class ScrambleMove {
 	private final ScrambleMoves move;
 	private final long[] args;
 	
-	public ScrambleMove(ScrambleMoves move, long... args) {
+	public ScrambleMove(ScrambleMoves move, long ... args) {
 		this.move = move;
 		if (args.length != this.move.numArgs) {
 			throw new IllegalArgumentException("Invalid number of arguments passed for the move given.");
@@ -24,16 +24,41 @@ public class ScrambleMove {
 		StringBuilder sb = new StringBuilder(this.move.opStr);
 		sb.append(OP_SEP);
 		
-		for (int i = 0, left = this.args.length; i < this.args.length; i++, left--) {
-			sb.append(this.args[i]);
-			boolean evenNumLeft = left % 2 != 0;
-			if (evenNumLeft) {
-				sb.append(COORD_SEP);
-			} else {
-				sb.append(ARG_SEP);
-			}
+		switch (this.move) {
+			case SWAP:
+				sb.append(this.args[Swap.X1])
+					.append(COORD_SEP)
+					.append(this.args[Swap.Y1])
+					.append(ARG_SEP)
+					.append(this.args[Swap.X2])
+					.append(COORD_SEP)
+					.append(this.args[Swap.Y2]);
+				break;
+			case SWAP_ROW:
+			case SWAP_COL:
+				sb.append(this.args[SwapRow.ROWCOL1])
+					.append(ARG_SEP)
+					.append(this.args[SwapRow.ROWCOL2]);
+				break;
+			case SLIDE_ROW:
+			case SLIDE_COL:
+				sb.append(this.args[SlideCol.ROWCOL])
+					.append(ARG_SEP)
+					.append(this.args[SlideCol.NUMTOSLIDE]);
+				break;
+			case ROT_CLOCK:
+			case ROT_CCLOCK:
+				sb.append(this.args[0])
+					.append(ARG_SEP)
+					.append(this.args[1])
+					.append(COORD_SEP)
+					.append(this.args[2])
+					.append(ARG_SEP)
+					.append(this.args[3])
+					.append(COORD_SEP)
+					.append(this.args[4]);
+				break;
 		}
-		
 		sb.append(MOVE_END);
 		return sb.toString();
 	}
@@ -53,7 +78,7 @@ public class ScrambleMove {
 	public static List<ScrambleMove> parseMulti(String moves) {
 		LongLinkedList<ScrambleMove> output = new LongLinkedList<>();
 		
-		String[] moveStrings = moves.split("(?<=" + ScrambleConstants.OP_SEP + ")");
+		String[] moveStrings = moves.split("(?<=" + ScrambleConstants.MOVE_END + ")");
 		
 		for (String curMove : moveStrings) {
 			output.addLast(parse(curMove));

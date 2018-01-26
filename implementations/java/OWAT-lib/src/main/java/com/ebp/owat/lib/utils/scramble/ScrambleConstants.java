@@ -11,11 +11,53 @@ public class ScrambleConstants {
 	static final char COORD_SEP_CAP = 'P';
 	static final char OP_SEP = ':';
 	
-	static final String SWAP		= "sw";
-	static final String SWAP_ROW	= "swr";
-	static final String SWAP_COL	= "swc";
-	static final String SLIDE_ROW	= "slr";
-	static final String SLIDE_COL	= "slc";
-	static final String ROT_CLOCK	= "rcl";
-	static final String ROT_CCLOCK	= "rcc";
+	public static class Swap {
+		public static final String OP = "sw";
+		public static final int X1 = 0;
+		public static final int Y1 = 1;
+		public static final int X2 = 2;
+		public static final int Y2 = 3;
+	}
+	
+	private static abstract class SwapRowCol {
+		public static final int ROWCOL1 = 0;
+		public static final int ROWCOL2 = 1;
+	}
+	
+	public static class SwapRow extends SwapRowCol {
+		public static final String OP = "swr";
+	}
+	
+	public static class SwapCol extends SwapRowCol {
+		public static final String OP = "swc";
+	}
+	
+	private static abstract class SlideRowCol {
+		public static final int ROWCOL = 0;
+		public static final int NUMTOSLIDE = 1;
+	}
+	
+	public static class SlideRow extends SlideRowCol {
+		public static final String OP = "slr";
+	}
+	
+	public static class SlideCol extends SlideRowCol {
+		public static final String OP = "slc";
+	}
+	
+	private static abstract class Rotate {
+		public static final int ROTNUM = 0;
+		public static final int X1 = 0;
+		public static final int Y1 = 1;
+		public static final int X2 = 2;
+		public static final int Y2 = 3;
+	}
+	
+	public static class RotateClock {
+		public static final String OP = "rcl";
+	}
+	
+	public static class RotateCounterClock {
+		public static final String OP = "rcc";
+	}
 }
