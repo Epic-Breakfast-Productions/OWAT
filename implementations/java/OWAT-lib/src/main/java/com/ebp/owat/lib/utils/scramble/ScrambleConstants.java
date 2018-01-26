@@ -47,17 +47,17 @@ public class ScrambleConstants {
 	
 	private static abstract class Rotate {
 		public static final int ROTNUM = 0;
-		public static final int X1 = 0;
-		public static final int Y1 = 1;
-		public static final int X2 = 2;
-		public static final int Y2 = 3;
+		public static final int X1 = 1;
+		public static final int Y1 = 2;
+		public static final int X2 = 3;
+		public static final int Y2 = 4;
 	}
 	
-	public static class RotateClock {
+	public static class RotateClock extends Rotate {
 		public static final String OP = "rcl";
 	}
 	
-	public static class RotateCounterClock {
+	public static class RotateCounterClock extends Rotate {
 		public static final String OP = "rcc";
 	}
 }

@@ -1,3 +1,5 @@
+*.odt#
+
 # Mobile Tools for Java (J2ME)
 implementations/java/.mtj.tmp/
 

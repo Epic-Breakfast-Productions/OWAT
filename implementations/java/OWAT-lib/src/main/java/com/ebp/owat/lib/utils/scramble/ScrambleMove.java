@@ -48,15 +48,15 @@ public class ScrambleMove {
 				break;
 			case ROT_CLOCK:
 			case ROT_CCLOCK:
-				sb.append(this.args[0])
+				sb.append(this.args[RotateClock.ROTNUM])
 					.append(ARG_SEP)
-					.append(this.args[1])
+					.append(this.args[RotateClock.X1])
 					.append(COORD_SEP)
-					.append(this.args[2])
+					.append(this.args[RotateClock.Y1])
 					.append(ARG_SEP)
-					.append(this.args[3])
+					.append(this.args[RotateClock.X2])
 					.append(COORD_SEP)
-					.append(this.args[4]);
+					.append(this.args[RotateClock.Y2]);
 				break;
 		}
 		sb.append(MOVE_END);
