@@ -2,6 +2,8 @@ package com.ebp.owat.lib.utils.scramble.generator;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.utils.rand.LongGenerator;
+import com.ebp.owat.lib.utils.scramble.MoveValidator;
+import com.ebp.owat.lib.utils.scramble.ScrambleConstants;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
 import com.ebp.owat.lib.utils.scramble.ScrambleMoves;
 
@@ -25,20 +27,22 @@ public class ScrambleMoveGenerator {
 	}
 	
 	public ScrambleMove getMove(){
-		if(!matrix.hasRowsCols()){
-			throw new IllegalStateException("Matrix has to have rows and columns to scramble.");
-		}
+		MoveValidator.throwIfMatrixTooSmallForScrambling(matrix);
 		ScrambleMoves sm = numGenerator.getRandValue(ScrambleMoves.values());
 		
 		switch (sm){
 			case SWAP:
-				return new ScrambleMove(
-					sm,
-					this.numGenerator.next(this.matrix.getNumCols()),
-					this.numGenerator.next(this.matrix.getNumRows()),
-					this.numGenerator.next(this.matrix.getNumCols()),
-					this.numGenerator.next(this.matrix.getNumRows())
+				long[] args = new long[4];
+				do{
+					args[ScrambleConstants.Swap.X1] = this.numGenerator.next(this.matrix.getNumCols());
+					args[ScrambleConstants.Swap.Y1] = this.numGenerator.next(this.matrix.getNumRows());
+					args[ScrambleConstants.Swap.X2] = this.numGenerator.next(this.matrix.getNumCols());
+					args[ScrambleConstants.Swap.Y2] = this.numGenerator.next(this.matrix.getNumRows());
+				}while(
+					args[ScrambleConstants.Swap.X1] == args[ScrambleConstants.Swap.X2] &&
+					args[ScrambleConstants.Swap.Y1] == args[ScrambleConstants.Swap.Y2]
 				);
+				return new ScrambleMove(sm, args);
 			case SWAP_ROW:
 					return new ScrambleMove(
 						sm,
@@ -63,26 +67,16 @@ public class ScrambleMoveGenerator {
 					this.numGenerator.next(this.matrix.getNumCols()),
 					this.numGenerator.next(this.matrix.getNumRows())
 				);
-			case ROT_CLOCK: {
+			case ROT_CLOCK:
+			case ROT_CCLOCK:{
 				long[] coords = this.getBoxCoords();
 				return new ScrambleMove(
 					sm,
-					this.numGenerator.next(3),
-					this.numGenerator.next(coords[0]),
-					this.numGenerator.next(coords[1]),
-					this.numGenerator.next(coords[2]),
-					this.numGenerator.next(coords[3])
-				);
-			}
-			case ROT_CCLOCK: {
-				long[] coords = this.getBoxCoords();
-				return new ScrambleMove(
-					sm,
-					this.numGenerator.next(3),
-					this.numGenerator.next(coords[0]),
-					this.numGenerator.next(coords[1]),
-					this.numGenerator.next(coords[2]),
-					this.numGenerator.next(coords[3])
+					this.numGenerator.next(1,4),
+					coords[0],
+					coords[1],
+					coords[2],
+					coords[3]
 				);
 			}
 		}
@@ -101,12 +95,18 @@ public class ScrambleMoveGenerator {
 	 * @return
 	 */
 	private long[] getBoxCoords(){
-		//TODO:: make this happen for real. need to ensure their two points are valid to eachother (top right (x/y1) is actually rop right, bottom left (x/y2) is actually bottom left)
+		long
+			x1 = this.numGenerator.next(this.matrix.getNumCols() - 2L),
+			y1 = this.numGenerator.next(this.matrix.getNumRows() - 2L),
+			x2 = this.numGenerator.next(x1 + 2, this.matrix.getNumCols()),
+			y2 = this.numGenerator.next(y1 + 2, this.matrix.getNumRows())
+		;
+		
 		return new long[] {
-			this.matrix.getNumCols(),
-			this.matrix.getNumRows(),
-			this.matrix.getNumCols(),
-			this.matrix.getNumRows()
+			x1,
+			y1,
+			x2,
+			y2
 		};
 	}
 }

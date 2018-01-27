@@ -35,7 +35,7 @@ public class LongGeneratorTest {
 	public static Collection exceptionsToTest() {
 		return Arrays.asList(new Object[][] {
 			{ RandGenerator.class },
-			{ThreadLocalRandGenerator.class}
+			{ ThreadLocalRandGenerator.class }
 		});
 	}
 	
