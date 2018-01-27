@@ -9,7 +9,7 @@ import java.util.Objects;
 import static com.ebp.owat.lib.utils.scramble.ScrambleConstants.*;
 
 public class ScrambleMove {
-	private final ScrambleMoves move;
+	public final ScrambleMoves move;
 	private final long[] args;
 	
 	public ScrambleMove(ScrambleMoves move, long ... args) {
@@ -18,6 +18,10 @@ public class ScrambleMove {
 			throw new IllegalArgumentException("Invalid number of arguments passed for the move given.");
 		}
 		this.args = args;
+	}
+	
+	public long getArg(int argIndex){
+		return this.args[argIndex];
 	}
 	
 	public String toKeyString() {

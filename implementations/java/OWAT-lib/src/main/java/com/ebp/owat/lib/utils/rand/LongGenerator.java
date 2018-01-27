@@ -2,6 +2,10 @@ package com.ebp.owat.lib.utils.rand;
 
 /**
  * Describes a random number generator for use with the rest of OWAT
+ *
+ * TODO:: implement generator from: https://api.random.org/
+ * TODO:: https://github.com/TheJavaGuy/rng
+ *
  * Created by Greg Stewart on 4/6/17.
  */
 public abstract class LongGenerator {
