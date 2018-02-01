@@ -48,11 +48,11 @@ public class ScrambleMove {
 			case SLIDE_COL:
 				sb.append(this.args[SlideCol.ROWCOL])
 					.append(ARG_SEP)
-					.append(this.args[SlideCol.NUMTOSLIDE]);
+					.append(this.args[SlideCol.NUMTOSLIDE] * -1L);
 				break;
 			case ROT_CLOCK:
 			case ROT_CCLOCK:
-				sb.append(this.args[RotateClock.ROTNUM])
+				sb.append(this.args[RotateClock.ROTNUM] * -1L)
 					.append(ARG_SEP)
 					.append(this.args[RotateClock.X1])
 					.append(COORD_SEP)
@@ -82,7 +82,7 @@ public class ScrambleMove {
 	public static List<ScrambleMove> parseMulti(String moves) {
 		LongLinkedList<ScrambleMove> output = new LongLinkedList<>();
 		
-		String[] moveStrings = moves.split("(?<=" + ScrambleConstants.MOVE_END + ")");
+		String[] moveStrings = moves.split(MOVE_SEP_REGEX);
 		
 		for (String curMove : moveStrings) {
 			output.addLast(parse(curMove));

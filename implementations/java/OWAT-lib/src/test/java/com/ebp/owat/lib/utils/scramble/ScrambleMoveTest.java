@@ -12,9 +12,13 @@ public class ScrambleMoveTest extends ScMoTest {
 	private static final ScrambleMove SWR = new ScrambleMove(ScrambleMoves.SWAP_ROW, 10L, 399L);
 	private static final ScrambleMove SWC = new ScrambleMove(ScrambleMoves.SWAP_COL, 10L, 399L);
 	private static final ScrambleMove SLR = new ScrambleMove(ScrambleMoves.SLIDE_ROW, 10L, 399L);
+	private static final ScrambleMove SLR_N = new ScrambleMove(ScrambleMoves.SLIDE_ROW, 10L, -399L);
 	private static final ScrambleMove SLC = new ScrambleMove(ScrambleMoves.SLIDE_COL, 10L, 399L);
+	private static final ScrambleMove SLC_N = new ScrambleMove(ScrambleMoves.SLIDE_COL, 10L, -399L);
 	private static final ScrambleMove RCL = new ScrambleMove(ScrambleMoves.ROT_CLOCK, 1, 10L, 1L, 100L, 399L);
+	private static final ScrambleMove RCL_N = new ScrambleMove(ScrambleMoves.ROT_CLOCK, -1, 10L, 1L, 100L, 399L);
 	private static final ScrambleMove RCC = new ScrambleMove(ScrambleMoves.ROT_CCLOCK, 1, 10L, 1L, 100L, 399L);
+	private static final ScrambleMove RCC_N = new ScrambleMove(ScrambleMoves.ROT_CCLOCK, -1, 10L, 1L, 100L, 399L);
 	
 	@Test
 	public void testScrambleMoveBadConstructor(){
@@ -32,9 +36,13 @@ public class ScrambleMoveTest extends ScMoTest {
 		assertEquals(SWR, ScrambleMove.parse("swr:10,399;"));
 		assertEquals(SWC, ScrambleMove.parse("swc:10,399;"));
 		assertEquals(SLR, ScrambleMove.parse("slr:10,399;"));
+		assertEquals(SLR_N, ScrambleMove.parse("slr:10,-399;"));
 		assertEquals(SLC, ScrambleMove.parse("slc:10,399;"));
+		assertEquals(SLC_N, ScrambleMove.parse("slc:10,-399;"));
 		assertEquals(RCL, ScrambleMove.parse("rcl:1,10x1,100x399;"));
+		assertEquals(RCL_N, ScrambleMove.parse("rcl:-1,10x1,100x399;"));
 		assertEquals(RCC, ScrambleMove.parse("rcc:1,10x1,100x399;"));
+		assertEquals(RCC_N, ScrambleMove.parse("rcc:-1,10x1,100x399;"));
 		SW.hashCode();
 	}
 	
@@ -51,10 +59,14 @@ public class ScrambleMoveTest extends ScMoTest {
 		assertEquals("sw:10x1,100x399;", SW.toKeyString());
 		assertEquals("swr:10,399;", SWR.toKeyString());
 		assertEquals("swc:10,399;", SWC.toKeyString());
-		assertEquals("slr:10,399;", SLR.toKeyString());
-		assertEquals("slc:10,399;", SLC.toKeyString());
-		assertEquals("rcl:1,10x1,100x399;", RCL.toKeyString());
-		assertEquals("rcc:1,10x1,100x399;", RCC.toKeyString());
+		assertEquals("slr:10,-399;", SLR.toKeyString());
+		assertEquals("slr:10,399;", SLR_N.toKeyString());
+		assertEquals("slc:10,-399;", SLC.toKeyString());
+		assertEquals("slc:10,399;", SLC_N.toKeyString());
+		assertEquals("rcl:-1,10x1,100x399;", RCL.toKeyString());
+		assertEquals("rcl:1,10x1,100x399;", RCL_N.toKeyString());
+		assertEquals("rcc:-1,10x1,100x399;", RCC.toKeyString());
+		assertEquals("rcc:1,10x1,100x399;", RCC_N.toKeyString());
 	}
 }
 

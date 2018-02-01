@@ -11,6 +11,8 @@ public class ScrambleConstants {
 	static final char COORD_SEP_CAP = 'P';
 	static final char OP_SEP = ':';
 	
+	static final String MOVE_SEP_REGEX = "(?<=" + ScrambleConstants.MOVE_END + ")";
+	
 	public static class Swap {
 		public static final String OP = "sw";
 		public static final int X1 = 0;
