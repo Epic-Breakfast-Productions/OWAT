@@ -409,6 +409,8 @@ public abstract class Matrix<T> implements Iterable<T> {
 		return this.numCols;
 	}
 	
+	public long getWidth(){return this.getNumCols();}
+	
 	/**
 	 * Gets the number of rows held by this matrix.
 	 * @return The number of rows held by this matrix.
@@ -416,6 +418,8 @@ public abstract class Matrix<T> implements Iterable<T> {
 	public long getNumRows(){
 		return this.numRows;
 	}
+	
+	public long getHeight(){return this.getNumRows();}
 	
 	/**
 	 * Gets the number of spots in this matrix to hold elements.

@@ -106,7 +106,7 @@ public class ScrambleMove {
 		return new ScrambleMove(sm, args);
 	}
 	
-	public static List<ScrambleMove> parseMulti(String moves) {
+	public static LongLinkedList<ScrambleMove> parseMulti(String moves) {
 		LongLinkedList<ScrambleMove> output = new LongLinkedList<>();
 		
 		String[] moveStrings = moves.split(MOVE_SEP_REGEX);
