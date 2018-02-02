@@ -1144,4 +1144,47 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 			}
 		};
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		//TODO:: test
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		LongLinkedList<E> that;
+		try {
+			that =(LongLinkedList<E>) o;
+		}catch(ClassCastException e){
+			return false;
+		}
+		if(capacity != that.capacity ||
+			length != that.length){
+			return false;
+		}
+		
+		Iterator<LongListNode<E>> thisIt = this.listNodeIterator();
+		Iterator<LongListNode<E>> thatIt = this.listNodeIterator();
+		
+		while (thisIt.hasNext()){
+			LongListNode<E> thisCur = thisIt.next();
+			LongListNode<E> thatCur = thatIt.next();
+			
+			if(thisCur == null){
+				if(thatCur != null){
+					return false;
+				}
+				continue;
+			}
+			
+			if(!thisCur.equals(thatCur)){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		
+		return Objects.hash(capacity, length, first, last);
+	}
 }

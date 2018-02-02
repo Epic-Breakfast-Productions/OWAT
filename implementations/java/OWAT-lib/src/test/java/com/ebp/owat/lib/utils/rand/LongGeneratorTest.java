@@ -45,7 +45,6 @@ public class LongGeneratorTest {
 		this.curGenClass = curGenClass;
 	}
 	
-	
 	@Test
 	public void testLongGenerators() throws Throwable{
 		LOGGER.info("Testing the LongGenerator class: {}", curGenClass);

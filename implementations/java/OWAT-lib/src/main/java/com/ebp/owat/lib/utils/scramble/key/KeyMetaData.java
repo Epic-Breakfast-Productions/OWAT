@@ -1,16 +1,20 @@
 package com.ebp.owat.lib.utils.scramble.key;
 
+import com.ebp.owat.lib.datastructure.value.BitValue;
+import com.ebp.owat.lib.datastructure.value.Value;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
+import static com.ebp.owat.lib.utils.scramble.key.SerializationConstants.*;
+
 public class KeyMetaData {
-	@JsonProperty("origHeight")
+	@JsonProperty(ORIGINAL_HEIGHT)
 	public final long originalHeight;
-	@JsonProperty("origWidth")
+	@JsonProperty(ORIGINAL_WIDTH)
 	public final long originalWidth;
-	@JsonProperty("nodeType")
+	@JsonProperty(NODE_TYPE)
 	public final String nodeType;
 	
 	@JsonCreator
@@ -18,6 +22,18 @@ public class KeyMetaData {
 		this.originalHeight = originalHeight;
 		this.originalWidth = originalWidth;
 		this.nodeType = nodeType;
+	}
+	
+	/**
+	 * Gets the string used to define what kind of node the matrix holds.
+	 * @param type The type of Value.
+	 * @return The string representation for
+	 */
+	public static String getTypeStr(Class<? extends Value> type){
+		if(type.equals(BitValue.class)){
+			return BIT_TYPE_STR;
+		}
+		return BYTE_TYPE_STR;
 	}
 	
 	@Override
@@ -32,7 +48,6 @@ public class KeyMetaData {
 	
 	@Override
 	public int hashCode() {
-		
 		return Objects.hash(originalHeight, originalWidth, nodeType);
 	}
 }
