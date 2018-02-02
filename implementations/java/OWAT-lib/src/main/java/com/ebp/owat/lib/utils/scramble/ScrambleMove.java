@@ -9,6 +9,8 @@ import java.util.Objects;
 import static com.ebp.owat.lib.utils.scramble.ScrambleConstants.*;
 
 public class ScrambleMove {
+	private static boolean useOpCode = true;
+	
 	public final ScrambleMoves move;
 	private final long[] args;
 	
@@ -24,8 +26,26 @@ public class ScrambleMove {
 		return this.args[argIndex];
 	}
 	
-	public String toKeyString() {
-		StringBuilder sb = new StringBuilder(this.move.opStr);
+	private String getOpOrStr(){
+		if(isUsingOpCode()){
+			return this.move.opCode;
+		}
+		return this.move.opStr;
+	}
+	
+	/**
+	 * Turns this move into it's string representation.
+	 * @param sbIn If null, simply returns the string. If given a StringBuilder, adds to the string builder and returns null.
+	 * @return If sbIn is null, returns the string. Else just returns null.
+	 */
+	public String toKeyString(StringBuilder sbIn){
+		StringBuilder sb;
+		if(sbIn != null){
+			sb = sbIn;
+			sb.append(this.getOpOrStr());
+		}else{
+			sb = new StringBuilder(getOpOrStr());
+		}
 		sb.append(OP_SEP);
 		
 		switch (this.move) {
@@ -64,7 +84,14 @@ public class ScrambleMove {
 				break;
 		}
 		sb.append(MOVE_END);
+		if(sbIn != null){
+			return null;
+		}
 		return sb.toString();
+	}
+	
+	public String toKeyString() {
+		return this.toKeyString(null);
 	}
 	
 	public static ScrambleMove parse(String move) {
@@ -89,6 +116,15 @@ public class ScrambleMove {
 		}
 		return output;
 	}
+	
+	public static synchronized boolean isUsingOpCode(){
+		return useOpCode;
+	}
+	
+	public static synchronized void useOpCode(boolean use){
+		useOpCode = use;
+	}
+	
 	
 	@Override
 	public boolean equals(Object o) {

@@ -56,6 +56,18 @@ public class ScrambleMoveTest extends ScMoTest {
 	
 	@Test
 	public void testScrambleMoveToKeyString(){
+		assertEquals("1:10x1,100x399;", SW.toKeyString());
+		assertEquals("2:10,399;", SWR.toKeyString());
+		assertEquals("3:10,399;", SWC.toKeyString());
+		assertEquals("4:10,-399;", SLR.toKeyString());
+		assertEquals("4:10,399;", SLR_N.toKeyString());
+		assertEquals("5:10,-399;", SLC.toKeyString());
+		assertEquals("5:10,399;", SLC_N.toKeyString());
+		assertEquals("6:-1,10x1,100x399;", RCL.toKeyString());
+		assertEquals("6:1,10x1,100x399;", RCL_N.toKeyString());
+		assertEquals("7:-1,10x1,100x399;", RCC.toKeyString());
+		assertEquals("7:1,10x1,100x399;", RCC_N.toKeyString());
+		ScrambleMove.useOpCode(false);
 		assertEquals("sw:10x1,100x399;", SW.toKeyString());
 		assertEquals("swr:10,399;", SWR.toKeyString());
 		assertEquals("swc:10,399;", SWC.toKeyString());
@@ -67,6 +79,7 @@ public class ScrambleMoveTest extends ScMoTest {
 		assertEquals("rcl:1,10x1,100x399;", RCL_N.toKeyString());
 		assertEquals("rcc:-1,10x1,100x399;", RCC.toKeyString());
 		assertEquals("rcc:1,10x1,100x399;", RCC_N.toKeyString());
+		ScrambleMove.useOpCode(true);
 	}
 }
 
