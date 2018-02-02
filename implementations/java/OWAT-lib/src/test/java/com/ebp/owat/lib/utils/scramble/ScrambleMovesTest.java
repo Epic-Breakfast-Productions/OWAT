@@ -21,13 +21,12 @@ public class ScrambleMovesTest extends ScMoTest {
 	@Parameterized.Parameters
 	public static Collection getMatrixClassesToTest(){
 		return Arrays.asList(new Object[][] {
-			{ ScrambleMoves.SWAP, SWAP, Iterables.concat(SWAP_ROW, SWAP_COL, SLIDE_COL, SLIDE_ROW, ROT_CLOCK, ROT_CCLOCK), INVALID },
-			{ ScrambleMoves.SWAP_ROW, SWAP_ROW, Iterables.concat(SWAP, SWAP_COL, SLIDE_COL, SLIDE_ROW, ROT_CLOCK, ROT_CCLOCK), INVALID },
-			{ ScrambleMoves.SWAP_COL, SWAP_COL, Iterables.concat(SWAP, SWAP_ROW, SLIDE_COL, SLIDE_ROW, ROT_CLOCK, ROT_CCLOCK), INVALID },
-			{ ScrambleMoves.SLIDE_ROW, SLIDE_ROW, Iterables.concat(SWAP, SWAP_ROW, SWAP_COL, SLIDE_COL, ROT_CLOCK, ROT_CCLOCK), INVALID },
-			{ ScrambleMoves.SLIDE_COL, SLIDE_COL, Iterables.concat(SWAP, SWAP_ROW, SWAP_COL, SLIDE_ROW, ROT_CLOCK, ROT_CCLOCK), INVALID },
-			{ ScrambleMoves.ROT_CLOCK, ROT_CLOCK, Iterables.concat(SWAP, SWAP_ROW, SWAP_COL, SLIDE_ROW, SLIDE_COL, ROT_CCLOCK), INVALID },
-			{ ScrambleMoves.ROT_CCLOCK, ROT_CCLOCK, Iterables.concat(SWAP, SWAP_ROW, SWAP_COL, SLIDE_ROW, SLIDE_COL, ROT_CLOCK), INVALID }
+			{ ScrambleMoves.SWAP, SWAP, Iterables.concat(SWAP_ROW, SWAP_COL, SLIDE_COL, SLIDE_ROW, ROT_BOX), INVALID },
+			{ ScrambleMoves.SWAP_ROW, SWAP_ROW, Iterables.concat(SWAP, SWAP_COL, SLIDE_COL, SLIDE_ROW, ROT_BOX), INVALID },
+			{ ScrambleMoves.SWAP_COL, SWAP_COL, Iterables.concat(SWAP, SWAP_ROW, SLIDE_COL, SLIDE_ROW, ROT_BOX), INVALID },
+			{ ScrambleMoves.SLIDE_ROW, SLIDE_ROW, Iterables.concat(SWAP, SWAP_ROW, SWAP_COL, SLIDE_COL, ROT_BOX), INVALID },
+			{ ScrambleMoves.SLIDE_COL, SLIDE_COL, Iterables.concat(SWAP, SWAP_ROW, SWAP_COL, SLIDE_ROW, ROT_BOX), INVALID },
+			{ ScrambleMoves.ROT_BOX, ROT_BOX, Iterables.concat(SWAP, SWAP_ROW, SWAP_COL, SLIDE_ROW, SLIDE_COL), INVALID }
 		});
 	}
 	

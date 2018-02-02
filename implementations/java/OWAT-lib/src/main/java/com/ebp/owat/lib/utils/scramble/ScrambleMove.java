@@ -3,7 +3,6 @@ package com.ebp.owat.lib.utils.scramble;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 import static com.ebp.owat.lib.utils.scramble.ScrambleConstants.*;
@@ -70,17 +69,16 @@ public class ScrambleMove {
 					.append(ARG_SEP)
 					.append(this.args[SlideCol.NUMTOSLIDE] * -1L);
 				break;
-			case ROT_CLOCK:
-			case ROT_CCLOCK:
-				sb.append(this.args[RotateClock.ROTNUM] * -1L)
+			case ROT_BOX:
+				sb.append(this.args[RotateBox.ROTNUM] * -1L)
 					.append(ARG_SEP)
-					.append(this.args[RotateClock.X1])
+					.append(this.args[RotateBox.X1])
 					.append(COORD_SEP)
-					.append(this.args[RotateClock.Y1])
+					.append(this.args[RotateBox.Y1])
 					.append(ARG_SEP)
-					.append(this.args[RotateClock.X2])
+					.append(this.args[RotateBox.X2])
 					.append(COORD_SEP)
-					.append(this.args[RotateClock.Y2]);
+					.append(this.args[RotateBox.Y2]);
 				break;
 		}
 		sb.append(MOVE_END);

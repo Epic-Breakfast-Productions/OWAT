@@ -67,8 +67,7 @@ public class ScrambleMoveGenerator {
 					this.numGenerator.next(this.matrix.getNumCols()),
 					this.numGenerator.next(this.matrix.getNumRows())
 				);
-			case ROT_CLOCK:
-			case ROT_CCLOCK:{
+			case ROT_BOX:{
 				long[] coords = this.getBoxCoords();
 				return new ScrambleMove(
 					sm,

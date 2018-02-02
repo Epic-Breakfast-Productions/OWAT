@@ -15,10 +15,8 @@ public class ScrambleMoveTest extends ScMoTest {
 	private static final ScrambleMove SLR_N = new ScrambleMove(ScrambleMoves.SLIDE_ROW, 10L, -399L);
 	private static final ScrambleMove SLC = new ScrambleMove(ScrambleMoves.SLIDE_COL, 10L, 399L);
 	private static final ScrambleMove SLC_N = new ScrambleMove(ScrambleMoves.SLIDE_COL, 10L, -399L);
-	private static final ScrambleMove RCL = new ScrambleMove(ScrambleMoves.ROT_CLOCK, 1, 10L, 1L, 100L, 399L);
-	private static final ScrambleMove RCL_N = new ScrambleMove(ScrambleMoves.ROT_CLOCK, -1, 10L, 1L, 100L, 399L);
-	private static final ScrambleMove RCC = new ScrambleMove(ScrambleMoves.ROT_CCLOCK, 1, 10L, 1L, 100L, 399L);
-	private static final ScrambleMove RCC_N = new ScrambleMove(ScrambleMoves.ROT_CCLOCK, -1, 10L, 1L, 100L, 399L);
+	private static final ScrambleMove ROT = new ScrambleMove(ScrambleMoves.ROT_BOX, 1, 10L, 1L, 100L, 399L);
+	private static final ScrambleMove ROT_N = new ScrambleMove(ScrambleMoves.ROT_BOX, -1, 10L, 1L, 100L, 399L);
 	
 	@Test
 	public void testScrambleMoveBadConstructor(){
@@ -39,10 +37,8 @@ public class ScrambleMoveTest extends ScMoTest {
 		assertEquals(SLR_N, ScrambleMove.parse("slr:10,-399;"));
 		assertEquals(SLC, ScrambleMove.parse("slc:10,399;"));
 		assertEquals(SLC_N, ScrambleMove.parse("slc:10,-399;"));
-		assertEquals(RCL, ScrambleMove.parse("rcl:1,10x1,100x399;"));
-		assertEquals(RCL_N, ScrambleMove.parse("rcl:-1,10x1,100x399;"));
-		assertEquals(RCC, ScrambleMove.parse("rcc:1,10x1,100x399;"));
-		assertEquals(RCC_N, ScrambleMove.parse("rcc:-1,10x1,100x399;"));
+		assertEquals(ROT, ScrambleMove.parse("rot:1,10x1,100x399;"));
+		assertEquals(ROT_N, ScrambleMove.parse("rot:-1,10x1,100x399;"));
 		SW.hashCode();
 	}
 	
@@ -63,10 +59,8 @@ public class ScrambleMoveTest extends ScMoTest {
 		assertEquals("4:10,399;", SLR_N.toKeyString());
 		assertEquals("5:10,-399;", SLC.toKeyString());
 		assertEquals("5:10,399;", SLC_N.toKeyString());
-		assertEquals("6:-1,10x1,100x399;", RCL.toKeyString());
-		assertEquals("6:1,10x1,100x399;", RCL_N.toKeyString());
-		assertEquals("7:-1,10x1,100x399;", RCC.toKeyString());
-		assertEquals("7:1,10x1,100x399;", RCC_N.toKeyString());
+		assertEquals("6:-1,10x1,100x399;", ROT.toKeyString());
+		assertEquals("6:1,10x1,100x399;", ROT_N.toKeyString());
 		ScrambleMove.useOpCode(false);
 		assertEquals("sw:10x1,100x399;", SW.toKeyString());
 		assertEquals("swr:10,399;", SWR.toKeyString());
@@ -75,10 +69,8 @@ public class ScrambleMoveTest extends ScMoTest {
 		assertEquals("slr:10,399;", SLR_N.toKeyString());
 		assertEquals("slc:10,-399;", SLC.toKeyString());
 		assertEquals("slc:10,399;", SLC_N.toKeyString());
-		assertEquals("rcl:-1,10x1,100x399;", RCL.toKeyString());
-		assertEquals("rcl:1,10x1,100x399;", RCL_N.toKeyString());
-		assertEquals("rcc:-1,10x1,100x399;", RCC.toKeyString());
-		assertEquals("rcc:1,10x1,100x399;", RCC_N.toKeyString());
+		assertEquals("rot:-1,10x1,100x399;", ROT.toKeyString());
+		assertEquals("rot:1,10x1,100x399;", ROT_N.toKeyString());
 		ScrambleMove.useOpCode(true);
 	}
 }

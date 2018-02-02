@@ -48,19 +48,18 @@ public class MoveValidator {
 				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.SlideCol.ROWCOL), Plane.X);
 				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.SlideCol.NUMTOSLIDE), Plane.Y);
 				break;
-			case ROT_CLOCK:
-			case ROT_CCLOCK:
-				if (!(move.getArg(ScrambleConstants.RotateClock.ROTNUM) >= 1 && move.getArg(ScrambleConstants.RotateClock.ROTNUM) <= 3)) {
-					throw new IllegalStateException("Invalid number of rotations given. Given: "+move.getArg(ScrambleConstants.RotateClock.ROTNUM));
+			case ROT_BOX:
+				if (!(move.getArg(ScrambleConstants.RotateBox.ROTNUM) >= 1 && move.getArg(ScrambleConstants.RotateBox.ROTNUM) <= 3)) {
+					throw new IllegalStateException("Invalid number of rotations given. Given: "+move.getArg(ScrambleConstants.RotateBox.ROTNUM));
 				}
-				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateClock.X1), Plane.X);
-				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateClock.Y1), Plane.Y);
-				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateClock.X2), Plane.X);
-				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateClock.Y2), Plane.Y);
+				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.X1), Plane.X);
+				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.Y1), Plane.Y);
+				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.X2), Plane.X);
+				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.Y2), Plane.Y);
 				
 				if(
-					(move.getArg(ScrambleConstants.RotateClock.X1) >= move.getArg(ScrambleConstants.RotateClock.X2) - 1) ||
-					(move.getArg(ScrambleConstants.RotateClock.Y1) >= move.getArg(ScrambleConstants.RotateClock.Y2) - 1)
+					(move.getArg(ScrambleConstants.RotateBox.X1) >= move.getArg(ScrambleConstants.RotateBox.X2) - 1) ||
+					(move.getArg(ScrambleConstants.RotateBox.Y1) >= move.getArg(ScrambleConstants.RotateBox.Y2) - 1)
 				){
 					throw new IllegalArgumentException(
 						"Points given do not make a valid box. Given: ("+move.getArg(ScrambleConstants.Swap.X1)+","+move.getArg(ScrambleConstants.Swap.Y1)+"),("+move.getArg(ScrambleConstants.Swap.X2)+","+move.getArg(ScrambleConstants.Swap.Y2)+")"
