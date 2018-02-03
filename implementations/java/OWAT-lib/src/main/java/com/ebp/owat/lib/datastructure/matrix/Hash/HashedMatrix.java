@@ -231,13 +231,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		return removedItems;
 	}
 	
-	/**
-	 * Replaces a particular value's value.
-	 *
-	 * @param nodeToReplace The coordinate of the value to replace.
-	 * @param newValue      The value to replace.
-	 * @return The previously held value.
-	 */
 	@Override
 	public T setValue(Coordinate nodeToReplace, T newValue) {
 		MatrixValidator.throwIfNotOnMatrix(this, nodeToReplace);
@@ -249,6 +242,12 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		
 		this.valueMap.put(nodeToReplace, newValue);
 		return valToReturn;
+	}
+	
+	@Override
+	public boolean hasValue(Coordinate node){
+		//TODO:: test
+		return this.valueMap.containsKey(node);
 	}
 	
 	@Override
@@ -271,6 +270,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		
 		long curCol = 0;
 		for(T curVal : newValues){
+			
 			this.setValue(curCol, coordinate.getY(), curVal);
 			curCol++;
 			if(!isValidColIndex(curCol)){

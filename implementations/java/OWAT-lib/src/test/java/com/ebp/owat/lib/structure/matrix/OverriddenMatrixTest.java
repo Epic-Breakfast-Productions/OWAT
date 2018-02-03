@@ -427,6 +427,7 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testReplaceRow() throws Exception {
+		//TODO:: test for default values and the number of elements in the matrix
 		Matrix m = this.getTestingInstance();
 		Object d = m.getDefaultValue();
 		

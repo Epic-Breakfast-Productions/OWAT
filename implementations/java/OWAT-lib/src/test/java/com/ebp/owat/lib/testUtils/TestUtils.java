@@ -15,7 +15,7 @@ public class TestUtils {
 		}
 	}
 	
-	public static void assertMatrix(Object[][] expected, Matrix actual) throws Exception{
+	public static void assertMatrix(Object[][] expected, Matrix actual) {
 		assertEquals(expected.length, actual.getNumRows());
 		
 		for(int i = 0; i < expected.length; i++){

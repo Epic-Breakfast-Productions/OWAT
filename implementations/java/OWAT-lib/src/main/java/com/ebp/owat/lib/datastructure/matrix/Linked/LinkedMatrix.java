@@ -206,6 +206,11 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	}
 	
 	@Override
+	public boolean hasValue(Coordinate node) {
+		return false;
+	}
+	
+	@Override
 	public T clearNode(Coordinate nodeToClear) {
 		return null;
 	}

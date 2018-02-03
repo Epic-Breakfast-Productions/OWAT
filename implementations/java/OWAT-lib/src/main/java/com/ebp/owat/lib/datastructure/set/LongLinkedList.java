@@ -129,7 +129,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 */
 	private void throwIfIndexOutOfBounds(long i){
 		if(i >= this.length || i < 0){
-			throw new IndexOutOfBoundsException("Index given is out of bounds.");
+			throw new IndexOutOfBoundsException("Index given is out of bounds; Given:"+ i);
 		}
 	}
 	

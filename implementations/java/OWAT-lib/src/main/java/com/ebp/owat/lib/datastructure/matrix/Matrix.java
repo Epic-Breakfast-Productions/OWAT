@@ -261,6 +261,26 @@ public abstract class Matrix<T> implements Iterable<T> {
 	}
 	
 	/**
+	 * Determines if the matrix has a value at the given index.
+	 * @param node The coordinate of the node.
+	 * @return If the node has a value or not.
+	 */
+	public abstract boolean hasValue(Coordinate node);
+	
+	/**
+	 * Determines if the matrix has a value at the given index.
+	 * TODO:: test
+	 * @param xIn The x index of the node.
+	 * @param yIn The y index of the node.
+	 * @return If the node has a value or not.
+	 */
+	public boolean hasValue(long xIn, long yIn){
+		return this.hasValue(
+			new Coordinate(this, xIn, yIn)
+		);
+	}
+	
+	/**
 	 * Clears the value at the coordinate given.
 	 * @param nodeToClear The coordinate of the value to clear the value of.
 	 * @return The value previously at the value. If nothing set, returns {@link Matrix#defaultValue}
