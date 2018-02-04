@@ -3,7 +3,6 @@ package com.ebp.owat.lib.datastructure.matrix.Hash;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
-import com.ebp.owat.lib.datastructure.value.Value;
 import com.ebp.owat.lib.utils.scramble.MoveValidator;
 import com.ebp.owat.lib.utils.scramble.ScrambleConstants;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
@@ -101,8 +100,8 @@ public class HashedScramblingMatrix<T> extends HashedMatrix<T> implements Scramb
 	public void rotBox(ScrambleMove sm) {
 		MoveValidator.throwIfInvalidMove(this, sm, ScrambleMoves.ROT_BOX);
 		long numTimesToRotate = sm.getArg(ScrambleConstants.RotateBox.ROTNUM);
-		Coordinate topLeft = new Coordinate(this, sm.getArg(ScrambleConstants.RotateBox.X1), sm.getArg(ScrambleConstants.RotateBox.Y1));
-		Coordinate botRight = new Coordinate(this, sm.getArg(ScrambleConstants.RotateBox.X2), sm.getArg(ScrambleConstants.RotateBox.Y2));
+		Coordinate topLeft = new Coordinate(this, sm.getArg(ScrambleConstants.RotateBox.X), sm.getArg(ScrambleConstants.RotateBox.Y));
+		long size = sm.getArg(ScrambleConstants.RotateBox.SIZE);
 		
 		numTimesToRotate = (numTimesToRotate < 0 ? numTimesToRotate : numTimesToRotate);
 		for(long curRotStep = 1; curRotStep <= numTimesToRotate; curRotStep++){

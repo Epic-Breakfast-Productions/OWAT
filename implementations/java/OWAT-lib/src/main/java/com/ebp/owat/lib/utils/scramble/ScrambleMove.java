@@ -72,13 +72,11 @@ public class ScrambleMove {
 			case ROT_BOX:
 				sb.append(this.args[RotateBox.ROTNUM] * -1L)
 					.append(ARG_SEP)
-					.append(this.args[RotateBox.X1])
+					.append(this.args[RotateBox.X])
 					.append(COORD_SEP)
-					.append(this.args[RotateBox.Y1])
+					.append(this.args[RotateBox.Y])
 					.append(ARG_SEP)
-					.append(this.args[RotateBox.X2])
-					.append(COORD_SEP)
-					.append(this.args[RotateBox.Y2]);
+					.append(this.args[RotateBox.SIZE]);
 				break;
 		}
 		sb.append(MOVE_END);

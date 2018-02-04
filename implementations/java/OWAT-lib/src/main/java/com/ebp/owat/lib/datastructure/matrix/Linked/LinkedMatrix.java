@@ -327,6 +327,11 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		return null;
 	}
 	
+	@Override
+	public void replaceSubMatrix(Matrix<T> matrix, Coordinate topLeft, long height, long width) {
+	
+	}
+	
 	/**
 	 * Gets this matrix represented as a two dimensional matrix.
 	 *

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ScrambleMoveGeneratorTest {
 	
-	private static final int NUM_TEST_ITERATIONS = 3_000_000;
+	private static final int NUM_TEST_ITERATIONS = 6_000_000;
 	private static final LongGenerator LONG_GEN = new RandGenerator();
 	
 	@Test

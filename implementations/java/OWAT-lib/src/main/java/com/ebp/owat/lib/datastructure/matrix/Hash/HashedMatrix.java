@@ -370,4 +370,9 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	public List<T> getRow(Coordinate coordIn) {
 		return this.getRow(coordIn.getY());
 	}
+	
+	@Override
+	public void replaceSubMatrix(Matrix<T> matrix, Coordinate topLeft, long height, long width) {
+		//TODO:: this
+	}
 }

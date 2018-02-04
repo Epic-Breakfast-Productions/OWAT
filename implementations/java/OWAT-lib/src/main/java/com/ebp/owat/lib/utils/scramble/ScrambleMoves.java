@@ -10,7 +10,7 @@ public enum ScrambleMoves {
 	SWAP_COL	("3",SwapCol.OP,2, "\\s*("+SwapCol.OP+"|3)\\s*"+OP_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*"),
 	SLIDE_ROW	("4",SlideRow.OP,2, "\\s*("+SlideRow.OP+"|4)\\s*"+OP_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*-?\\d+\\s*"+MOVE_END+"\\s*"),
 	SLIDE_COL	("5",SlideCol.OP,2, "\\s*("+SlideCol.OP+"|5)\\s*"+OP_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*-?\\d+\\s*"+MOVE_END+"\\s*"),
-	ROT_BOX		("6",RotateBox.OP,5, "\\s*("+RotateBox.OP+"|6)\\s*"+OP_SEP+"\\s*(-?1|-?2|-?3)\\s*"+ARG_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*");
+	ROT_BOX		("6",RotateBox.OP,4, "\\s*("+RotateBox.OP+"|6)\\s*"+OP_SEP+"\\s*(-?1|-?2|-?3)\\s*"+ARG_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*");
 	
 	public final String opCode;
 	public final String opStr;

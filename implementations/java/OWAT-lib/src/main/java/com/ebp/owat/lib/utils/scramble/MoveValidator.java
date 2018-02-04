@@ -6,18 +6,25 @@ import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 
 public class MoveValidator {
 	public static final long MIN_SIZE_FOR_SCRAMBLING = 5;
+	public static final long MIN_SIZE_FOR_ROTATION = 2;
 	
+	public static boolean matrixIsTooSmallForScrambling(Matrix matrix) {
+		return matrix.getNumCols() < MIN_SIZE_FOR_SCRAMBLING ||
+			matrix.getNumRows() < MIN_SIZE_FOR_SCRAMBLING;
+	}
+	
+	/**
+	 *
+	 * @param matrix
+	 * @throws IllegalStateException If the matrix is too small for scrambling.
+	 */
 	public static void throwIfMatrixTooSmallForScrambling(Matrix matrix) {
-		if (
-			matrix.getNumCols() < MIN_SIZE_FOR_SCRAMBLING ||
-				matrix.getNumRows() < MIN_SIZE_FOR_SCRAMBLING
-			) {
+		if (matrixIsTooSmallForScrambling(matrix)) {
 			throw new IllegalStateException("Matrix too small for scrambling.");
 		}
 	}
 	
 	public static void throwIfInvalidMove(Matrix matrix, ScrambleMove move) {
-		
 		switch (move.move) {
 			case SWAP:
 				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.Swap.X1), Plane.X);
@@ -48,20 +55,15 @@ public class MoveValidator {
 				break;
 			case ROT_BOX:
 				if (!(move.getArg(ScrambleConstants.RotateBox.ROTNUM) >= 1 && move.getArg(ScrambleConstants.RotateBox.ROTNUM) <= 3)) {
-					throw new IllegalStateException("Invalid number of rotations given. Given: " + move.getArg(ScrambleConstants.RotateBox.ROTNUM));
+					throw new IllegalArgumentException("Invalid number of rotations given. Given: " + move.getArg(ScrambleConstants.RotateBox.ROTNUM));
 				}
-				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.X1), Plane.X);
-				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.Y1), Plane.Y);
-				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.X2), Plane.X);
-				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.Y2), Plane.Y);
+				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.X), Plane.X);
+				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.Y), Plane.Y);
+				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.SIZE) + move.getArg(ScrambleConstants.RotateBox.X), Plane.X);
+				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.SIZE) + move.getArg(ScrambleConstants.RotateBox.Y), Plane.Y);
 				
-				if (
-					(move.getArg(ScrambleConstants.RotateBox.X1) >= move.getArg(ScrambleConstants.RotateBox.X2) - 1) ||
-						(move.getArg(ScrambleConstants.RotateBox.Y1) >= move.getArg(ScrambleConstants.RotateBox.Y2) - 1)
-					) {
-					throw new IllegalArgumentException(
-						"Points given do not make a valid box. Given: (" + move.getArg(ScrambleConstants.Swap.X1) + "," + move.getArg(ScrambleConstants.Swap.Y1) + "),(" + move.getArg(ScrambleConstants.Swap.X2) + "," + move.getArg(ScrambleConstants.Swap.Y2) + ")"
-					);
+				if (move.getArg(ScrambleConstants.RotateBox.SIZE) < MIN_SIZE_FOR_ROTATION) {
+					throw new IllegalArgumentException("Invalid size of sub matrix.");
 				}
 				break;
 			default:

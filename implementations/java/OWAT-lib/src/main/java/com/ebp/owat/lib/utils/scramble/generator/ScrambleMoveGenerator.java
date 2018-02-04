@@ -27,8 +27,8 @@ public class ScrambleMoveGenerator {
 	}
 	
 	public ScrambleMove getMove(){
-		MoveValidator.throwIfMatrixTooSmallForScrambling(matrix);
-		ScrambleMoves sm = numGenerator.getRandValue(ScrambleMoves.values());
+		MoveValidator.throwIfMatrixTooSmallForScrambling(this.matrix);
+		ScrambleMoves sm = this.numGenerator.getRandValue(ScrambleMoves.values());
 		
 		switch (sm){
 			case SWAP:
@@ -68,15 +68,13 @@ public class ScrambleMoveGenerator {
 					this.numGenerator.next(this.matrix.getNumRows())
 				);
 			case ROT_BOX:{
-				long[] coords = this.getBoxCoords();
-				return new ScrambleMove(
-					sm,
-					this.numGenerator.next(1,4),
-					coords[0],
-					coords[1],
-					coords[2],
-					coords[3]
-				);
+				long
+					x = this.numGenerator.next(this.matrix.getNumCols() - MoveValidator.MIN_SIZE_FOR_ROTATION),
+					y = this.numGenerator.next(this.matrix.getNumRows() - MoveValidator.MIN_SIZE_FOR_ROTATION),
+					maxSize = Math.max(x,y),
+					s = this.numGenerator.next(maxSize, this.matrix.getNumCols() - maxSize)
+					;
+				return new ScrambleMove(sm, this.numGenerator.next(1,4), x, y, s);
 			}
 		}
 		throw new IllegalStateException("This should not happen.");
@@ -86,8 +84,8 @@ public class ScrambleMoveGenerator {
 	 * Gets a set to coords to describe a box.
 	 *
 	 * Array returned looks like:
-	 * [0] = X1 \
-	 * [1] = Y1 |- "Top Left"
+	 * [0] = X \
+	 * [1] = Y |- "Top Left"
 	 * [2] = X2 \
 	 * [3] = Y2 |- "Bottom Right"
 	 *

@@ -547,6 +547,32 @@ public abstract class Matrix<T> implements Iterable<T> {
 	}
 	
 	/**
+	 * Gets a sub matrix from this matrix.
+	 * @param topLeft The top left most node of the sud matrix.
+	 * @param height The height of the sub matrix to get; how many rows it should have.
+	 * @param width The width of the sub matrix to get; how many columns it should have.
+	 * @return A sub matrix of this matrix.
+	 */
+	public Matrix<T> getSubMatrix(Coordinate topLeft, long height, long width){
+		//TODO:: this
+		return null;
+	}
+	
+	public Matrix<T> getSubMatrix(Coordinate topLeft, long heightWidth){
+		return this.getSubMatrix(topLeft, heightWidth, heightWidth);
+	}
+	
+	public abstract void replaceSubMatrix(Matrix<T> matrix, Coordinate topLeft, long height, long width);
+	
+	public void replaceSubMatrix(Matrix<T> matrix, Coordinate topLeft, long heightWidth){
+		this.replaceSubMatrix(matrix, topLeft, heightWidth, heightWidth);
+	}
+	
+	public void replaceSubMatrix(Matrix<T> matrix, Coordinate topLeft){
+		this.replaceSubMatrix(matrix, topLeft, matrix.getNumRows(), matrix.getNumCols());
+	}
+	
+	/**
 	 * Gets this matrix represented as a two dimensional matrix.
 	 * @return This matrix as a 2d array.
 	 */

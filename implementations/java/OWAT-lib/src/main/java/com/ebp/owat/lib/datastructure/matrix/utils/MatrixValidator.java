@@ -109,6 +109,11 @@ public class MatrixValidator {
 		}
 	}
 	
+	public static void throwIfBadIndex(Matrix matrix, long index){
+		throwIfBadIndex(matrix, index, Plane.X);
+		throwIfBadIndex(matrix, index, Plane.Y);
+	}
+	
 	/**
 	 * Throws an IllegalStateException if the matrix has no rows or columns.
 	 * @param matrix
