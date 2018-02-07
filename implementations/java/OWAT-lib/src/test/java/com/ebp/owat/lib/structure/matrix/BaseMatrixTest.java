@@ -17,10 +17,10 @@ import static com.ebp.owat.lib.testUtils.TestUtils.assert2dArrayEquals;
 /**
  * A test of methods from the abstract Matrix class that are already implemented in that class.
  */
-public class BaseMatrixTest extends MatrixTest {
+public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseMatrixTest.class);
 	
-	public BaseMatrixTest(Class<? extends Matrix> curMatrixClass) {
+	public BaseMatrixTest(Class<T> curMatrixClass) {
 		super(curMatrixClass);
 	}
 	
@@ -35,7 +35,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testIsEmpty() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		assertTrue("Newly instantiated matrix is not empty for some reason.", m.isEmpty());
 		
 		m.grow(1);
@@ -47,7 +47,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testSize() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		assertEquals(0,m.size());
 		m.grow(1);
@@ -70,7 +70,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testIsFull() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		assertFalse(m.isFull());
 		
@@ -94,7 +94,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testNumColsRows() throws Exception {
-		Matrix testingMatrix = this.getTestingInstance();
+		T testingMatrix = this.getTestingInstance();
 		
 		assertEquals(0,testingMatrix.getNumCols());
 		assertEquals(0,testingMatrix.getNumRows());
@@ -102,7 +102,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testHasRowsCols() throws Exception {
-		Matrix testingMatrix = this.getTestingInstance();
+		T testingMatrix = this.getTestingInstance();
 		
 		assertFalse(testingMatrix.hasRowsCols());
 		testingMatrix.addRow();
@@ -111,7 +111,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testNumElementsHeld() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		assertEquals(0, m.numElements());
 		
@@ -139,13 +139,13 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testDefaultVal() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
-		Object obj = m.getDefaultValue();
+		Integer obj = m.getDefaultValue();
 		
 		assertNull(obj);
 		
-		Object testObj = "this is some value";
+		Integer testObj = 1;
 		obj = testObj;
 		
 		m.setDefaultValue(obj);
@@ -171,7 +171,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testGrowWithNum() throws Exception{
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		m.grow(1);
 		assertEquals(1, m.getNumCols());
@@ -199,7 +199,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testGrowWithCollection() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		assertTrue(m.grow(Arrays.asList(1)));
 		TestUtils.assertMatrix(
@@ -263,7 +263,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testGrowWithCollectionAlternating() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		assertTrue(m.growAlternating(Arrays.asList(1)));
 		TestUtils.assertMatrix(
@@ -312,7 +312,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testClearNode() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		m.grow(1);
 		
@@ -325,7 +325,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testTrimTo() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		m.grow(5);
 		
@@ -333,11 +333,13 @@ public class BaseMatrixTest extends MatrixTest {
 		
 		assertEquals(3, m.getNumCols());
 		assertEquals(3, m.getNumRows());
+		
+		//TODO:: test more thougroughlt with actual data, numElements
 	}
 	
 	@Test
 	public void testTrimBy() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		m.grow(5);
 		
@@ -349,7 +351,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testIterator() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		assertFalse(m.iterator().hasNext());
 		
@@ -391,7 +393,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testTo2dArray() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		m.addRow();
 		
@@ -432,7 +434,7 @@ public class BaseMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testRemoveRowColEmptyMatrix() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		assertNull(m.removeCol());
 		assertNull(m.removeRow());

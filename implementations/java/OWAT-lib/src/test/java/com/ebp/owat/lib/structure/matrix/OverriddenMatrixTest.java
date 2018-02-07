@@ -10,14 +10,13 @@ import com.ebp.owat.lib.testUtils.TestUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.Assert.*;
 
-public class OverriddenMatrixTest extends MatrixTest {
+public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseMatrixTest.class);
 	
-	public OverriddenMatrixTest(Class<? extends Matrix> curMatrixClass) {
+	public OverriddenMatrixTest(Class<T> curMatrixClass) {
 		super(curMatrixClass);
 	}
 	
@@ -27,7 +26,7 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void addRowColTest() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		m.addCol();
 		assertEquals(1, m.getNumCols());
@@ -56,7 +55,7 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void addRowsColsWithNumTest() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		m.addCols(1);
 		assertEquals(1, m.getNumCols());
@@ -101,14 +100,14 @@ public class OverriddenMatrixTest extends MatrixTest {
 	@Test
 	public void addColsWithCollectionTest() throws Exception {
 		//TODO:: add numElements assertions
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		Object def = m.getDefaultValue();
 		
 		assertTrue(m.addCols(Arrays.asList(1)));
 		
 		assertEquals(1, m.getNumRows());
 		assertEquals(1, m.getNumCols());
-		assertEquals(1, m.get(0,0));
+		assertEquals(1, (int)m.get(0L,0L));
 		
 		m = this.getTestingInstance();
 		
@@ -150,14 +149,14 @@ public class OverriddenMatrixTest extends MatrixTest {
 	@Test
 	public void addRowsWithCollectionTest() throws Exception {
 		//TODO:: add numElements assertions
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		Object def = m.getDefaultValue();
 		
 		assertTrue(m.addRows(Arrays.asList(1)));
 		
 		assertEquals(1, m.getNumRows());
 		assertEquals(1, m.getNumCols());
-		assertEquals(1, m.get(0,0));
+		assertEquals(1, (int)m.get(0,0));
 		
 		m = this.getTestingInstance();
 		
@@ -211,7 +210,7 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void removeColTest() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		Object d = m.getDefaultValue();
 		
 		m.grow(1);
@@ -284,7 +283,7 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void removeRowTest() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		Object d = m.getDefaultValue();
 		
 		m.grow(1);
@@ -352,8 +351,8 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void setValueTest() throws Exception{
-		Matrix m = this.getTestingInstance();
-		Object d = m.getDefaultValue();
+		T m = this.getTestingInstance();
+		Integer d = m.getDefaultValue();
 		
 		m.grow(1);
 		
@@ -384,7 +383,7 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testGet() throws Exception{
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		Object d = m.getDefaultValue();
 		
 		m.grow(1);
@@ -392,12 +391,12 @@ public class OverriddenMatrixTest extends MatrixTest {
 		assertEquals(d, m.get(0,0));
 		
 		m.setValue(0,0,1);
-		assertEquals(1, m.get(0,0));
+		assertEquals(1, (int)m.get(0,0));
 	}
 	
 	@Test
 	public void testGetRow() throws Exception{
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		Object d = m.getDefaultValue();
 		
 		m.grow(1);
@@ -415,7 +414,7 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testGetCol() throws Exception{
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		Object d = m.getDefaultValue();
 		
 		m.grow(1);
@@ -433,12 +432,12 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testReplaceRow() throws Exception {
-		Matrix m = this.getTestingInstance();
-		Object d = m.getDefaultValue();
+		T m = this.getTestingInstance();
+		Integer d = m.getDefaultValue();
 		
 		m.grow(5);
 		
-		List<Object> result = m.replaceRow(0, Arrays.asList(1,2,3,4,5));
+		List<Integer> result = m.replaceRow(0, Arrays.asList(1,2,3,4,5));
 		
 		assertEquals(Arrays.asList(d,d,d,d,d), result);
 		assertEquals(Arrays.asList(1,2,3,4,5), m.getRow(0));
@@ -465,12 +464,12 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testReplaceCol() throws Exception {
-		Matrix m = this.getTestingInstance();
-		Object d = m.getDefaultValue();
+		T m = this.getTestingInstance();
+		Integer d = m.getDefaultValue();
 		
 		m.grow(5);
 		
-		List<Object> result = m.replaceCol(0, Arrays.asList(1,2,3,4,5));
+		List<Integer> result = m.replaceCol(0, Arrays.asList(1,2,3,4,5));
 		
 		assertEquals(Arrays.asList(d,d,d,d,d), result);
 		assertEquals(Arrays.asList(1,2,3,4,5), m.getCol(0));
@@ -497,13 +496,13 @@ public class OverriddenMatrixTest extends MatrixTest {
 	
 	@Test
 	public void testGetSubMatrix() throws Exception {
-		Matrix m = this.getTestingInstance();
+		T m = this.getTestingInstance();
 		
 		m.grow(1);
 		
 		m.setValue(0,0,1);
 		
-		Matrix result = m.getSubMatrix(new Coordinate(m, 0,0), 1);
+		T result = (T)m.getSubMatrix(new Coordinate(m, 0,0), 1);
 		
 		assertEquals(m.numElements(), result.numElements());
 		TestUtils.assertMatrix(
@@ -518,7 +517,7 @@ public class OverriddenMatrixTest extends MatrixTest {
 		m.setValue(0,1,3);
 		m.setValue(1,1,4);
 		
-		result = m.getSubMatrix(new Coordinate(m, 0,0), 2);
+		result = (T)m.getSubMatrix(new Coordinate(m, 0,0), 2);
 		
 		assertEquals(m.numElements(), result.numElements());
 		TestUtils.assertMatrix(
@@ -538,7 +537,7 @@ public class OverriddenMatrixTest extends MatrixTest {
 		
 		m = this.getTestingInstance();
 		
-		Object n = m.getDefaultValue();
+		Integer n = m.getDefaultValue();
 		
 		m.grow(5L);
 		
@@ -548,7 +547,7 @@ public class OverriddenMatrixTest extends MatrixTest {
 		m.replaceRow(3, Arrays.asList(15,16, n,18,19));
 		m.replaceRow(4, Arrays.asList(20, n,22, n,24));
 		
-		result = m.getSubMatrix(new Coordinate(m, 1,1), 3);
+		result = (T)m.getSubMatrix(new Coordinate(m, 1,1), 3);
 		
 		assertEquals(6, result.numElements());
 		TestUtils.assertMatrix(
