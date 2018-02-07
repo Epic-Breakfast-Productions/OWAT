@@ -328,6 +328,11 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	}
 	
 	@Override
+	public Matrix<T> getSubMatrix(Coordinate topLeft, long height, long width) {
+		return null;
+	}
+	
+	@Override
 	public void replaceSubMatrix(Matrix<T> matrix, Coordinate topLeft, long height, long width) {
 	
 	}

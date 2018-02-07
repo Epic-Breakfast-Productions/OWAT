@@ -73,6 +73,21 @@ public abstract class Matrix<T> implements Iterable<T> {
 	}
 	
 	/**
+	 * Determines if the object given is equivalent to the one held as default.
+	 *
+	 * @param obj The object to test against
+	 * @return If the object given is equivalent to the one held as default.
+	 */
+	public boolean isDefaultValue(T obj){
+		if(obj == null){
+			return this.defaultValue == obj;
+		}else if(this.defaultValue == null){
+			return false;
+		}
+		return this.defaultValue.equals(obj);
+	}
+	
+	/**
 	 * Adds a row to the matrix. Will be added below the existing matrix.
 	 */
 	public abstract void addRow();
@@ -553,10 +568,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param width The width of the sub matrix to get; how many columns it should have.
 	 * @return A sub matrix of this matrix.
 	 */
-	public Matrix<T> getSubMatrix(Coordinate topLeft, long height, long width){
-		//TODO:: this
-		return null;
-	}
+	public abstract Matrix<T> getSubMatrix(Coordinate topLeft, long height, long width);
 	
 	public Matrix<T> getSubMatrix(Coordinate topLeft, long heightWidth){
 		return this.getSubMatrix(topLeft, heightWidth, heightWidth);

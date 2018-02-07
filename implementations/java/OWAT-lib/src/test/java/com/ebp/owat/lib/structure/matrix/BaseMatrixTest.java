@@ -155,6 +155,18 @@ public class BaseMatrixTest extends MatrixTest {
 		m.grow(1);
 		
 		assertEquals(testObj, m.get(0,0));
+		
+		m = this.getTestingInstance();
+		
+		assertTrue(m.isDefaultValue(null));
+		assertFalse(m.isDefaultValue(0));
+		assertFalse(m.isDefaultValue(1));
+		
+		m.setDefaultValue(0);
+		
+		assertFalse(m.isDefaultValue(null));
+		assertTrue(m.isDefaultValue(0));
+		assertFalse(m.isDefaultValue(1));
 	}
 	
 	@Test

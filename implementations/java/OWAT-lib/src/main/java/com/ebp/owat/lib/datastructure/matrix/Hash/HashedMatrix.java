@@ -270,8 +270,16 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		
 		long curCol = 0;
 		for(T curVal : newValues){
+			Coordinate curCoord = new Coordinate(this, curCol, coordinate.getY());
+			boolean hadVal = this.hasValue(curCoord);
+			boolean hasNewVal = !this.isDefaultValue(curVal);
 			
-			this.setValue(curCol, coordinate.getY(), curVal);
+			if(hasNewVal){
+				this.setValue(curCoord, curVal);
+			}else if(hadVal){
+				this.clearNode(curCoord);
+			}
+			
 			curCol++;
 			if(!isValidColIndex(curCol)){
 				break;
@@ -289,9 +297,18 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		
 		long curRow = 0;
 		for(T curVal : newValues){
-			this.setValue(coordinate.getX(), curRow, curVal);
+			Coordinate curCoord = new Coordinate(this, coordinate.getX(), curRow);
+			boolean hadVal = this.hasValue(curCoord);
+			boolean hasNewVal = !this.isDefaultValue(curVal);
+			
+			if(hasNewVal){
+				this.setValue(curCoord, curVal);
+			}else if(hadVal){
+				this.clearNode(curCoord);
+			}
+			
 			curRow++;
-			if(!isValidRowIndex(curRow)){
+			if(!isValidColIndex(curRow)){
 				break;
 			}
 		}
@@ -372,7 +389,32 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	}
 	
 	@Override
+	public Matrix<T> getSubMatrix(Coordinate topLeft, long height, long width) {
+		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
+		
+		Matrix<T> output = new HashedMatrix<>();
+		output.grow(height, width);
+		
+		Coordinate curThisCoord = topLeft.clone();
+		for(long curY = 0; curY < height; curY++){
+			curThisCoord.setY(curY + topLeft.getY());
+			for(long curX = 0; curX < width; curX++){
+				Coordinate curOutCoord = new Coordinate(output, curX, curY);
+				curThisCoord.setX(curX + topLeft.getX());
+				if(this.hasValue(curThisCoord)) {
+					output.setValue(curOutCoord, this.get(curThisCoord));
+				}
+			}
+		}
+		
+		return output;
+	}
+	
+	@Override
 	public void replaceSubMatrix(Matrix<T> matrix, Coordinate topLeft, long height, long width) {
+		
 		//TODO:: this
 	}
 }
