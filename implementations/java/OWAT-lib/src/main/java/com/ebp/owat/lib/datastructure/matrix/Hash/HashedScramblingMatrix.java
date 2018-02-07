@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.datastructure.matrix.Hash;
 
+import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
@@ -103,11 +104,49 @@ public class HashedScramblingMatrix<T> extends HashedMatrix<T> implements Scramb
 		Coordinate topLeft = new Coordinate(this, sm.getArg(ScrambleConstants.RotateBox.X), sm.getArg(ScrambleConstants.RotateBox.Y));
 		long size = sm.getArg(ScrambleConstants.RotateBox.SIZE);
 		
-		numTimesToRotate = (numTimesToRotate < 0 ? numTimesToRotate : numTimesToRotate);
-		for(long curRotStep = 1; curRotStep <= numTimesToRotate; curRotStep++){
-			//TODO:: rotate 90 degrees clockwise
+		Matrix<T> subMatrix = this.getSubMatrix(topLeft, size);
+		
+		for(long i = 0; i < numTimesToRotate; i++){
+			//transmute
+			{
+				LongLinkedList<List<T>> rows = new LongLinkedList<>();
+				
+				for(long j = 0; j < subMatrix.getNumRows(); j++){
+					rows.addLast(subMatrix.getRow(j));
+				}
+				
+				long j = 0;
+				for(List<T> curRow : rows){
+					subMatrix.replaceCol(j, curRow);
+					j++;
+				}
+			}
+			
+			//flip
+			{
+				LongLinkedList<List<T>> rows = new LongLinkedList<>();
+				
+				for(long j = 0; j < subMatrix.getNumRows(); j++){
+					rows.addLast(subMatrix.getRow(j));
+				}
+				
+				LongLinkedList<List<T>> newRows = new LongLinkedList<>();
+				
+				Iterator<List<T>> it = rows.destructiveIterator();
+				
+				long j = 0;
+				while (it.hasNext()){
+					LongLinkedList<T> newRow = new LongLinkedList<>();
+					List<T> curRow = it.next();
+					for(T curItem : curRow){
+						newRow.addFirst(curItem);
+					}
+					subMatrix.replaceRow(j, newRow);
+					j++;
+				}
+			}
 		}
 		
-		
+		this.replaceSubMatrix(subMatrix, topLeft);
 	}
 }

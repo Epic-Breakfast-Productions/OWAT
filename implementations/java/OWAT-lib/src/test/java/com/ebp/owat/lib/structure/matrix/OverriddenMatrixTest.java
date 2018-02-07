@@ -559,4 +559,10 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 			result
 		);
 	}
+	
+	
+	@Test
+	public void testReplaceSubMatrix() throws Exception {
+	
+	}
 }

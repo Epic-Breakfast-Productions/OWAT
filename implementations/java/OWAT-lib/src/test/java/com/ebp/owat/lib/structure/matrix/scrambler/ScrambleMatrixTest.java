@@ -258,7 +258,6 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 	}
 	
 	@Test
-	@Ignore//TODO
 	public void testRotBox() throws Exception {
 		E testMatrix = this.getPopulatedTestingInstance();
 		
@@ -269,7 +268,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 			//nothing to do
 		}
 		
-		testMatrix.rotBox(new ScrambleMove(ROT_BOX, 1, 0,0,4,4));
+		testMatrix.rotBox(new ScrambleMove(ROT_BOX, 1, 0,0,5));
 		
 		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
@@ -283,7 +282,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 			testMatrix
 		);
 		
-		testMatrix.rotBox(new ScrambleMove(ROT_BOX, 2, 0,0,4,4));
+		testMatrix.rotBox(new ScrambleMove(ROT_BOX, 2, 0,0,5));
 		
 		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
@@ -293,6 +292,20 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 				{ 2, N,12, N,22},
 				{ N, 6, N,16, N},
 				{ 0, N,10,15,20}
+			},
+			testMatrix
+		);
+		
+		testMatrix.rotBox(new ScrambleMove(ROT_BOX, 1, 0,0,5));
+		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{ 0, N, 2, N, 4},
+				{ N, 6, N, 8, N},
+				{10, N,12,13,14},
+				{15,16, N,18,19},
+				{20, N,22, N,24}
 			},
 			testMatrix
 		);

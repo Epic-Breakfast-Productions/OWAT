@@ -1145,6 +1145,25 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		};
 	}
 	
+	/**
+	 * Iterates through the items in the list, removing them as it goes.
+	 * TODO:: test
+	 * @return An iterator that removes the items it iterates through.
+	 */
+	public Iterator<E> destructiveIterator(){
+		return new Iterator<E>() {
+			@Override
+			public boolean hasNext() {
+				return !isEmpty();
+			}
+			
+			@Override
+			public E next() {
+				return removeFirst();
+			}
+		};
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		//TODO:: test

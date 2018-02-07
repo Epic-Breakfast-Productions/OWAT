@@ -59,8 +59,8 @@ public class MoveValidator {
 				}
 				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.X), Plane.X);
 				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.Y), Plane.Y);
-				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.SIZE) + move.getArg(ScrambleConstants.RotateBox.X), Plane.X);
-				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.SIZE) + move.getArg(ScrambleConstants.RotateBox.Y), Plane.Y);
+				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.SIZE) + move.getArg(ScrambleConstants.RotateBox.X) - 1, Plane.X);
+				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.SIZE) + move.getArg(ScrambleConstants.RotateBox.Y) - 1, Plane.Y);
 				
 				if (move.getArg(ScrambleConstants.RotateBox.SIZE) < MIN_SIZE_FOR_ROTATION) {
 					throw new IllegalArgumentException("Invalid size of sub matrix.");
