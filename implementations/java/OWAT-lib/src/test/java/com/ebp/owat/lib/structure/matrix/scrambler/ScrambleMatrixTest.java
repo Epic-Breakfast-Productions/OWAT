@@ -15,10 +15,10 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static com.ebp.owat.lib.utils.scramble.ScrambleMoves.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Greg Stewart on 3/30/17.
- * TODO:: on all tests, verify number of elements in matrix never changes
  */
 @RunWith(Parameterized.class)
 public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
@@ -44,12 +44,12 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 	
 	@Before
 	public void setUp() throws Exception {
-		LOGGER.info("Testing the basic implemented methods of {}", this.curMatrixClass);
+		LOGGER.info("Testing the scrambling matrix {}", this.curMatrixClass);
 	}
 	
 	@After
 	public void tearDown() throws Exception {
-		LOGGER.info("Done testing the basic implemented methods of {}", this.curMatrixClass);
+		LOGGER.info("Done testing the scrambling matrix {}", this.curMatrixClass);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -86,6 +86,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		
 		testMatrix.swap(new ScrambleMove(SWAP, 0,0,4,4));
 		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{24, N, 2, N, 4},
@@ -99,6 +100,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		
 		testMatrix.swap(new ScrambleMove(SWAP, 1,0,1,1));
 		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{24, 6, 2, N, 4},
@@ -124,6 +126,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		
 		testMatrix.swapRows(new ScrambleMove(SWAP_ROW, 1,0));
 		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{ N, 6, N, 8, N},
@@ -149,6 +152,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		
 		testMatrix.swapCols(new ScrambleMove(SWAP_COL, 1,0));
 		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{ N, 0, 2, N, 4},
@@ -173,7 +177,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		}
 		
 		testMatrix.slideRow(new ScrambleMove(SLIDE_ROW, 0, 3));
-		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{ 2, N, 4, 0, N},
@@ -186,7 +190,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		);
 		
 		testMatrix.slideRow(new ScrambleMove(SLIDE_ROW, 0, -3));
-		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{ 0, N, 2, N, 4},
@@ -212,6 +216,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		
 		testMatrix.slideCol(new ScrambleMove(SLIDE_COL, 0, 3));
 		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{10, N, 2, N, 4},
@@ -225,6 +230,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		
 		testMatrix.slideCol(new ScrambleMove(SLIDE_COL, 1, 3));
 		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{10, N, 2, N, 4},
@@ -238,6 +244,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		
 		testMatrix.slideCol(new ScrambleMove(SLIDE_COL, 0, -3));
 		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{ 0, N, 2, N, 4},
@@ -264,6 +271,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		
 		testMatrix.rotBox(new ScrambleMove(ROT_BOX, 1, 0,0,4,4));
 		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{20,15,10, N, 0},
@@ -277,6 +285,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		
 		testMatrix.rotBox(new ScrambleMove(ROT_BOX, 2, 0,0,4,4));
 		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{ 4, N,14,19,24},
@@ -287,7 +296,5 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 			},
 			testMatrix
 		);
-		
-		//TODO:: test with rectangles, other boxes
 	}
 }
