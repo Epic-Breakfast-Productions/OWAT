@@ -14,13 +14,25 @@ public class KeyMetaData {
 	public final long originalHeight;
 	@JsonProperty(ORIGINAL_WIDTH)
 	public final long originalWidth;
+	@JsonProperty(DATA_HEIGHT)
+	public final long dataHeight;
+	@JsonProperty(DATA_WIDTH)
+	public final long dataWidth;
 	@JsonProperty(NODE_TYPE)
 	public final String nodeType;
 	
 	@JsonCreator
-	public KeyMetaData(@JsonProperty("origHeight") long originalHeight, @JsonProperty("origWidth") long originalWidth, @JsonProperty("nodeType") String nodeType) {
+	public KeyMetaData(
+		@JsonProperty(ORIGINAL_HEIGHT) long originalHeight,
+		@JsonProperty(ORIGINAL_WIDTH) long originalWidth,
+		@JsonProperty(DATA_HEIGHT) long dataHeight,
+		@JsonProperty(DATA_WIDTH) long dataWidth,
+		@JsonProperty("nodeType") String nodeType
+	) {
 		this.originalHeight = originalHeight;
 		this.originalWidth = originalWidth;
+		this.dataHeight = dataHeight;
+		this.dataWidth = dataWidth;
 		this.nodeType = nodeType;
 	}
 	

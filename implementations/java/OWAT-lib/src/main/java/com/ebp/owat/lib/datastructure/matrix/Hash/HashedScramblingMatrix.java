@@ -101,13 +101,14 @@ public class HashedScramblingMatrix<T> extends HashedMatrix<T> implements Scramb
 	public void rotBox(ScrambleMove sm) {
 		MoveValidator.throwIfInvalidMove(this, sm, ScrambleMoves.ROT_BOX);
 		long numTimesToRotate = sm.getArg(ScrambleConstants.RotateBox.ROTNUM);
+		numTimesToRotate = (numTimesToRotate<0 ? numTimesToRotate + 4 : numTimesToRotate);
 		Coordinate topLeft = new Coordinate(this, sm.getArg(ScrambleConstants.RotateBox.X), sm.getArg(ScrambleConstants.RotateBox.Y));
 		long size = sm.getArg(ScrambleConstants.RotateBox.SIZE);
 		
 		Matrix<T> subMatrix = this.getSubMatrix(topLeft, size);
 		
 		for(long i = 0; i < numTimesToRotate; i++){
-			//transmute
+			//transpose
 			{
 				LongLinkedList<List<T>> rows = new LongLinkedList<>();
 				

@@ -309,5 +309,7 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 			},
 			testMatrix
 		);
+		
+		//TODO:: test negative moves
 	}
 }

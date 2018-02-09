@@ -32,9 +32,9 @@ public class ScrambleKey {
 	@JsonIgnore
 	public final Mode mode;
 	
-	public ScrambleKey(long originalHeight, long originalWidth, Class<? extends Value> type) {
+	public ScrambleKey(long originalHeight, long originalWidth, long dataHeight, long dataWidth, Class<? extends Value> type) {
 		this.mode = Mode.SCRAMBLING;
-		this.meta = new KeyMetaData(originalHeight, originalWidth, KeyMetaData.getTypeStr(type));
+		this.meta = new KeyMetaData(originalHeight, originalWidth, dataHeight, dataWidth, KeyMetaData.getTypeStr(type));
 		this.moves = new LongLinkedList<>();
 	}
 	
