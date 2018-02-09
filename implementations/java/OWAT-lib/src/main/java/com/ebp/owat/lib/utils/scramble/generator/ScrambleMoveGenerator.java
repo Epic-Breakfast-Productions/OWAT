@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.utils.scramble.generator;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.utils.rand.LongGenerator;
+import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.scramble.MoveValidator;
 import com.ebp.owat.lib.utils.scramble.ScrambleConstants;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
@@ -9,19 +9,19 @@ import com.ebp.owat.lib.utils.scramble.ScrambleMoves;
 
 public class ScrambleMoveGenerator {
 	
-	protected LongGenerator numGenerator;
+	protected OwatRandGenerator numGenerator;
 	protected final Matrix matrix;
 	
-	public ScrambleMoveGenerator(LongGenerator numGenerator, Matrix matrix) {
+	public ScrambleMoveGenerator(OwatRandGenerator numGenerator, Matrix matrix) {
 		this.numGenerator = numGenerator;
 		this.matrix = matrix;
 	}
 	
-	public LongGenerator getNumGenerator(){
+	public OwatRandGenerator getNumGenerator(){
 		return numGenerator;
 	}
 	
-	public ScrambleMoveGenerator setNumGenerator(LongGenerator numGenerator){
+	public ScrambleMoveGenerator setNumGenerator(OwatRandGenerator numGenerator){
 		this.numGenerator = numGenerator;
 		return this;
 	}
@@ -34,10 +34,10 @@ public class ScrambleMoveGenerator {
 			case SWAP:
 				long[] args = new long[4];
 				do{
-					args[ScrambleConstants.Swap.X1] = this.numGenerator.next(this.matrix.getNumCols());
-					args[ScrambleConstants.Swap.Y1] = this.numGenerator.next(this.matrix.getNumRows());
-					args[ScrambleConstants.Swap.X2] = this.numGenerator.next(this.matrix.getNumCols());
-					args[ScrambleConstants.Swap.Y2] = this.numGenerator.next(this.matrix.getNumRows());
+					args[ScrambleConstants.Swap.X1] = this.numGenerator.nextLong(this.matrix.getNumCols());
+					args[ScrambleConstants.Swap.Y1] = this.numGenerator.nextLong(this.matrix.getNumRows());
+					args[ScrambleConstants.Swap.X2] = this.numGenerator.nextLong(this.matrix.getNumCols());
+					args[ScrambleConstants.Swap.Y2] = this.numGenerator.nextLong(this.matrix.getNumRows());
 				}while(
 					args[ScrambleConstants.Swap.X1] == args[ScrambleConstants.Swap.X2] &&
 					args[ScrambleConstants.Swap.Y1] == args[ScrambleConstants.Swap.Y2]
@@ -46,35 +46,35 @@ public class ScrambleMoveGenerator {
 			case SWAP_ROW:
 					return new ScrambleMove(
 						sm,
-						this.numGenerator.next(this.matrix.getNumRows()),
-						this.numGenerator.next(this.matrix.getNumRows())
+						this.numGenerator.nextLong(this.matrix.getNumRows()),
+						this.numGenerator.nextLong(this.matrix.getNumRows())
 					);
 			case SWAP_COL:
 				return new ScrambleMove(
 					sm,
-					this.numGenerator.next(this.matrix.getNumCols()),
-					this.numGenerator.next(this.matrix.getNumCols())
+					this.numGenerator.nextLong(this.matrix.getNumCols()),
+					this.numGenerator.nextLong(this.matrix.getNumCols())
 				);
 			case SLIDE_ROW:
 				return new ScrambleMove(
 					sm,
-					this.numGenerator.next(this.matrix.getNumRows()),
-					this.numGenerator.next(this.matrix.getNumCols())
+					this.numGenerator.nextLong(this.matrix.getNumRows()),
+					this.numGenerator.nextLong(this.matrix.getNumCols())
 				);
 			case SLIDE_COL:
 				return new ScrambleMove(
 					sm,
-					this.numGenerator.next(this.matrix.getNumCols()),
-					this.numGenerator.next(this.matrix.getNumRows())
+					this.numGenerator.nextLong(this.matrix.getNumCols()),
+					this.numGenerator.nextLong(this.matrix.getNumRows())
 				);
 			case ROT_BOX:{
 				long
-					x = this.numGenerator.next(this.matrix.getNumCols() - MoveValidator.MIN_SIZE_FOR_ROTATION),
-					y = this.numGenerator.next(this.matrix.getNumRows() - MoveValidator.MIN_SIZE_FOR_ROTATION),
+					x = this.numGenerator.nextLong(this.matrix.getNumCols() - MoveValidator.MIN_SIZE_FOR_ROTATION),
+					y = this.numGenerator.nextLong(this.matrix.getNumRows() - MoveValidator.MIN_SIZE_FOR_ROTATION),
 					maxSize = Math.max(x,y),
-					s = this.numGenerator.next(maxSize, this.matrix.getNumCols() - maxSize)
+					s = this.numGenerator.nextLong(maxSize, this.matrix.getNumCols() - maxSize)
 					;
-				return new ScrambleMove(sm, this.numGenerator.next(1,4), x, y, s);
+				return new ScrambleMove(sm, this.numGenerator.nextLong(1,4), x, y, s);
 			}
 		}
 		throw new IllegalStateException("This should not happen.");
@@ -93,10 +93,10 @@ public class ScrambleMoveGenerator {
 	 */
 	private long[] getBoxCoords(){
 		long
-			x1 = this.numGenerator.next(this.matrix.getNumCols() - 2L),
-			y1 = this.numGenerator.next(this.matrix.getNumRows() - 2L),
-			x2 = this.numGenerator.next(x1 + 2, this.matrix.getNumCols()),
-			y2 = this.numGenerator.next(y1 + 2, this.matrix.getNumRows())
+			x1 = this.numGenerator.nextLong(this.matrix.getNumCols() - 2L),
+			y1 = this.numGenerator.nextLong(this.matrix.getNumRows() - 2L),
+			x2 = this.numGenerator.nextLong(x1 + 2, this.matrix.getNumCols()),
+			y2 = this.numGenerator.nextLong(y1 + 2, this.matrix.getNumRows())
 		;
 		
 		return new long[] {

@@ -8,24 +8,27 @@ package com.ebp.owat.lib.utils.rand;
  *
  * Created by Greg Stewart on 4/6/17.
  */
-public abstract class LongGenerator {
+public abstract class OwatRandGenerator {
+	protected static final String CHARSET = "0123456789abcdefghijklmnopqrstuvwxyz`~!@#$%^&*()-_=+\\]}[{'\";:/?.>,<";
+	protected byte[] byteBuff = new byte[1];
+	
 	/**
 	 * Default constructor.
 	 */
-	public LongGenerator(){}
+	public OwatRandGenerator(){}
 	
 	/**
 	 * Gets a random long, no consideration of bounds. Allways positive
 	 * @return A random long.
 	 */
-	public abstract long next();
+	public abstract long nextLong();
 	
 	/**
 	 * Gets a random long, with a maximum possible value.
 	 * @param upperBound
 	 * @return
 	 */
-	public abstract long next(long upperBound);
+	public abstract long nextLong(long upperBound);
 	
 	/**
 	 * Gets a random long.
@@ -33,8 +36,26 @@ public abstract class LongGenerator {
 	 * @param upperBound
 	 * @return
 	 */
-	public long next(long lowerBound, long upperBound){
-		return this.next(upperBound - lowerBound) + lowerBound;
+	public long nextLong(long lowerBound, long upperBound){
+		return this.nextLong(upperBound - lowerBound) + lowerBound;
+	}
+	
+	/**
+	 * Gets a byte with a random value.
+	 * TODO:: test
+	 * @return A byte with a random value.
+	 */
+	public byte nextByte(){
+		return (byte)this.nextLong(Byte.MAX_VALUE + 1);
+	}
+	
+	/**
+	 * Gets a random character in the form of a byte.
+	 * TODO:: test
+	 * @return A random character in the form of a byte.
+	 */
+	public byte nextByteChar(){
+		return (byte) CHARSET.charAt((int)this.nextLong(CHARSET.length()));
 	}
 	
 	/**
@@ -49,6 +70,6 @@ public abstract class LongGenerator {
 		if(vals == null || vals.length == 0){
 			throw new IllegalArgumentException("Cannot choose from an empty or null set.");
 		}
-		return vals[(int)this.next(vals.length-1)];
+		return vals[(int)this.nextLong(vals.length-1)];
 	}
 }

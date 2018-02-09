@@ -71,8 +71,8 @@ public abstract class NodeReader<T extends Value> {
 	}
 	
 	/**
-	 * Gets the next value available.
-	 * @return The next value received.
+	 * Gets the nextLong value available.
+	 * @return The nextLong value received.
 	 */
 	public abstract Value getNextNode();
 	

@@ -14,13 +14,13 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the basic functionality of the LongGenerator.
+ * Tests the basic functionality of the OwatRandGenerator.
  *
  * Created by Greg Stewart on 4/14/17.
  */
 @RunWith(Parameterized.class)
-public class LongGeneratorTest {
-	private Logger LOGGER = LoggerFactory.getLogger(LongGeneratorTest.class);
+public class OwatRandGeneratorTest {
+	private Logger LOGGER = LoggerFactory.getLogger(OwatRandGeneratorTest.class);
 	
 	private static final int NUM_TEST_ITERATIONS = 20_000_000;
 	
@@ -39,28 +39,28 @@ public class LongGeneratorTest {
 		});
 	}
 	
-	private final Class<? extends LongGenerator> curGenClass;
+	private final Class<? extends OwatRandGenerator> curGenClass;
 	
-	public LongGeneratorTest(Class<? extends LongGenerator> curGenClass){
+	public OwatRandGeneratorTest(Class<? extends OwatRandGenerator> curGenClass){
 		this.curGenClass = curGenClass;
 	}
 	
 	@Test
 	public void testLongGenerators() throws Throwable{
-		LOGGER.info("Testing the LongGenerator class: {}", curGenClass);
-		Constructor<? extends LongGenerator> constBase = curGenClass.getConstructor();
+		LOGGER.info("Testing the OwatRandGenerator class: {}", curGenClass);
+		Constructor<? extends OwatRandGenerator> constBase = curGenClass.getConstructor();
 		
-		LongGenerator gen = constBase.newInstance();
+		OwatRandGenerator gen = constBase.newInstance();
 		
-		gen.next();
+		gen.nextLong();
 		
 		for(long i = 0; i < NUM_TEST_ITERATIONS; i++){
-			long val = gen.next(TEST_UPPER);
+			long val = gen.nextLong(TEST_UPPER);
 			assertTrue(val < TEST_UPPER);
 		}
 		
 		for(long i = 0; i < NUM_TEST_ITERATIONS; i++){
-			long val = gen.next(TEST_LOWER, TEST_UPPER);
+			long val = gen.nextLong(TEST_LOWER, TEST_UPPER);
 			assertTrue(val < TEST_UPPER);
 			assertTrue(val >= TEST_LOWER);
 		}
@@ -71,6 +71,6 @@ public class LongGeneratorTest {
 			));
 		}
 		
-		LOGGER.info("DONE Testing the LongGenerator class: {}", curGenClass);
+		LOGGER.info("DONE Testing the OwatRandGenerator class: {}", curGenClass);
 	}
 }

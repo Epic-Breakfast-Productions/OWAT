@@ -3,13 +3,12 @@ package com.ebp.owat.app.runner;
 import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
-import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.BitValue;
 import com.ebp.owat.lib.datastructure.value.ByteValue;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
-import com.ebp.owat.lib.utils.rand.LongGenerator;
+import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
 import com.ebp.owat.lib.utils.scramble.key.ScrambleKey;
 
@@ -21,7 +20,7 @@ import java.util.Iterator;
 
 public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler> extends OwatRunner {
 	/** The random number generator to use. */
-	private LongGenerator rand;
+	private OwatRandGenerator rand;
 	/** The key that will be used. */
 	private ScrambleKey key;
 	/** The type of data that will be used. */

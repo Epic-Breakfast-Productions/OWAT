@@ -2,7 +2,7 @@ package com.ebp.owat.lib.utils.scramble;
 
 import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.utils.rand.LongGenerator;
+import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
 import com.ebp.owat.lib.utils.scramble.generator.ScrambleMoveGenerator;
 import org.junit.Assert;
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class ScrambleMoveGeneratorTest {
 	
 	private static final int NUM_TEST_ITERATIONS = 6_000_000;
-	private static final LongGenerator LONG_GEN = new RandGenerator();
+	private static final OwatRandGenerator LONG_GEN = new RandGenerator();
 	
 	@Test
 	public void scrambleMoveGeneratorTest(){

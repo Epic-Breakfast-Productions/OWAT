@@ -4,11 +4,11 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 /**
- * A LongGenerator that gets its random numbers from a simple rand().
+ * A OwatRandGenerator that gets its random numbers from a simple rand().
  *
  * Created by Greg Stewart on 4/6/17.
  */
-public class RandGenerator extends LongGenerator {
+public class RandGenerator extends OwatRandGenerator {
 	/** The random number generator to use. */
 	private Random rand;
 	
@@ -52,12 +52,12 @@ public class RandGenerator extends LongGenerator {
 	}
 	
 	@Override
-	public long next() {
+	public long nextLong() {
 		return this.rand.nextLong();
 	}
 	
 	@Override
-	public long next(long upperBound) {
+	public long nextLong(long upperBound) {
 		return (long)(this.rand.nextDouble()*upperBound);
 	}
 }

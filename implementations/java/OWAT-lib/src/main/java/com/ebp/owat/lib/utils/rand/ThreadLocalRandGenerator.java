@@ -3,11 +3,11 @@ package com.ebp.owat.lib.utils.rand;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * A LongGenerator that gets its random numbers from a simple rand().
+ * A OwatRandGenerator that gets its random numbers from a simple rand().
  *
  * Created by Greg Stewart on 4/6/17.
  */
-public class ThreadLocalRandGenerator extends LongGenerator {
+public class ThreadLocalRandGenerator extends OwatRandGenerator {
 	/**
 	 * Default constructor.
 	 */
@@ -16,17 +16,17 @@ public class ThreadLocalRandGenerator extends LongGenerator {
 	}
 	
 	@Override
-	public long next() {
+	public long nextLong() {
 		return ThreadLocalRandom.current().nextLong();
 	}
 	
 	@Override
-	public long next(long lowerBound, long upperBound) {
+	public long nextLong(long lowerBound, long upperBound) {
 		return ThreadLocalRandom.current().nextLong(lowerBound, upperBound);
 	}
 	
 	@Override
-	public long next(long upperBound) {
+	public long nextLong(long upperBound) {
 		return ThreadLocalRandom.current().nextLong(upperBound);
 	}
 }

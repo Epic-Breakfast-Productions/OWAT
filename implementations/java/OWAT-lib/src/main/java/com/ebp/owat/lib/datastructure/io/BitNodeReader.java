@@ -41,9 +41,9 @@ public class BitNodeReader extends NodeReader<BitValue> {
 	}
 	
 	/**
-	 * Gets the next value available.
+	 * Gets the nextLong value available.
 	 *
-	 * @return The next value received.
+	 * @return The nextLong value received.
 	 */
 	@Override
 	public BitValue getNextNode() {
