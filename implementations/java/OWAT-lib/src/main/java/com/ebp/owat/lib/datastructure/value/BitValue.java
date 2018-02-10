@@ -47,8 +47,12 @@ public class BitValue extends Value<Boolean> {
 		return vals;
 	}
 	
-	
-	public static byte toBytes(List<BitValue> sources){
+	/**
+	 * Turns exactly 8 bit vaules into a byte.
+	 * @param sources The bit values to get info from.
+	 * @return The byte that was made up from the sources.
+	 */
+	public static byte toByte(List<BitValue> sources){
 		//TODO
 		return 0;
 	}
