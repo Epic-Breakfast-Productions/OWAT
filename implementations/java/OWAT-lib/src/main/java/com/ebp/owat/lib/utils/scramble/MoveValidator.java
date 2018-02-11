@@ -54,7 +54,7 @@ public class MoveValidator {
 				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.SlideCol.ROWCOL), Plane.X);
 				break;
 			case ROT_BOX:
-				if (!(move.getArg(ScrambleConstants.RotateBox.ROTNUM) >= 1 && move.getArg(ScrambleConstants.RotateBox.ROTNUM) <= 3)) {
+				if (!(move.getArg(ScrambleConstants.RotateBox.ROTNUM) >= -3 && move.getArg(ScrambleConstants.RotateBox.ROTNUM) <= 3 && move.getArg(ScrambleConstants.RotateBox.ROTNUM) != 0)) {
 					throw new IllegalArgumentException("Invalid number of rotations given. Given: " + move.getArg(ScrambleConstants.RotateBox.ROTNUM));
 				}
 				MatrixValidator.throwIfBadIndex(matrix, move.getArg(ScrambleConstants.RotateBox.X), Plane.X);

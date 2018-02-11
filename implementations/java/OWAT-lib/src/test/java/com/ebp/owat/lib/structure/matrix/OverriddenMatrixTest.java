@@ -99,12 +99,11 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 	
 	@Test
 	public void addColsWithCollectionTest() throws Exception {
-		//TODO:: add numElements assertions
 		T m = this.getTestingInstance();
 		Object def = m.getDefaultValue();
 		
 		assertTrue(m.addCols(Arrays.asList(1)));
-		
+		assertEquals(1, m.numElements());
 		assertEquals(1, m.getNumRows());
 		assertEquals(1, m.getNumCols());
 		assertEquals(1, (int)m.get(0L,0L));
@@ -113,6 +112,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		
 		assertTrue(m.addCols(Arrays.asList(1,2,3,4)));
 		
+		assertEquals(4, m.numElements());
 		assertEquals(1, m.getNumRows());
 		assertEquals(4, m.getNumCols());
 		
@@ -126,7 +126,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		m.addRow();
 		
 		assertTrue(m.addCols(Arrays.asList(5,6,7,8)));
-		
+		assertEquals(8, m.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{1,2,3,4, 5, 7},
@@ -137,6 +137,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		
 		assertFalse(m.addCols(Arrays.asList(9,10,11)));
 		
+		assertEquals(11, m.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{1,2,3,4,5,7,9,11},
@@ -148,12 +149,12 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 	
 	@Test
 	public void addRowsWithCollectionTest() throws Exception {
-		//TODO:: add numElements assertions
 		T m = this.getTestingInstance();
 		Object def = m.getDefaultValue();
 		
 		assertTrue(m.addRows(Arrays.asList(1)));
 		
+		assertEquals(1, m.numElements());
 		assertEquals(1, m.getNumRows());
 		assertEquals(1, m.getNumCols());
 		assertEquals(1, (int)m.get(0,0));
@@ -162,6 +163,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		
 		assertTrue(m.addRows(Arrays.asList(1,2,3,4)));
 		
+		assertEquals(4, m.numElements());
 		assertEquals(4, m.getNumRows());
 		assertEquals(1, m.getNumCols());
 		
@@ -179,6 +181,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		
 		assertTrue(m.addRows(Arrays.asList(5,6,7,8)));
 		
+		assertEquals(8, m.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{1, def},
@@ -193,6 +196,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		
 		assertFalse(m.addRows(Arrays.asList(9,10,11)));
 		
+		assertEquals(11, m.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{1, def},

@@ -310,6 +310,18 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 			testMatrix
 		);
 		
-		//TODO:: test negative moves
+		testMatrix.rotBox(new ScrambleMove(ROT_BOX, -1, 0,0,5));
+		
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{ 4, N,14,19,24},
+				{ N, 8,13,18, N},
+				{ 2, N,12, N,22},
+				{ N, 6, N,16, N},
+				{ 0, N,10,15,20}
+			},
+			testMatrix
+		);
 	}
 }
