@@ -23,7 +23,7 @@ public class ScrambleKeyTest {
 
 	@Test
 	public void testScrambleKeySerialization() throws IOException {
-		ScrambleKey key = new ScrambleKey(0L, 0L, BitValue.class);
+		ScrambleKey key = new ScrambleKey(0L, 0L, 0L, 0L, BitValue.class);
 		
 		key.addMove(new ScrambleMove(ScrambleMoves.SWAP_ROW, 1L, 1L));
 		key.addMove(new ScrambleMove(ScrambleMoves.SWAP_ROW, 2L, 2L));
@@ -40,7 +40,7 @@ public class ScrambleKeyTest {
 	
 	@Test
 	public void testScrambleKeyMode() throws IOException {
-		ScrambleKey key = new ScrambleKey(0L, 0L, BitValue.class);
+		ScrambleKey key = new ScrambleKey(0L, 0L, 0L, 0L, BitValue.class);
 		key.addMove(new ScrambleMove(ScrambleMoves.SWAP_ROW, 1L, 1L));
 		
 		try{
@@ -63,7 +63,7 @@ public class ScrambleKeyTest {
 	
 	@Test
 	public void testScrambleKeyAddMoveAndIterator() throws IOException {
-		ScrambleKey key = new ScrambleKey(0L, 0L, BitValue.class);
+		ScrambleKey key = new ScrambleKey(0L, 0L, 0L, 0L, BitValue.class);
 		key.addMove(new ScrambleMove(ScrambleMoves.SWAP_ROW, 1L, 1L));
 		key.addMove(new ScrambleMove(ScrambleMoves.SWAP_COL, 2L, 2L));
 		key.addMove(new ScrambleMove(ScrambleMoves.SWAP_ROW, 3L, 3L));

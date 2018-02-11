@@ -30,18 +30,24 @@ public class BitValue extends Value<Boolean> {
 		return ValueFlag.VALUE.getFlag(this.flags);
 	}
 	
+	private static boolean isBitSet(byte b, short bit){
+		return (b & (1 << bit)) != 0;
+	}
+	
 	/**
-	 * Turns a byte into a list of 8 BitValues.
-	 * TODO:: test
+	 * Turns a byte into a list of 8 BitValues.3
+	 *
 	 * @param source The byte to get the info from.
 	 * @return The list of 8 BitValues.
 	 */
 	public static List<BitValue> fromByte(byte source, boolean isOriginal){
 		List<BitValue> vals = new LinkedList<>();
 		
-		for(byte curOffset = 1; curOffset <= 128; curOffset = (byte)(curOffset >> 1)){
-			boolean curVal = (source & curOffset) == curOffset;
-			vals.add(new BitValue(curVal, isOriginal));
+		for(short curBit = 0; curBit < 8; curBit++){
+			boolean curVal = isBitSet(source, curBit);
+			vals.add(
+				new BitValue(curVal, isOriginal)
+			);
 		}
 		
 		return vals;
@@ -51,9 +57,22 @@ public class BitValue extends Value<Boolean> {
 	 * Turns exactly 8 bit vaules into a byte.
 	 * @param sources The bit values to get info from.
 	 * @return The byte that was made up from the sources.
+	 * @throws IllegalArgumentException If the list given is not 8 bits long.
 	 */
 	public static byte toByte(List<BitValue> sources){
-		//TODO
-		return 0;
+		if(sources.size() != 8){
+			throw new IllegalArgumentException("Cannot parse a byte from a list of bits not 8 bits long.");
+		}
+		byte output = 0;
+		
+		for(short curBit = 0; curBit < 8; curBit++){
+			if(sources.get(curBit).getValue()){
+				output = (byte)(output | ((byte)1 << curBit));
+			}
+		}
+		
+		return output;
 	}
+	
+	
 }
