@@ -474,7 +474,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	}
 	
 	/**
-	 * Gets the number of elements actually held in the matrix.
+	 * Gets the number of values actually held in the matrix. Note that this is not the number of values this matrix can possibly hold.
 	 * @return The number of elements in the matrix.
 	 */
 	public long numElements(){

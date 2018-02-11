@@ -326,6 +326,7 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 	@Test
 	public void testTrimTo() throws Exception {
 		T m = this.getTestingInstance();
+		Integer N = m.getDefaultValue();
 		
 		m.grow(5);
 		
@@ -334,7 +335,26 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 		assertEquals(3, m.getNumCols());
 		assertEquals(3, m.getNumRows());
 		
-		//TODO:: test more thougroughlt with actual data, numElements
+		m.grow(2);
+		
+		m.replaceRow(0, Arrays.asList( 0, N, 2, N, 4));
+		m.replaceRow(1, Arrays.asList( N, 6, N, 8, N));
+		m.replaceRow(2, Arrays.asList(10, N,12,13,14));
+		m.replaceRow(3, Arrays.asList(15,16, N,18,19));
+		m.replaceRow(4, Arrays.asList(20, N,22, N,24));
+		
+		m.trimTo(3,2);
+		
+		assertEquals(3, m.numElements());
+		assertEquals(3, m.getNumCols());
+		assertEquals(2, m.getNumRows());
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{ 0, N, 2},
+				{ N, 6, N}
+			},
+			m
+		);
 	}
 	
 	@Test
