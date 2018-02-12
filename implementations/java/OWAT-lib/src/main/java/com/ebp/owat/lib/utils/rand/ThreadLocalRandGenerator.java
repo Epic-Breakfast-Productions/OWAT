@@ -26,6 +26,11 @@ public class ThreadLocalRandGenerator extends OwatRandGenerator {
 	}
 	
 	@Override
+	public boolean nextBool() {
+		return ThreadLocalRandom.current().nextBoolean();
+	}
+	
+	@Override
 	public long nextLong(long upperBound) {
 		return ThreadLocalRandom.current().nextLong(upperBound);
 	}

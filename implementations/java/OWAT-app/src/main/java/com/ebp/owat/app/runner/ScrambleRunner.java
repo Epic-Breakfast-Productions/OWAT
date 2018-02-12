@@ -21,6 +21,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Iterator;
+import java.util.List;
 
 public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScrambleRunner.class);
@@ -239,19 +240,57 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		}
 	}
 	
+	private List<N> getListOfValues(long numValues){
+		LongLinkedList<N> output = new LongLinkedList<>();
+		
+		if(this.nodeType == NodeMode.BIT){
+			for(long i = 0; i < numValues; i++){
+				output.add((N) new BitValue(this.rand.nextBool(), false));
+			}
+		}else if(this.nodeType == NodeMode.BYTE){
+			for(long i = 0; i < numValues; i++){
+				output.add((N) new ByteValue(this.rand.nextByte(), false));
+			}
+		}
+		
+		return output;
+	}
+	
+	private void addRandRowOrCol(M matrix){
+		if(this.rand.nextBool()){
+			matrix.addRow();
+			matrix.replaceRow(matrix.getNumRows() -1, this.getListOfValues(matrix.getNumCols()));
+		}else{
+			matrix.addCol();
+			matrix.replaceCol(matrix.getNumCols() -1, this.getListOfValues(matrix.getNumRows()));
+		}
+	}
+	
 	private void padMatrix(M matrix){
 		//TODO:: fill last bits of end row if need be
-		//TODO:: throw random data (actually pad the matrix)
-		//TODO:: if a bit matrix, ensure size() is divisible by 8 to ensure proper serialization.
+		
+		long numRowsColsToGenerate = matrix.size();
+		LOGGER.debug("Adding a total of {} rows and columns of dummy data to the matrix.", numRowsColsToGenerate);
+		for(long i = 0; i < numRowsColsToGenerate; i++){
+			addRandRowOrCol(matrix);
+		}
+		
+		//ensure that bit marices can be serialized properly
+		if(this.nodeType == NodeMode.BIT){
+			while (matrix.size() % 8 != 0){
+				addRandRowOrCol(matrix);
+			}
+		}
 	}
 	
 	private void determineMinStepsToTake(M matrix){
-		long sizeSquared = (long)Math.pow(matrix.size(), 2);
-		this.minNumScrambleSteps = this.rand.nextLong(
-			sizeSquared, sizeSquared + matrix.size()
-		);
+		//TODO::make this calculation smarter. Logrithmical?
+		long min = matrix.size() * 2L;
+		long max = min * 2L;
+		this.minNumScrambleSteps = this.rand.nextLong(min, max);
 	}
 	private void determineMaxStepsToTake(M matrix){
+		//TODO::make this calculation smarter. Logrithmical?
 		long tempMin = this.minNumScrambleSteps + matrix.size();
 		long tempMax = tempMin * 2L;
 		this.maxNumScrambleSteps = this.rand.nextLong(tempMin, tempMax);
@@ -298,6 +337,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		
 		{
 			this.setCurStep(Step.LOAD_DATA);
+			LOGGER.info("Loading data...");
 			LongLinkedList<Byte> data = this.readDataIn();
 			
 			matrix = this.getMatrix(data);
@@ -314,12 +354,15 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			}
 			
 			this.setCurStep(Step.PAD_DATA);
+			LOGGER.info("Padding data...");
 			this.padMatrix(matrix);
 			
+			LOGGER.debug("Size of matrix: {}rows x {}cols", matrix.getNumRows(), matrix.getNumCols());
 			this.key = new ScrambleKey(origDataHeight, origDataWidth, matrix.getNumRows(), matrix.getNumCols(), this.nodeType.typeClass, lastRowIndex);
 		}
 		
 		this.setCurStep(Step.SCRAMBLING);
+		LOGGER.info("Scrambling Data...");
 		
 		if(this.minNumScrambleSteps < 0){
 			this.determineMinStepsToTake(matrix);
@@ -329,6 +372,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		}
 		
 		long numSteps = this.rand.nextLong(this.minNumScrambleSteps, this.maxNumScrambleSteps);
+		LOGGER.debug("Number of steps in scramble: {} (chosen from a range from {} to {})", numSteps, this.minNumScrambleSteps, this.maxNumScrambleSteps);
 		ScrambleMoveGenerator generator = new ScrambleMoveGenerator(this.rand, matrix);
 		for(long l = 0; l < numSteps; l++){
 			ScrambleMove curMove = generator.getMove();
@@ -337,17 +381,19 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		}
 		
 		this.setCurStep(Step.OUT_SCRAMBLED_DATA);
-		
+		LOGGER.info("Outputting scrambled data...");
 		{
 			byte[] bytes = this.getMatrixAsBytes(matrix);
-			
+			LOGGER.debug("Number of bytes to output: {}", bytes.length);
 			this.dataOutput.write(bytes);
 		}
 		
 		this.setCurStep(Step.OUT_KEY);
+		LOGGER.info("Outputting key...");
 		
 		this.keyOutput.write(OBJECT_MAPPER.writeValueAsBytes(this.key));
 		
 		this.setCurStep(Step.DONE_SCRAMBLING);
+		LOGGER.info("Done Scrambling.");
 	}
 }

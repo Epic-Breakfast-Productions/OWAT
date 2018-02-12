@@ -60,4 +60,9 @@ public class RandGenerator extends OwatRandGenerator {
 	public long nextLong(long upperBound) {
 		return (long)(this.rand.nextDouble()*upperBound);
 	}
+	
+	@Override
+	public boolean nextBool() {
+		return this.rand.nextBoolean();
+	}
 }

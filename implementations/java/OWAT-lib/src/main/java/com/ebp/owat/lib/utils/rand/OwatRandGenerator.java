@@ -56,6 +56,13 @@ public abstract class OwatRandGenerator {
 	}
 	
 	/**
+	 * Gets a random boolean value.
+	 * TODO:: test
+	 * @return A random boolean value.
+	 */
+	public abstract boolean nextBool();
+	
+	/**
 	 * Gets a random value from the set brought in.
 	 * https://stackoverflow.com/questions/450807/how-do-i-make-the-method-return-type-generic
 	 * @param vals The values to choose from.
