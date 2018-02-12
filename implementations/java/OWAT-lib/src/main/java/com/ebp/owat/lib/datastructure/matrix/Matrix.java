@@ -186,6 +186,9 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 */
 	public boolean grow(Collection<T> valuesIn) throws IllegalStateException{
 		long numRowsCols = calcSquareSize(valuesIn.size());
+		if(numRowsCols*numRowsCols - valuesIn.size() >= numRowsCols){
+			return this.grow(numRowsCols - 1L, numRowsCols, valuesIn);
+		}
 		return this.grow(numRowsCols, numRowsCols, valuesIn);
 	}
 	

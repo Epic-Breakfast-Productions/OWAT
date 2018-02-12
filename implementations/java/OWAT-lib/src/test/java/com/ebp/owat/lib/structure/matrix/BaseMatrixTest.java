@@ -200,6 +200,7 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 	@Test
 	public void testGrowWithCollection() throws Exception {
 		T m = this.getTestingInstance();
+		Integer n = m.getDefaultValue();
 		
 		assertTrue(m.grow(Arrays.asList(1)));
 		TestUtils.assertMatrix(
@@ -210,11 +211,20 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 		);
 		
 		m = this.getTestingInstance();
-		assertFalse(m.grow(Arrays.asList(1,2)));
+		assertTrue(m.grow(Arrays.asList(1,2)));
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{1,2}
+			},
+			m
+		);
+		
+		m = this.getTestingInstance();
+		assertFalse(m.grow(Arrays.asList(1,2,3)));
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{1,2},
-				{m.getDefaultValue(), m.getDefaultValue()}
+				{3,n}
 			},
 			m
 		);
@@ -250,6 +260,8 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 			},
 			m
 		);
+		
+		//TODO:: test with nonsquare numbers (6, 11?)
 		
 		m = this.getTestingInstance();
 		assertTrue(m.grow(Arrays.asList(1)));

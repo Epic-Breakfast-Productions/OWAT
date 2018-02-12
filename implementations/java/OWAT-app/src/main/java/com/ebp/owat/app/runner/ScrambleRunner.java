@@ -22,8 +22,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Iterator;
 
-public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
-	private static final Logger LOGGER = LoggerFactory.getLogger(OwatScrambleRunner.class);
+public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ScrambleRunner.class);
 	
 	/** The random number generator to use. */
 	private R rand;
@@ -42,15 +42,21 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 	/** The maximum number of steps */
 	private long maxNumScrambleSteps = -1;
 	
-	private OwatScrambleRunner(R rand, InputStream dataInput, OutputStream dataOutput, OutputStream keyOutput, NodeMode nodeType){
-		if(
-			rand == null ||
-			dataInput == null ||
-				dataOutput == null ||
-				keyOutput == null ||
-				nodeType == null
-			){
-			throw new IllegalArgumentException("Invalid null parameters given.");
+	private ScrambleRunner(R rand, InputStream dataInput, OutputStream dataOutput, OutputStream keyOutput, NodeMode nodeType){
+		if(rand == null){
+			throw new IllegalArgumentException("Invalid null parameter(s) given. Must specify a random number generator or seed.");
+		}
+		if(dataInput == null){
+			throw new IllegalArgumentException("Invalid null parameter(s) given. Must specify data to input.");
+		}
+		if(dataOutput == null){
+			throw new IllegalArgumentException("Invalid null parameter(s) given. Must specify a method of outputting the scrambled data.");
+		}
+		if(keyOutput == null) {
+			throw new IllegalArgumentException("Invalid null parameter(s) given. Must specify a method of outputting the key data.");
+		}
+		if(nodeType == null){
+			throw new IllegalArgumentException("Invalid null parameter(s) given. Must specify what node type to use.");
 		}
 		
 		this.rand = rand;
@@ -68,7 +74,7 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 		this.maxNumScrambleSteps = num;
 	}
 	
-	public class Builder {
+	public static class Builder<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> {
 		/** The random number generator to use. */
 		private R rand = (R)new ThreadLocalRandGenerator();
 		/** The type of data that will be used. */
@@ -144,8 +150,8 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 		 * Builds the runner with the data given.
 		 * @return The runner setup with the data given.
 		 */
-		public OwatScrambleRunner build(){
-			OwatScrambleRunner runner =  new OwatScrambleRunner(
+		public ScrambleRunner build(){
+			ScrambleRunner runner =  new ScrambleRunner(
 				this.rand,
 				this.dataInput,
 				this.dataOutput,
@@ -188,6 +194,8 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 	private M getBitMatrix(LongLinkedList<Byte> data){
 		M matrix = (M) new HashedScramblingMatrix<BitValue>();
 		
+		matrix.setDefaultValue((N) new BitValue(false, false));
+		
 		Iterator<Byte> it = data.destructiveIterator();
 		LongLinkedList<BitValue> bitValues = new LongLinkedList<>();
 		
@@ -204,6 +212,8 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 	@SuppressWarnings("unchecked")
 	private M getByteMatrix(LongLinkedList<Byte> data){
 		M matrix = (M) new HashedScramblingMatrix<ByteValue>();
+		
+		matrix.setDefaultValue((N) new ByteValue((byte)0, false));
 		
 		Iterator<Byte> it = data.destructiveIterator();
 		LongLinkedList<ByteValue> byteValues = new LongLinkedList<>();
@@ -230,7 +240,9 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 	}
 	
 	private void padMatrix(M matrix){
-		//TODO
+		//TODO:: fill last bits of end row if need be
+		//TODO:: throw random data (actually pad the matrix)
+		//TODO:: if a bit matrix, ensure size() is divisible by 8 to ensure proper serialization.
 	}
 	
 	private void determineMinStepsToTake(M matrix){
@@ -241,7 +253,7 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 	}
 	private void determineMaxStepsToTake(M matrix){
 		long tempMin = this.minNumScrambleSteps + matrix.size();
-		long tempMax = (long)Math.pow(tempMin, 2);
+		long tempMax = tempMin * 2L;
 		this.maxNumScrambleSteps = this.rand.nextLong(tempMin, tempMax);
 	}
 	

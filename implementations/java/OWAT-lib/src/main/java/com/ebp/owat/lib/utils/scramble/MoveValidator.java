@@ -5,7 +5,7 @@ import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 
 public class MoveValidator {
-	public static final long MIN_SIZE_FOR_SCRAMBLING = 5;
+	public static final long MIN_SIZE_FOR_SCRAMBLING = 4;
 	public static final long MIN_SIZE_FOR_ROTATION = 2;
 	
 	public static boolean matrixIsTooSmallForScrambling(Matrix matrix) {
