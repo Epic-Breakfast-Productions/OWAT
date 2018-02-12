@@ -708,7 +708,7 @@ public class LongLinkedListTest {
 		this.testingNodeList.add(2L);
 		this.testingNodeList.add(3L);
 		this.testingNodeList.add(4L);
-		assertTrue(this.testingNodeList.canAdd(1L));
+		assertFalse(this.testingNodeList.canAdd(1L));
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

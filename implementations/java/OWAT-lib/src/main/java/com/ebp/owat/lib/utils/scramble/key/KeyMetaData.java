@@ -20,6 +20,8 @@ public class KeyMetaData {
 	public final long dataWidth;
 	@JsonProperty(NODE_TYPE)
 	public final String nodeType;
+	@JsonProperty(LAST_ROW_INDEX)
+	public final long lastRowIndex;
 	
 	@JsonCreator
 	public KeyMetaData(
@@ -27,13 +29,15 @@ public class KeyMetaData {
 		@JsonProperty(ORIGINAL_WIDTH) long originalWidth,
 		@JsonProperty(DATA_HEIGHT) long dataHeight,
 		@JsonProperty(DATA_WIDTH) long dataWidth,
-		@JsonProperty("nodeType") String nodeType
+		@JsonProperty(NODE_TYPE) String nodeType,
+		@JsonProperty(value = LAST_ROW_INDEX, defaultValue = "-1") long lastRowIndex
 	) {
 		this.originalHeight = originalHeight;
 		this.originalWidth = originalWidth;
 		this.dataHeight = dataHeight;
 		this.dataWidth = dataWidth;
 		this.nodeType = nodeType;
+		this.lastRowIndex = lastRowIndex;
 	}
 	
 	/**

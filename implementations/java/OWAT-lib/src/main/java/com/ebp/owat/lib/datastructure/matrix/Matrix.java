@@ -181,6 +181,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	/**
 	 *
 	 * @param valuesIn The values to give the object.
+	 * @return If the matrix was filled with the values given.
 	 * @throws IllegalStateException If the matrix is not empty when the method is called.
 	 */
 	public boolean grow(Collection<T> valuesIn) throws IllegalStateException{

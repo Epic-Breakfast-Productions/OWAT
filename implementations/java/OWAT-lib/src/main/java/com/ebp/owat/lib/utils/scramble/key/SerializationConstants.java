@@ -8,6 +8,7 @@ public class SerializationConstants {
 	public static final String DATA_HEIGHT = "dataHeight";
 	public static final String DATA_WIDTH = "dataWidth";
 	public static final String NODE_TYPE = "nodeType";
+	public static final String LAST_ROW_INDEX = "lastRowInd";
 	
 	public static final String BIT_TYPE_STR = "bit";
 	public static final String BYTE_TYPE_STR = "byte";

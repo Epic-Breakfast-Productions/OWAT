@@ -17,11 +17,9 @@ import com.ebp.owat.lib.utils.scramble.key.ScrambleKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.management.RuntimeErrorException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.util.Collection;
 import java.util.Iterator;
 
 public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
@@ -181,6 +179,11 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 	}
 	
 	
+	private void fillMatrixWithOriginalData(M emptyMatrix, LongLinkedList values){
+		emptyMatrix.grow(values);
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	private M getBitMatrix(LongLinkedList<Byte> data){
 		M matrix = (M) new HashedScramblingMatrix<BitValue>();
@@ -193,7 +196,7 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 			bitValues.addAll(BitValue.fromByte(curByte, true));
 		}
 		
-		matrix.grow((Collection<N>) bitValues);
+		this.fillMatrixWithOriginalData(matrix, bitValues);
 		
 		return matrix;
 	}
@@ -210,11 +213,10 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 			byteValues.addLast(new ByteValue(curByte,true));
 		}
 		
-		matrix.grow((Collection<N>) byteValues);
+		this.fillMatrixWithOriginalData(matrix, byteValues);
 		
 		return matrix;
 	}
-	
 	
 	private M getMatrix(LongLinkedList<Byte> data){
 		switch (this.nodeType){
@@ -227,11 +229,9 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 		}
 	}
 	
-	
 	private void padMatrix(M matrix){
 		//TODO
 	}
-	
 	
 	private void determineMinStepsToTake(M matrix){
 		long sizeSquared = (long)Math.pow(matrix.size(), 2);
@@ -248,19 +248,24 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 	private byte[] getMatrixAsBytes(M matrix){
 		byte[] bytes;
 		if(this.nodeType == NodeMode.BIT){
-			Iterator<BitValue> it = (Iterator<BitValue>) matrix.iterator();
+			Iterator<BitValue> bitIt = (Iterator<BitValue>) matrix.iterator();
 			
-			LongLinkedList<BitValue> tempBits = new LongLinkedList<>();
+			LongLinkedList<BitValue> tempBits;
+			LongLinkedList<Byte> tempBytes = new LongLinkedList<>();
 			
-			while (it.hasNext()){
-				//TODO:: finish
+			while (bitIt.hasNext()){
+				tempBits = new LongLinkedList<>();
 				for(short i = 0; i < 8; i++){
-				
+					tempBits.addLast(bitIt.next());
 				}
-				
-				
+				tempBytes.addLast(BitValue.toByte(tempBits));
 			}
-			bytes = null;
+			
+			bytes = new byte[tempBytes.size()];
+			Iterator<Byte> it = tempBytes.destructiveIterator();
+			for(int i = 0; i < bytes.length; i++){
+				bytes[i] = it.next();
+			}
 		}else if(this.nodeType == NodeMode.BYTE){
 			bytes = new byte[(int)matrix.size()];
 			int i = 0;
@@ -288,11 +293,18 @@ public class OwatScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler
 			long origDataHeight = matrix.getNumRows();
 			long origDataWidth = matrix.getNumCols();
 			
-			this.setCurStep(Step.PAD_DATA);
+			long lastRowIndex;
+			if(matrix.isFull()){
+				lastRowIndex = -1;
+			}else{
+				long numLeftInLastRow = matrix.size() - matrix.numElements();
+				lastRowIndex = matrix.getNumRows() - numLeftInLastRow - 1;
+			}
 			
+			this.setCurStep(Step.PAD_DATA);
 			this.padMatrix(matrix);
 			
-			this.key = new ScrambleKey(origDataHeight, origDataWidth, matrix.getNumRows(), matrix.getNumCols(), this.nodeType.typeClass);
+			this.key = new ScrambleKey(origDataHeight, origDataWidth, matrix.getNumRows(), matrix.getNumCols(), this.nodeType.typeClass, lastRowIndex);
 		}
 		
 		this.setCurStep(Step.SCRAMBLING);

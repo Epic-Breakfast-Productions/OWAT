@@ -30,9 +30,16 @@ public class ScrambleKey {
 	@JsonIgnore
 	public final Mode mode;
 	
-	public ScrambleKey(long originalHeight, long originalWidth, long dataHeight, long dataWidth, Class<? extends Value> type) {
+	public ScrambleKey(
+		long originalHeight,
+		long originalWidth,
+		long dataHeight,
+		long dataWidth,
+		Class<? extends Value> type,
+		long lastRowIndex
+	) {
 		this.mode = Mode.SCRAMBLING;
-		this.meta = new KeyMetaData(originalHeight, originalWidth, dataHeight, dataWidth, KeyMetaData.getTypeStr(type));
+		this.meta = new KeyMetaData(originalHeight, originalWidth, dataHeight, dataWidth, KeyMetaData.getTypeStr(type), lastRowIndex);
 		this.moves = new LongLinkedList<>();
 	}
 	
@@ -65,18 +72,7 @@ public class ScrambleKey {
 		if(this.mode != Mode.DESCRAMBLING){
 			throw new IllegalStateException("The mode of the ScrambleKey is not set to DESCRAMBLING. Cannot remove moves when scrambling.");
 		}
-		return new Iterator<ScrambleMove>() {
-			
-			@Override
-			public boolean hasNext() {
-				return !moves.isEmpty();
-			}
-			
-			@Override
-			public ScrambleMove next() {
-				return moves.removeFirst();
-			}
-		};
+		return this.moves.destructiveIterator();
 	}
 	
 	@JsonGetter(SCRAMBLE)
