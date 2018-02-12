@@ -541,15 +541,9 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		
 		m = this.getTestingInstance();
 		
+		TestUtils.setupMatrix(m);
+		
 		Integer n = m.getDefaultValue();
-		
-		m.grow(5L);
-		
-		m.replaceRow(0, Arrays.asList( 0, n, 2, n, 4));
-		m.replaceRow(1, Arrays.asList( n, 6, n, 8, n));
-		m.replaceRow(2, Arrays.asList(10, n,12,13,14));
-		m.replaceRow(3, Arrays.asList(15,16, n,18,19));
-		m.replaceRow(4, Arrays.asList(20, n,22, n,24));
 		
 		result = (T)m.getSubMatrix(new Coordinate(m, 1,1), 3);
 		
@@ -567,6 +561,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 	
 	@Test
 	public void testReplaceSubMatrix() throws Exception {
-	
+		T m = this.getTestingInstance();
+		//TODO
 	}
 }

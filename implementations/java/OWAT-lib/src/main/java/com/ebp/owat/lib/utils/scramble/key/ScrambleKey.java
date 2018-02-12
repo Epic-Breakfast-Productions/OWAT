@@ -1,7 +1,5 @@
 package com.ebp.owat.lib.utils.scramble.key;
 
-
-import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.Value;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
@@ -36,14 +34,6 @@ public class ScrambleKey {
 		this.mode = Mode.SCRAMBLING;
 		this.meta = new KeyMetaData(originalHeight, originalWidth, dataHeight, dataWidth, KeyMetaData.getTypeStr(type));
 		this.moves = new LongLinkedList<>();
-	}
-	
-	public ScrambleKey(Matrix<? extends Value> matrix){
-		this.mode = Mode.SCRAMBLING;
-		//TODO
-		throw new UnsupportedOperationException("Haven't done this yet.");
-		//this.meta = new KeyMetaData(matrix.getHeight(), matrix.getWidth(), getTypeStr((Class<? extends Value>) matrix.getClass().getComponentType()));
-		//this.moves = new LongLinkedList<>();
 	}
 	
 	@JsonCreator

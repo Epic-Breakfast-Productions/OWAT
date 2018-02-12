@@ -246,7 +246,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	
 	@Override
 	public boolean hasValue(Coordinate node){
-		//TODO:: test
 		return this.valueMap.containsKey(node);
 	}
 	
@@ -414,7 +413,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	
 	@Override
 	public void replaceSubMatrix(Matrix<T> subMatrix, Coordinate topLeft, long height, long width) {
-		//TODO:: test
 		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
 		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
 		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);

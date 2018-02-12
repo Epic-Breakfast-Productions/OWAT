@@ -284,7 +284,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	
 	/**
 	 * Determines if the matrix has a value at the given index.
-	 * TODO:: test
+	 *
 	 * @param xIn The x index of the node.
 	 * @param yIn The y index of the node.
 	 * @return If the node has a value or not.

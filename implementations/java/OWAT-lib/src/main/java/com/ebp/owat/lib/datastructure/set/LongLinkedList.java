@@ -65,7 +65,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * Determines if this list is at capacity or not.
 	 * @return False if not at capacity, true if at capacity.
 	 */
-	public boolean atCapacity(){//TODO:: test
+	public boolean atCapacity(){
 		return this.length >= capacity;
 	}
 	
@@ -74,8 +74,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * @param l The theoretical number of nodes to be added.
 	 * @return If this list is at capacity or not after adding a theoretical number of nodes.
 	 */
-	public boolean atCapacity(long l){
-		return this.length + l > capacity;
+	public boolean canAdd(long l){
+		return this.length + l <= capacity;
 	}
 	
 	/**
@@ -91,8 +91,8 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 	 * Throws an IllegalStateException if the list is at capacity, or will be if l number of nodes are added. Use before any operation that adds elements to the list.
 	 * @param l The theoretical number of nodes to be added.
 	 */
-	private void throwIfAtCapacity(long l){
-		if(this.atCapacity(l)){
+	private void throwIfCannotAdd(long l){
+		if(!this.canAdd(l)){
 			throw new IllegalStateException("List is already at capacity. Cannot add more to the list.");
 		}
 	}
@@ -386,7 +386,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		if(i != 0) {
 			this.throwIfIndexOutOfBoundsAllowEndIndex(i);
 		}
-		this.throwIfAtCapacity(collection.size());
+		this.throwIfCannotAdd(collection.size());
 		boolean changed = false;
 		if(i == 0 && this.isEmpty()) {
 			for (E curElement : collection) {
@@ -755,7 +755,7 @@ public class LongLinkedList<E> implements Serializable, Cloneable, Iterable<E>, 
 		if(collection == null){
 			throw new NullPointerException("The collection given to addAll(Collection) was null.");
 		}
-		this.throwIfAtCapacity(collection.size());
+		this.throwIfCannotAdd(collection.size());
 		for(E curElement : collection){
 			this.add(curElement);
 		}

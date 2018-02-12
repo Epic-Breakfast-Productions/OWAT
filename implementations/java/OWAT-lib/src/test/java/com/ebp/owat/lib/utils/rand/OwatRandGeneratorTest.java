@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -69,6 +70,14 @@ public class OwatRandGeneratorTest {
 			assertTrue(VALUES_AS_LIST.contains(
 				gen.getRandValue(VALUES)
 			));
+		}
+		
+		byte bytee = gen.nextByte();
+		
+		for(long i = 0; i < NUM_TEST_ITERATIONS; i++){
+			bytee = gen.nextByteChar();
+			char cha = (char)bytee;
+			assertNotEquals(-1, OwatRandGenerator.CHARSET.indexOf(cha));
 		}
 		
 		LOGGER.info("DONE Testing the OwatRandGenerator class: {}", curGenClass);

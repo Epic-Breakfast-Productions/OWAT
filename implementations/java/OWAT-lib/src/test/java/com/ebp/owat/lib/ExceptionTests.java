@@ -1,7 +1,6 @@
 package com.ebp.owat.lib;
 
 import com.ebp.owat.lib.datastructure.OwatStructureException;
-import com.ebp.owat.lib.datastructure.io.OwatNodeIOException;
 import com.ebp.owat.lib.datastructure.matrix.OwatMatrixException;
 import com.ebp.owat.lib.datastructure.matrix.utils.OwatMatrixUtilException;
 import com.ebp.owat.lib.datastructure.value.OwatValueException;
@@ -30,7 +29,6 @@ public class ExceptionTests {
 		return Arrays.asList(new Object[][] {
 				{ OwatException.class },
 				{ OwatStructureException.class },
-				{ OwatNodeIOException.class },
 				{ OwatMatrixException.class },
 				{ OwatValueException.class },
 				{ OwatSetException.class },

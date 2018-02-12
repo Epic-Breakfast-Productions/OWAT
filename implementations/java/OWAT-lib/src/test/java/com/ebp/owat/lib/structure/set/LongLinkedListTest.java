@@ -672,6 +672,45 @@ public class LongLinkedListTest {
 		
 	}
 	
+	@Test
+	public void testAtCapacity(){
+		this.testingNodeList = new LongLinkedList<>(5L);
+		
+		assertFalse(this.testingNodeList.atCapacity());
+		
+		this.testingNodeList.add(0L);
+		this.testingNodeList.add(1L);
+		
+		assertFalse(this.testingNodeList.atCapacity());
+		
+		this.testingNodeList.add(2L);
+		this.testingNodeList.add(3L);
+		this.testingNodeList.add(4L);
+		
+		assertTrue(this.testingNodeList.atCapacity());
+		
+	}
+	
+	@Test
+	public void testCanAdd(){
+		this.testingNodeList = new LongLinkedList<>(5L);
+		
+		assertTrue(this.testingNodeList.canAdd(4L));
+		assertTrue(this.testingNodeList.canAdd(5L));
+		assertFalse(this.testingNodeList.canAdd(6L));
+		
+		this.testingNodeList.add(0L);
+		this.testingNodeList.add(1L);
+		
+		assertTrue(this.testingNodeList.canAdd(3L));
+		assertFalse(this.testingNodeList.canAdd(5L));
+		
+		this.testingNodeList.add(2L);
+		this.testingNodeList.add(3L);
+		this.testingNodeList.add(4L);
+		assertTrue(this.testingNodeList.canAdd(1L));
+	}
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////// Other methods /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

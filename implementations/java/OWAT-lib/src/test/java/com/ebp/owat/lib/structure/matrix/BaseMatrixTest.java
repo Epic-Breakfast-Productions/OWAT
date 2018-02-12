@@ -459,4 +459,17 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 		assertNull(m.removeCol());
 		assertNull(m.removeRow());
 	}
+	
+	@Test
+	public void testHasValue() throws Exception {
+		T m = this.getTestingInstance();
+		m.grow(2);
+		m.setValue(0,0,1);
+		m.setValue(1,1,1);
+		
+		assertTrue(m.hasValue(0,0));
+		assertTrue(m.hasValue(1,1));
+		assertFalse(m.hasValue(0,1));
+		assertFalse(m.hasValue(1,0));
+	}
 }

@@ -10,7 +10,6 @@ package com.ebp.owat.lib.utils.rand;
  */
 public abstract class OwatRandGenerator {
 	protected static final String CHARSET = "0123456789abcdefghijklmnopqrstuvwxyz`~!@#$%^&*()-_=+\\]}[{'\";:/?.>,<";
-	protected byte[] byteBuff = new byte[1];
 	
 	/**
 	 * Default constructor.
@@ -42,7 +41,6 @@ public abstract class OwatRandGenerator {
 	
 	/**
 	 * Gets a byte with a random value.
-	 * TODO:: test
 	 * @return A byte with a random value.
 	 */
 	public byte nextByte(){
@@ -51,7 +49,6 @@ public abstract class OwatRandGenerator {
 	
 	/**
 	 * Gets a random character in the form of a byte.
-	 * TODO:: test
 	 * @return A random character in the form of a byte.
 	 */
 	public byte nextByteChar(){
