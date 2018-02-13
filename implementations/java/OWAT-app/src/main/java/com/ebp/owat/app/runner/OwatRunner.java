@@ -1,11 +1,14 @@
 package com.ebp.owat.app.runner;
 
+import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
 public abstract class OwatRunner {
 	protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+	
+	protected static final NodeMode DEFAULT_MODE = NodeMode.BIT;
 	
 	private Step curStep = Step.NOT_STARTED;
 	

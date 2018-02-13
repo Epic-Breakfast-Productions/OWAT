@@ -86,6 +86,11 @@ public class ScrambleKey {
 		return sb.toString();
 	}
 	
+	@JsonIgnore
+	public long getNumMoves(){
+		return this.moves.sizeL();
+	}
+	
 	/**
 	 * Same as {@link #equals(Object)}, but includes a flag to include the mode in the comparison.
 	 * @param o

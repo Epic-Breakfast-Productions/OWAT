@@ -1,11 +1,8 @@
 package com.ebp.owat.app.runner;
 
-import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
-import com.ebp.owat.lib.datastructure.value.BitValue;
-import com.ebp.owat.lib.datastructure.value.ByteValue;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
@@ -20,8 +17,6 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.util.Iterator;
-import java.util.List;
 
 public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScrambleRunner.class);
@@ -42,6 +37,8 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 	private long minNumScrambleSteps = -1;
 	/** The maximum number of steps */
 	private long maxNumScrambleSteps = -1;
+	
+	private RunnerUtilities<N, M, R> utils = new RunnerUtilities<>();
 	
 	private ScrambleRunner(R rand, InputStream dataInput, OutputStream dataOutput, OutputStream keyOutput, NodeMode nodeType){
 		if(rand == null){
@@ -79,7 +76,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		/** The random number generator to use. */
 		private R rand = (R)new ThreadLocalRandGenerator();
 		/** The type of data that will be used. */
-		private NodeMode nodeType = NodeMode.BIT;
+		private NodeMode nodeType = DEFAULT_MODE;
 		/** The stream to use to read the original data in. */
 		private InputStream dataInput = null;
 		/** The stream to use to write the data out */
@@ -167,170 +164,6 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		}
 	}
 	
-	private LongLinkedList<Byte> readDataIn() throws IOException {
-		LongLinkedList<Byte> output = new LongLinkedList<>();
-		
-		try{
-			byte curByte = (byte)this.dataInput.read();
-			
-			while (curByte != -1){
-				output.addLast(curByte);
-				curByte = (byte)this.dataInput.read();
-			}
-		}finally {
-			if(this.dataInput != null){
-				this.dataInput.close();
-			}
-		}
-		return output;
-	}
-	
-	
-	private void fillMatrixWithOriginalData(M emptyMatrix, LongLinkedList values){
-		emptyMatrix.grow(values);
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	private M getBitMatrix(LongLinkedList<Byte> data){
-		M matrix = (M) new HashedScramblingMatrix<BitValue>();
-		
-		matrix.setDefaultValue((N) new BitValue(false, false));
-		
-		Iterator<Byte> it = data.destructiveIterator();
-		LongLinkedList<BitValue> bitValues = new LongLinkedList<>();
-		
-		while (it.hasNext()){
-			byte curByte = it.next();
-			bitValues.addAll(BitValue.fromByte(curByte, true));
-		}
-		
-		this.fillMatrixWithOriginalData(matrix, bitValues);
-		
-		return matrix;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private M getByteMatrix(LongLinkedList<Byte> data){
-		M matrix = (M) new HashedScramblingMatrix<ByteValue>();
-		
-		matrix.setDefaultValue((N) new ByteValue((byte)0, false));
-		
-		Iterator<Byte> it = data.destructiveIterator();
-		LongLinkedList<ByteValue> byteValues = new LongLinkedList<>();
-		
-		while (it.hasNext()){
-			byte curByte = it.next();
-			byteValues.addLast(new ByteValue(curByte,true));
-		}
-		
-		this.fillMatrixWithOriginalData(matrix, byteValues);
-		
-		return matrix;
-	}
-	
-	private M getMatrix(LongLinkedList<Byte> data){
-		switch (this.nodeType){
-			case BIT:
-				return this.getBitMatrix(data);
-			case BYTE:
-				return this.getByteMatrix(data);
-			default:
-				throw new IllegalStateException();
-		}
-	}
-	
-	private List<N> getListOfValues(long numValues){
-		LongLinkedList<N> output = new LongLinkedList<>();
-		
-		if(this.nodeType == NodeMode.BIT){
-			for(long i = 0; i < numValues; i++){
-				output.add((N) new BitValue(this.rand.nextBool(), false));
-			}
-		}else if(this.nodeType == NodeMode.BYTE){
-			for(long i = 0; i < numValues; i++){
-				output.add((N) new ByteValue(this.rand.nextByte(), false));
-			}
-		}
-		
-		return output;
-	}
-	
-	private void addRandRowOrCol(M matrix){
-		if(this.rand.nextBool()){
-			matrix.addRow();
-			matrix.replaceRow(matrix.getNumRows() -1, this.getListOfValues(matrix.getNumCols()));
-		}else{
-			matrix.addCol();
-			matrix.replaceCol(matrix.getNumCols() -1, this.getListOfValues(matrix.getNumRows()));
-		}
-	}
-	
-	private void padMatrix(M matrix){
-		//TODO:: fill last bits of end row if need be
-		
-		long numRowsColsToGenerate = matrix.size();
-		LOGGER.debug("Adding a total of {} rows and columns of dummy data to the matrix.", numRowsColsToGenerate);
-		for(long i = 0; i < numRowsColsToGenerate; i++){
-			addRandRowOrCol(matrix);
-		}
-		
-		//ensure that bit marices can be serialized properly
-		if(this.nodeType == NodeMode.BIT){
-			while (matrix.size() % 8 != 0){
-				addRandRowOrCol(matrix);
-			}
-		}
-	}
-	
-	private void determineMinStepsToTake(M matrix){
-		//TODO::make this calculation smarter. Logrithmical?
-		long min = matrix.size() * 2L;
-		long max = min * 2L;
-		this.minNumScrambleSteps = this.rand.nextLong(min, max);
-	}
-	private void determineMaxStepsToTake(M matrix){
-		//TODO::make this calculation smarter. Logrithmical?
-		long tempMin = this.minNumScrambleSteps + matrix.size();
-		long tempMax = tempMin * 2L;
-		this.maxNumScrambleSteps = this.rand.nextLong(tempMin, tempMax);
-	}
-	
-	private byte[] getMatrixAsBytes(M matrix){
-		byte[] bytes;
-		if(this.nodeType == NodeMode.BIT){
-			Iterator<BitValue> bitIt = (Iterator<BitValue>) matrix.iterator();
-			
-			LongLinkedList<BitValue> tempBits;
-			LongLinkedList<Byte> tempBytes = new LongLinkedList<>();
-			
-			while (bitIt.hasNext()){
-				tempBits = new LongLinkedList<>();
-				for(short i = 0; i < 8; i++){
-					tempBits.addLast(bitIt.next());
-				}
-				tempBytes.addLast(BitValue.toByte(tempBits));
-			}
-			
-			bytes = new byte[tempBytes.size()];
-			Iterator<Byte> it = tempBytes.destructiveIterator();
-			for(int i = 0; i < bytes.length; i++){
-				bytes[i] = it.next();
-			}
-		}else if(this.nodeType == NodeMode.BYTE){
-			bytes = new byte[(int)matrix.size()];
-			int i = 0;
-			Iterator<ByteValue> it = (Iterator<ByteValue>) matrix.iterator();
-			while (it.hasNext()){
-				bytes[i] = it.next().getValue();
-				i++;
-			}
-		}else{
-			throw new IllegalStateException();
-		}
-		return bytes;
-	}
-	
 	@Override
 	public void doSteps() throws IOException {
 		M matrix;
@@ -338,12 +171,15 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		{
 			this.setCurStep(Step.LOAD_DATA);
 			LOGGER.info("Loading data...");
-			LongLinkedList<Byte> data = this.readDataIn();
 			
-			matrix = this.getMatrix(data);
+			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput);
+			LOGGER.debug("Length of original data: {} bytes", data.sizeL());
+			matrix = this.utils.getMatrix(data, this.nodeType, -1, -1);
 			
 			long origDataHeight = matrix.getNumRows();
 			long origDataWidth = matrix.getNumCols();
+			
+			LOGGER.debug("Size of matrix with just original data: {}rows x {}cols", origDataHeight, origDataWidth);
 			
 			long lastRowIndex;
 			if(matrix.isFull()){
@@ -355,7 +191,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			
 			this.setCurStep(Step.PAD_DATA);
 			LOGGER.info("Padding data...");
-			this.padMatrix(matrix);
+			this.utils.padMatrix(matrix, this.rand, this.nodeType);
 			
 			LOGGER.debug("Size of matrix: {}rows x {}cols", matrix.getNumRows(), matrix.getNumCols());
 			this.key = new ScrambleKey(origDataHeight, origDataWidth, matrix.getNumRows(), matrix.getNumCols(), this.nodeType.typeClass, lastRowIndex);
@@ -365,10 +201,10 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		LOGGER.info("Scrambling Data...");
 		
 		if(this.minNumScrambleSteps < 0){
-			this.determineMinStepsToTake(matrix);
+			this.minNumScrambleSteps = this.utils.determineMinStepsToTake(matrix, this.rand);
 		}
 		if(this.maxNumScrambleSteps < 0 || this.maxNumScrambleSteps <= this.minNumScrambleSteps) {
-			this.determineMaxStepsToTake(matrix);
+			this.maxNumScrambleSteps = this.utils.determineMaxStepsToTake(matrix, this.rand, this.minNumScrambleSteps);
 		}
 		
 		long numSteps = this.rand.nextLong(this.minNumScrambleSteps, this.maxNumScrambleSteps);
@@ -383,7 +219,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		this.setCurStep(Step.OUT_SCRAMBLED_DATA);
 		LOGGER.info("Outputting scrambled data...");
 		{
-			byte[] bytes = this.getMatrixAsBytes(matrix);
+			byte[] bytes = this.utils.getMatrixAsBytes(matrix, this.nodeType);
 			LOGGER.debug("Number of bytes to output: {}", bytes.length);
 			this.dataOutput.write(bytes);
 		}

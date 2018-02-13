@@ -1,8 +1,10 @@
 package com.ebp.owat.lib.utils.scramble.key;
 
 import com.ebp.owat.lib.datastructure.value.BitValue;
+import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
@@ -20,8 +22,8 @@ public class KeyMetaData {
 	public final long dataWidth;
 	@JsonProperty(NODE_TYPE)
 	public final String nodeType;
-	@JsonProperty(LAST_ROW_INDEX)
-	public final long lastRowIndex;
+	@JsonProperty(LAST_COL_INDEX)
+	public final long lastColIndex;
 	
 	@JsonCreator
 	public KeyMetaData(
@@ -30,14 +32,14 @@ public class KeyMetaData {
 		@JsonProperty(DATA_HEIGHT) long dataHeight,
 		@JsonProperty(DATA_WIDTH) long dataWidth,
 		@JsonProperty(NODE_TYPE) String nodeType,
-		@JsonProperty(value = LAST_ROW_INDEX, defaultValue = "-1") long lastRowIndex
+		@JsonProperty(value = LAST_COL_INDEX, defaultValue = "-1") long lastColIndex
 	) {
 		this.originalHeight = originalHeight;
 		this.originalWidth = originalWidth;
 		this.dataHeight = dataHeight;
 		this.dataWidth = dataWidth;
 		this.nodeType = nodeType;
-		this.lastRowIndex = lastRowIndex;
+		this.lastColIndex = lastColIndex;
 	}
 	
 	/**
@@ -50,6 +52,18 @@ public class KeyMetaData {
 			return BIT_TYPE_STR;
 		}
 		return BYTE_TYPE_STR;
+	}
+	
+	@JsonIgnore
+	public NodeMode getNodeMode(){
+		switch (this.nodeType){
+			case SerializationConstants.BIT_TYPE_STR:
+				return NodeMode.BIT;
+			case SerializationConstants.BYTE_TYPE_STR:
+				return NodeMode.BYTE;
+			default:
+				throw new IllegalStateException();
+		}
 	}
 	
 	@Override
