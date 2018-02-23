@@ -1,111 +1,98 @@
 package com.ebp.owat.app.runner;
 
+import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
+import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(Parameterized.class)
 public class RunnerTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunnerTest.class);
 	
-	//TODO:: test using parameters (string to scramble, node type)
-	
-	@Test
-	public void testScrambleRunnerBuilder(){
-		ScrambleRunner.Builder builder = new ScrambleRunner.Builder();
-		try {
-			builder.build();
-			Assert.fail();
-		}catch (IllegalArgumentException e){
-			//nothing to do
-		}
-		builder.setRand("Hello world");
-		builder.setDataInput(new ByteArrayInputStream("lorem ipsum".getBytes(StandardCharsets.UTF_8)));
-		builder.setDataOutput(new ByteArrayOutputStream());
-		builder.setKeyOutput(new ByteArrayOutputStream());
-		builder.setNodeType(NodeMode.BYTE);
-		
-		builder.build();
+	private final String data;
+
+	public RunnerTest(String data){
+		this.data = data;
 	}
-	
-	@Test
-	public void testScrambleRunner() throws IOException {
-		ScrambleRunner.Builder scrambleBuilder = new ScrambleRunner.Builder();
-		/*
-		LOGGER.info("Testing square byte.");
-		scrambleBuilder.setRand("Hello world");
-		scrambleBuilder.setDataInput(new ByteArrayInputStream("lorem ipsum!!".getBytes(StandardCharsets.UTF_8)));
-		scrambleBuilder.setDataOutput(new ByteArrayOutputStream());
-		scrambleBuilder.setKeyOutput(new ByteArrayOutputStream());
-		scrambleBuilder.setNodeType(NodeMode.BYTE);
-		scrambleBuilder.build().doSteps();
-		
-		LOGGER.info("Testing non square byte.");
-		scrambleBuilder.setRand("Hello world");
-		scrambleBuilder.setDataInput(new ByteArrayInputStream("lorem ipsum".getBytes(StandardCharsets.UTF_8)));
-		scrambleBuilder.setDataOutput(new ByteArrayOutputStream());
-		scrambleBuilder.setKeyOutput(new ByteArrayOutputStream());
-		scrambleBuilder.setNodeType(NodeMode.BYTE);
-		scrambleBuilder.build().doSteps();
-		
-		LOGGER.info("Testing bit 1");
-		scrambleBuilder.setRand("Hello world");
-		scrambleBuilder.setDataInput(new ByteArrayInputStream("lorem ipsum!!".getBytes(StandardCharsets.UTF_8)));
-		scrambleBuilder.setDataOutput(new ByteArrayOutputStream());
-		scrambleBuilder.setKeyOutput(new ByteArrayOutputStream());
-		scrambleBuilder.setNodeType(NodeMode.BIT);
-		scrambleBuilder.build().doSteps();
-		
-		LOGGER.info("Testing bit 2.");
-		scrambleBuilder.setRand("Hello world");
-		scrambleBuilder.setDataInput(new ByteArrayInputStream("lorem ipsum".getBytes(StandardCharsets.UTF_8)));
-		scrambleBuilder.setDataOutput(new ByteArrayOutputStream());
-		scrambleBuilder.setKeyOutput(new ByteArrayOutputStream());
-		scrambleBuilder.setNodeType(NodeMode.BIT);
-		scrambleBuilder.build().doSteps();
-		/* */
-		
-		
-		
-		
-		LOGGER.info("Testing to/from.");
-		
-		scrambleBuilder = new ScrambleRunner.Builder();
-		
-		//String testData = "lorem ipsum This is a test message 1234567890!@#$%^&*()_+-={}[],.<>/?;:'\"\\|";
-		String testData = "hi";
-		
+
+	private static ScrambleRunner.Builder getBuilder(){
+		ScrambleRunner.Builder builder = new ScrambleRunner.Builder();
+
+		return builder;
+	}
+
+	private void runTest(NodeMode mode) throws IOException {
+		ScrambleRunner.Builder builder = getBuilder();
+
 		ByteArrayOutputStream scrambledDataOutput = new ByteArrayOutputStream();
 		ByteArrayOutputStream keyOutput = new ByteArrayOutputStream();
-		
-		scrambleBuilder.setDataInput(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
-		scrambleBuilder.setDataOutput(scrambledDataOutput);
-		scrambleBuilder.setKeyOutput(keyOutput);
-		scrambleBuilder.setNodeType(NodeMode.BYTE);
-		scrambleBuilder.build().doSteps();
-		
-		
+
+		builder.setDataInput(new ByteArrayInputStream(this.data.getBytes(StandardCharsets.UTF_8)));
+		builder.setDataOutput(scrambledDataOutput);
+		builder.setKeyOutput(keyOutput);
+		builder.setNodeType(NodeMode.BYTE);
+
+		LOGGER.info("Scrambling test data.");
+
+		builder.build().doSteps();
+
+		LOGGER.info("DONE Scrambling test data.");
+
 		ByteArrayOutputStream deScrambledDataOutput = new ByteArrayOutputStream();
-		
+
 		DeScrambleRunner.Builder deScrambleBuilder = new DeScrambleRunner.Builder();
-		
+
 		String scrambledData = scrambledDataOutput.toString();
-		
-		LOGGER.debug("Scrambled data: {}", scrambledData);
-		
+
+		LOGGER.info("Scrambled data: {}", scrambledData);
+
 		deScrambleBuilder.setDataInput(new ByteArrayInputStream(scrambledData.getBytes(StandardCharsets.UTF_8)));
 		deScrambleBuilder.setKeyInput(new ByteArrayInputStream(keyOutput.toByteArray()));
 		deScrambleBuilder.setDataOutput(deScrambledDataOutput);
-		
+
+		LOGGER.info("Descrambling test data.");
+
 		deScrambleBuilder.build().doSteps();
-		
+
+		LOGGER.info("DONE descrambling data.");
+
 		String output = deScrambledDataOutput.toString();
-		assertEquals(testData, output);
+
+		LOGGER.info("Expected: {}", this.data);
+		LOGGER.info("Got:      {}", output);
+		assertEquals(this.data, output);
+	}
+
+	@Test
+	public void testByteMode() throws IOException {
+		this.runTest(NodeMode.BYTE);
+	}
+
+	@Test
+	public void testBitMode() throws IOException {
+		this.runTest(NodeMode.BIT);
+	}
+
+	@Parameterized.Parameters
+	public static Collection getMatrixClassesToTest(){
+		return Arrays.asList(new Object[][] {
+			{ "" },
+			{ "a" },
+			{ "hello world"},
+			{ "hello world12345" },
+		});
 	}
 }
