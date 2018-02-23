@@ -80,7 +80,7 @@ public class ScrambleKey {
 		StringBuilder sb = new StringBuilder();
 		
 		for(ScrambleMove curMove : moves){
-			curMove.toKeyString(sb);
+			curMove.toKeyString(sb, true);
 		}
 		
 		return sb.toString();

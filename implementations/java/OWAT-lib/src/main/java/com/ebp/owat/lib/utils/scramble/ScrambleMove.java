@@ -31,13 +31,28 @@ public class ScrambleMove {
 		}
 		return this.move.opStr;
 	}
+
+	public void toReverse(){
+		switch (this.move){
+			case SLIDE_COL:
+			case SLIDE_ROW:
+				this.args[SlideCol.NUMTOSLIDE] = this.args[SlideCol.NUMTOSLIDE] * -1L;
+				break;
+			case ROT_BOX:
+				this.args[RotateBox.ROTNUM] = this.args[RotateBox.ROTNUM] * -1L;
+				break;
+		}
+	}
 	
 	/**
 	 * Turns this move into it's string representation.
 	 * @param sbIn If null, simply returns the string. If given a StringBuilder, adds to the string builder and returns null.
 	 * @return If sbIn is null, returns the string. Else just returns null.
 	 */
-	public String toKeyString(StringBuilder sbIn){
+	public String toKeyString(StringBuilder sbIn, boolean reverse){
+		if(reverse){
+			this.toReverse();
+		}
 		StringBuilder sb;
 		if(sbIn != null){
 			sb = sbIn;
@@ -67,10 +82,10 @@ public class ScrambleMove {
 			case SLIDE_COL:
 				sb.append(this.args[SlideCol.ROWCOL])
 					.append(ARG_SEP)
-					.append(this.args[SlideCol.NUMTOSLIDE] * -1L);
+					.append(this.args[SlideCol.NUMTOSLIDE]);
 				break;
 			case ROT_BOX:
-				sb.append(this.args[RotateBox.ROTNUM] * -1L)
+				sb.append(this.args[RotateBox.ROTNUM])
 					.append(ARG_SEP)
 					.append(this.args[RotateBox.X])
 					.append(COORD_SEP)
@@ -87,7 +102,7 @@ public class ScrambleMove {
 	}
 	
 	public String toKeyString() {
-		return this.toKeyString(null);
+		return this.toKeyString(null, true);
 	}
 	
 	public static ScrambleMove parse(String move) {
@@ -120,8 +135,12 @@ public class ScrambleMove {
 	public static synchronized void useOpCode(boolean use){
 		useOpCode = use;
 	}
-	
-	
+
+	@Override
+	protected ScrambleMove clone() {
+		return new ScrambleMove(this.move, this.args.clone());
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

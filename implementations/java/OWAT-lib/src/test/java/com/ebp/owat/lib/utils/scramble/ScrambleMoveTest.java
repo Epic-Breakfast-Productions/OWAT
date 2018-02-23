@@ -2,76 +2,163 @@ package com.ebp.owat.lib.utils.scramble;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+@RunWith(Parameterized.class)
 public class ScrambleMoveTest extends ScMoTest {
-	private static final ScrambleMove SW = new ScrambleMove(ScrambleMoves.SWAP, 10L, 1L, 100L, 399L);
-	private static final ScrambleMove SWR = new ScrambleMove(ScrambleMoves.SWAP_ROW, 10L, 399L);
-	private static final ScrambleMove SWC = new ScrambleMove(ScrambleMoves.SWAP_COL, 10L, 399L);
-	private static final ScrambleMove SLR = new ScrambleMove(ScrambleMoves.SLIDE_ROW, 10L, 399L);
-	private static final ScrambleMove SLR_N = new ScrambleMove(ScrambleMoves.SLIDE_ROW, 10L, -399L);
-	private static final ScrambleMove SLC = new ScrambleMove(ScrambleMoves.SLIDE_COL, 10L, 399L);
-	private static final ScrambleMove SLC_N = new ScrambleMove(ScrambleMoves.SLIDE_COL, 10L, -399L);
-	private static final ScrambleMove ROT = new ScrambleMove(ScrambleMoves.ROT_BOX, 1, 10L, 1L, 50L);
-	private static final ScrambleMove ROT_N = new ScrambleMove(ScrambleMoves.ROT_BOX, -1, 10L, 1L, 50L);
-	
-	@Test
-	public void testScrambleMoveBadConstructor(){
-		try{
-			new ScrambleMove(ScrambleMoves.SWAP, 1L);
-			Assert.fail();
-		}catch (IllegalArgumentException e){
-		
-		}
+
+	private final ScrambleMove testMove;
+	private final boolean usingOpcode;
+	private final String expectedString;
+	private final String expectedReverseString;
+
+	public ScrambleMoveTest(ScrambleMove testMove, boolean usingOpcode, String expectedString, String expectedReverseString){
+		this.testMove = testMove;
+		ScrambleMove.useOpCode(usingOpcode);
+		this.usingOpcode = usingOpcode;
+		this.expectedString = expectedString;
+		this.expectedReverseString = expectedReverseString;
 	}
-	
+
 	@Test
-	public void testScrambleMoveParse(){
-		assertEquals(SW, ScrambleMove.parse("sw:10x1,100x399;"));
-		assertEquals(SWR, ScrambleMove.parse("swr:10,399;"));
-		assertEquals(SWC, ScrambleMove.parse("swc:10,399;"));
-		assertEquals(SLR, ScrambleMove.parse("slr:10,399;"));
-		assertEquals(SLR_N, ScrambleMove.parse("slr:10,-399;"));
-		assertEquals(SLC, ScrambleMove.parse("slc:10,399;"));
-		assertEquals(SLC_N, ScrambleMove.parse("slc:10,-399;"));
-		assertEquals(ROT, ScrambleMove.parse("rot:1,10x1,50;"));
-		assertEquals(ROT_N, ScrambleMove.parse("rot:-1,10x1,50;"));
-		SW.hashCode();
+	public void testCloneEquals(){
+		ScrambleMove test = this.testMove.clone();
+		assertTrue(this.testMove.equals(test));
+		//TODO:: test this more?
 	}
-	
+
 	@Test
-	public void testScrambleMoveMultiParse(){
-		assertEquals(
-			Arrays.asList(SW,SWR),
-			ScrambleMove.parseMulti("sw:10x1,100x399;swr:10,399;")
-		);
+	public void testToString(){
+		ScrambleMove testMove = this.testMove.clone();
+
+		assertEquals(this.expectedString, testMove.toKeyString(null, false));
+		assertEquals(this.expectedReverseString, testMove.toKeyString(null, true));
 	}
-	
+
 	@Test
-	public void testScrambleMoveToKeyString(){
-		assertEquals("1:10x1,100x399;", SW.toKeyString());
-		assertEquals("2:10,399;", SWR.toKeyString());
-		assertEquals("3:10,399;", SWC.toKeyString());
-		assertEquals("4:10,-399;", SLR.toKeyString());
-		assertEquals("4:10,399;", SLR_N.toKeyString());
-		assertEquals("5:10,-399;", SLC.toKeyString());
-		assertEquals("5:10,399;", SLC_N.toKeyString());
-		assertEquals("6:-1,10x1,50;", ROT.toKeyString());
-		assertEquals("6:1,10x1,50;", ROT_N.toKeyString());
-		ScrambleMove.useOpCode(false);
-		assertEquals("sw:10x1,100x399;", SW.toKeyString());
-		assertEquals("swr:10,399;", SWR.toKeyString());
-		assertEquals("swc:10,399;", SWC.toKeyString());
-		assertEquals("slr:10,-399;", SLR.toKeyString());
-		assertEquals("slr:10,399;", SLR_N.toKeyString());
-		assertEquals("slc:10,-399;", SLC.toKeyString());
-		assertEquals("slc:10,399;", SLC_N.toKeyString());
-		assertEquals("rot:-1,10x1,50;", ROT.toKeyString());
-		assertEquals("rot:1,10x1,50;", ROT_N.toKeyString());
-		ScrambleMove.useOpCode(true);
+	public void testParse(){
+		assertEquals(this.testMove, ScrambleMove.parse(this.expectedString));
+	}
+
+	@Parameterized.Parameters
+	public static Collection getMatrixClassesToTest(){
+		return Arrays.asList(new Object[][]{
+			{
+				new ScrambleMove(ScrambleMoves.SWAP, 10L, 1L, 100L, 399L),
+				true,
+				"1:10x1,100x399;",
+				"1:10x1,100x399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SWAP, 10L, 1L, 100L, 399L),
+				false,
+				"sw:10x1,100x399;",
+				"sw:10x1,100x399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SWAP_ROW, 10L, 399L),
+				true,
+				"2:10,399;",
+				"2:10,399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SWAP_ROW, 10L, 399L),
+				false,
+				"swr:10,399;",
+				"swr:10,399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SWAP_COL, 10L, 399L),
+				true,
+				"3:10,399;",
+				"3:10,399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SWAP_COL, 10L, 399L),
+				false,
+				"swc:10,399;",
+				"swc:10,399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SLIDE_ROW, 10L, 399L),
+				true,
+				"4:10,399;",
+				"4:10,-399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SLIDE_ROW, 10L, 399L),
+				false,
+				"slr:10,399;",
+				"slr:10,-399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SLIDE_ROW, 10L, -399L),
+				true,
+				"4:10,-399;",
+				"4:10,399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SLIDE_ROW, 10L, -399L),
+				false,
+				"slr:10,-399;",
+				"slr:10,399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SLIDE_COL, 10L, 399L),
+				true,
+				"5:10,399;",
+				"5:10,-399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SLIDE_COL, 10L, 399L),
+				false,
+				"slc:10,399;",
+				"slc:10,-399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SLIDE_COL, 10L, -399L),
+				true,
+				"5:10,-399;",
+				"5:10,399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.SLIDE_COL, 10L, -399L),
+				false,
+				"slc:10,-399;",
+				"slc:10,399;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.ROT_BOX, 1, 10L, 1L, 50L),
+				true,
+				"6:1,10x1,50;",
+				"6:-1,10x1,50;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.ROT_BOX, 1, 10L, 1L, 50L),
+				false,
+				"rot:1,10x1,50;",
+				"rot:-1,10x1,50;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.ROT_BOX, -1, 10L, 1L, 50L),
+				true,
+				"6:-1,10x1,50;",
+				"6:1,10x1,50;"
+			},
+			{
+				new ScrambleMove(ScrambleMoves.ROT_BOX, -1, 10L, 1L, 50L),
+				false,
+				"rot:-1,10x1,50;",
+				"rot:1,10x1,50;"
+			}
+		});
 	}
 }
 

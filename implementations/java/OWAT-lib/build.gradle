@@ -7,6 +7,7 @@
 repositories {
 	jcenter()
 }
+
 apply plugin: 'java'
 
 // In this section you declare the dependencies for your production and test code
@@ -22,12 +23,10 @@ dependencies {
 	compile 'args4j:args4j:2.33'
 	compile 'args4j:args4j-site:2.33'
 
+	//for actual code needs
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.9.+'
+
 	//test dependencies
 	testCompile 'junit:junit:4.12'
 	testCompile 'com.google.guava:guava:23.6-jre'
-
-	//for actual code needs
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.9.+'
 }
-
-
