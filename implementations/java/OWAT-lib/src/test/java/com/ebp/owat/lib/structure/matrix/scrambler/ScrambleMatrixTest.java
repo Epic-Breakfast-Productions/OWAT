@@ -77,9 +77,10 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		}catch (IllegalArgumentException e){
 			//nothing to do
 		}
-		
-		testMatrix.swap(new ScrambleMove(SWAP, 0,0,4,4));
-		
+
+		ScrambleMove testMove = new ScrambleMove(SWAP, 0,0,4,4);
+		testMatrix.swap(testMove);
+
 		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
@@ -91,17 +92,49 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 			},
 			testMatrix
 		);
-		
-		testMatrix.swap(new ScrambleMove(SWAP, 1,0,1,1));
-		
+
+		testMove.toReverse();
+		testMatrix.swap(testMove);
+
 		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
-				{24, 6, 2, N, 4},
+				{ 0, N, 2, N, 4},
+				{ N, 6, N, 8, N},
+				{10, N,12,13,14},
+				{15,16, N,18,19},
+				{20, N,22, N,24}
+			},
+			testMatrix
+		);
+
+		testMove = new ScrambleMove(SWAP, 1,0,1,1);
+
+		testMatrix.swap(testMove);
+
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{ 0, 6, 2, N, 4},
 				{ N, N, N, 8, N},
 				{10, N,12,13,14},
 				{15,16, N,18,19},
-				{20, N,22, N, 0}
+				{20, N,22, N,24}
+			},
+			testMatrix
+		);
+
+		testMove.toReverse();
+		testMatrix.swap(testMove);
+
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{ 0, N, 2, N, 4},
+				{ N, 6, N, 8, N},
+				{10, N,12,13,14},
+				{15,16, N,18,19},
+				{20, N,22, N,24}
 			},
 			testMatrix
 		);
@@ -117,9 +150,11 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		}catch (IllegalArgumentException e){
 			//nothing to do
 		}
-		
-		testMatrix.swapRows(new ScrambleMove(SWAP_ROW, 1,0));
-		
+
+		ScrambleMove testMove = new ScrambleMove(SWAP_ROW, 1,0);
+
+		testMatrix.swapRows(testMove);
+
 		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
@@ -128,6 +163,21 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 				{10, N,12,13,14},
 				{15,16, N,18,19},
 				{20, N,22, N, 24}
+			},
+			testMatrix
+		);
+
+		testMove.toReverse();
+		testMatrix.swapRows(testMove);
+
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{ 0, N, 2, N, 4},
+				{ N, 6, N, 8, N},
+				{10, N,12,13,14},
+				{15,16, N,18,19},
+				{20, N,22, N,24}
 			},
 			testMatrix
 		);
@@ -143,9 +193,10 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		}catch (IllegalArgumentException e){
 			//nothing to do
 		}
-		
-		testMatrix.swapCols(new ScrambleMove(SWAP_COL, 1,0));
-		
+
+		ScrambleMove testMove = new ScrambleMove(SWAP_COL, 1,0);
+		testMatrix.swapCols(testMove);
+
 		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
@@ -154,6 +205,21 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 				{ N,10,12,13,14},
 				{16,15, N,18,19},
 				{ N,20,22, N,24}
+			},
+			testMatrix
+		);
+
+		testMove.toReverse();
+		testMatrix.swapCols(testMove);
+
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{ 0, N, 2, N, 4},
+				{ N, 6, N, 8, N},
+				{10, N,12,13,14},
+				{15,16, N,18,19},
+				{20, N,22, N,24}
 			},
 			testMatrix
 		);
@@ -169,8 +235,10 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		}catch (IllegalArgumentException e){
 			//nothing to do
 		}
-		
-		testMatrix.slideRow(new ScrambleMove(SLIDE_ROW, 0, 3));
+
+		ScrambleMove testMove = new ScrambleMove(SLIDE_ROW, 0, 3);
+
+		testMatrix.slideRow(testMove);
 		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
@@ -182,8 +250,9 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 			},
 			testMatrix
 		);
-		
-		testMatrix.slideRow(new ScrambleMove(SLIDE_ROW, 0, -3));
+
+		testMove.toReverse();
+		testMatrix.slideRow(testMove);
 		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
@@ -207,8 +276,9 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 		}catch (IllegalArgumentException e){
 			//nothing to do
 		}
-		
-		testMatrix.slideCol(new ScrambleMove(SLIDE_COL, 0, 3));
+
+		ScrambleMove testMove = new ScrambleMove(SLIDE_COL, 0, 3);
+		testMatrix.slideCol(testMove);
 		
 		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
@@ -221,34 +291,21 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 			},
 			testMatrix
 		);
-		
-		testMatrix.slideCol(new ScrambleMove(SLIDE_COL, 1, 3));
-		
-		assertEquals(this.origNumInMatrix, testMatrix.numElements());
-		TestUtils.assertMatrix(
-			new Object[][]{
-				{10, N, 2, N, 4},
-				{15,16, N, 8, N},
-				{20, N,12,13,14},
-				{ 0, N, N,18,19},
-				{ N, 6,22, N,24}
-			},
-			testMatrix
-		);
-		
-		testMatrix.slideCol(new ScrambleMove(SLIDE_COL, 0, -3));
-		
+
+		testMove.toReverse();
+		testMatrix.slideCol(testMove);
 		assertEquals(this.origNumInMatrix, testMatrix.numElements());
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{ 0, N, 2, N, 4},
-				{ N,16, N, 8, N},
+				{ N, 6, N, 8, N},
 				{10, N,12,13,14},
-				{15, N, N,18,19},
-				{20, 6,22, N,24}
+				{15,16, N,18,19},
+				{20, N,22, N,24}
 			},
 			testMatrix
 		);
+
 	}
 	
 	@Test
@@ -314,6 +371,39 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 				{ 2, N,12, N,22},
 				{ N, 6, N,16, N},
 				{ 0, N,10,15,20}
+			},
+			testMatrix
+		);
+
+		testMatrix = this.getPopulatedTestingInstance();
+
+		ScrambleMove testMove = new ScrambleMove(ROT_BOX, 1, 0,0,5);
+		testMatrix.rotBox(testMove);
+
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{20,15,10, N, 0},
+				{ N,16, N, 6, N},
+				{22, N,12, N, 2},
+				{ N,18,13, 8, N},
+				{24,19,14, N, 4}
+			},
+			testMatrix
+		);
+
+		testMove.toReverse();
+
+		testMatrix.rotBox(testMove);
+
+		assertEquals(this.origNumInMatrix, testMatrix.numElements());
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{ 0, N, 2, N, 4},
+				{ N, 6, N, 8, N},
+				{10, N,12,13,14},
+				{15,16, N,18,19},
+				{20, N,22, N,24}
 			},
 			testMatrix
 		);
