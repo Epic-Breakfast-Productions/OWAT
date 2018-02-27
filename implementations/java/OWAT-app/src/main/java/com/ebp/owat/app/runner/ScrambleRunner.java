@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.time.Instant;
 
 public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScrambleRunner.class);
@@ -166,10 +167,13 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 	
 	@Override
 	public void doSteps() throws IOException {
+		this.resetTiming();
+		long start, end;
 		M matrix;
 		
 		{
 			this.setCurStep(Step.LOAD_DATA);
+			start = System.currentTimeMillis();
 			LOGGER.info("Loading data...");
 			
 			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput);
@@ -188,16 +192,23 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 				long numLeftInLastRow = matrix.size() - matrix.numElements();
 				lastRowIndex = matrix.getNumRows() - numLeftInLastRow - 1;
 			}
-			
+			end = System.currentTimeMillis();
+			this.setElapsedTime(Step.LOAD_DATA, start, end);
+
 			this.setCurStep(Step.PAD_DATA);
+			start = System.currentTimeMillis();
 			LOGGER.info("Padding data...");
+
 			this.utils.padMatrix(matrix, this.rand, this.nodeType);
-			
 			LOGGER.debug("Size of matrix: {}rows x {}cols", matrix.getNumRows(), matrix.getNumCols());
 			this.key = new ScrambleKey(origDataHeight, origDataWidth, matrix.getNumRows(), matrix.getNumCols(), this.nodeType.typeClass, lastRowIndex);
+
+			end = System.currentTimeMillis();
+			this.setElapsedTime(Step.PAD_DATA, start, end);
 		}
 		
 		this.setCurStep(Step.SCRAMBLING);
+		start = System.currentTimeMillis();
 		LOGGER.info("Scrambling Data...");
 		
 		if(this.minNumScrambleSteps < 0){
@@ -215,20 +226,30 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			matrix.doScrambleMove(curMove);
 			this.key.addMove(curMove);
 		}
+
+		end = System.currentTimeMillis();
+		this.setElapsedTime(Step.SCRAMBLING, start, end);
 		
 		this.setCurStep(Step.OUT_SCRAMBLED_DATA);
+		start = System.currentTimeMillis();
 		LOGGER.info("Outputting scrambled data...");
 		{
 			byte[] bytes = this.utils.getMatrixAsBytes(matrix, this.nodeType);
 			LOGGER.debug("Number of bytes to output: {}", bytes.length);
 			this.dataOutput.write(bytes);
 		}
+		end = System.currentTimeMillis();
+		this.setElapsedTime(Step.OUT_SCRAMBLED_DATA, start, end);
 		
 		this.setCurStep(Step.OUT_KEY);
+		start = System.currentTimeMillis();
 		LOGGER.info("Outputting key...");
 		
 		this.keyOutput.write(OBJECT_MAPPER.writeValueAsBytes(this.key));
-		
+
+		end = System.currentTimeMillis();
+		this.setElapsedTime(Step.OUT_KEY, start, end);
+
 		this.setCurStep(Step.DONE_SCRAMBLING);
 		LOGGER.info("Done Scrambling.");
 	}

@@ -88,28 +88,39 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 			return new DeScrambleRunner(dataInput, keyInput, dataOutput);
 		}
 	}
-	
-	
-	
+
 	@Override
 	public void doSteps() throws IOException {
+		this.resetTiming();
+		long start, end;
 		M matrix;
 		
 		this.setCurStep(Step.LOAD_KEY);
+		start = System.currentTimeMillis();
 		LOGGER.info("Loading key...");
+
 		this.key = OBJECT_MAPPER.readValue(this.keyInput, ScrambleKey.class);
 		this.nodeType = this.key.meta.getNodeMode();
-		
+
+		end = System.currentTimeMillis();
+		this.setElapsedTime(Step.LOAD_DATA, start, end);
+
 		this.setCurStep(Step.LOAD_SCRAMBLED_DATA);
+		start = System.currentTimeMillis();
 		LOGGER.info("Loading scrambled data...");
+
 		{
 			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput);
 			LOGGER.debug("Length of scrambled data: {} bytes", data.sizeL());
 			matrix = this.utils.getMatrix(data, this.nodeType, this.key.meta.dataHeight, this.key.meta.dataWidth);
 		}
+		end = System.currentTimeMillis();
+		this.setElapsedTime(Step.LOAD_SCRAMBLED_DATA, start, end);
 		
 		this.setCurStep(Step.DESCRAMBLING);
+		start = System.currentTimeMillis();
 		LOGGER.info("Descrambling data...");
+
 		LOGGER.debug("Number of moves: {}", this.key.getNumMoves());
 		{
 			Iterator<ScrambleMove> it = this.key.getMovesIt();
@@ -117,8 +128,11 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 				matrix.doScrambleMove(it.next());
 			}
 		}
-		
+		end = System.currentTimeMillis();
+		this.setElapsedTime(Step.DESCRAMBLING, start, end);
+
 		this.setCurStep(Step.OUT_DESCRAMBLED_DATA);
+		start = System.currentTimeMillis();
 		LOGGER.info("Outputting descrambled data...");
 		matrix = (M) matrix.getSubMatrix(new Coordinate(matrix,0,0), this.key.meta.originalHeight, this.key.meta.originalWidth);
 		{
@@ -129,6 +143,8 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 			LOGGER.debug("Number of bytes to output: {}", bytes.length);
 			this.dataOutput.write(bytes);
 		}
+		end = System.currentTimeMillis();
+		this.setElapsedTime(Step.OUT_DESCRAMBLED_DATA, start, end);
 		
 		this.setCurStep(Step.DONE_DESCRAMBLING);
 		LOGGER.info("Done descrambling data...");

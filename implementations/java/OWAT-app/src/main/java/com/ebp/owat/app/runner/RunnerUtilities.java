@@ -24,8 +24,13 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	public RunnerUtilities(){
 	
 	}
-	
-	
+
+	/**
+	 * Reads the data in from they input stream. Closes stream when done.
+	 * @param dataInput The stream to get the data from.
+	 * @return A list of the data read in.
+	 * @throws IOException If something goes wrong with the read.
+	 */
 	public LongLinkedList<Byte> readDataIn(InputStream dataInput) throws IOException {
 		LongLinkedList<Byte> output = new LongLinkedList<>();
 		
@@ -89,7 +94,15 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		
 		return matrix;
 	}
-	
+
+	/**
+	 * Gets a matrix built with the data given.
+	 * @param data The data read in.
+	 * @param nodeType The type of node to use.
+	 * @param height The height of the matrix to make.
+	 * @param width The width of the matrix to make.
+	 * @return
+	 */
 	public M getMatrix(LongLinkedList<Byte> data, NodeMode nodeType, long height, long width){
 		switch (nodeType){
 			case BIT:
