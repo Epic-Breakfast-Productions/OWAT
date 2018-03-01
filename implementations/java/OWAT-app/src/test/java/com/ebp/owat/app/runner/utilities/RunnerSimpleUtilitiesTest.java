@@ -1,5 +1,6 @@
-package com.ebp.owat.app.runner;
+package com.ebp.owat.app.runner.utilities;
 
+import com.ebp.owat.app.runner.RunnerUtilities;
 import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
@@ -12,9 +13,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
-public class RunnerUtilitiesTest {
-
-	private final RunnerUtilities utilities = new RunnerUtilities();
+public class RunnerSimpleUtilitiesTest extends RunnerUtilTest {
 
 	@Test
 	public void testReadDataIn() throws IOException {
@@ -25,14 +24,6 @@ public class RunnerUtilitiesTest {
 			Arrays.asList((byte)'H', (byte)'e', (byte)'l', (byte)'l', (byte)'o', (byte)' ', (byte)'W', (byte)'o', (byte)'r', (byte)'l', (byte)'d'),
 			result
 		);
-	}
-
-	@Test
-	public void testGetMatrix() throws IOException {
-		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream("Hello World".getBytes(StandardCharsets.UTF_8)));
-
-		//utilities.getMatrix();
-		//TODO:: getMatrix
 	}
 
 	@Test

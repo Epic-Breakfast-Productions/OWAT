@@ -1,10 +1,6 @@
 package com.ebp.owat.app.runner;
 
-import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
-import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
-import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -43,7 +39,7 @@ public class RunnerTest {
 		builder.setDataInput(new ByteArrayInputStream(this.data.getBytes(StandardCharsets.UTF_8)));
 		builder.setDataOutput(scrambledDataOutput);
 		builder.setKeyOutput(keyOutput);
-		builder.setNodeType(NodeMode.BYTE);
+		builder.setNodeType(mode);
 
 		LOGGER.info("Scrambling test data.");
 
@@ -89,8 +85,8 @@ public class RunnerTest {
 	@Parameterized.Parameters
 	public static Collection getMatrixClassesToTest(){
 		return Arrays.asList(new Object[][] {
-			{ "" },
 			{ "a" },
+			{ "ab" },
 			{ "hello world"},
 			{ "hello world12345" },
 		});

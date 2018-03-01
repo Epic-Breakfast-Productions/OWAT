@@ -178,7 +178,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			
 			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput);
 			LOGGER.debug("Length of original data: {} bytes", data.sizeL());
-			matrix = this.utils.getMatrix(data, this.nodeType, -1, -1);
+			matrix = this.utils.getMatrix(data, this.nodeType);
 			
 			long origDataHeight = matrix.getNumRows();
 			long origDataWidth = matrix.getNumCols();

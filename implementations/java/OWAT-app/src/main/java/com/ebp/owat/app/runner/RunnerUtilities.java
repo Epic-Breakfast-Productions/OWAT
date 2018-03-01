@@ -99,9 +99,9 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	 * Gets a matrix built with the data given.
 	 * @param data The data read in.
 	 * @param nodeType The type of node to use.
-	 * @param height The height of the matrix to make.
-	 * @param width The width of the matrix to make.
-	 * @return
+	 * @param height The height of the matrix to make. -1 for Automatic.
+	 * @param width The width of the matrix to make. -1 for Automatic.
+	 * @return A matrix built with the data given.
 	 */
 	public M getMatrix(LongLinkedList<Byte> data, NodeMode nodeType, long height, long width){
 		switch (nodeType){
@@ -115,7 +115,17 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 				throw new IllegalStateException();
 		}
 	}
-	
+
+	/**
+	 * Gets a matrix built with the data given, automatically setting height/width.
+	 * @param data The data read in.
+	 * @param nodeType The type of node to use.
+	 * @return A matrix built with the data given.
+	 */
+	public M getMatrix(LongLinkedList<Byte> data, NodeMode nodeType) {
+		return getMatrix(data, nodeType, -1, -1);
+	}
+
 	private List<N> getListOfValues(long numValues, OwatRandGenerator rand, NodeMode nodeType){
 		LongLinkedList<N> output = new LongLinkedList<>();
 		
@@ -192,6 +202,9 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 			while (bitIt.hasNext()){
 				tempBits = new LongLinkedList<>();
 				for(short i = 0; i < 8; i++){
+					if(!bitIt.hasNext()){
+						throw new IllegalStateException("Matrix was not set up properly; invalid number of bits in matrix.");
+					}
 					tempBits.addLast(bitIt.next());
 				}
 				tempBytes.addLast(BitValue.toByte(tempBits));
