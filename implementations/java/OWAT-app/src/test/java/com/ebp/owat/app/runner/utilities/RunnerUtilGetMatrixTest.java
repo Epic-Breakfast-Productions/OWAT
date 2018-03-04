@@ -16,8 +16,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class RunnerUtilGetMatrixTest extends RunnerUtilTest {
@@ -38,16 +36,13 @@ public class RunnerUtilGetMatrixTest extends RunnerUtilTest {
 		this.expectFull = this.expectedNumHeld == this.expectedHeight * this.expectedWidth;
 	}
 
-	@Test
-	public void testGetMatrix() throws IOException {
-		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
-
-		Matrix m = utilities.getMatrix(bytes,this.nodeType);
+	private void assertMatrix(Matrix m){
 
 		assertEquals(this.expectedHeight, m.getHeight());
 		assertEquals(this.expectedWidth, m.getWidth());
 
 		assertEquals(this.expectFull, m.isFull());
+		assertEquals(this.expectedNumHeld, m.numElements());
 
 		if(this.nodeType == NodeMode.BIT){
 			return;//TODO:: figure out how to verify contents of bit matrix
@@ -63,7 +58,25 @@ public class RunnerUtilGetMatrixTest extends RunnerUtilTest {
 		assertEquals(!this.expectFull, it.hasNext());
 	}
 
-	//TODO:: test with h/w params
+	@Test
+	public void testGetMatrix() throws IOException {
+		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
+
+		Matrix m = utilities.getMatrix(bytes,this.nodeType);
+
+		this.assertMatrix(m);
+	}
+
+	@Test
+	public void testGetMatrixWithHW() throws IOException {
+		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
+
+		Matrix m = utilities.getMatrix(bytes,this.nodeType, this.expectedHeight, this.expectedWidth);
+
+		this.assertMatrix(m);
+
+
+	}
 
 	@Parameterized.Parameters
 	public static Collection getMatrixClassesToTest(){
