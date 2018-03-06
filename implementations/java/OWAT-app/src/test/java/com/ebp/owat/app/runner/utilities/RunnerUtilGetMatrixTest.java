@@ -61,21 +61,15 @@ public class RunnerUtilGetMatrixTest extends RunnerUtilTest {
 	@Test
 	public void testGetMatrix() throws IOException {
 		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
-
 		Matrix m = utilities.getMatrix(bytes,this.nodeType);
-
 		this.assertMatrix(m);
 	}
 
 	@Test
 	public void testGetMatrixWithHW() throws IOException {
 		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
-
 		Matrix m = utilities.getMatrix(bytes,this.nodeType, this.expectedHeight, this.expectedWidth);
-
 		this.assertMatrix(m);
-
-
 	}
 
 	@Parameterized.Parameters

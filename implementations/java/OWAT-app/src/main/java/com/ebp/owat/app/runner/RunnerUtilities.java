@@ -3,6 +3,7 @@ package com.ebp.owat.app.runner;
 import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.BitValue;
 import com.ebp.owat.lib.datastructure.value.ByteValue;
@@ -61,7 +62,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	@SuppressWarnings("unchecked")
 	private M getBitMatrix(LongLinkedList<Byte> data, long height, long width){
 		M matrix = (M) new HashedScramblingMatrix<BitValue>();
-		
+		matrix.setDefaultValue(null);
 		matrix.setDefaultValue((N) new BitValue(false, false));
 		
 		Iterator<Byte> it = data.destructiveIterator();
@@ -79,7 +80,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	@SuppressWarnings("unchecked")
 	private M getByteMatrix(LongLinkedList<Byte> data, long height, long width){
 		M matrix = (M) new HashedScramblingMatrix<ByteValue>();
-		
+		matrix.setDefaultValue(null);
 		matrix.setDefaultValue((N) new ByteValue((byte)0, false));
 		
 		Iterator<Byte> it = data.destructiveIterator();
@@ -126,7 +127,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		return getMatrix(data, nodeType, -1, -1);
 	}
 
-	private List<N> getListOfValues(long numValues, OwatRandGenerator rand, NodeMode nodeType){
+	public LongLinkedList<N> getListOfValues(long numValues, OwatRandGenerator rand, NodeMode nodeType){
 		LongLinkedList<N> output = new LongLinkedList<>();
 		
 		if(nodeType == NodeMode.BIT){
@@ -153,8 +154,31 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	}
 	
 	public void padMatrix(M matrix, OwatRandGenerator rand, NodeMode nodeType){
-		//TODO:: fill last bits of end row if need be
-		
+		if(!matrix.isFull()) {
+			Coordinate curPos = new Coordinate(matrix, matrix.getWidth() - 1, matrix.getHeight() - 1);
+			do{
+				if(matrix.hasValue(curPos)){
+					throw new IllegalStateException("Could not fill empty part of matrix; Hit a value but still not full.");
+				}
+				switch (nodeType){
+					case BIT:
+						matrix.setValue(curPos, (N) new BitValue(rand.nextBool(), false));
+						break;
+					case BYTE:
+						matrix.setValue(curPos, (N) new ByteValue(rand.nextByte(), false));
+						break;
+				}
+
+				if(curPos.getCol() == 0){
+					curPos.setX(matrix.getWidth() - 1);
+					curPos.setY(curPos.getY() - 1);
+				}else{
+					curPos.setX(curPos.getX() - 1);
+				}
+
+			}while(!matrix.isFull());
+		}
+
 		while (matrix.getNumCols() < MoveValidator.MIN_SIZE_FOR_SCRAMBLING){
 			matrix.addCol();
 			matrix.replaceCol(matrix.getNumCols() -1, this.getListOfValues(matrix.getNumRows(), rand, nodeType));

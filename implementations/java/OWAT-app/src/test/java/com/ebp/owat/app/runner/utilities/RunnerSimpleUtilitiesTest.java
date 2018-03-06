@@ -4,14 +4,19 @@ import com.ebp.owat.app.runner.RunnerUtilities;
 import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
+import com.ebp.owat.lib.datastructure.value.NodeMode;
+import com.ebp.owat.lib.datastructure.value.Value;
+import com.ebp.owat.lib.utils.rand.RandGenerator;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class RunnerSimpleUtilitiesTest extends RunnerUtilTest {
 
@@ -26,10 +31,37 @@ public class RunnerSimpleUtilitiesTest extends RunnerUtilTest {
 		);
 	}
 
+
+	private void assertListOfValues(LongLinkedList<Value> values, long expectedSize){
+		assertEquals("List given was the wrong size.", expectedSize, values.size());
+
+		for (Value curVal : values){
+			assertNotNull("List given has null values.", curVal);
+		}
+	}
+
 	@Test
-	public void testPadMatrix() {
-		Matrix matrix = new HashedMatrix();
-		//TODO
+	public void testGetListOfValues() {
+		this.assertListOfValues(
+			utilities.getListOfValues(1, new RandGenerator(), NodeMode.BIT),
+			1
+		);
+		this.assertListOfValues(
+			utilities.getListOfValues(2, new RandGenerator(), NodeMode.BIT),
+			2
+		);
+		this.assertListOfValues(
+			utilities.getListOfValues(10, new RandGenerator(), NodeMode.BIT),
+			10
+		);
+		this.assertListOfValues(
+			utilities.getListOfValues(50, new RandGenerator(), NodeMode.BIT),
+			50
+		);
+		this.assertListOfValues(
+			utilities.getListOfValues(11, new RandGenerator(), NodeMode.BIT),
+			11
+		);
 	}
 
 	@Test

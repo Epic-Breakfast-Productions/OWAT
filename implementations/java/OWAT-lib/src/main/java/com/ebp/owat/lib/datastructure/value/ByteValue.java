@@ -1,5 +1,7 @@
 package com.ebp.owat.lib.datastructure.value;
 
+import java.util.Objects;
+
 /**
  *  A Node that holds a ByteValue.
  *
@@ -23,5 +25,19 @@ public class ByteValue extends Value<Byte> {
 	@Override
 	public Byte getValue() {
 		return this.value;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		ByteValue byteValue = (ByteValue) o;
+		return Objects.equals(value, byteValue.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), value);
 	}
 }
