@@ -41,6 +41,8 @@ public class RunnerUtilPadMatrixTest extends RunnerUtilTest {
 
 		assertTrue(m.getHeight() > initHeight);
 		assertTrue(m.getWidth() > initWidth);
+
+		//TODO:: test initial matrix was not changed.
 	}
 
 	@Parameterized.Parameters

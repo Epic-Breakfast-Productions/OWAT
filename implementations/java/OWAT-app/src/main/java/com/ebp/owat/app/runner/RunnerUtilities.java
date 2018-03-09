@@ -62,8 +62,6 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	@SuppressWarnings("unchecked")
 	private M getBitMatrix(LongLinkedList<Byte> data, long height, long width){
 		M matrix = (M) new HashedScramblingMatrix<BitValue>();
-		matrix.setDefaultValue(null);
-		matrix.setDefaultValue((N) new BitValue(false, false));
 		
 		Iterator<Byte> it = data.destructiveIterator();
 		LongLinkedList<BitValue> bitValues = new LongLinkedList<>();
@@ -80,8 +78,6 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	@SuppressWarnings("unchecked")
 	private M getByteMatrix(LongLinkedList<Byte> data, long height, long width){
 		M matrix = (M) new HashedScramblingMatrix<ByteValue>();
-		matrix.setDefaultValue(null);
-		matrix.setDefaultValue((N) new ByteValue((byte)0, false));
 		
 		Iterator<Byte> it = data.destructiveIterator();
 		LongLinkedList<ByteValue> byteValues = new LongLinkedList<>();
@@ -143,13 +139,17 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		return output;
 	}
 	
-	private void addRandRowOrCol(M matrix, OwatRandGenerator rand, NodeMode nodeType){
+	public void addRandRowOrCol(M matrix, OwatRandGenerator rand, NodeMode nodeType){
 		if(rand.nextBool()){
 			matrix.addRow();
-			matrix.replaceRow(matrix.getNumRows() -1, this.getListOfValues(matrix.getNumCols(), rand, nodeType));
+			List<N> newVals =  this.getListOfValues(matrix.getNumCols(), rand, nodeType);
+
+			matrix.replaceRow(matrix.getNumRows() - 1, newVals);
 		}else{
 			matrix.addCol();
-			matrix.replaceCol(matrix.getNumCols() -1, this.getListOfValues(matrix.getNumRows(), rand, nodeType));
+			List<N> newVals =  this.getListOfValues(matrix.getNumRows(), rand, nodeType);
+
+			matrix.replaceCol(matrix.getNumCols() -1, newVals);
 		}
 	}
 	
@@ -186,6 +186,10 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		while (matrix.getNumRows() < MoveValidator.MIN_SIZE_FOR_SCRAMBLING){
 			matrix.addRow();
 			matrix.replaceRow(matrix.getNumRows() -1, this.getListOfValues(matrix.getNumCols(), rand, nodeType));
+		}
+
+		if(!matrix.isFull()){
+			throw new RuntimeException("NOT FULL");
 		}
 		
 		long numRowsColsToGenerate = matrix.size();

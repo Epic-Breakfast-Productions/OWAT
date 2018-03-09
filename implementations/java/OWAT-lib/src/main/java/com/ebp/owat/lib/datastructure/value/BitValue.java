@@ -73,6 +73,9 @@ public class BitValue extends Value<Boolean> {
 		
 		return output;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "{Value type BIT. Value: " + (this.getValue() ? "1" : "0") + "}";
+	}
 }

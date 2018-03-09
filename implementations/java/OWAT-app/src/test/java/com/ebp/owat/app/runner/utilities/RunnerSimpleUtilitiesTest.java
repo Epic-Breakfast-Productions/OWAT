@@ -6,6 +6,7 @@ import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
+import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
 import org.junit.Test;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class RunnerSimpleUtilitiesTest extends RunnerUtilTest {
 
@@ -62,6 +64,24 @@ public class RunnerSimpleUtilitiesTest extends RunnerUtilTest {
 			utilities.getListOfValues(11, new RandGenerator(), NodeMode.BIT),
 			11
 		);
+	}
+
+	@Test
+	public void addRandRowOrColTest() throws IOException {
+		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream("8".getBytes(StandardCharsets.UTF_8)));
+		Matrix m = utilities.getMatrix(bytes,NodeMode.BYTE);
+
+		assertTrue("Was not full before testing could begin.", m.isFull());
+
+		OwatRandGenerator rand = new RandGenerator();
+
+		for(int i = 0; i < 50; i++){
+			this.utilities.addRandRowOrCol(m, rand, NodeMode.BYTE);
+			assertTrue(
+				"Matrix was not full after adding a random row. Iteration: " + i +" Height: " + m.getHeight() + " Width: " + m.getWidth() + " Size: " + m.size() + " # elements: " + m.numElements(),
+				m.isFull()
+			);
+		}
 	}
 
 	@Test

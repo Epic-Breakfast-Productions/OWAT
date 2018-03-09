@@ -5,6 +5,8 @@ import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -18,7 +20,7 @@ import java.util.*;
  * @param <T> The type of object this matrix holds.
  */
 public class HashedMatrix<T>  extends Matrix<T> {
-	
+
 	/**
 	 * The map of values the matrix holds.
 	 */
@@ -266,13 +268,13 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		MatrixValidator.throwIfNotOnMatrix(this, coordinate);
 		
 		List<T> output = this.getRow(coordinate);
-		
+
 		long curCol = 0;
 		for(T curVal : newValues){
 			Coordinate curCoord = new Coordinate(this, curCol, coordinate.getY());
 			boolean hadVal = this.hasValue(curCoord);
 			boolean hasNewVal = !this.isDefaultValue(curVal);
-			
+
 			if(hasNewVal){
 				this.setValue(curCoord, curVal);
 			}else if(hadVal){
@@ -307,7 +309,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 			}
 			
 			curRow++;
-			if(!isValidColIndex(curRow)){
+			if(!isValidRowIndex(curRow)){
 				break;
 			}
 		}

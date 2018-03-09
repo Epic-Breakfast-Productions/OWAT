@@ -1,6 +1,8 @@
 package com.ebp.owat.lib.structure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
+import com.ebp.owat.lib.utils.rand.RandGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -167,6 +169,13 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 		assertFalse(m.isDefaultValue(null));
 		assertTrue(m.isDefaultValue(0));
 		assertFalse(m.isDefaultValue(1));
+
+		m = this.getTestingInstance();
+		OwatRandGenerator rand = new RandGenerator();
+
+		for(long i = 0; i < 500_000; i++){
+			assertFalse(m.isDefaultValue((int)rand.nextLong()));
+		}
 	}
 	
 	@Test

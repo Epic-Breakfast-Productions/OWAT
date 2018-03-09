@@ -40,4 +40,9 @@ public class ByteValue extends Value<Byte> {
 	public int hashCode() {
 		return Objects.hash(super.hashCode(), value);
 	}
+
+	@Override
+	public String toString() {
+		return " {Value type BYTE. Value: " + this.getValue() + "} ";
+	}
 }
