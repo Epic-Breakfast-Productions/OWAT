@@ -19,7 +19,7 @@ import java.util.Iterator;
 
 public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeScrambleRunner.class);
-	
+
 	/** The key that will be used. */
 	private ScrambleKey key;
 	/** The type of data that will be used. */
@@ -110,7 +110,7 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		LOGGER.info("Loading scrambled data...");
 
 		{
-			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput);
+			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput, true);
 			LOGGER.debug("Length of scrambled data: {} bytes", data.sizeL());
 			matrix = this.utils.getMatrix(data, this.nodeType, this.key.meta.dataHeight, this.key.meta.dataWidth);
 		}

@@ -17,10 +17,11 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.time.Instant;
+import java.util.Base64;
 
 public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScrambleRunner.class);
+	private static final java.util.Base64.Encoder ENCODER = Base64.getEncoder();
 	
 	/** The random number generator to use. */
 	private R rand;
@@ -217,7 +218,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		start = System.currentTimeMillis();
 		LOGGER.info("Outputting scrambled data...");
 		{
-			byte[] bytes = this.utils.getMatrixAsBytes(matrix, this.nodeType);
+			byte[] bytes = ENCODER.encode(this.utils.getMatrixAsBytes(matrix, this.nodeType));
 			LOGGER.debug("Number of bytes to output: {}", bytes.length);
 			this.dataOutput.write(bytes);
 		}

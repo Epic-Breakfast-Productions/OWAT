@@ -17,11 +17,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 
 public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunnerUtilities.class);
+	private static final java.util.Base64.Decoder DECODER = Base64.getDecoder();
 	
 	public RunnerUtilities(){
 	
@@ -33,7 +35,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	 * @return A list of the data read in.
 	 * @throws IOException If something goes wrong with the read.
 	 */
-	public LongLinkedList<Byte> readDataIn(InputStream dataInput) throws IOException {
+	public LongLinkedList<Byte> readDataIn(InputStream dataInput, boolean decode) throws IOException {
 		LongLinkedList<Byte> output = new LongLinkedList<>();
 		
 		try{
@@ -48,9 +50,30 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 				dataInput.close();
 			}
 		}
+		if(decode){
+			byte data[] = new byte[output.size()];
+
+			int count = 0;
+			for(byte curByte : output){
+				data[count] = curByte;
+				count++;
+			}
+
+			data = DECODER.decode(data);
+
+			output = new LongLinkedList<>();
+
+			for(byte curByte : data){
+				output.addLast(curByte);
+			}
+		}
 		return output;
 	}
-	
+
+	public LongLinkedList<Byte> readDataIn(InputStream dataInput) throws IOException {
+		return readDataIn(dataInput, false);
+	}
+
 	private void fillMatrixWithData(M emptyMatrix, LongLinkedList values, long height, long width){
 		if(height < 1 || width < 1){
 			emptyMatrix.grow(values);
@@ -259,8 +282,8 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 
 					BitValue val = bitIt.next();
 
-					if(val == null){//TODO:: remove
-						throw new IllegalStateException("Cannot handle null values in matrix. AFTER peek");
+					if(val == null){
+						throw new IllegalStateException("Cannot handle null values in matrix.");
 					}
 
 					tempBits.addLast(val);

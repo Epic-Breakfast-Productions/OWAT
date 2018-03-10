@@ -37,6 +37,7 @@ public class RunnerUtilPadMatrixTest extends RunnerUtilTest {
 
 		long initHeight = m.getHeight();
 		long initWidth = m.getWidth();
+		long initNumHeld = m.numElements();
 
 		this.utilities.padMatrix(m, new RandGenerator(), this.nodeType);
 
@@ -53,9 +54,13 @@ public class RunnerUtilPadMatrixTest extends RunnerUtilTest {
 			initHeight, initWidth).iterator();
 		Iterator itTwo = mTwo.iterator();
 
-		long count = 1;
-		while (itTwo.hasNext()){
-			assertEquals("Did not get the same value from # " + ++count, itTwo.next(), itOrig.next());
+		long count = 0;
+		while (itOrig.hasNext()){
+			if(count >= initNumHeld){
+				break;
+			}
+			assertEquals(itTwo.next(), itOrig.next());
+			count++;
 		}
 	}
 
