@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Iterator;
 
 public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
@@ -136,10 +135,13 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		LOGGER.info("Outputting descrambled data...");
 		matrix = (M) matrix.getSubMatrix(new Coordinate(matrix,0,0), this.key.meta.originalHeight, this.key.meta.originalWidth);
 		{
-			byte[] bytes = this.utils.getMatrixAsBytes(matrix, this.nodeType);
-			if(this.key.meta.lastColIndex != -1){
-				bytes = Arrays.copyOfRange(bytes, 0, bytes.length - (int)(matrix.getNumCols() - this.key.meta.lastColIndex + 1));
+			long length = matrix.size();
+			if(this.key.meta.lastColIndex == 0) {
+				length -= matrix.getNumCols() - 1;
+			}else if(this.key.meta.lastColIndex > 0){
+				length -= key.meta.lastColIndex;
 			}
+			byte[] bytes = this.utils.getMatrixAsBytes(matrix, this.nodeType, length);
 			LOGGER.debug("Number of bytes to output: {}", bytes.length);
 			this.dataOutput.write(bytes);
 		}

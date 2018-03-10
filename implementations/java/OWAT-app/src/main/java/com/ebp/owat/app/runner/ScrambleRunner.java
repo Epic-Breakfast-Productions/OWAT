@@ -176,8 +176,8 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			if(matrix.isFull()){
 				lastRowIndex = -1;
 			}else{
-				long numLeftInLastRow = matrix.size() - matrix.numElements();
-				lastRowIndex = matrix.getNumRows() - numLeftInLastRow - 1;
+				lastRowIndex = matrix.size() - matrix.numElements();
+				//lastRowIndex = matrix.getNumRows() - lastRowIndex - 1;
 			}
 			end = System.currentTimeMillis();
 			this.setElapsedTime(Step.LOAD_DATA, start, end);
