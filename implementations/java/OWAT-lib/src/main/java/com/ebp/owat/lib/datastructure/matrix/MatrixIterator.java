@@ -16,4 +16,12 @@ public abstract class MatrixIterator<T> implements Iterator<T> {
 	}
 
 	public abstract T peekNext();
+
+	public long getCurRow(){
+		return curRow;
+	}
+
+	public long getCurCol(){
+		return curCol;
+	}
 }

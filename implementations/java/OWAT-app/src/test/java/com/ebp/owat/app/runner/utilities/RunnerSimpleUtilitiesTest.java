@@ -85,11 +85,6 @@ public class RunnerSimpleUtilitiesTest extends RunnerUtilTest {
 	}
 
 	@Test
-	public void testDetermineNumStepsToTake() {
-		//this.utilities.determineMaxStepsToTake();
-	}
-
-	@Test
 	public void testGetMatrixAsBytes(){
 		//TODO:: getMatrixAsBytes
 	}

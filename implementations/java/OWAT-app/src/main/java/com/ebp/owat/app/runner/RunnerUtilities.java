@@ -2,6 +2,7 @@ package com.ebp.owat.app.runner;
 
 import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
@@ -173,23 +174,25 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 						break;
 				}
 
+				curPos = curPos.clone();
 				if(curPos.getCol() == 0){
 					curPos.setX(matrix.getWidth() - 1);
 					curPos.setY(curPos.getY() - 1);
 				}else{
 					curPos.setX(curPos.getX() - 1);
 				}
-
 			}while(!matrix.isFull());
 		}
 
 		while (matrix.getNumCols() < MoveValidator.MIN_SIZE_FOR_SCRAMBLING){
 			matrix.addCol();
-			matrix.replaceCol(matrix.getNumCols() -1, this.getListOfValues(matrix.getNumRows(), rand, nodeType));
+			List list = this.getListOfValues(matrix.getNumRows(), rand, nodeType);
+			matrix.replaceCol(matrix.getNumCols() -1, list);
 		}
 		while (matrix.getNumRows() < MoveValidator.MIN_SIZE_FOR_SCRAMBLING){
 			matrix.addRow();
-			matrix.replaceRow(matrix.getNumRows() -1, this.getListOfValues(matrix.getNumCols(), rand, nodeType));
+			List list = this.getListOfValues(matrix.getNumCols(), rand, nodeType);
+			matrix.replaceRow(matrix.getNumRows() -1, list);
 		}
 		
 		long numRowsColsToGenerate = determineNumToPad(matrix.size());
@@ -242,7 +245,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	public byte[] getMatrixAsBytes(M matrix, NodeMode nodeType){
 		byte[] bytes;
 		if(nodeType == NodeMode.BIT){
-			Iterator<BitValue> bitIt = (Iterator<BitValue>) matrix.iterator();
+			MatrixIterator<BitValue> bitIt = (MatrixIterator<BitValue>) matrix.iterator();
 			
 			LongLinkedList<BitValue> tempBits;
 			LongLinkedList<Byte> tempBytes = new LongLinkedList<>();
@@ -253,7 +256,14 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 					if(!bitIt.hasNext()){
 						throw new IllegalStateException("Matrix was not set up properly; invalid number of bits in matrix.");
 					}
-					tempBits.addLast(bitIt.next());
+
+					BitValue val = bitIt.next();
+
+					if(val == null){//TODO:: remove
+						throw new IllegalStateException("Cannot handle null values in matrix. AFTER peek");
+					}
+
+					tempBits.addLast(val);
 				}
 				tempBytes.addLast(BitValue.toByte(tempBits));
 			}

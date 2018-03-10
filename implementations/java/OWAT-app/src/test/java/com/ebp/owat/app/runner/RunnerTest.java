@@ -53,8 +53,10 @@ public class RunnerTest {
 		DeScrambleRunner.Builder deScrambleBuilder = new DeScrambleRunner.Builder();
 
 		String scrambledData = scrambledDataOutput.toString();
+		//String scrambledData = String.valueOf(scrambledDataOutput.toByteArray());
 
-		LOGGER.info("Scrambled data: {}", scrambledData);
+
+		LOGGER.info("Scrambled data: (length: {}) \"{}\"", scrambledData.length(), scrambledData);
 
 		deScrambleBuilder.setDataInput(new ByteArrayInputStream(scrambledData.getBytes(StandardCharsets.UTF_8)));
 		deScrambleBuilder.setKeyInput(new ByteArrayInputStream(keyOutput.toByteArray()));
