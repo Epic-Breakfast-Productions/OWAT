@@ -430,6 +430,71 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 		}catch (NoSuchElementException e){
 			//nothing to do
 		}
+
+		m.addRows(Arrays.asList(5, 6));
+
+		it = m.iterator();
+
+		assertEquals(1,it.next());
+		assertEquals(2,it.next());
+		assertEquals(3,it.next());
+		assertEquals(4,it.next());
+		assertEquals(5,it.next());
+		assertEquals(6,it.next());
+		assertFalse(it.hasNext());
+
+		m.addRows(Arrays.asList(7, 8));
+
+		it = m.iterator();
+
+		assertEquals(1,it.next());
+		assertEquals(2,it.next());
+		assertEquals(3,it.next());
+		assertEquals(4,it.next());
+		assertEquals(5,it.next());
+		assertEquals(6,it.next());
+		assertEquals(7,it.next());
+		assertEquals(8,it.next());
+		assertFalse(it.hasNext());
+
+		m.addRows(Arrays.asList(9, 10));
+
+		it = m.iterator();
+
+		assertEquals(1,it.next());
+		assertEquals(2,it.next());
+		assertEquals(3,it.next());
+		assertEquals(4,it.next());
+		assertEquals(5,it.next());
+		assertEquals(6,it.next());
+		assertEquals(7,it.next());
+		assertEquals(8,it.next());
+		assertEquals(9,it.next());
+		assertEquals(10,it.next());
+		assertFalse(it.hasNext());
+
+		m = this.getTestingInstance();
+
+		m.addRows(Arrays.asList(1));
+		m.addCols(Arrays.asList(2));
+
+		m.addRows(Arrays.asList(3,4));
+
+		m.addCols(Arrays.asList(5,6,7,8,9,10));
+
+		it = m.iterator();
+
+		assertEquals(1,it.next());
+		assertEquals(2,it.next());
+		assertEquals(5,it.next());
+		assertEquals(7,it.next());
+		assertEquals(9,it.next());
+		assertEquals(3,it.next());
+		assertEquals(4,it.next());
+		assertEquals(6,it.next());
+		assertEquals(8,it.next());
+		assertEquals(10,it.next());
+		m = this.getTestingInstance();
 	}
 	
 	@Test

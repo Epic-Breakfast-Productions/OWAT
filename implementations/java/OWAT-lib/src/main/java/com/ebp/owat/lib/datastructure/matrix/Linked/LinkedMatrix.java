@@ -250,7 +250,12 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		//TODO
 		return null;
 	}
-	
+
+	@Override
+	public long numElements() {
+		return 0;
+	}
+
 	/**
 	 * Gets a value from this matrix.
 	 *

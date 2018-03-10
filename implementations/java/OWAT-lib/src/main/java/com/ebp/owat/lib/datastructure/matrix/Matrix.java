@@ -5,6 +5,7 @@ import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * General Matrix class.
@@ -31,11 +32,9 @@ import java.util.*;
 public abstract class Matrix<T> implements Iterable<T> {
 	/** The number of rows held by this object. */
 	protected long numRows = 0L;
+
 	/** The number of columns held by this object. */
 	protected long numCols = 0L;
-	
-	/** The number of elements held by this object. I.E., the number of nodes that are not null. */
-	protected long numElementsHeld = 0L;
 	
 	/**
 	 * The default value to set new elements where values are not specified.
@@ -481,9 +480,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * Gets the number of values actually held in the matrix. Note that this is not the number of values this matrix can possibly hold.
 	 * @return The number of elements in the matrix.
 	 */
-	public long numElements(){
-		return this.numElementsHeld;
-	}
+	public abstract long numElements();
 	
 	/**
 	 * Gets a value from this matrix.
@@ -544,7 +541,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	@Override
 	public MatrixIterator<T> iterator() {
 		return new MatrixIterator<T>() {
-			
+
 			@Override
 			public boolean hasNext() {
 				return isValidRowIndex(this.curRow);
@@ -561,6 +558,15 @@ public abstract class Matrix<T> implements Iterable<T> {
 					curCol = 0;//-1 so we can increment before returning
 				}
 				return val;
+			}
+
+			@Override
+			public T peekNext() {
+				if(!this.hasNext()){
+					throw new NoSuchElementException("No more to iterate through.");
+				}
+
+				return get(curCol, curRow);
 			}
 		};
 	}

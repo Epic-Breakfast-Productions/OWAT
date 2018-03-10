@@ -145,16 +145,9 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		
 		List<T> removedItems = this.getRow(rowIndex);
 		
-		for(T curElement : removedItems){
-			if(curElement != this.defaultValue) {
-				this.numElementsHeld--;
-			}
-		}
-		
 		this.numRows--;
 		if(this.numRows == 0){
 			this.numCols = 0;
-			this.numElementsHeld = 0;
 			this.valueMap.clear();
 		}else {
 			List<Coordinate> coordsToMove = new LongLinkedList<>();
@@ -195,17 +188,10 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		MatrixValidator.throwIfBadIndex(this, colIndex, Plane.X);
 		
 		List<T> removedItems = this.getCol(colIndex);
-		
-		for(T curElement : removedItems){
-			if(curElement != this.defaultValue) {
-				this.numElementsHeld--;
-			}
-		}
-		
+
 		this.numCols--;
 		if(this.numCols == 0){
 			this.numRows = 0;
-			this.numElementsHeld = 0;
 			this.valueMap.clear();
 		}else {
 			List<Coordinate> coordsToMove = new LongLinkedList<>();
@@ -238,10 +224,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		MatrixValidator.throwIfNotOnMatrix(this, nodeToReplace);
 		T valToReturn = this.get(nodeToReplace);
 		
-		if(!this.valueMap.containsKey(nodeToReplace)){
-			this.numElementsHeld++;
-		}
-		
 		this.valueMap.put(nodeToReplace, newValue);
 		return valToReturn;
 	}
@@ -256,7 +238,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		T clearedVal = this.get(nodeToClear);
 		
 		if(this.valueMap.containsKey(nodeToClear)){
-			this.numElementsHeld--;
 			this.valueMap.remove(nodeToClear);
 		}
 		
@@ -316,7 +297,12 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		
 		return output;
 	}
-	
+
+	@Override
+	public long numElements() {
+		return this.valueMap.size();
+	}
+
 	/**
 	 * Gets a value from this matrix.
 	 *
