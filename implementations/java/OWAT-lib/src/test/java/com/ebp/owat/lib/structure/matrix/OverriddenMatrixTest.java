@@ -556,6 +556,18 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 			},
 			result
 		);
+
+		result = (T)m.getSubMatrix(new Coordinate(m, 1,1), 3, 2);
+
+		assertEquals(3, result.numElements());
+		TestUtils.assertMatrix(
+			new Object[][]{
+				{6, n},
+				{n, 12},
+				{16, n}
+			},
+			result
+		);
 	}
 	
 	

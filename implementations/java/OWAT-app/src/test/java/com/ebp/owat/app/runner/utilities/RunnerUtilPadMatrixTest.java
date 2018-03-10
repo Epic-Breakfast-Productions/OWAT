@@ -1,6 +1,7 @@
 package com.ebp.owat.app.runner.utilities;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
@@ -13,7 +14,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
@@ -33,7 +36,7 @@ public class RunnerUtilPadMatrixTest extends RunnerUtilTest {
 		Matrix m = utilities.getMatrix(bytes,this.nodeType);
 
 		long initHeight = m.getHeight();
-		long initWidth = m.getHeight();
+		long initWidth = m.getWidth();
 
 		this.utilities.padMatrix(m, new RandGenerator(), this.nodeType);
 
@@ -42,7 +45,18 @@ public class RunnerUtilPadMatrixTest extends RunnerUtilTest {
 		assertTrue(m.getHeight() > initHeight);
 		assertTrue(m.getWidth() > initWidth);
 
-		//TODO:: test initial matrix was not changed.
+		bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
+		Matrix mTwo = utilities.getMatrix(bytes,this.nodeType);
+
+		Iterator itOrig = m.getSubMatrix(
+			new Coordinate(m),
+			initHeight, initWidth).iterator();
+		Iterator itTwo = mTwo.iterator();
+
+		long count = 1;
+		while (itTwo.hasNext()){
+			assertEquals("Did not get the same value from # " + ++count, itTwo.next(), itOrig.next());
+		}
 	}
 
 	@Parameterized.Parameters

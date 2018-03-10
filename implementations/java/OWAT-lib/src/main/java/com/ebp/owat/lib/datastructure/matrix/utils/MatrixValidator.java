@@ -98,12 +98,12 @@ public class MatrixValidator {
 		switch (plane){
 			case X:
 				if(!matrix.isValidColIndex(index)){
-					throw new IndexOutOfBoundsException("Bad x index given.");
+					throw new IndexOutOfBoundsException("Bad x index given: "+index);
 				}
 				break;
 			case Y:
 				if(!matrix.isValidRowIndex(index)){
-					throw new IndexOutOfBoundsException("Bad y index given.");
+					throw new IndexOutOfBoundsException("Bad y index given: "+index);
 				}
 				break;
 		}

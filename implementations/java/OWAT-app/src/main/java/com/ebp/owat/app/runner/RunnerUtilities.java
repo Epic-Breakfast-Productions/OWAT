@@ -187,10 +187,6 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 			matrix.addRow();
 			matrix.replaceRow(matrix.getNumRows() -1, this.getListOfValues(matrix.getNumCols(), rand, nodeType));
 		}
-
-		if(!matrix.isFull()){
-			throw new RuntimeException("NOT FULL");
-		}
 		
 		long numRowsColsToGenerate = matrix.size();
 		LOGGER.debug("Adding a total of {} rows and columns of dummy data to the matrix.", numRowsColsToGenerate);

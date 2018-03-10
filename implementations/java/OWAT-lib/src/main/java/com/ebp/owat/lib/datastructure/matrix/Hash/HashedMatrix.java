@@ -396,9 +396,9 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
 		
 		Matrix<T> output = new HashedMatrix<>();
-		output.grow(height, width);
+		output.grow(width, height);
 		
-		Coordinate curThisCoord = topLeft.clone();
+		Coordinate curThisCoord = topLeft.clone();//somewhere in here
 		for(long curY = 0; curY < height; curY++){
 			curThisCoord.setY(curY + topLeft.getY());
 			for(long curX = 0; curX < width; curX++){
