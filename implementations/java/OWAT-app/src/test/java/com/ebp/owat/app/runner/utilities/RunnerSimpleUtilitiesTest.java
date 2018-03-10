@@ -85,13 +85,8 @@ public class RunnerSimpleUtilitiesTest extends RunnerUtilTest {
 	}
 
 	@Test
-	public void testDetermineMinStepsToTake() {
-		//TODO:: determineMinStepsToTake
-	}
-
-	@Test
-	public void testDetermineMaxStepsToTake() {
-		//TODO:: determineMaxStepsToTake
+	public void testDetermineNumStepsToTake() {
+		//this.utilities.determineMaxStepsToTake();
 	}
 
 	@Test

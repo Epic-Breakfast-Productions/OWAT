@@ -36,8 +36,6 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 	private final OutputStream keyOutput;
 	/** The minimum number of steps */
 	private long minNumScrambleSteps = -1;
-	/** The maximum number of steps */
-	private long maxNumScrambleSteps = -1;
 	
 	private RunnerUtilities<N, M, R> utils = new RunnerUtilities<>();
 	
@@ -69,10 +67,6 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		this.minNumScrambleSteps = num;
 	}
 	
-	private void setMaxNumScrambleSteps(long num){
-		this.maxNumScrambleSteps = num;
-	}
-	
 	public static class Builder<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> {
 		/** The random number generator to use. */
 		private R rand = (R)new ThreadLocalRandGenerator();
@@ -86,8 +80,6 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		private OutputStream keyOutput = null;
 		/** The minimum number of steps */
 		private long minNumScrambleSteps = -1;
-		/** The maximum number of steps */
-		private long maxNumScrambleSteps = -1;
 		
 		private byte[] getByteArrFromString(String str){
 			return str.getBytes(StandardCharsets.UTF_8);
@@ -134,14 +126,9 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			this.keyOutput = os;
 			return this;
 		}
-		
+
 		public Builder setMinNumScrambleSteps(long num){
 			this.minNumScrambleSteps = num;
-			return this;
-		}
-		
-		public Builder setMaxNumScrambleSteps(long num){
-			this.maxNumScrambleSteps = num;
 			return this;
 		}
 		
@@ -157,8 +144,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 				this.keyOutput,
 				this.nodeType
 			);
-			
-			runner.setMaxNumScrambleSteps(this.maxNumScrambleSteps);
+
 			runner.setMinNumScrambleSteps(this.minNumScrambleSteps);
 			
 			return runner;
@@ -179,12 +165,12 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput);
 			LOGGER.debug("Length of original data: {} bytes", data.sizeL());
 			matrix = this.utils.getMatrix(data, this.nodeType);
-			
+
+			LOGGER.debug("Size of matrix with just original data: {}rows x {}cols, {} values", matrix.getHeight(), matrix.getWidth(), matrix.numElements());
+
 			long origDataHeight = matrix.getNumRows();
 			long origDataWidth = matrix.getNumCols();
-			
-			LOGGER.debug("Size of matrix with just original data: {}rows x {}cols", origDataHeight, origDataWidth);
-			
+
 			long lastRowIndex;
 			if(matrix.isFull()){
 				lastRowIndex = -1;
@@ -200,7 +186,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			LOGGER.info("Padding data...");
 
 			this.utils.padMatrix(matrix, this.rand, this.nodeType);
-			LOGGER.debug("Size of matrix: {}rows x {}cols", matrix.getNumRows(), matrix.getNumCols());
+			LOGGER.debug("Size of matrix: {}rows x {}cols, {} values", matrix.getNumRows(), matrix.getNumCols(), matrix.size());
 			this.key = new ScrambleKey(origDataHeight, origDataWidth, matrix.getNumRows(), matrix.getNumCols(), this.nodeType.typeClass, lastRowIndex);
 
 			end = System.currentTimeMillis();
@@ -214,12 +200,9 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		if(this.minNumScrambleSteps < 0){
 			this.minNumScrambleSteps = this.utils.determineMinStepsToTake(matrix, this.rand);
 		}
-		if(this.maxNumScrambleSteps < 0 || this.maxNumScrambleSteps <= this.minNumScrambleSteps) {
-			this.maxNumScrambleSteps = this.utils.determineMaxStepsToTake(matrix, this.rand, this.minNumScrambleSteps);
-		}
-		
-		long numSteps = this.rand.nextLong(this.minNumScrambleSteps, this.maxNumScrambleSteps);
-		LOGGER.debug("Number of steps in scramble: {} (chosen from a range from {} to {})", numSteps, this.minNumScrambleSteps, this.maxNumScrambleSteps);
+
+		long numSteps = this.utils.determineNumStepsToTake(matrix, this.rand, this.minNumScrambleSteps);
+		LOGGER.debug("Number of steps in scramble: {}", numSteps);
 		ScrambleMoveGenerator generator = new ScrambleMoveGenerator(this.rand, matrix);
 		for(long l = 0; l < numSteps; l++){
 			ScrambleMove curMove = generator.getMove();

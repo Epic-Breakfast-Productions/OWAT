@@ -42,8 +42,8 @@ public class RunnerUtilPadMatrixTest extends RunnerUtilTest {
 
 		assertTrue("Matrix was not full after padding.", m.isFull());
 
-		assertTrue(m.getHeight() > initHeight);
-		assertTrue(m.getWidth() > initWidth);
+		assertTrue(m.getHeight() >= initHeight);
+		assertTrue(m.getWidth() >= initWidth);
 
 		bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
 		Matrix mTwo = utilities.getMatrix(bytes,this.nodeType);

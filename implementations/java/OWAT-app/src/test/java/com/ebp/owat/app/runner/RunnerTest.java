@@ -31,6 +31,7 @@ public class RunnerTest {
 	}
 
 	private void runTest(NodeMode mode) throws IOException {
+		LOGGER.info("Testing {} scrambling. Test Data: {}", mode, this.data);
 		ScrambleRunner.Builder builder = getBuilder();
 
 		ByteArrayOutputStream scrambledDataOutput = new ByteArrayOutputStream();
@@ -89,6 +90,7 @@ public class RunnerTest {
 			{ "ab" },
 			{ "hello world"},
 			{ "hello world12345" },
+			{ "Super Secret Message that cannot get into the wrong hands. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in velit sapien. Nullam id pharetra metus. In ac massa dignissim, cursus lorem ut, tincidunt libero. Nulla ac posuere enim. Ut ante tellus, faucibus sit amet elit scelerisque, semper imperdiet lorem. Ut in nulla vel eros euismod euismod. Donec tincidunt quam turpis, aliquet porta quam bibendum ac. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."}
 		});
 	}
 }

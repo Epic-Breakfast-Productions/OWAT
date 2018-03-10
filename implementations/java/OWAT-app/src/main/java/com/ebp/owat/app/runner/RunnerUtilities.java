@@ -152,6 +152,10 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 			matrix.replaceCol(matrix.getNumCols() -1, newVals);
 		}
 	}
+
+	private static long determineNumToPad(long num){
+		return (long)Math.ceil(num * 0.5);
+	}
 	
 	public void padMatrix(M matrix, OwatRandGenerator rand, NodeMode nodeType){
 		if(!matrix.isFull()) {
@@ -188,8 +192,8 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 			matrix.replaceRow(matrix.getNumRows() -1, this.getListOfValues(matrix.getNumCols(), rand, nodeType));
 		}
 		
-		long numRowsColsToGenerate = matrix.size();
-		LOGGER.debug("Adding a total of {} rows and columns of dummy data to the matrix.", numRowsColsToGenerate);
+		long numRowsColsToGenerate = determineNumToPad(matrix.size());
+		LOGGER.debug("Adding a total of {} rows and/or columns of dummy data to the matrix.", numRowsColsToGenerate);
 		for(long i = 0; i < numRowsColsToGenerate; i++){
 			addRandRowOrCol(matrix, rand, nodeType);
 		}
@@ -201,18 +205,38 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 			}
 		}
 	}
-	
-	public long determineMinStepsToTake(M matrix, OwatRandGenerator rand){
-		//TODO::make this calculation smarter. Logrithmical?
-		long min = matrix.size() * 2L;
-		long max = min * 2L;
+
+	/**
+	 * https://www.desmos.com/calculator/6lusvo9prb
+	 * @param num
+	 * @return
+	 */
+	private static long getNumFromNum(long num){
+		long a = 50,
+			b = 1,
+			h = 1,
+			c = 1,
+			k = 1;
+
+		return (long)Math.ceil(
+			a * Math.log(
+				b * Math.pow(num - h, c)
+			) + k
+		);
+	}
+
+	public long determineNumStepsToTake(M matrix, OwatRandGenerator rand, long minNumScrambleSteps){
+		long min = minNumScrambleSteps + getNumFromNum(matrix.size());
+		long max = rand.nextLong(min, min + (long)Math.ceil(Math.sqrt(matrix.size())) + rand.nextLong(1000));
 		return rand.nextLong(min, max);
 	}
-	public long determineMaxStepsToTake(M matrix, OwatRandGenerator rand, long minNumScrambleSteps){
-		//TODO::make this calculation smarter. Logrithmical?
-		long tempMin = minNumScrambleSteps + matrix.size();
-		long tempMax = tempMin * 2L;
-		return rand.nextLong(tempMin, tempMax);
+
+	public long determineMinStepsToTake(M matrix, OwatRandGenerator rand){
+		return determineNumStepsToTake(
+			matrix,
+			rand,
+			getNumFromNum(matrix.size())
+		);
 	}
 	
 	public byte[] getMatrixAsBytes(M matrix, NodeMode nodeType){
