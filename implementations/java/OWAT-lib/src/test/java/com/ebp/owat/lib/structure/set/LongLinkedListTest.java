@@ -1,11 +1,14 @@
 package com.ebp.owat.lib.structure.set;
 
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
-import org.junit.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.ebp.owat.lib.testModels.structure.set.ListTestCheckers;
 import com.ebp.owat.lib.testModels.structure.set.LongLinkedListTestModels;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -46,23 +49,35 @@ public class LongLinkedListTest {
 		assertEquals("Constructor has wrong number of nodes.", LongLinkedListTestModels.fullTestingArray.size(), testingNodeList.sizeL());
 		assertEquals("Constructor didn't set the capacity correctly.", LongLinkedListTestModels.testingCapacity, testingNodeList.getCapacity());
 	}
-	
+
+	/**
+	 * A ridiculous test to try to exercize the full ability of the long linked list.
+	 *
+	 * Relevant jvm options to run:
+	 * -Xmx16g -XX:-UseGCOverheadLimit
+	 */
 	@Ignore("Ignored due to the fact that this will take too much time to run in a normal test, and will probably fail due to running out of memory.")
 	@Test
 	public void testLongLinkedListMakeSizeGTIntSize(){
+		long goalLength = (long)Integer.MAX_VALUE + 1L;
 		LOGGER.info("Attempting to make a LongLinkedList that is longer than Integer.MAX_VALUE ({}) values long. MIGHT take a while (if you have enough memory to run it completely)......", Integer.MAX_VALUE);
 		LOGGER.info("Recommended to keep this test ignored (add the '@Ignore' annotation to the method) in order to keep the tests sane.");
-		
-		Boolean valToAdd = true;
-		LongLinkedList<Boolean> testList = new LongLinkedList<>();
-		long goalLength = (long)Integer.MAX_VALUE + 1L;
-		for(long i = 0; i <= goalLength; i++){
-			testList.addLast(valToAdd);
+
+		long i = 0;
+		try {
+			Boolean valToAdd = true;
+			LongLinkedList<Boolean> testList = new LongLinkedList<>();
+			for (i = 0; i <= goalLength; i++) {
+				testList.addLast(valToAdd);
+			}
+			LOGGER.info("Built to the end of the list! Congratulations!");
+			assertTrue(testList.lengthGTMaxInt());
+			assertEquals(goalLength, testList.sizeL());
+			assertEquals(Integer.MAX_VALUE, testList.size());
+		}catch (OutOfMemoryError e){
+			LOGGER.error("Out of memory error at iteration #{}/{} ({} iterations left): ", i, goalLength, goalLength - i, e);
+			Assert.fail("Ran into out of memory error at iteration #"+i+".");
 		}
-		LOGGER.info("Built to the end of the list! Congratulations!");
-		assertTrue(testList.lengthGTMaxInt());
-		assertEquals(goalLength, testList.sizeL());
-		assertEquals(Integer.MAX_VALUE, testList.size());
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
