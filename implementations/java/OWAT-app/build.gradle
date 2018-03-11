@@ -36,13 +36,6 @@ run {
 		args Eval.me(appArgs)
 	}
 }
-distributions {
-	main {
-		contents {
-			from jar
-		}
-	}
-}
 
 //config for the application plugin
 mainClassName = "com.ebp.owat.app.Main"

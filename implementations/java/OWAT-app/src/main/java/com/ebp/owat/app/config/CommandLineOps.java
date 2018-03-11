@@ -1,5 +1,6 @@
 package com.ebp.owat.app.config;
 
+import com.ebp.owat.app.InputValidator;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -7,7 +8,8 @@ import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,15 +60,15 @@ public class CommandLineOps {
 			parser.parseArgument(this.argsGotten);
 			
 			if( this.argsGotten.length == 0 ) {
-				throw new CmdLineException(parser, new IllegalArgumentException("No argument was given"));
+				throw new IllegalArgumentException("No arguments given");
 			}
 			if(this.showHelp){
 				System.out.println("Available options:");
 				parser.printUsage(System.out);
 				System.exit(0);
 			}
-			this.ensureReadyForRun(parser);
-		} catch( CmdLineException e ) {
+			this.ensureReadyForRun();
+		} catch( CmdLineException|IllegalArgumentException e ) {
 			System.err.println("Error parsing arguments:");
 			System.err.println("\t"+e.getMessage());
 			System.err.println("");
@@ -79,73 +81,69 @@ public class CommandLineOps {
 
 	}
 
-	private void ensureHaveInputData(CmdLineParser parser) throws CmdLineException {
+	private void ensureHaveInputData() throws IllegalArgumentException {
 		if(this.inputString == null && this.inputFile == null){
-			throw new CmdLineException(parser, new IllegalArgumentException("No input data given. Cannot continue."));
+			throw new IllegalArgumentException("No input data given. Cannot continue.");
 		}
 		if(this.inputString != null && this.inputFile != null){
-			throw new CmdLineException(parser, new IllegalArgumentException("Got both a input file and string. Don't know which to use."));
+			throw new IllegalArgumentException("Got both a input file and string. Don't know which to use.");
 		}
 		if(this.inputFile != null){
-			this.ensureCanReadFromFile(this.inputFile, "data input file", parser);
+			InputValidator.ensureCanReadFromFile(this.inputFile, "data input file");
 		}
 	}
 
-	private void ensureCanWriteToFile(File file, String description, CmdLineParser parser) throws CmdLineException {
-		if(file == null){
-			throw new CmdLineException(parser, new IllegalArgumentException("No "+ description +" given. Cannot continue."));
-		}
-		if(this.inputFile.exists()){
-			throw new CmdLineException(parser, new IllegalArgumentException(description +" file given already exists."));
-		}
-		if(!this.inputFile.canWrite()){
-			throw new CmdLineException(parser, new IllegalArgumentException("Cannot write to "+description+" given."));
-		}
-	}
-
-	private void ensureCanReadFromFile(File file, String description, CmdLineParser parser) throws CmdLineException {
-		if(file == null){
-			throw new CmdLineException(parser, new IllegalArgumentException("No "+ description +" given. Cannot continue."));
-		}
-		if(!this.inputFile.exists()){
-			throw new CmdLineException(parser, new IllegalArgumentException(description +" file given already exists."));
-		}
-		if(!this.inputFile.canRead()){
-			throw new CmdLineException(parser, new IllegalArgumentException("Cannot write to "+description+" given."));
-		}
-	}
-
-	private void ensureReadyForRun(CmdLineParser parser) throws CmdLineException {
+	private void ensureReadyForRun() throws IllegalArgumentException {
 		switch (this.runMode){
 			case GUI:
 				break;
 			case SCRAMBLE:
 				//ensure we have data to input
-				this.ensureHaveInputData(parser);
+				this.ensureHaveInputData();
 				//ensure we can write out to
-				this.ensureCanWriteToFile(this.dataOutputFile, "output file", parser);
-				this.ensureCanWriteToFile(this.keyFile, "key file", parser);
+				InputValidator.ensureCanWriteToFile(this.dataOutputFile, "output file");
+				InputValidator.ensureCanWriteToFile(this.keyFile, "key file");
 				break;
 			case DESCRAMBLE:
 				//ensure key file exists
-				this.ensureCanReadFromFile(this.keyFile, "key file", parser);
+				InputValidator.ensureCanReadFromFile(this.keyFile, "key file");
 
 				//ensure we have data to input
-				this.ensureCanReadFromFile(this.inputFile, "data input file", parser);
+				InputValidator.ensureCanReadFromFile(this.inputFile, "data input file");
 
 				//ensure we can write out
-				this.ensureCanWriteToFile(this.inputFile, "data output file", parser);
+				InputValidator.ensureCanWriteToFile(this.dataOutputFile, "data output file");
 				break;
 			default:
-				throw new CmdLineException(parser, new IllegalArgumentException("Must specify a mode to run."));
+				throw new IllegalArgumentException("Must specify a mode to run.");
 		}
 	}
 	
 	public void printArgs(){
 		LOGGER.info("Command line arguments given: {}", Arrays.asList(this.argsGotten));
 	}
-	
-	public boolean runGui(){
-		return this.runMode == RunMode.GUI;
+
+	public RunMode getRunMode() {
+		return runMode;
+	}
+
+	public InputStream getKeyInputStream() throws FileNotFoundException {
+		return new FileInputStream(this.keyFile);
+	}
+
+	public OutputStream getKeyOutputStream() throws FileNotFoundException {
+		return new FileOutputStream(this.keyFile);
+	}
+
+	public InputStream getDataInputStream() throws FileNotFoundException {
+		if(this.inputFile != null){
+			return new FileInputStream(this.inputFile);
+		}else{
+			return new ByteArrayInputStream(this.inputString.getBytes(StandardCharsets.UTF_8));
+		}
+	}
+
+	public OutputStream getDataOutputStream() throws FileNotFoundException {
+		return new FileOutputStream(this.dataOutputFile);
 	}
 }

@@ -1,6 +1,8 @@
 package com.ebp.owat.app.gui;
 
 import com.ebp.owat.app.config.Globals;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +16,8 @@ import java.awt.*;
  * https://stackoverflow.com/questions/3899525/how-to-use-gui-form-created-in-itellij-idea
  */
 public class MainGuiApp {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MainGuiApp.class);
+
 	private JPanel panel1;
 	private JLabel mainLabel;
 	
@@ -27,6 +31,7 @@ public class MainGuiApp {
 	);
 	
 	public static void main(String[] args) {
+		LOGGER.info("Starting GUI.");
 		JFrame frame = new JFrame(appTitle);
 		frame.setContentPane(new MainGuiApp().panel1);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

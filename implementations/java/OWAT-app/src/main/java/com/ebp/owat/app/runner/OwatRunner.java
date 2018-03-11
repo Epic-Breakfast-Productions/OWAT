@@ -2,11 +2,16 @@ package com.ebp.owat.app.runner;
 
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public abstract class OwatRunner {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OwatRunner.class);
 	protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 	
 	protected static final NodeMode DEFAULT_MODE = NodeMode.BIT;
@@ -30,7 +35,7 @@ public abstract class OwatRunner {
 	 * Resets the timing data.
 	 */
 	protected synchronized void resetTiming(){
-		this.timingMap = new HashMap<>();
+		this.timingMap = new LinkedHashMap<>();
 	}
 
 	/**
@@ -89,5 +94,14 @@ public abstract class OwatRunner {
 		}
 		
 		return runningThread;
+	}
+
+	public void logOutTimingData(){
+		HashMap<Step, Long> timingMap = this.getTimingMap();
+
+		LOGGER.info("Step Timing data: (how log it took to do each step)");
+		for(Map.Entry<Step, Long> curStep : timingMap.entrySet()){
+			LOGGER.info("\t{}: {}s", curStep.getKey(), (double)curStep.getValue()/1000.0);
+		}
 	}
 }
