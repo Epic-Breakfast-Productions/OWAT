@@ -6,7 +6,7 @@ import com.ebp.owat.app.gui.MainGuiApp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.ebp.owat.app.config.Globals.*;
+import static com.ebp.owat.app.config.Globals.PropertyKey;
 
 /**
  * Created by Greg Stewart on 5/27/17.
@@ -39,6 +39,9 @@ public class Main {
 		if(COMMAND_LINE_OPS.runGui()) {
 			LOGGER.info("Starting GUI.");
 			MainGuiApp.main(args);
+			return;
 		}
+
+
 	}
 }

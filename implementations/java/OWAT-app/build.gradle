@@ -25,13 +25,22 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 	testCompile 'com.google.guava:guava:23.6-jre'
 }
-
-/*
- * So we can have arguments passed to the program in gradle
- */
 run {
+	/*
+	 * So we can have arguments passed to the program in gradle
+	 *
+	 * Example of usage:
+	 *      gradle :OWAT-app:run -PappArgs="['-g']"
+	 */
 	if (project.hasProperty("appArgs")) {
 		args Eval.me(appArgs)
+	}
+}
+distributions {
+	main {
+		contents {
+			from jar
+		}
 	}
 }
 
