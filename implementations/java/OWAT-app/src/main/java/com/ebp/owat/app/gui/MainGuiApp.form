@@ -123,14 +123,14 @@
                           <text value="Inputs"/>
                         </properties>
                       </component>
-                      <tabbedpane id="17492" binding="inputModeScramble">
+                      <tabbedpane id="17492" binding="inputModeScrambleSelect">
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="48bb4" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="48bb4" binding="scrambleDataDirectInputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="Enter Text">
@@ -158,7 +158,7 @@
                               </component>
                             </children>
                           </grid>
-                          <grid id="ce10a" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="ce10a" binding="scrambleDataFileInputPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="File">
@@ -239,7 +239,7 @@
                           <text value="Scrambled data output to:"/>
                         </properties>
                       </component>
-                      <tabbedpane id="da9fb" binding="outputScrambledDataModePane">
+                      <tabbedpane id="da9fb" binding="outputScrambledDataModeSelectPane">
                         <constraints>
                           <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
                             <preferred-size width="200" height="200"/>
@@ -248,7 +248,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="5512e" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="5512e" binding="scrambledDataDirectOutputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="Direct output"/>
@@ -271,7 +271,7 @@
                               </component>
                             </children>
                           </grid>
-                          <grid id="f157d" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="f157d" binding="scrambledDataFileOutputPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="File"/>
@@ -306,7 +306,7 @@
                           </grid>
                         </children>
                       </tabbedpane>
-                      <tabbedpane id="83247" binding="outputScrambleKeyModePane">
+                      <tabbedpane id="83247" binding="outputScrambleKeyModeSelectPane">
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
                             <preferred-size width="200" height="200"/>
@@ -315,7 +315,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="7ad59" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="7ad59" binding="scrambleKeyDirectOutputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="Direct Output"/>
@@ -337,7 +337,7 @@
                               </component>
                             </children>
                           </grid>
-                          <grid id="5ac1c" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="5ac1c" binding="scrambleKeyFileOutputPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="File"/>
@@ -429,7 +429,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="8b2a2" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="8b2a2" binding="scrambledDataDirectInputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="Direct Input"/>
@@ -450,7 +450,7 @@
                               </component>
                             </children>
                           </grid>
-                          <grid id="2b9f1" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="2b9f1" binding="scrambledDataFileInputPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="From File"/>
@@ -500,7 +500,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="72727" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="72727" binding="scrambleKeyDirectInputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="Direct Input"/>
@@ -521,7 +521,7 @@
                               </component>
                             </children>
                           </grid>
-                          <grid id="f08e7" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="f08e7" binding="scrambleKeyFileInputPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="File"/>
@@ -582,7 +582,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="5188" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="5188" binding="deScrambledDataDirectOutputPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="Display"/>
@@ -604,7 +604,7 @@
                               </component>
                             </children>
                           </grid>
-                          <grid id="e6997" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="e6997" binding="deScrambledDataFileOutputPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="To File"/>

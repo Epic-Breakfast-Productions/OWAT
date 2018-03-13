@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.ebp.owat.app.InputValidator.*;
+
 /**
  *
  */
@@ -89,7 +91,7 @@ public class CommandLineOps {
 			throw new IllegalArgumentException("Got both a input file and string. Don't know which to use.");
 		}
 		if(this.inputFile != null){
-			InputValidator.ensureCanReadFromFile(this.inputFile, "data input file");
+			InputValidator.ensureCanReadFromFile(this.inputFile, DESC_SCRAMBLE_DATA_INPUT);
 		}
 	}
 
@@ -101,18 +103,18 @@ public class CommandLineOps {
 				//ensure we have data to input
 				this.ensureHaveInputData();
 				//ensure we can write out to
-				InputValidator.ensureCanWriteToFile(this.dataOutputFile, "output file");
-				InputValidator.ensureCanWriteToFile(this.keyFile, "key file");
+				InputValidator.ensureCanWriteToFile(this.dataOutputFile, DESC_SCRAMBLED_DATA_OUTPUT);
+				InputValidator.ensureCanWriteToFile(this.keyFile, DESC_KEY);
 				break;
 			case DESCRAMBLE:
 				//ensure key file exists
-				InputValidator.ensureCanReadFromFile(this.keyFile, "key file");
+				InputValidator.ensureCanReadFromFile(this.keyFile, DESC_KEY);
 
 				//ensure we have data to input
-				InputValidator.ensureCanReadFromFile(this.inputFile, "data input file");
+				InputValidator.ensureCanReadFromFile(this.inputFile, DESC_SCRAMBLE_DATA_INPUT);
 
 				//ensure we can write out
-				InputValidator.ensureCanWriteToFile(this.dataOutputFile, "data output file");
+				InputValidator.ensureCanWriteToFile(this.dataOutputFile, DESC_DESCRAMBLED_DATA_OUTPUT);
 				break;
 			default:
 				throw new IllegalArgumentException("Must specify a mode to run.");

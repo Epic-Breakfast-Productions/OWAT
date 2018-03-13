@@ -1,5 +1,6 @@
 package com.ebp.owat.app.gui;
 
+import com.ebp.owat.app.InputValidator;
 import com.ebp.owat.app.config.Globals;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -8,10 +9,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 
 /**
@@ -33,7 +40,7 @@ public class MainGuiApp {
 	private JSplitPane scrambleOptionsPane;
 	private JPanel scrambleDataInputPanel;
 	private JLabel inputsScrambleTitle;
-	private JTabbedPane inputModeScramble;
+	private JTabbedPane inputModeScrambleSelect;
 	private JTextArea scrambleDataDirectInput;
 	private JTextField scrambleDataFileInput;
 	private JButton chooseScrambleDataFileButton;
@@ -58,14 +65,26 @@ public class MainGuiApp {
 	private JButton chooseDeScrambledDataOutputFileButton;
 	private JPanel infoPanel;
 	private JTextPane infoPane;
-	private JTabbedPane outputScrambledDataModePane;
+	private JTabbedPane outputScrambledDataModeSelectPane;
 	private JTextArea scrambledDataDirectOutput;
-	private JTabbedPane outputScrambleKeyModePane;
+	private JTabbedPane outputScrambleKeyModeSelectPane;
 	private JTextArea keyDirectOutput;
 	private JTextArea deScrambledDirectOutput;
 	private JTabbedPane deScrambleKeyInputModePane;
 	private JTextArea keyDirectInput;
 	private JButton resetButton;
+	private JPanel scrambleDataDirectInputPane;
+	private JPanel scrambleDataFileInputPane;
+	private JPanel scrambleKeyFileOutputPane;
+	private JPanel scrambledDataFileOutputPane;
+	private JPanel scrambledDataDirectOutputPane;
+	private JPanel scrambleKeyDirectOutputPane;
+	private JPanel scrambleKeyDirectInputPane;
+	private JPanel scrambleKeyFileInputPane;
+	private JPanel scrambledDataDirectInputPane;
+	private JPanel scrambledDataFileInputPane;
+	private JPanel deScrambledDataDirectOutputPanel;
+	private JPanel deScrambledDataFileOutputPanel;
 
 	private JFrame frame;
 
@@ -84,7 +103,7 @@ public class MainGuiApp {
 
 	private void showMessage(int type, String title, String message) {
 		LOGGER.info("Displaying message: {}", message);
-		JOptionPane.showMessageDialog(this.mainPanel, "Clearing all inputs.", title, type);
+		JOptionPane.showMessageDialog(this.mainPanel, message, title, type);
 	}
 
 	private void showMessage(String message) {
@@ -115,6 +134,44 @@ public class MainGuiApp {
 		}
 		LOGGER.debug("User chose: {}{}", dir, returned);
 		return dir + returned;
+	}
+
+	private boolean validateTextInput(String text) {
+		return !(text == null || text.equals(""));
+	}
+
+	private boolean validateFileInput(String loc, String description, boolean input) {
+		if (!validateTextInput(loc)) {
+			return false;
+		}
+		File file = null;
+		try {
+			//TODO:: put this validation in InputValidator
+			Path path = Paths.get(loc).normalize();
+			file = path.toFile();
+		} catch (Exception e) {
+			LOGGER.debug("File path to scramble was invalid.");
+			this.showMessage(ERROR_MESSAGE, "Invalid file path given.", "Invalid " + description + " location given:\n" + loc);
+			return false;
+		}
+		if (input) {
+			try {
+				InputValidator.ensureCanReadFromFile(file, description);
+			} catch (IllegalArgumentException e) {
+				LOGGER.debug("Input file given cannot be read. ({}) Error: {}", loc, e);
+				this.showMessage(ERROR_MESSAGE, "File cannot be read.", "" + description + " cannot be read:\n" + loc);
+				return false;
+			}
+		} else {
+			try {
+				InputValidator.ensureCanWriteToFile(file, description);
+			} catch (IllegalArgumentException e) {
+				LOGGER.debug("Input file given cannot be written to. ({}) Error: {}", loc, e);
+				this.showMessage(ERROR_MESSAGE, "File cannot be written to.", "" + description + " cannot be written to:\n" + loc);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/* ****************************************************************
@@ -190,9 +247,193 @@ public class MainGuiApp {
 	 * Validate input methods.
 	 ******************************************************************/
 
+	private boolean inScrambleMode() {
+		return this.modeSelect.getSelectedComponent() == this.scramblePanel;
+	}
+
+	private boolean inDeScrambleMode() {
+		return this.modeSelect.getSelectedComponent() == this.deScramblePanel;
+	}
+
+	private boolean inRunnableMode() {
+		return this.inScrambleMode() || this.inDeScrambleMode();
+	}
+
+	private boolean inputScrambleDataDirect() {
+		return this.inputModeScrambleSelect.getSelectedComponent() == this.scrambleDataDirectInputPane;
+	}
+
+	private boolean inputScrambleDataFile() {
+		return this.inputModeScrambleSelect.getSelectedComponent() == this.scrambleDataFileInputPane;
+	}
+
+	private boolean outputScrambleKeyDirect() {
+		return this.outputScrambleKeyModeSelectPane.getSelectedComponent() == this.scrambleKeyDirectOutputPane;
+	}
+
+	private boolean outputScrambleKeyFile() {
+		return this.outputScrambleKeyModeSelectPane.getSelectedComponent() == this.scrambleKeyFileOutputPane;
+	}
+
+	private boolean outputScrambledDataDirect() {
+		return this.outputScrambledDataModeSelectPane.getSelectedComponent() == this.scrambledDataDirectOutputPane;
+	}
+
+	private boolean outputScrambledDataFile() {
+		return this.outputScrambledDataModeSelectPane.getSelectedComponent() == this.scrambledDataFileOutputPane;
+	}
+
+	private boolean inputScrambleKeyDirect() {
+		return this.deScrambleKeyInputModePane.getSelectedComponent() == this.scrambleKeyDirectInputPane;
+	}
+
+	private boolean inputScrambleKeyFile() {
+		return this.deScrambleKeyInputModePane.getSelectedComponent() == this.scrambleKeyFileInputPane;
+	}
+
+	private boolean inputScrambledDataDirect() {
+		return this.deScrambleDataInputModePane.getSelectedComponent() == this.scrambledDataDirectInputPane;
+	}
+
+	private boolean inputScrambledDataFile() {
+		return this.deScrambleDataInputModePane.getSelectedComponent() == this.scrambledDataFileInputPane;
+	}
+
+	private boolean outputDeScrambledDataDirect() {
+		return this.deScrambleDataOutputModePane.getSelectedComponent() == this.deScrambledDataDirectOutputPanel;
+	}
+
+	private boolean outputDeScrambledDataFile() {
+		return this.deScrambleDataOutputModePane.getSelectedComponent() == this.deScrambledDataFileOutputPanel;
+	}
+
+	private boolean validateScrambleInputs() {
+		if (this.inputScrambleDataDirect()) {
+			return validateTextInput(this.scrambleDataDirectInput.getText());
+		} else if (this.inputScrambleDataFile()) {
+			return this.validateFileInput(
+				this.scrambleDataFileInput.getText(),
+				InputValidator.DESC_SCRAMBLE_DATA_INPUT,
+				true
+			);
+		}
+		return false;
+	}
+
+	private boolean validateScrambleKeyOutput() {
+		if (this.outputScrambleKeyFile()) {
+			boolean result = this.validateFileInput(
+				this.keyFileOutput.getText(),
+				InputValidator.DESC_KEY,
+				false
+			);
+			if (!result) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean validateScrambledDataOutput() {
+		if (this.outputScrambledDataFile()) {
+			boolean result = this.validateFileInput(
+				this.outputScrambledDataFile.getText(),
+				InputValidator.DESC_SCRAMBLED_DATA_OUTPUT,
+				false
+			);
+			if (!result) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean validateScrambleOutputs() {
+		return this.validateScrambleKeyOutput() & this.validateScrambledDataOutput();
+	}
+
+	private boolean validateScrambleKeyInput() {
+		if (this.inputScrambleKeyFile()) {
+			boolean result = this.validateFileInput(
+				this.keyFileInput.getText(),
+				InputValidator.DESC_KEY,
+				true
+			);
+			if (!result) {
+				return false;
+			}
+		} else if (this.inputScrambleKeyDirect()) {
+			boolean result = this.validateTextInput(this.keyDirectInput.getText());
+			if (!result) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean validateScrambledDataInputs() {
+		if (this.inputScrambledDataFile()) {
+			boolean result = this.validateFileInput(
+				this.scrambledDataFileInput.getText(),
+				InputValidator.DESC_SCRAMBLED_DATA_INPUT,
+				true
+			);
+			if (!result) {
+				return false;
+			}
+		} else if (this.inputScrambledDataDirect()) {
+			boolean result = this.validateTextInput(this.scrambledDataDirectInput.getText());
+			if (!result) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean validateDeScrambleInputs() {
+		return this.validateScrambleKeyInput() & this.validateScrambledDataInputs();
+	}
+
+	private boolean validateDeScrambleOutputs() {
+		if (this.outputDeScrambledDataFile()) {
+			boolean result = this.validateFileInput(
+				this.deScrambledDataOutputFileInput.getText(),
+				InputValidator.DESC_DESCRAMBLED_DATA_OUTPUT,
+				false
+			);
+			if (!result) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private void validateForGO() {
 		boolean goodToGO = false;
-		//TODO:: based on what tabs are open, validate that the inputs are valid.
+
+		if (this.inRunnableMode()) {
+			if (this.inScrambleMode()) {
+				goodToGO = validateScrambleInputs() & validateScrambleOutputs();
+			} else if (this.inDeScrambleMode()) {
+				goodToGO = validateDeScrambleInputs() & validateDeScrambleOutputs();
+			}
+		}
+
+		if (goodToGO) {
+			LOGGER.debug("Validation passed. Enabling GO button.");
+			this.enableGoButton();
+		} else {
+			LOGGER.debug("Validation failed. Disabling GO button.");
+			this.disableGoButton();
+		}
+	}
+
+	private void enableGoButton() {
+		this.processStartButton.setEnabled(true);
+	}
+
+	private void disableGoButton() {
+		this.processStartButton.setEnabled(false);
 	}
 
 	/* ****************************************************************
@@ -217,25 +458,24 @@ public class MainGuiApp {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//TODO:: not working/waiting for double click
-				if(e.getClickCount() == 2){
-					if (confirmActon("Reset All Forms")) {
+				if (e.getClickCount() == 2) {
+					if (confirmActon("Reset ALL Forms")) {
 						resetAllInputs();
 					}
 				}
 
-				if (modeSelect.getSelectedComponent() == scramblePanel) {
+				if (inScrambleMode()) {
 					if (confirmActon("Reset Scramble Form")) {
 						resetScramble();
 					}
 				}
-				if (modeSelect.getSelectedComponent() == deScramblePanel) {
+				if (inDeScrambleMode()) {
 					if (confirmActon("Reset DeScramble Form")) {
 						resetDeScramble();
 					}
 				}
 				super.mouseClicked(e);
 			}
-
 		});
 		chooseScrambleDataFileButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -276,6 +516,84 @@ public class MainGuiApp {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				deScrambledDataOutputFileInput.setText(chooseFile("Choose where to save the descrambled data", FileDialog.SAVE, "*"));
+				super.mouseClicked(e);
+			}
+		});
+		modeSelect.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				validateForGO();
+				super.mouseClicked(e);
+			}
+		});
+		DocumentListener inputChangeListener = new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				validateForGO();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				validateForGO();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				validateForGO();
+			}
+		};
+		this.scrambleDataDirectInput.getDocument().addDocumentListener(inputChangeListener);
+		this.scrambleDataFileInput.getDocument().addDocumentListener(inputChangeListener);
+		this.keyDirectOutput.getDocument().addDocumentListener(inputChangeListener);
+		this.keyFileOutput.getDocument().addDocumentListener(inputChangeListener);
+		this.scrambledDataDirectOutput.getDocument().addDocumentListener(inputChangeListener);
+		this.outputScrambledDataFile.getDocument().addDocumentListener(inputChangeListener);
+		this.keyDirectInput.getDocument().addDocumentListener(inputChangeListener);
+		this.keyFileInput.getDocument().addDocumentListener(inputChangeListener);
+		this.scrambledDataDirectInput.getDocument().addDocumentListener(inputChangeListener);
+		this.scrambledDataFileInput.getDocument().addDocumentListener(inputChangeListener);
+		this.deScrambledDirectOutput.getDocument().addDocumentListener(inputChangeListener);
+		this.deScrambledDataOutputFileInput.getDocument().addDocumentListener(inputChangeListener);
+
+		inputModeScrambleSelect.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				validateForGO();
+				super.mouseClicked(e);
+			}
+		});
+		outputScrambleKeyModeSelectPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				validateForGO();
+				super.mouseClicked(e);
+			}
+		});
+		outputScrambledDataModeSelectPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				validateForGO();
+				super.mouseClicked(e);
+			}
+		});
+		deScrambleKeyInputModePane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				validateForGO();
+				super.mouseClicked(e);
+			}
+		});
+		deScrambleDataInputModePane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				validateForGO();
+				super.mouseClicked(e);
+			}
+		});
+		deScrambleDataOutputModePane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				validateForGO();
 				super.mouseClicked(e);
 			}
 		});
@@ -349,30 +667,30 @@ public class MainGuiApp {
 		if (inputsScrambleTitleFont != null) inputsScrambleTitle.setFont(inputsScrambleTitleFont);
 		inputsScrambleTitle.setText("Inputs");
 		scrambleDataInputPanel.add(inputsScrambleTitle, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-		inputModeScramble = new JTabbedPane();
-		scrambleDataInputPanel.add(inputModeScramble, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-		final JPanel panel2 = new JPanel();
-		panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-		panel2.setMaximumSize(new Dimension(-1, -1));
-		panel2.setMinimumSize(new Dimension(-1, -1));
-		panel2.setPreferredSize(new Dimension(-1, -1));
-		panel2.setToolTipText("");
-		inputModeScramble.addTab("Enter Text", null, panel2, "This is to enter your own data to be scrambled.");
+		inputModeScrambleSelect = new JTabbedPane();
+		scrambleDataInputPanel.add(inputModeScrambleSelect, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+		scrambleDataDirectInputPane = new JPanel();
+		scrambleDataDirectInputPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+		scrambleDataDirectInputPane.setMaximumSize(new Dimension(-1, -1));
+		scrambleDataDirectInputPane.setMinimumSize(new Dimension(-1, -1));
+		scrambleDataDirectInputPane.setPreferredSize(new Dimension(-1, -1));
+		scrambleDataDirectInputPane.setToolTipText("");
+		inputModeScrambleSelect.addTab("Enter Text", null, scrambleDataDirectInputPane, "This is to enter your own data to be scrambled.");
 		scrambleDataDirectInput = new JTextArea();
 		Font scrambleDataDirectInputFont = this.$$$getFont$$$("Monospaced", -1, -1, scrambleDataDirectInput.getFont());
 		if (scrambleDataDirectInputFont != null) scrambleDataDirectInput.setFont(scrambleDataDirectInputFont);
 		scrambleDataDirectInput.setLineWrap(true);
-		panel2.add(scrambleDataDirectInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
-		final JPanel panel3 = new JPanel();
-		panel3.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-		inputModeScramble.addTab("File", null, panel3, "This is to specify a file to be scrambled.");
+		scrambleDataDirectInputPane.add(scrambleDataDirectInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
+		scrambleDataFileInputPane = new JPanel();
+		scrambleDataFileInputPane.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+		inputModeScrambleSelect.addTab("File", null, scrambleDataFileInputPane, "This is to specify a file to be scrambled.");
 		scrambleDataFileInput = new JTextField();
-		panel3.add(scrambleDataFileInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+		scrambleDataFileInputPane.add(scrambleDataFileInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
 		final Spacer spacer3 = new Spacer();
-		panel3.add(spacer3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+		scrambleDataFileInputPane.add(spacer3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
 		chooseScrambleDataFileButton = new JButton();
 		chooseScrambleDataFileButton.setText("Choose File");
-		panel3.add(chooseScrambleDataFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		scrambleDataFileInputPane.add(chooseScrambleDataFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		final JLabel label1 = new JLabel();
 		label1.setText("Data to Scramble:");
 		scrambleDataInputPanel.add(label1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -392,50 +710,50 @@ public class MainGuiApp {
 		final JLabel label3 = new JLabel();
 		label3.setText("Scrambled data output to:");
 		scrambleDataOutputPanel.add(label3, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-		outputScrambledDataModePane = new JTabbedPane();
-		scrambleDataOutputPanel.add(outputScrambledDataModePane, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
-		final JPanel panel4 = new JPanel();
-		panel4.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-		outputScrambledDataModePane.addTab("Direct output", panel4);
+		outputScrambledDataModeSelectPane = new JTabbedPane();
+		scrambleDataOutputPanel.add(outputScrambledDataModeSelectPane, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+		scrambledDataDirectOutputPane = new JPanel();
+		scrambledDataDirectOutputPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+		outputScrambledDataModeSelectPane.addTab("Direct output", scrambledDataDirectOutputPane);
 		scrambledDataDirectOutput = new JTextArea();
 		scrambledDataDirectOutput.setEditable(false);
 		Font scrambledDataDirectOutputFont = this.$$$getFont$$$("Monospaced", -1, -1, scrambledDataDirectOutput.getFont());
 		if (scrambledDataDirectOutputFont != null) scrambledDataDirectOutput.setFont(scrambledDataDirectOutputFont);
 		scrambledDataDirectOutput.setLineWrap(true);
 		scrambledDataDirectOutput.setText("");
-		panel4.add(scrambledDataDirectOutput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
-		final JPanel panel5 = new JPanel();
-		panel5.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-		outputScrambledDataModePane.addTab("File", panel5);
+		scrambledDataDirectOutputPane.add(scrambledDataDirectOutput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
+		scrambledDataFileOutputPane = new JPanel();
+		scrambledDataFileOutputPane.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+		outputScrambledDataModeSelectPane.addTab("File", scrambledDataFileOutputPane);
 		chooseScrambledDataOutputFileButton = new JButton();
 		chooseScrambledDataOutputFileButton.setText("Choose File");
-		panel5.add(chooseScrambledDataOutputFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		scrambledDataFileOutputPane.add(chooseScrambledDataOutputFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		final Spacer spacer4 = new Spacer();
-		panel5.add(spacer4, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+		scrambledDataFileOutputPane.add(spacer4, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
 		outputScrambledDataFile = new JTextField();
 		outputScrambledDataFile.setText("");
-		panel5.add(outputScrambledDataFile, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-		outputScrambleKeyModePane = new JTabbedPane();
-		scrambleDataOutputPanel.add(outputScrambleKeyModePane, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
-		final JPanel panel6 = new JPanel();
-		panel6.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-		outputScrambleKeyModePane.addTab("Direct Output", panel6);
+		scrambledDataFileOutputPane.add(outputScrambledDataFile, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+		outputScrambleKeyModeSelectPane = new JTabbedPane();
+		scrambleDataOutputPanel.add(outputScrambleKeyModeSelectPane, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+		scrambleKeyDirectOutputPane = new JPanel();
+		scrambleKeyDirectOutputPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+		outputScrambleKeyModeSelectPane.addTab("Direct Output", scrambleKeyDirectOutputPane);
 		keyDirectOutput = new JTextArea();
 		keyDirectOutput.setEditable(false);
 		Font keyDirectOutputFont = this.$$$getFont$$$("Monospaced", -1, -1, keyDirectOutput.getFont());
 		if (keyDirectOutputFont != null) keyDirectOutput.setFont(keyDirectOutputFont);
 		keyDirectOutput.setLineWrap(true);
-		panel6.add(keyDirectOutput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
-		final JPanel panel7 = new JPanel();
-		panel7.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-		outputScrambleKeyModePane.addTab("File", panel7);
+		scrambleKeyDirectOutputPane.add(keyDirectOutput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
+		scrambleKeyFileOutputPane = new JPanel();
+		scrambleKeyFileOutputPane.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+		outputScrambleKeyModeSelectPane.addTab("File", scrambleKeyFileOutputPane);
 		keyFileOutput = new JTextField();
-		panel7.add(keyFileOutput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+		scrambleKeyFileOutputPane.add(keyFileOutput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
 		final Spacer spacer5 = new Spacer();
-		panel7.add(spacer5, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+		scrambleKeyFileOutputPane.add(spacer5, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
 		chooseKeyOutputFileButton = new JButton();
 		chooseKeyOutputFileButton.setText("Choose File");
-		panel7.add(chooseKeyOutputFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		scrambleKeyFileOutputPane.add(chooseKeyOutputFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		deScramblePanel = new JPanel();
 		deScramblePanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
 		modeSelect.addTab("Descramble", null, deScramblePanel, "Descramble previously scrambled data");
@@ -454,47 +772,47 @@ public class MainGuiApp {
 		enterScrambledDataAndKeyPanel.add(label5, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		deScrambleDataInputModePane = new JTabbedPane();
 		enterScrambledDataAndKeyPanel.add(deScrambleDataInputModePane, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
-		final JPanel panel8 = new JPanel();
-		panel8.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-		deScrambleDataInputModePane.addTab("Direct Input", panel8);
+		scrambledDataDirectInputPane = new JPanel();
+		scrambledDataDirectInputPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+		deScrambleDataInputModePane.addTab("Direct Input", scrambledDataDirectInputPane);
 		scrambledDataDirectInput = new JTextArea();
 		Font scrambledDataDirectInputFont = this.$$$getFont$$$("Monospaced", -1, -1, scrambledDataDirectInput.getFont());
 		if (scrambledDataDirectInputFont != null) scrambledDataDirectInput.setFont(scrambledDataDirectInputFont);
 		scrambledDataDirectInput.setLineWrap(true);
-		panel8.add(scrambledDataDirectInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
-		final JPanel panel9 = new JPanel();
-		panel9.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-		deScrambleDataInputModePane.addTab("From File", panel9);
+		scrambledDataDirectInputPane.add(scrambledDataDirectInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
+		scrambledDataFileInputPane = new JPanel();
+		scrambledDataFileInputPane.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+		deScrambleDataInputModePane.addTab("From File", scrambledDataFileInputPane);
 		scrambledDataFileInput = new JTextField();
-		panel9.add(scrambledDataFileInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+		scrambledDataFileInputPane.add(scrambledDataFileInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
 		final Spacer spacer6 = new Spacer();
-		panel9.add(spacer6, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+		scrambledDataFileInputPane.add(spacer6, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
 		chooseScrambledDataFileInputButton = new JButton();
 		chooseScrambledDataFileInputButton.setText("Choose File");
-		panel9.add(chooseScrambledDataFileInputButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		scrambledDataFileInputPane.add(chooseScrambledDataFileInputButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		final JLabel label6 = new JLabel();
 		label6.setText("Scrambled Data:");
 		enterScrambledDataAndKeyPanel.add(label6, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		deScrambleKeyInputModePane = new JTabbedPane();
 		enterScrambledDataAndKeyPanel.add(deScrambleKeyInputModePane, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
-		final JPanel panel10 = new JPanel();
-		panel10.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-		deScrambleKeyInputModePane.addTab("Direct Input", panel10);
+		scrambleKeyDirectInputPane = new JPanel();
+		scrambleKeyDirectInputPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+		deScrambleKeyInputModePane.addTab("Direct Input", scrambleKeyDirectInputPane);
 		keyDirectInput = new JTextArea();
 		Font keyDirectInputFont = this.$$$getFont$$$("Monospaced", -1, -1, keyDirectInput.getFont());
 		if (keyDirectInputFont != null) keyDirectInput.setFont(keyDirectInputFont);
 		keyDirectInput.setLineWrap(true);
-		panel10.add(keyDirectInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
-		final JPanel panel11 = new JPanel();
-		panel11.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-		deScrambleKeyInputModePane.addTab("File", panel11);
+		scrambleKeyDirectInputPane.add(keyDirectInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
+		scrambleKeyFileInputPane = new JPanel();
+		scrambleKeyFileInputPane.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+		deScrambleKeyInputModePane.addTab("File", scrambleKeyFileInputPane);
 		keyFileInput = new JTextField();
-		panel11.add(keyFileInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+		scrambleKeyFileInputPane.add(keyFileInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
 		final Spacer spacer7 = new Spacer();
-		panel11.add(spacer7, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+		scrambleKeyFileInputPane.add(spacer7, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
 		chooseDeScrambleKeyFileButton = new JButton();
 		chooseDeScrambleKeyFileButton.setText("Choose File");
-		panel11.add(chooseDeScrambleKeyFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		scrambleKeyFileInputPane.add(chooseDeScrambleKeyFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		enterDeScrambledDataOutputPanel = new JPanel();
 		enterDeScrambledDataOutputPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
 		deScrambleOptionsPane.setRightComponent(enterDeScrambledDataOutputPanel);
@@ -505,25 +823,25 @@ public class MainGuiApp {
 		enterDeScrambledDataOutputPanel.add(label7, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		deScrambleDataOutputModePane = new JTabbedPane();
 		enterDeScrambledDataOutputPanel.add(deScrambleDataOutputModePane, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
-		final JPanel panel12 = new JPanel();
-		panel12.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-		deScrambleDataOutputModePane.addTab("Display", panel12);
+		deScrambledDataDirectOutputPanel = new JPanel();
+		deScrambledDataDirectOutputPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+		deScrambleDataOutputModePane.addTab("Display", deScrambledDataDirectOutputPanel);
 		deScrambledDirectOutput = new JTextArea();
 		deScrambledDirectOutput.setEditable(false);
 		Font deScrambledDirectOutputFont = this.$$$getFont$$$("Monospaced", -1, -1, deScrambledDirectOutput.getFont());
 		if (deScrambledDirectOutputFont != null) deScrambledDirectOutput.setFont(deScrambledDirectOutputFont);
 		deScrambledDirectOutput.setLineWrap(true);
-		panel12.add(deScrambledDirectOutput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
-		final JPanel panel13 = new JPanel();
-		panel13.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-		deScrambleDataOutputModePane.addTab("To File", panel13);
+		deScrambledDataDirectOutputPanel.add(deScrambledDirectOutput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 50), null, 0, false));
+		deScrambledDataFileOutputPanel = new JPanel();
+		deScrambledDataFileOutputPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+		deScrambleDataOutputModePane.addTab("To File", deScrambledDataFileOutputPanel);
 		deScrambledDataOutputFileInput = new JTextField();
-		panel13.add(deScrambledDataOutputFileInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+		deScrambledDataFileOutputPanel.add(deScrambledDataOutputFileInput, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
 		final Spacer spacer8 = new Spacer();
-		panel13.add(spacer8, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+		deScrambledDataFileOutputPanel.add(spacer8, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
 		chooseDeScrambledDataOutputFileButton = new JButton();
 		chooseDeScrambledDataOutputFileButton.setText("Choose File");
-		panel13.add(chooseDeScrambledDataOutputFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		deScrambledDataFileOutputPanel.add(chooseDeScrambledDataOutputFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		infoPanel = new JPanel();
 		infoPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
 		infoPanel.setToolTipText("Info about this program");
