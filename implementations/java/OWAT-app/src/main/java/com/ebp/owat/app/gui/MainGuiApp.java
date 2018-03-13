@@ -65,6 +65,9 @@ public class MainGuiApp {
 	private JTextArea deScrambledDirectOutput;
 	private JTabbedPane deScrambleKeyInputModePane;
 	private JTextArea keyDirectInput;
+	private JButton resetButton;
+
+	private JFrame frame;
 
 	private static final String TITLE_FORMAT = "%s v%s %s";
 
@@ -75,22 +78,51 @@ public class MainGuiApp {
 		Globals.getProp(Globals.PropertyKey.APP_VERSION_NAME_PROP_KEY)
 	);
 
+	/* ****************************************************************
+	 * Helpful Workers
+	 ******************************************************************/
+
 	private void showMessage(int type, String title, String message) {
 		LOGGER.info("Displaying message: {}", message);
-		JOptionPane.showMessageDialog(mainPanel, "Clearing all inputs.", title, type);
+		JOptionPane.showMessageDialog(this.mainPanel, "Clearing all inputs.", title, type);
 	}
 
 	private void showMessage(String message) {
 		this.showMessage(INFORMATION_MESSAGE, "Message", message);
 	}
 
+	private boolean confirmActon(String action) {
+		LOGGER.debug("Confirming action with user: {}", action);
+		boolean returned = 0 == JOptionPane.showConfirmDialog(this.mainPanel, action + "\nAre you sure?", "Confirm Action", JOptionPane.OK_CANCEL_OPTION);
+		LOGGER.debug("User returned: {}", returned);
+		return returned;
+	}
 
+	private String chooseFile(String title, int mode, String extention) {
+		LOGGER.debug("Prompting user for file: {}", title);
+		FileDialog dialog = new FileDialog(this.frame, title, mode);
+
+		dialog.setFile(extention);
+		dialog.setVisible(true);
+		dialog.setMultipleMode(false);
+
+		String dir = dialog.getDirectory();
+		String returned = dialog.getFile();
+
+		if (returned == null) {
+			LOGGER.debug("User cancelled selection.");
+			return "";
+		}
+		LOGGER.debug("User chose: {}{}", dir, returned);
+		return dir + returned;
+	}
 
 	/* ****************************************************************
 	 * Clear input methods.
 	 ******************************************************************/
 
 	private void resetProgress() {
+		this.resetButton.setEnabled(true);
 		this.processStartButton.setEnabled(false);
 		this.processStartButton.setText("Go");
 		this.processProgressBar.setValue(0);
@@ -154,11 +186,96 @@ public class MainGuiApp {
 		this.resetDeScramble();
 	}
 
-	public MainGuiApp() {
-		modeSelect.addMouseListener(new MouseAdapter() {
+	/* ****************************************************************
+	 * Validate input methods.
+	 ******************************************************************/
+
+	private void validateForGO() {
+		boolean goodToGO = false;
+		//TODO:: based on what tabs are open, validate that the inputs are valid.
+	}
+
+	/* ****************************************************************
+	 * Form enabler/disablers
+	 ******************************************************************/
+
+	//TODO:: methods to enable/disable forms and switching between forms while scrambling/descrambling happens.
+
+	/* ****************************************************************
+	 * Run scramble/descramble
+	 ******************************************************************/
+
+	//TODO:: run a scramble/descramble
+
+	/* ****************************************************************
+	 * Setup
+	 ******************************************************************/
+
+	public MainGuiApp(JFrame frame) {
+		this.frame = frame;
+		resetButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				resetAllInputs();
+				//TODO:: not working/waiting for double click
+				if(e.getClickCount() == 2){
+					if (confirmActon("Reset All Forms")) {
+						resetAllInputs();
+					}
+				}
+
+				if (modeSelect.getSelectedComponent() == scramblePanel) {
+					if (confirmActon("Reset Scramble Form")) {
+						resetScramble();
+					}
+				}
+				if (modeSelect.getSelectedComponent() == deScramblePanel) {
+					if (confirmActon("Reset DeScramble Form")) {
+						resetDeScramble();
+					}
+				}
+				super.mouseClicked(e);
+			}
+
+		});
+		chooseScrambleDataFileButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				scrambleDataFileInput.setText(chooseFile("Choose a file to scramble", FileDialog.LOAD, "*"));
+				super.mouseClicked(e);
+			}
+		});
+		chooseKeyOutputFileButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				keyFileOutput.setText(chooseFile("Choose where to save the data key", FileDialog.SAVE, "*.obfk"));
+				super.mouseClicked(e);
+			}
+		});
+		chooseScrambledDataOutputFileButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				outputScrambledDataFile.setText(chooseFile("Choose where to save the scrambled data", FileDialog.SAVE, "*.obf"));
+				super.mouseClicked(e);
+			}
+		});
+		chooseDeScrambleKeyFileButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				keyFileInput.setText(chooseFile("Choose key file to use", FileDialog.LOAD, "*.obfk"));
+				super.mouseClicked(e);
+			}
+		});
+		chooseScrambledDataFileInputButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				scrambledDataFileInput.setText(chooseFile("Choose the scrambled data file", FileDialog.LOAD, "*.obf"));
+				super.mouseClicked(e);
+			}
+		});
+		chooseDeScrambledDataOutputFileButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				deScrambledDataOutputFileInput.setText(chooseFile("Choose where to save the descrambled data", FileDialog.SAVE, "*"));
 				super.mouseClicked(e);
 			}
 		});
@@ -167,7 +284,7 @@ public class MainGuiApp {
 	public static void main(String[] args) {
 		LOGGER.info("Starting GUI.");
 		JFrame frame = new JFrame(appTitle);
-		frame.setContentPane(new MainGuiApp().mainPanel);
+		frame.setContentPane(new MainGuiApp(frame).mainPanel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
@@ -194,20 +311,23 @@ public class MainGuiApp {
 		mainPanel.setName("");
 		mainPanel.setPreferredSize(new Dimension(500, 500));
 		final JPanel panel1 = new JPanel();
-		panel1.setLayout(new GridLayoutManager(1, 4, new Insets(0, 0, 0, 0), -1, -1));
+		panel1.setLayout(new GridLayoutManager(1, 5, new Insets(0, 0, 0, 0), -1, -1));
 		mainPanel.add(panel1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 55), new Dimension(-1, 55), new Dimension(-1, 55), 0, false));
 		processStartButton = new JButton();
 		processStartButton.setEnabled(false);
 		processStartButton.setText("Go");
-		panel1.add(processStartButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		panel1.add(processStartButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		processProgressBar = new JProgressBar();
 		processProgressBar.setString("");
 		processProgressBar.setStringPainted(true);
-		panel1.add(processProgressBar, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 50), new Dimension(-1, 50), new Dimension(-1, 50), 0, false));
+		panel1.add(processProgressBar, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 50), new Dimension(-1, 50), new Dimension(-1, 50), 0, false));
 		final Spacer spacer1 = new Spacer();
 		panel1.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, 1, new Dimension(2, -1), new Dimension(2, -1), new Dimension(2, -1), 0, false));
 		final Spacer spacer2 = new Spacer();
-		panel1.add(spacer2, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, 1, new Dimension(2, -1), new Dimension(2, -1), new Dimension(2, -1), 0, false));
+		panel1.add(spacer2, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, 1, new Dimension(2, -1), new Dimension(2, -1), new Dimension(2, -1), 0, false));
+		resetButton = new JButton();
+		resetButton.setText("Reset");
+		panel1.add(resetButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		modeSelect = new JTabbedPane();
 		mainPanel.add(modeSelect, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
 		scramblePanel = new JPanel();
