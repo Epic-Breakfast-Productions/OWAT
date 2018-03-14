@@ -2,6 +2,9 @@ package com.ebp.owat.app.gui;
 
 import com.ebp.owat.app.InputValidator;
 import com.ebp.owat.app.config.Globals;
+import com.ebp.owat.app.runner.OwatRunner;
+import com.ebp.owat.app.runner.ScrambleRunner;
+import com.ebp.owat.app.runner.Step;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -14,12 +17,14 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.concurrent.*;
 
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
-import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
+import static javax.swing.JOptionPane.*;
 
 /**
  * Main class for the GUI.
@@ -87,6 +92,34 @@ public class MainGuiApp {
 	private JPanel deScrambledDataFileOutputPanel;
 
 	private JFrame frame;
+
+	private boolean keepRun = false;
+	private boolean running = false;
+
+	private synchronized boolean isRunning() {
+		return this.running;
+	}
+
+	private synchronized void runningStopped() {
+		LOGGER.trace("Running has stopped.");
+		this.running = false;
+		this.keepRun = false;
+	}
+
+	private synchronized void runStarted() {
+		this.running = true;
+		this.keepRun = true;
+	}
+
+	private synchronized void stopRunning() {
+		LOGGER.trace("Running has been told to stop.");
+		this.keepRun = false;
+	}
+
+	private synchronized boolean doKeepRunning() {
+		return this.keepRun;
+	}
+
 
 	private static final String TITLE_FORMAT = "%s v%s %s";
 
@@ -408,7 +441,7 @@ public class MainGuiApp {
 		return true;
 	}
 
-	private void validateForGO() {
+	private boolean validateForGO() {
 		boolean goodToGO = false;
 
 		if (this.inRunnableMode()) {
@@ -419,6 +452,7 @@ public class MainGuiApp {
 			}
 		}
 
+
 		if (goodToGO) {
 			LOGGER.debug("Validation passed. Enabling GO button.");
 			this.enableGoButton();
@@ -426,6 +460,7 @@ public class MainGuiApp {
 			LOGGER.debug("Validation failed. Disabling GO button.");
 			this.disableGoButton();
 		}
+		return goodToGO;
 	}
 
 	private void enableGoButton() {
@@ -440,13 +475,185 @@ public class MainGuiApp {
 	 * Form enabler/disablers
 	 ******************************************************************/
 
-	//TODO:: methods to enable/disable forms and switching between forms while scrambling/descrambling happens.
+	private void enableInputs() {
+		//TODO: re-enable everything
+	}
+
+	private void disableInputs() {
+		//TODO: disable everything
+	}
+
+	private void setupForRunning() {
+		this.disableInputs();
+		this.processStartButton.setText("STOP");
+	}
+
+	private void resetAfterRun() {
+		this.enableInputs();
+		this.processStartButton.setText("Go");
+	}
 
 	/* ****************************************************************
 	 * Run scramble/descramble
 	 ******************************************************************/
 
-	//TODO:: run a scramble/descramble
+	private void outputTimingData(OwatRunner runner) {
+		StringBuilder sb = new StringBuilder("Timing data:\n");
+
+		for (Map.Entry<Step, Long> curEntry : runner.getTimingMap().entrySet()) {
+			sb.append("\t" + curEntry.getKey().stepNo + ") " + curEntry.getKey().stepName + ": " + ((double) curEntry.getValue() / 1000.0) + "s\n");
+		}
+		this.showMessage(INFORMATION_MESSAGE, "Success!", sb.toString());
+	}
+
+	private Exception runConcurrentProcess(OwatRunner runner) {
+		ExecutorService exec = Executors.newSingleThreadExecutor();
+
+		Future fut = exec.submit(OwatRunner.getThread(runner, false));
+
+		Exception error = null;
+		try {
+			LOGGER.trace("Running.");
+			this.runStarted();
+			boolean isRunning = true;
+			while (isRunning && !fut.isDone() && !fut.isCancelled()) {
+				//LOGGER.trace("In the loop.");
+				Step curStep = runner.getCurStep();
+
+				int percent = (int) (((double) curStep.stepNo / (double) Step.NUM_STEPS_SCRAMBLING) * 100.0);
+
+				this.processProgressBar.setValue(percent);
+				this.processProgressBar.setString(percent + "% " + curStep.stepName);
+
+				if (!this.doKeepRunning()) {
+					fut.cancel(true);
+					this.runningStopped();
+				}
+
+				try {
+					Object get = fut.get(100, TimeUnit.MILLISECONDS);
+					this.runningStopped();
+				} catch (TimeoutException e) {
+					//LOGGER.warn("Timeout exception.");
+				}
+
+				isRunning = this.isRunning();
+			}
+		} catch (InterruptedException | ExecutionException e) {
+			error = e;
+		} catch (CancellationException e) {
+
+			error = e;
+		}
+		this.runningStopped();
+		return error;
+	}
+
+	private void runScramble() throws IOException {
+		ScrambleRunner.Builder builder = new ScrambleRunner.Builder();
+
+		LOGGER.trace("Setting up data input...");
+		if (this.inputScrambleDataDirect()) {
+			builder.setDataInput(
+				new ByteArrayInputStream(
+					this.scrambleDataDirectInput.getText().getBytes(StandardCharsets.UTF_8)
+				)
+			);
+		} else if (this.inputScrambleDataFile()) {
+			LOGGER.debug("Data source file: {}", this.scrambleDataFileInput.getText());
+			builder.setDataInput(new FileInputStream(this.scrambleDataFileInput.getText()));
+		} else {
+			throw new IllegalStateException();
+		}
+
+		LOGGER.trace("Setting up data output...");
+		OutputStream keyOutput;
+		OutputStream dataOutput;
+
+		if (this.outputScrambleKeyDirect()) {
+			keyOutput = new ByteArrayOutputStream();
+		} else if (this.outputScrambleKeyFile()) {
+			keyOutput = new FileOutputStream(this.keyFileOutput.getText(), false);
+		} else {
+			throw new IllegalStateException();
+		}
+
+		if (this.outputScrambledDataDirect()) {
+			dataOutput = new ByteArrayOutputStream();
+		} else if (this.outputScrambledDataFile()) {
+			dataOutput = new FileOutputStream(this.outputScrambledDataFile.getText(), false);
+		} else {
+			throw new IllegalStateException();
+		}
+		builder.setKeyOutput(keyOutput);
+		builder.setDataOutput(dataOutput);
+
+		LOGGER.trace("Setting up execution...");
+		ScrambleRunner runner = builder.build();
+
+		Exception error = this.runConcurrentProcess(runner);
+		LOGGER.trace("Done running.");
+
+		if (error != null) {
+			LOGGER.warn("There was an error during execution: ", error);
+			if (error instanceof CancellationException) {
+				this.showMessage(WARNING_MESSAGE, "Cancelled.", "Operation cancelled.");
+			} else {
+				this.showMessage(ERROR_MESSAGE, "ERROR", "There was an error during execution:\n" + error.getMessage());
+			}
+			return;
+		}
+
+		this.processProgressBar.setValue(100);
+		this.processProgressBar.setString(100 + "% " + Step.DONE_SCRAMBLING.stepName);
+
+		if (this.outputScrambleKeyDirect()) {
+			this.keyDirectOutput.setText(keyOutput.toString());
+		}
+		keyOutput.close();
+
+		if (this.outputScrambledDataDirect()) {
+			this.scrambledDataDirectOutput.setText(dataOutput.toString());
+		}
+		dataOutput.close();
+
+		this.outputTimingData(runner);
+	}
+
+	private void runProcess() {
+		LOGGER.info("Button hit to run the process.");
+		boolean goodToGO = this.validateForGO();
+		if (!goodToGO) {
+			LOGGER.info("Form did not pass validation. NOT running.");
+			return;
+		}
+		LOGGER.info("Form PASSED validation. RUNNING...");
+
+		this.setupForRunning();
+		if (this.inScrambleMode()) {
+			try {
+				this.runScramble();
+			} catch (IOException e) {
+				LOGGER.warn("Error in file I/O during setup or cleanup of run. Error: ", e);
+				this.showMessage(ERROR_MESSAGE, "File I/O Error", "There was a file I/O error while scrambling. Error: \n" + e.getMessage());
+			} catch (IllegalStateException e) {
+				LOGGER.error("Got into something we didn't really expect to see. Error: ", e);
+				this.showMessage(ERROR_MESSAGE, "Some Other Error", "There was a strange error while scrambling. Error: \n" + e.getMessage());
+			}
+		}
+		this.resetAfterRun();
+	}
+
+	private void runConcurrently() {
+		ExecutorService exec = Executors.newSingleThreadExecutor();
+
+		Future fut = exec.submit(new Runnable() {
+			@Override
+			public void run() {
+				runProcess();
+			}
+		});
+	}
 
 	/* ****************************************************************
 	 * Setup
@@ -597,6 +804,17 @@ public class MainGuiApp {
 				super.mouseClicked(e);
 			}
 		});
+		processStartButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (isRunning()) {
+					stopRunning();
+				} else {
+					runConcurrently();
+				}
+				super.mouseClicked(e);
+			}
+		});
 	}
 
 	public static void main(String[] args) {
@@ -636,6 +854,8 @@ public class MainGuiApp {
 		processStartButton.setText("Go");
 		panel1.add(processStartButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		processProgressBar = new JProgressBar();
+		Font processProgressBarFont = this.$$$getFont$$$(null, Font.BOLD, 18, processProgressBar.getFont());
+		if (processProgressBarFont != null) processProgressBar.setFont(processProgressBarFont);
 		processProgressBar.setString("");
 		processProgressBar.setStringPainted(true);
 		panel1.add(processProgressBar, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 50), new Dimension(-1, 50), new Dimension(-1, 50), 0, false));

@@ -42,6 +42,7 @@
               </grid>
             </constraints>
             <properties>
+              <font size="18" style="1"/>
               <string value=""/>
               <stringPainted value="true"/>
             </properties>
