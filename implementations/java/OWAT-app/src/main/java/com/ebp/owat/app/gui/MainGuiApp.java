@@ -5,6 +5,8 @@ import com.ebp.owat.app.config.Globals;
 import com.ebp.owat.app.runner.OwatRunner;
 import com.ebp.owat.app.runner.ScrambleRunner;
 import com.ebp.owat.app.runner.Step;
+import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
+import com.ebp.owat.lib.utils.rand.RandGenerator;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -17,6 +19,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -122,6 +125,8 @@ public class MainGuiApp {
 
 
 	private static final String TITLE_FORMAT = "%s v%s %s";
+
+	private static final int ICON_IMG_DIMENTIONS = 4;
 
 	private static final String appTitle = String.format(
 		TITLE_FORMAT,
@@ -531,7 +536,7 @@ public class MainGuiApp {
 				}
 
 				try {
-					Object get = fut.get(100, TimeUnit.MILLISECONDS);
+					Object get = fut.get(50, TimeUnit.MILLISECONDS);
 					this.runningStopped();
 				} catch (TimeoutException e) {
 					//LOGGER.warn("Timeout exception.");
@@ -817,9 +822,26 @@ public class MainGuiApp {
 		});
 	}
 
+	public static Image getIcon(){
+		BufferedImage img = new BufferedImage(ICON_IMG_DIMENTIONS, ICON_IMG_DIMENTIONS, BufferedImage.TYPE_INT_ARGB);
+		OwatRandGenerator rand = new RandGenerator();
+		for(int i = 0; i < ICON_IMG_DIMENTIONS; i++){
+			for(int j = 0; j < ICON_IMG_DIMENTIONS; j++){
+				int a = 255,
+					r = rand.nextByte(),
+					g = rand.nextByte(),
+					b = rand.nextByte();
+				int p = (a<<24) | (r<<16) | (g<<8) | b;
+				img.setRGB(i, j, p);
+			}
+		}
+		return img;
+	}
+
 	public static void main(String[] args) {
 		LOGGER.info("Starting GUI.");
 		JFrame frame = new JFrame(appTitle);
+		frame.setIconImage(getIcon());
 		frame.setContentPane(new MainGuiApp(frame).mainPanel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
