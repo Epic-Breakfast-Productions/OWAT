@@ -2,6 +2,7 @@ package com.ebp.owat.app.runner;
 
 import com.ebp.owat.app.runner.utils.RunResults;
 import com.ebp.owat.app.runner.utils.ScrambleRunnerThread;
+import com.ebp.owat.app.runner.utils.Step;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -23,6 +24,13 @@ public abstract class OwatRunner {
 
 	public synchronized RunResults getLastRunResults() {
 		return this.lastRunResults.clone();
+	}
+
+	public synchronized Step getCurStep() {
+		if(this.lastRunResults == null){
+			return Step.NOT_STARTED_SCRAMBLE;
+		}
+		return this.lastRunResults.getCurStep();
 	}
 	
 	public abstract void doSteps() throws IOException;

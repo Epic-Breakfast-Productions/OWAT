@@ -109,10 +109,10 @@ public class RunResults {
 	}
 
 	@Override
-	public RunResults clone(){
+	public synchronized RunResults clone(){
 		RunResults output = new RunResults(this.mode);
 
-		output.setCurStep(this.getCurStep());
+		output.setCurStep(this.curStep);
 		output.setTimingMap(this.getTimingMap());
 		output.setNumBytesIn(this.getNumBytesIn());
 		output.setNumBytesOut(this.getNumBytesOut());

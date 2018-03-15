@@ -212,6 +212,15 @@ public class MainGuiApp {
 		return true;
 	}
 
+	private void outputTimingData(OwatRunner runner) {
+		StringBuilder sb = new StringBuilder("Timing data:\n");
+
+		for (Map.Entry<Step, Long> curEntry : runner.getLastRunResults().getTimingMap().entrySet()) {
+			sb.append("\t" + curEntry.getKey().stepNo + ") " + curEntry.getKey().stepName + ": " + ((double) curEntry.getValue() / 1000.0) + "s\n");
+		}
+		this.showMessage(INFORMATION_MESSAGE, "Success!", sb.toString());
+	}
+
 	/* ****************************************************************
 	 * Clear input methods.
 	 ******************************************************************/
@@ -507,15 +516,6 @@ public class MainGuiApp {
 	 * Run scramble/descramble
 	 ******************************************************************/
 
-	private void outputTimingData(OwatRunner runner) {
-		StringBuilder sb = new StringBuilder("Timing data:\n");
-
-		for (Map.Entry<Step, Long> curEntry : runner.getLastRunResults().getTimingMap().entrySet()) {
-			sb.append("\t" + curEntry.getKey().stepNo + ") " + curEntry.getKey().stepName + ": " + ((double) curEntry.getValue() / 1000.0) + "s\n");
-		}
-		this.showMessage(INFORMATION_MESSAGE, "Success!", sb.toString());
-	}
-
 	private Exception runConcurrentProcess(OwatRunner runner) {
 		ExecutorService exec = Executors.newSingleThreadExecutor();
 
@@ -527,8 +527,8 @@ public class MainGuiApp {
 			this.runStarted();
 			boolean isRunning = true;
 			while (isRunning && !fut.isDone() && !fut.isCancelled()) {
-				//LOGGER.trace("In the loop.");
-				Step curStep = runner.getLastRunResults().getCurStep();
+				LOGGER.trace("In the loop.");
+				Step curStep = runner.getCurStep();
 
 				int percent = (int) (((double) curStep.stepNo / (double) Step.NUM_STEPS_SCRAMBLING) * 100.0);
 
