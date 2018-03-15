@@ -2,6 +2,7 @@ package com.ebp.owat.app.gui;
 
 import com.ebp.owat.app.InputValidator;
 import com.ebp.owat.app.config.Globals;
+import com.ebp.owat.app.runner.DeScrambleRunner;
 import com.ebp.owat.app.runner.OwatRunner;
 import com.ebp.owat.app.runner.ScrambleRunner;
 import com.ebp.owat.app.runner.utils.Step;
@@ -603,7 +604,7 @@ public class MainGuiApp {
 		builder.setKeyOutput(keyOutput);
 		builder.setDataOutput(dataOutput);
 
-		LOGGER.trace("Setting up execution...");
+		LOGGER.trace("Setting up Scramble execution...");
 		ScrambleRunner runner = builder.build();
 
 		Exception error = this.runConcurrentProcess(runner);
@@ -635,6 +636,63 @@ public class MainGuiApp {
 		this.outputTimingData(runner);
 	}
 
+	private void runDeScramble() throws IOException {
+		DeScrambleRunner.Builder builder = new DeScrambleRunner.Builder();
+
+		if (this.inputScrambleKeyDirect()) {
+			builder.setKeyInput(new ByteArrayInputStream(this.keyDirectInput.getText().getBytes(StandardCharsets.UTF_8)));
+		} else if (this.inputScrambleKeyFile()) {
+			builder.setKeyInput(new FileInputStream(this.keyFileInput.getText()));
+		} else {
+			throw new IllegalStateException();
+		}
+
+		if (this.inputScrambledDataDirect()) {
+			builder.setDataInput(new ByteArrayInputStream(this.scrambledDataDirectInput.getText().getBytes(StandardCharsets.UTF_8)));
+		} else if (this.inputScrambledDataFile()) {
+			builder.setDataInput(new FileInputStream(this.scrambledDataFileInput.getText()));
+		} else {
+			throw new IllegalStateException();
+		}
+
+		OutputStream os;
+		boolean directDeScrambledDataOutput = false;
+		if (this.outputDeScrambledDataDirect()) {
+			directDeScrambledDataOutput = true;
+			os = new ByteArrayOutputStream();
+		} else if (this.outputDeScrambledDataFile()) {
+			os = new FileOutputStream(this.deScrambledDataOutputFileInput.getText());
+		} else {
+			throw new IllegalStateException();
+		}
+		builder.setDataOutput(os);
+
+		LOGGER.trace("Setting up Descramble execution...");
+		DeScrambleRunner runner = builder.build();
+
+		Exception error = this.runConcurrentProcess(runner);
+		LOGGER.trace("Done running.");
+
+
+		if (error != null) {
+			LOGGER.warn("There was an error during execution: ", error);
+			if (error instanceof CancellationException) {
+				this.showMessage(WARNING_MESSAGE, "Cancelled.", "Operation cancelled.");
+			} else {
+				this.showMessage(ERROR_MESSAGE, "ERROR", "There was an error during execution:\n" + error.getMessage());
+			}
+			return;
+		}
+
+		this.processProgressBar.setValue(100);
+		this.processProgressBar.setString(100 + "% " + Step.DONE_SCRAMBLING.stepName);
+
+		if (directDeScrambledDataOutput) {
+			this.deScrambledDirectOutput.setText(os.toString());
+		}
+		os.close();
+	}
+
 	private void runProcess() {
 		LOGGER.info("Button hit to run the process.");
 		boolean goodToGO = this.validateForGO();
@@ -645,16 +703,20 @@ public class MainGuiApp {
 		LOGGER.info("Form PASSED validation. RUNNING...");
 
 		this.setupForRunning();
-		if (this.inScrambleMode()) {
-			try {
+		try {
+			if (this.inScrambleMode()) {
 				this.runScramble();
-			} catch (IOException e) {
-				LOGGER.warn("Error in file I/O during setup or cleanup of run. Error: ", e);
-				this.showMessage(ERROR_MESSAGE, "File I/O Error", "There was a file I/O error while scrambling. Error: \n" + e.getMessage());
-			} catch (IllegalStateException e) {
-				LOGGER.error("Got into something we didn't really expect to see. Error: ", e);
-				this.showMessage(ERROR_MESSAGE, "Some Other Error", "There was a strange error while scrambling. Error: \n" + e.getMessage());
+			} else if (this.inDeScrambleMode()) {
+				this.runDeScramble();
+			} else {
+				this.showMessage(ERROR_MESSAGE, "Improper Mode", "Not in a scrambling or descrambling mode.");
 			}
+		} catch (IOException e) {
+			LOGGER.warn("Error in file I/O during setup or cleanup of run. Error: ", e);
+			this.showMessage(ERROR_MESSAGE, "File I/O Error", "There was a file I/O error while scrambling. Error: \n" + e.getMessage());
+		} catch (IllegalStateException e) {
+			LOGGER.error("Got into something we didn't really expect to see. Error: ", e);
+			this.showMessage(ERROR_MESSAGE, "Some Other Error", "There was a strange error while scrambling. Error: \n" + e.getMessage());
 		}
 		this.resetAfterRun();
 	}
