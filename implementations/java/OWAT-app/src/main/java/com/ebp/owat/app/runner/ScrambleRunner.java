@@ -1,5 +1,9 @@
 package com.ebp.owat.app.runner;
 
+import com.ebp.owat.app.runner.utils.RunResults;
+import com.ebp.owat.app.runner.utils.RunnerUtilities;
+import com.ebp.owat.app.runner.utils.ScrambleMode;
+import com.ebp.owat.app.runner.utils.Step;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
@@ -154,12 +158,14 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 	
 	@Override
 	public void doSteps() throws IOException {
-		this.resetTiming();
+		RunResults runResults = new RunResults(ScrambleMode.SCRAMBLING);
+		this.setLastRunResults(runResults);
+
 		long start, end;
 		M matrix;
 		
 		{
-			this.setCurStep(Step.LOAD_DATA);
+			runResults.setCurStep(Step.LOAD_DATA);
 			start = System.currentTimeMillis();
 			LOGGER.info("Loading data...");
 			
@@ -180,9 +186,9 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 				//lastRowIndex = matrix.getNumRows() - lastRowIndex - 1;
 			}
 			end = System.currentTimeMillis();
-			this.setElapsedTime(Step.LOAD_DATA, start, end);
+			runResults.setElapsedTime(Step.LOAD_DATA, start, end);
 
-			this.setCurStep(Step.PAD_DATA);
+			runResults.setCurStep(Step.PAD_DATA);
 			start = System.currentTimeMillis();
 			LOGGER.info("Padding data...");
 
@@ -191,10 +197,10 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			this.key = new ScrambleKey(origDataHeight, origDataWidth, matrix.getNumRows(), matrix.getNumCols(), this.nodeType.typeClass, lastRowIndex);
 
 			end = System.currentTimeMillis();
-			this.setElapsedTime(Step.PAD_DATA, start, end);
+			runResults.setElapsedTime(Step.PAD_DATA, start, end);
 		}
-		
-		this.setCurStep(Step.SCRAMBLING);
+
+		runResults.setCurStep(Step.SCRAMBLING);
 		start = System.currentTimeMillis();
 		LOGGER.info("Scrambling Data...");
 		
@@ -212,9 +218,9 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		}
 
 		end = System.currentTimeMillis();
-		this.setElapsedTime(Step.SCRAMBLING, start, end);
-		
-		this.setCurStep(Step.OUT_SCRAMBLED_DATA);
+		runResults.setElapsedTime(Step.SCRAMBLING, start, end);
+
+		runResults.setCurStep(Step.OUT_SCRAMBLED_DATA);
 		start = System.currentTimeMillis();
 		LOGGER.info("Outputting scrambled data...");
 		{
@@ -223,18 +229,18 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			this.dataOutput.write(bytes);
 		}
 		end = System.currentTimeMillis();
-		this.setElapsedTime(Step.OUT_SCRAMBLED_DATA, start, end);
-		
-		this.setCurStep(Step.OUT_KEY);
+		runResults.setElapsedTime(Step.OUT_SCRAMBLED_DATA, start, end);
+
+		runResults.setCurStep(Step.OUT_KEY);
 		start = System.currentTimeMillis();
 		LOGGER.info("Outputting key...");
 		
 		this.keyOutput.write(OBJECT_MAPPER.writeValueAsBytes(this.key));
 
 		end = System.currentTimeMillis();
-		this.setElapsedTime(Step.OUT_KEY, start, end);
+		runResults.setElapsedTime(Step.OUT_KEY, start, end);
 
-		this.setCurStep(Step.DONE_SCRAMBLING);
+		runResults.setCurStep(Step.DONE_SCRAMBLING);
 		LOGGER.info("Done Scrambling.");
 	}
 }

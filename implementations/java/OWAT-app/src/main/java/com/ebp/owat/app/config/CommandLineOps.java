@@ -39,6 +39,9 @@ public class CommandLineOps {
 	@Option(name = "-k", aliases = {"--key-file"}, usage = "The key file.")
 	private File keyFile = null;
 
+	@Option(name = "-c", aliases = {"--csv-stats"}, usage = "For outputting timing data to a CSV file.")
+	private File csvFile = null;
+
 	@Option(name = "-h", aliases = {"--help"}, usage = "Show this help dialogue.")
 	private boolean showHelp = false;
 
@@ -83,6 +86,10 @@ public class CommandLineOps {
 
 	}
 
+	public boolean outputCsvStats(){
+		return this.csvFile == null;
+	}
+
 	private void ensureHaveInputData() throws IllegalArgumentException {
 		if(this.inputString == null && this.inputFile == null){
 			throw new IllegalArgumentException("No input data given. Cannot continue.");
@@ -105,6 +112,9 @@ public class CommandLineOps {
 				//ensure we can write out to
 				InputValidator.ensureCanWriteToFile(this.dataOutputFile, DESC_SCRAMBLED_DATA_OUTPUT);
 				InputValidator.ensureCanWriteToFile(this.keyFile, DESC_KEY);
+				if(this.outputCsvStats()){
+					InputValidator.ensureCanWriteToFile(csvFile, CSV_FILE);
+				}
 				break;
 			case DESCRAMBLE:
 				//ensure key file exists
@@ -115,6 +125,9 @@ public class CommandLineOps {
 
 				//ensure we can write out
 				InputValidator.ensureCanWriteToFile(this.dataOutputFile, DESC_DESCRAMBLED_DATA_OUTPUT);
+				if(this.outputCsvStats()){
+					InputValidator.ensureCanWriteToFile(csvFile, CSV_FILE);
+				}
 				break;
 			default:
 				throw new IllegalArgumentException("Must specify a mode to run.");
@@ -147,5 +160,9 @@ public class CommandLineOps {
 
 	public OutputStream getDataOutputStream() throws FileNotFoundException {
 		return new FileOutputStream(this.dataOutputFile);
+	}
+
+	public OutputStream getCsvStatsOutputStream() throws FileNotFoundException {
+		return new FileOutputStream(this.csvFile);
 	}
 }

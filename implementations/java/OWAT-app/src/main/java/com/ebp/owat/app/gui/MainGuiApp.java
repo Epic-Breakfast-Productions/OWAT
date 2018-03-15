@@ -4,7 +4,7 @@ import com.ebp.owat.app.InputValidator;
 import com.ebp.owat.app.config.Globals;
 import com.ebp.owat.app.runner.OwatRunner;
 import com.ebp.owat.app.runner.ScrambleRunner;
-import com.ebp.owat.app.runner.Step;
+import com.ebp.owat.app.runner.utils.Step;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -447,6 +447,11 @@ public class MainGuiApp {
 	}
 
 	private boolean validateForGO() {
+		if (this.isRunning()) {
+			LOGGER.debug("Won't validate while running.");
+			return true;
+		}
+
 		boolean goodToGO = false;
 
 		if (this.inRunnableMode()) {
@@ -505,7 +510,7 @@ public class MainGuiApp {
 	private void outputTimingData(OwatRunner runner) {
 		StringBuilder sb = new StringBuilder("Timing data:\n");
 
-		for (Map.Entry<Step, Long> curEntry : runner.getTimingMap().entrySet()) {
+		for (Map.Entry<Step, Long> curEntry : runner.getLastRunResults().getTimingMap().entrySet()) {
 			sb.append("\t" + curEntry.getKey().stepNo + ") " + curEntry.getKey().stepName + ": " + ((double) curEntry.getValue() / 1000.0) + "s\n");
 		}
 		this.showMessage(INFORMATION_MESSAGE, "Success!", sb.toString());
@@ -523,7 +528,7 @@ public class MainGuiApp {
 			boolean isRunning = true;
 			while (isRunning && !fut.isDone() && !fut.isCancelled()) {
 				//LOGGER.trace("In the loop.");
-				Step curStep = runner.getCurStep();
+				Step curStep = runner.getLastRunResults().getCurStep();
 
 				int percent = (int) (((double) curStep.stepNo / (double) Step.NUM_STEPS_SCRAMBLING) * 100.0);
 
@@ -536,7 +541,7 @@ public class MainGuiApp {
 				}
 
 				try {
-					Object get = fut.get(50, TimeUnit.MILLISECONDS);
+					Object get = fut.get(200, TimeUnit.MILLISECONDS);
 					this.runningStopped();
 				} catch (TimeoutException e) {
 					//LOGGER.warn("Timeout exception.");
@@ -575,9 +580,13 @@ public class MainGuiApp {
 		OutputStream keyOutput;
 		OutputStream dataOutput;
 
+		boolean directScrambledDataOutput = false;
+		boolean directKeyDataOutput = false;
+
 		if (this.outputScrambleKeyDirect()) {
 			keyOutput = new ByteArrayOutputStream();
 		} else if (this.outputScrambleKeyFile()) {
+			directKeyDataOutput = true;
 			keyOutput = new FileOutputStream(this.keyFileOutput.getText(), false);
 		} else {
 			throw new IllegalStateException();
@@ -586,6 +595,7 @@ public class MainGuiApp {
 		if (this.outputScrambledDataDirect()) {
 			dataOutput = new ByteArrayOutputStream();
 		} else if (this.outputScrambledDataFile()) {
+			directScrambledDataOutput = true;
 			dataOutput = new FileOutputStream(this.outputScrambledDataFile.getText(), false);
 		} else {
 			throw new IllegalStateException();
@@ -612,12 +622,12 @@ public class MainGuiApp {
 		this.processProgressBar.setValue(100);
 		this.processProgressBar.setString(100 + "% " + Step.DONE_SCRAMBLING.stepName);
 
-		if (this.outputScrambleKeyDirect()) {
+		if (directKeyDataOutput) {
 			this.keyDirectOutput.setText(keyOutput.toString());
 		}
 		keyOutput.close();
 
-		if (this.outputScrambledDataDirect()) {
+		if (directScrambledDataOutput) {
 			this.scrambledDataDirectOutput.setText(dataOutput.toString());
 		}
 		dataOutput.close();
@@ -663,13 +673,17 @@ public class MainGuiApp {
 	/* ****************************************************************
 	 * Setup
 	 ******************************************************************/
-
 	public MainGuiApp(JFrame frame) {
 		this.frame = frame;
 		resetButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				if (isRunning()) {
+					return;
+				}
 				//TODO:: not working/waiting for double click
+				//TODO:: don't reset when running
 				if (e.getClickCount() == 2) {
 					if (confirmActon("Reset ALL Forms")) {
 						resetAllInputs();
@@ -686,49 +700,66 @@ public class MainGuiApp {
 						resetDeScramble();
 					}
 				}
-				super.mouseClicked(e);
 			}
 		});
 		chooseScrambleDataFileButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				scrambleDataFileInput.setText(chooseFile("Choose a file to scramble", FileDialog.LOAD, "*"));
 				super.mouseClicked(e);
+				if (isRunning()) {
+					return;
+				}
+				scrambleDataFileInput.setText(chooseFile("Choose a file to scramble", FileDialog.LOAD, "*"));
 			}
 		});
 		chooseKeyOutputFileButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				keyFileOutput.setText(chooseFile("Choose where to save the data key", FileDialog.SAVE, "*.obfk"));
 				super.mouseClicked(e);
+				if (isRunning()) {
+					return;
+				}
+				keyFileOutput.setText(chooseFile("Choose where to save the data key", FileDialog.SAVE, "*.obfk"));
 			}
 		});
 		chooseScrambledDataOutputFileButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				outputScrambledDataFile.setText(chooseFile("Choose where to save the scrambled data", FileDialog.SAVE, "*.obf"));
 				super.mouseClicked(e);
+				if (isRunning()) {
+					return;
+				}
+				outputScrambledDataFile.setText(chooseFile("Choose where to save the scrambled data", FileDialog.SAVE, "*.obf"));
 			}
 		});
 		chooseDeScrambleKeyFileButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				keyFileInput.setText(chooseFile("Choose key file to use", FileDialog.LOAD, "*.obfk"));
 				super.mouseClicked(e);
+				if (isRunning()) {
+					return;
+				}
+				keyFileInput.setText(chooseFile("Choose key file to use", FileDialog.LOAD, "*.obfk"));
 			}
 		});
 		chooseScrambledDataFileInputButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				scrambledDataFileInput.setText(chooseFile("Choose the scrambled data file", FileDialog.LOAD, "*.obf"));
 				super.mouseClicked(e);
+				if (isRunning()) {
+					return;
+				}
+				scrambledDataFileInput.setText(chooseFile("Choose the scrambled data file", FileDialog.LOAD, "*.obf"));
 			}
 		});
 		chooseDeScrambledDataOutputFileButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				deScrambledDataOutputFileInput.setText(chooseFile("Choose where to save the descrambled data", FileDialog.SAVE, "*"));
 				super.mouseClicked(e);
+				if (isRunning()) {
+					return;
+				}
+				deScrambledDataOutputFileInput.setText(chooseFile("Choose where to save the descrambled data", FileDialog.SAVE, "*"));
 			}
 		});
 		modeSelect.addMouseListener(new MouseAdapter() {
@@ -822,16 +853,16 @@ public class MainGuiApp {
 		});
 	}
 
-	public static Image getIcon(){
+	public static Image getIcon() {
 		BufferedImage img = new BufferedImage(ICON_IMG_DIMENTIONS, ICON_IMG_DIMENTIONS, BufferedImage.TYPE_INT_ARGB);
 		OwatRandGenerator rand = new RandGenerator();
-		for(int i = 0; i < ICON_IMG_DIMENTIONS; i++){
-			for(int j = 0; j < ICON_IMG_DIMENTIONS; j++){
+		for (int i = 0; i < ICON_IMG_DIMENTIONS; i++) {
+			for (int j = 0; j < ICON_IMG_DIMENTIONS; j++) {
 				int a = 255,
 					r = rand.nextByte(),
 					g = rand.nextByte(),
 					b = rand.nextByte();
-				int p = (a<<24) | (r<<16) | (g<<8) | b;
+				int p = (a << 24) | (r << 16) | (g << 8) | b;
 				img.setRGB(i, j, p);
 			}
 		}

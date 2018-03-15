@@ -1,0 +1,165 @@
+package com.ebp.owat.app.runner.utils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class RunResults {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RunResults.class);
+
+	public RunResults(ScrambleMode mode){
+		this.mode = mode;
+		if(this.mode == ScrambleMode.SCRAMBLING){
+			this.curStep = Step.NOT_STARTED_SCRAMBLE;
+		}
+		if(this.mode == ScrambleMode.DESCRAMBLING){
+			this.curStep = Step.NOT_STARTED_DESCRAMBLE;
+		}
+	}
+
+	private final ScrambleMode mode;
+	private long numBytesIn = -1;
+	private long numBytesOut = -1;
+
+	/** The map of timing data. */
+	private LinkedHashMap<Step, Long> timingMap = new LinkedHashMap<>();
+
+	private Step curStep;
+
+	public synchronized Step getCurStep(){
+		return this.curStep;
+	}
+
+	public synchronized void setCurStep(Step curStep){
+		this.curStep = curStep;
+	}
+
+	private synchronized void setTimingMap(LinkedHashMap<Step,Long> timingMap){
+		this.timingMap = timingMap;
+	}
+
+	/**
+	 * Sets the time it took to complete a specific step.
+	 * @param step The step.
+	 * @param timeTook How long it took to complete the step.
+	 */
+	public synchronized void setElapsedTime(Step step, long timeTook){
+		if(this.timingMap.containsKey(step)){
+			throw new IllegalStateException("Cannot overwrite step timing.");
+		}
+		this.timingMap.put(step, timeTook);
+	}
+
+	/**
+	 *
+	 * @param step The step that took place.
+	 * @param startTime Time in milliseconds when the step started.
+	 * @param endTime Time in milliseconds when the step ended.
+	 */
+	public synchronized void setElapsedTime(Step step, long startTime, long endTime){
+		this.setElapsedTime(step, endTime - startTime);
+	}
+
+	/**
+	 * Gets the number of milliseconds it took for the step to be completed.
+	 * @param step The step to get the data for.
+	 * @return The number of milliseconds it took to complete the step.
+	 */
+	public synchronized long getStepTiming(Step step){
+		return this.timingMap.get(step);
+	}
+
+	/**
+	 * Gets the timing data from the runner.
+	 * @return The timing data from the runner. Null if not run.
+	 */
+	public synchronized LinkedHashMap<Step, Long> getTimingMap(){
+		if(this.timingMap == null){
+			return null;
+		}
+		return (LinkedHashMap<Step, Long>) this.timingMap.clone();
+	}
+
+	public synchronized void setNumBytesIn(long numBytesIn){
+		this.numBytesIn = numBytesIn;
+	}
+
+	public synchronized long getNumBytesIn(){
+		return this.numBytesIn;
+	}
+
+	public synchronized void setNumBytesOut(long numBytesOut){
+		this.numBytesOut = numBytesOut;
+	}
+
+	public synchronized long getNumBytesOut(){
+		return this.numBytesOut;
+	}
+
+	public void logOutTimingData(){
+		HashMap<Step, Long> timingMap = this.getTimingMap();
+
+		LOGGER.info("Step Timing data: (how log it took to do each step)");
+		for(Map.Entry<Step, Long> curStep : timingMap.entrySet()){
+			LOGGER.info("\t{}: {}s", curStep.getKey(), (double)curStep.getValue()/1000.0);
+		}
+	}
+
+	@Override
+	public RunResults clone(){
+		RunResults output = new RunResults(this.mode);
+
+		output.setCurStep(this.getCurStep());
+		output.setTimingMap(this.getTimingMap());
+		output.setNumBytesIn(this.getNumBytesIn());
+		output.setNumBytesOut(this.getNumBytesOut());
+
+		return output;
+	}
+
+	public String getCsvHead(){
+		StringBuilder sb = new StringBuilder("mode,lastStep,numBytesIn,numBytesOut");
+
+		for (Step curStep : Step.getStepsIn(this.mode)) {
+			sb.append(",");
+			sb.append(curStep.stepName);
+		}
+
+		return sb.toString();
+	}
+
+	public String getCsvLine(boolean includeHead){
+		StringBuilder sb = new StringBuilder();
+		if(includeHead){
+			sb.append(
+				String.format(this.getCsvHead()+"%n")
+			);
+		}
+
+		sb.append(this.mode.name);
+		sb.append(",");
+		sb.append(this.getCurStep().stepName);
+		sb.append(",");
+		sb.append(this.getNumBytesIn());
+		sb.append(",");
+		sb.append(this.getNumBytesOut());
+
+		LinkedHashMap<Step, Long> steps = this.getTimingMap();
+		for (Step curStep : Step.getStepsIn(this.mode)) {
+			Long val = steps.get(curStep);
+			sb.append(",");
+			sb.append(
+				(val == null ? -1 : val)
+			);
+		}
+
+		return sb.toString();
+	}
+
+	public String getCsvLine(){
+		return this.getCsvLine(false);
+	}
+}

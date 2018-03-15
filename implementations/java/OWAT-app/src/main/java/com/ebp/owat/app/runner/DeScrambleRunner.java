@@ -1,5 +1,9 @@
 package com.ebp.owat.app.runner;
 
+import com.ebp.owat.app.runner.utils.RunResults;
+import com.ebp.owat.app.runner.utils.RunnerUtilities;
+import com.ebp.owat.app.runner.utils.ScrambleMode;
+import com.ebp.owat.app.runner.utils.Step;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
@@ -90,11 +94,12 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 
 	@Override
 	public void doSteps() throws IOException {
-		this.resetTiming();
+		RunResults runResults = new RunResults(ScrambleMode.DESCRAMBLING);
+		this.setLastRunResults(runResults);
 		long start, end;
 		M matrix;
-		
-		this.setCurStep(Step.LOAD_KEY);
+
+		runResults.setCurStep(Step.LOAD_KEY);
 		start = System.currentTimeMillis();
 		LOGGER.info("Loading key...");
 
@@ -102,9 +107,9 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		this.nodeType = this.key.meta.getNodeMode();
 
 		end = System.currentTimeMillis();
-		this.setElapsedTime(Step.LOAD_DATA, start, end);
+		runResults.setElapsedTime(Step.LOAD_DATA, start, end);
 
-		this.setCurStep(Step.LOAD_SCRAMBLED_DATA);
+		runResults.setCurStep(Step.LOAD_SCRAMBLED_DATA);
 		start = System.currentTimeMillis();
 		LOGGER.info("Loading scrambled data...");
 
@@ -114,9 +119,9 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 			matrix = this.utils.getMatrix(data, this.nodeType, this.key.meta.dataHeight, this.key.meta.dataWidth);
 		}
 		end = System.currentTimeMillis();
-		this.setElapsedTime(Step.LOAD_SCRAMBLED_DATA, start, end);
-		
-		this.setCurStep(Step.DESCRAMBLING);
+		runResults.setElapsedTime(Step.LOAD_SCRAMBLED_DATA, start, end);
+
+		runResults.setCurStep(Step.DESCRAMBLING);
 		start = System.currentTimeMillis();
 		LOGGER.info("Descrambling data...");
 
@@ -128,9 +133,9 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 			}
 		}
 		end = System.currentTimeMillis();
-		this.setElapsedTime(Step.DESCRAMBLING, start, end);
+		runResults.setElapsedTime(Step.DESCRAMBLING, start, end);
 
-		this.setCurStep(Step.OUT_DESCRAMBLED_DATA);
+		runResults.setCurStep(Step.OUT_DESCRAMBLED_DATA);
 		start = System.currentTimeMillis();
 		LOGGER.info("Outputting descrambled data...");
 		matrix = (M) matrix.getSubMatrix(new Coordinate(matrix,0,0), this.key.meta.originalHeight, this.key.meta.originalWidth);
@@ -146,9 +151,9 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 			this.dataOutput.write(bytes);
 		}
 		end = System.currentTimeMillis();
-		this.setElapsedTime(Step.OUT_DESCRAMBLED_DATA, start, end);
-		
-		this.setCurStep(Step.DONE_DESCRAMBLING);
+		runResults.setElapsedTime(Step.OUT_DESCRAMBLED_DATA, start, end);
+
+		runResults.setCurStep(Step.DONE_DESCRAMBLING);
 		LOGGER.info("Done descrambling data...");
 	}
 }

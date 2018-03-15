@@ -1,4 +1,6 @@
-package com.ebp.owat.app.runner;
+package com.ebp.owat.app.runner.utils;
+
+import com.ebp.owat.app.runner.OwatRunner;
 
 import java.io.IOException;
 
@@ -19,6 +21,6 @@ public class ScrambleRunnerThread<T extends OwatRunner> extends Thread {
 	}
 	
 	public Step curStep(){
-		return this.runner.getCurStep();
+		return this.runner.getLastRunResults().getCurStep();
 	}
 }

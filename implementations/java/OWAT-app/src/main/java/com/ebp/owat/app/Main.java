@@ -5,10 +5,13 @@ import com.ebp.owat.app.config.Globals;
 import com.ebp.owat.app.gui.MainGuiApp;
 import com.ebp.owat.app.runner.DeScrambleRunner;
 import com.ebp.owat.app.runner.ScrambleRunner;
+import com.ebp.owat.app.runner.utils.RunResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 import static com.ebp.owat.app.config.Globals.PropertyKey;
 
@@ -64,7 +67,15 @@ public class Main {
 
 		runner.doSteps();
 
-		runner.logOutTimingData();
+		RunResults results = runner.getLastRunResults();
+
+		results.logOutTimingData();
+
+		if(COMMAND_LINE_OPS.outputCsvStats()){
+			OutputStream csv = COMMAND_LINE_OPS.getCsvStatsOutputStream();
+			csv.write(results.getCsvLine(true).getBytes(StandardCharsets.UTF_8));
+			csv.close();
+		}
 	}
 
 	private static void doDeScramble() throws IOException {
@@ -78,6 +89,14 @@ public class Main {
 
 		runner.doSteps();
 
-		runner.logOutTimingData();
+		RunResults results = runner.getLastRunResults();
+
+		results.logOutTimingData();
+
+		if(COMMAND_LINE_OPS.outputCsvStats()){
+			OutputStream csv = COMMAND_LINE_OPS.getCsvStatsOutputStream();
+			csv.write(results.getCsvLine(true).getBytes(StandardCharsets.UTF_8));
+			csv.close();
+		}
 	}
 }
