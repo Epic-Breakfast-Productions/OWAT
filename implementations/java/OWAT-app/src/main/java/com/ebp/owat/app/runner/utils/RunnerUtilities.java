@@ -180,8 +180,16 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		}
 	}
 
+	/**
+	 * https://www.desmos.com/calculator/tq6r7kviyc
+	 * @param num
+	 * @return
+	 */
 	private static long determineNumToPad(long num) {
-		return (long) Math.ceil(num * 0.5);
+		long a = 5,
+			b = 700,
+			c = 15;
+		return (long) (Math.pow(Math.E, (a - (num / b))) + c);
 	}
 
 	public void padMatrix(M matrix, OwatRandGenerator rand, NodeMode nodeType) {

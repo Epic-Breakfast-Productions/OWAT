@@ -230,8 +230,6 @@ public class MainGuiApp {
 		this.resetButton.setEnabled(true);
 		this.processStartButton.setEnabled(false);
 		this.processStartButton.setText("Go");
-		this.processProgressBar.setValue(0);
-		this.processProgressBar.setString("");
 	}
 
 	private void resetScrambleInputs() {
@@ -461,6 +459,7 @@ public class MainGuiApp {
 			LOGGER.debug("Won't validate while running.");
 			return true;
 		}
+		LOGGER.debug("Validating inputs.");
 
 		boolean goodToGO = false;
 
@@ -495,12 +494,48 @@ public class MainGuiApp {
 	 * Form enabler/disablers
 	 ******************************************************************/
 
+	private void disEnAbleInputs(boolean enabled) {
+		this.resetButton.setEnabled(enabled);
+		this.modeSelect.setEnabled(enabled);
+
+		this.inputModeScrambleSelect.setEnabled(enabled);
+		this.scrambleDataDirectInput.setEnabled(enabled);
+		this.scrambleDataFileInput.setEnabled(enabled);
+		this.chooseScrambleDataFileButton.setEnabled(enabled);
+
+		this.outputScrambleKeyModeSelectPane.setEnabled(enabled);
+		this.keyDirectOutput.setEnabled(enabled);
+		this.keyFileOutput.setEnabled(enabled);
+		this.chooseKeyOutputFileButton.setEnabled(enabled);
+
+		this.outputScrambledDataModeSelectPane.setEnabled(enabled);
+		this.scrambledDataDirectOutput.setEnabled(enabled);
+		this.outputScrambledDataFile.setEnabled(enabled);
+		this.chooseScrambledDataOutputFileButton.setEnabled(enabled);
+
+		this.deScrambleKeyInputModePane.setEnabled(enabled);
+		this.keyDirectInput.setEnabled(enabled);
+		this.keyFileInput.setEnabled(enabled);
+		this.chooseDeScrambleKeyFileButton.setEnabled(enabled);
+
+		this.deScrambleDataInputModePane.setEnabled(enabled);
+		this.scrambledDataDirectInput.setEnabled(enabled);
+		this.scrambledDataFileInput.setEnabled(enabled);
+		this.chooseScrambledDataFileInputButton.setEnabled(enabled);
+
+		this.deScrambleDataOutputModePane.setEnabled(enabled);
+		this.deScrambledDirectOutput.setEnabled(enabled);
+		this.deScrambledDataOutputFileInput.setEnabled(enabled);
+		this.chooseDeScrambledDataOutputFileButton.setEnabled(enabled);
+
+	}
+
 	private void enableInputs() {
-		//TODO: re-enable everything
+		this.disEnAbleInputs(true);
 	}
 
 	private void disableInputs() {
-		//TODO: disable everything
+		this.disEnAbleInputs(false);
 	}
 
 	private void setupForRunning() {
@@ -528,7 +563,7 @@ public class MainGuiApp {
 			this.runStarted();
 			boolean isRunning = true;
 			while (isRunning && !fut.isDone() && !fut.isCancelled()) {
-				LOGGER.trace("In the loop.");
+				//LOGGER.trace("In the loop.");
 				Step curStep = runner.getCurStep();
 
 				int percent = (int) (((double) curStep.stepNo / (double) Step.NUM_STEPS_SCRAMBLING) * 100.0);
@@ -585,18 +620,18 @@ public class MainGuiApp {
 		boolean directKeyDataOutput = false;
 
 		if (this.outputScrambleKeyDirect()) {
+			directKeyDataOutput = true;
 			keyOutput = new ByteArrayOutputStream();
 		} else if (this.outputScrambleKeyFile()) {
-			directKeyDataOutput = true;
 			keyOutput = new FileOutputStream(this.keyFileOutput.getText(), false);
 		} else {
 			throw new IllegalStateException();
 		}
 
 		if (this.outputScrambledDataDirect()) {
+			directScrambledDataOutput = true;
 			dataOutput = new ByteArrayOutputStream();
 		} else if (this.outputScrambledDataFile()) {
-			directScrambledDataOutput = true;
 			dataOutput = new FileOutputStream(this.outputScrambledDataFile.getText(), false);
 		} else {
 			throw new IllegalStateException();
@@ -691,17 +726,11 @@ public class MainGuiApp {
 			this.deScrambledDirectOutput.setText(os.toString());
 		}
 		os.close();
+
+		this.outputTimingData(runner);
 	}
 
 	private void runProcess() {
-		LOGGER.info("Button hit to run the process.");
-		boolean goodToGO = this.validateForGO();
-		if (!goodToGO) {
-			LOGGER.info("Form did not pass validation. NOT running.");
-			return;
-		}
-		LOGGER.info("Form PASSED validation. RUNNING...");
-
 		this.setupForRunning();
 		try {
 			if (this.inScrambleMode()) {
@@ -722,6 +751,14 @@ public class MainGuiApp {
 	}
 
 	private void runConcurrently() {
+		LOGGER.info("Button hit to run the process.");
+		boolean goodToGO = this.validateForGO();
+		if (!goodToGO) {
+			LOGGER.info("Form did not pass validation. NOT running.");
+			return;
+		}
+		LOGGER.info("Form PASSED validation. RUNNING...");
+
 		ExecutorService exec = Executors.newSingleThreadExecutor();
 
 		Future fut = exec.submit(new Runnable() {
@@ -737,6 +774,7 @@ public class MainGuiApp {
 	 ******************************************************************/
 	public MainGuiApp(JFrame frame) {
 		this.frame = frame;
+		$$$setupUI$$$();
 		resetButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -745,7 +783,6 @@ public class MainGuiApp {
 					return;
 				}
 				//TODO:: not working/waiting for double click
-				//TODO:: don't reset when running
 				if (e.getClickCount() == 2) {
 					if (confirmActon("Reset ALL Forms")) {
 						resetAllInputs();
@@ -941,11 +978,7 @@ public class MainGuiApp {
 		frame.setVisible(true);
 	}
 
-	{
-// GUI initializer generated by IntelliJ IDEA GUI Designer
-// >>> IMPORTANT!! <<<
-// DO NOT EDIT OR ADD ANY CODE HERE!
-		$$$setupUI$$$();
+	private void createUIComponents() {
 	}
 
 	/**
@@ -969,6 +1002,7 @@ public class MainGuiApp {
 		processStartButton.setText("Go");
 		panel1.add(processStartButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		processProgressBar = new JProgressBar();
+		processProgressBar.setBorderPainted(true);
 		Font processProgressBarFont = this.$$$getFont$$$(null, Font.BOLD, 18, processProgressBar.getFont());
 		if (processProgressBarFont != null) processProgressBar.setFont(processProgressBarFont);
 		processProgressBar.setString("");
