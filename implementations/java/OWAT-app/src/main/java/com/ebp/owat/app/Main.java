@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import static com.ebp.owat.app.config.Globals.PropertyKey;
@@ -23,7 +24,7 @@ public class Main {
 	
 	private static CommandLineOps COMMAND_LINE_OPS;
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, URISyntaxException {
 		new Globals();//init globals, no need to keep object.
 		
 		LOGGER.debug("Properties read in:");

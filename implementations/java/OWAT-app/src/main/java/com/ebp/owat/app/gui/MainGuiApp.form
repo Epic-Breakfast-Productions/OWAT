@@ -645,7 +645,7 @@
               </splitpane>
             </children>
           </grid>
-          <grid id="a855e" binding="infoPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="a855e" binding="infoPanel" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="*Info*">
@@ -657,15 +657,49 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="75d70" class="javax.swing.JTextPane" binding="infoPane">
+              <component id="e9e63" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                  <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font size="36" style="1"/>
+                  <text value="OWAT-J"/>
+                </properties>
+              </component>
+              <component id="74c23" class="javax.swing.JLabel" binding="versionLabel">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font size="20" style="2"/>
+                  <text value=" "/>
+                </properties>
+              </component>
+              <component id="7414c" class="javax.swing.JLabel" binding="gitHubLink">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Github: https://github.com/Epic-Breakfast-Productions/OWAT"/>
+                </properties>
+              </component>
+              <component id="f1a6e" class="javax.swing.JLabel" binding="ebpLink">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Made by EBP: http://epic-breakfast-productions.tech"/>
+                </properties>
+              </component>
+              <component id="e2ea3" class="javax.swing.JTextPane" binding="thisProgramIsAnTextPane" default-binding="true">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="50"/>
                   </grid>
                 </constraints>
                 <properties>
                   <editable value="false"/>
-                  <text value="OWAT-J&#10;&#10;Java implementation of the OWAT protocol."/>
+                  <text value="This program is an implementation of the OWAT protocol.&#10;&#10;It takes in some data, and obfuscates it by scrambling that data in itself and additional random data, generating a key in the process. This key is used to descramble the data later.&#10;&#10;For more details, please feel free to visit the github page for this project."/>
                 </properties>
               </component>
             </children>

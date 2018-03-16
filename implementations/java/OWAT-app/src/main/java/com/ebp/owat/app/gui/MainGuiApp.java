@@ -22,6 +22,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -73,7 +75,6 @@ public class MainGuiApp {
 	private JTextField deScrambledDataOutputFileInput;
 	private JButton chooseDeScrambledDataOutputFileButton;
 	private JPanel infoPanel;
-	private JTextPane infoPane;
 	private JTabbedPane outputScrambledDataModeSelectPane;
 	private JTextArea scrambledDataDirectOutput;
 	private JTabbedPane outputScrambleKeyModeSelectPane;
@@ -94,8 +95,22 @@ public class MainGuiApp {
 	private JPanel scrambledDataFileInputPane;
 	private JPanel deScrambledDataDirectOutputPanel;
 	private JPanel deScrambledDataFileOutputPanel;
+	private JLabel versionLabel;
+	private JLabel gitHubLink;
+	private JLabel ebpLink;
+	private JTextPane thisProgramIsAnTextPane;
 
 	private JFrame frame;
+
+	private Desktop desktop = Desktop.getDesktop();
+	private final URI gitHubUri = new URI("https://github.com/Epic-Breakfast-Productions/OWAT");
+	private final URI ebpUri = new URI("http://epic-breakfast-productions.tech/");
+
+	{
+		if (!desktop.isSupported(Desktop.Action.BROWSE)) {
+			this.desktop = null;
+		}
+	}
 
 	private boolean keepRun = false;
 	private boolean running = false;
@@ -220,6 +235,20 @@ public class MainGuiApp {
 			sb.append("\t" + curEntry.getKey().stepNo + ") " + curEntry.getKey().stepName + ": " + ((double) curEntry.getValue() / 1000.0) + "s\n");
 		}
 		this.showMessage(INFORMATION_MESSAGE, "Success!", sb.toString());
+	}
+
+	private void openLinkOnDesktop(URI url) {
+		if (this.desktop == null) {
+			LOGGER.info("Opening a link on the desktop is apparently not supported.");
+			this.showMessage(WARNING_MESSAGE, "Cannot open link", "Apparently we cannot open a link in a browser for you.");
+			return;
+		}
+		try {
+			desktop.browse(url);
+		} catch (IOException e) {
+			LOGGER.warn("Error opening link: ", e);
+			this.showMessage(ERROR_MESSAGE, "Could not open link", "Could not open the link.");
+		}
 	}
 
 	/* ****************************************************************
@@ -772,9 +801,10 @@ public class MainGuiApp {
 	/* ****************************************************************
 	 * Setup
 	 ******************************************************************/
-	public MainGuiApp(JFrame frame) {
+	public MainGuiApp(JFrame frame) throws URISyntaxException {
 		this.frame = frame;
 		$$$setupUI$$$();
+		this.versionLabel.setText("Version " + Globals.getProp(Globals.PropertyKey.APP_VERSION_PROP_KEY) + " " + Globals.getProp(Globals.PropertyKey.APP_VERSION_NAME_PROP_KEY));
 		resetButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -818,7 +848,7 @@ public class MainGuiApp {
 				if (isRunning()) {
 					return;
 				}
-				keyFileOutput.setText(chooseFile("Choose where to save the data key", FileDialog.SAVE, "*.obfk"));
+				keyFileOutput.setText(chooseFile("Choose where to save the data key", FileDialog.SAVE, "*.obfdk"));
 			}
 		});
 		chooseScrambledDataOutputFileButton.addMouseListener(new MouseAdapter() {
@@ -828,7 +858,7 @@ public class MainGuiApp {
 				if (isRunning()) {
 					return;
 				}
-				outputScrambledDataFile.setText(chooseFile("Choose where to save the scrambled data", FileDialog.SAVE, "*.obf"));
+				outputScrambledDataFile.setText(chooseFile("Choose where to save the scrambled data", FileDialog.SAVE, "*.obfd"));
 			}
 		});
 		chooseDeScrambleKeyFileButton.addMouseListener(new MouseAdapter() {
@@ -838,7 +868,7 @@ public class MainGuiApp {
 				if (isRunning()) {
 					return;
 				}
-				keyFileInput.setText(chooseFile("Choose key file to use", FileDialog.LOAD, "*.obfk"));
+				keyFileInput.setText(chooseFile("Choose key file to use", FileDialog.LOAD, "*.obfdk"));
 			}
 		});
 		chooseScrambledDataFileInputButton.addMouseListener(new MouseAdapter() {
@@ -848,7 +878,7 @@ public class MainGuiApp {
 				if (isRunning()) {
 					return;
 				}
-				scrambledDataFileInput.setText(chooseFile("Choose the scrambled data file", FileDialog.LOAD, "*.obf"));
+				scrambledDataFileInput.setText(chooseFile("Choose the scrambled data file", FileDialog.LOAD, "*.obfd"));
 			}
 		});
 		chooseDeScrambledDataOutputFileButton.addMouseListener(new MouseAdapter() {
@@ -950,6 +980,22 @@ public class MainGuiApp {
 				super.mouseClicked(e);
 			}
 		});
+		gitHubLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		gitHubLink.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				openLinkOnDesktop(gitHubUri);
+			}
+		});
+		ebpLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		ebpLink.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				openLinkOnDesktop(ebpUri);
+			}
+		});
 	}
 
 	public static Image getIcon() {
@@ -968,7 +1014,7 @@ public class MainGuiApp {
 		return img;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws URISyntaxException {
 		LOGGER.info("Starting GUI.");
 		JFrame frame = new JFrame(appTitle);
 		frame.setIconImage(getIcon());
@@ -1212,13 +1258,29 @@ public class MainGuiApp {
 		chooseDeScrambledDataOutputFileButton.setText("Choose File");
 		deScrambledDataFileOutputPanel.add(chooseDeScrambledDataOutputFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		infoPanel = new JPanel();
-		infoPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+		infoPanel.setLayout(new GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
 		infoPanel.setToolTipText("Info about this program");
 		modeSelect.addTab("*Info*", null, infoPanel, "Information about this program");
-		infoPane = new JTextPane();
-		infoPane.setEditable(false);
-		infoPane.setText("OWAT-J\n\nJava implementation of the OWAT protocol.");
-		infoPanel.add(infoPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+		final JLabel label8 = new JLabel();
+		Font label8Font = this.$$$getFont$$$(null, Font.BOLD, 36, label8.getFont());
+		if (label8Font != null) label8.setFont(label8Font);
+		label8.setText("OWAT-J");
+		infoPanel.add(label8, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		versionLabel = new JLabel();
+		Font versionLabelFont = this.$$$getFont$$$(null, Font.ITALIC, 20, versionLabel.getFont());
+		if (versionLabelFont != null) versionLabel.setFont(versionLabelFont);
+		versionLabel.setText(" ");
+		infoPanel.add(versionLabel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		gitHubLink = new JLabel();
+		gitHubLink.setText("Github: https://github.com/Epic-Breakfast-Productions/OWAT");
+		infoPanel.add(gitHubLink, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		ebpLink = new JLabel();
+		ebpLink.setText("Made by EBP: http://epic-breakfast-productions.tech");
+		infoPanel.add(ebpLink, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		thisProgramIsAnTextPane = new JTextPane();
+		thisProgramIsAnTextPane.setEditable(false);
+		thisProgramIsAnTextPane.setText("This program is an implementation of the OWAT protocol.\n\nIt takes in some data, and obfuscates it by scrambling that data in itself and additional random data, generating a key in the process. This key is used to descramble the data later.\n\nFor more details, please feel free to visit the github page for this project.");
+		infoPanel.add(thisProgramIsAnTextPane, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
 	}
 
 	/**
