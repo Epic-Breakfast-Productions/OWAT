@@ -29,16 +29,49 @@ public class RunResults {
 
 	private Step curStep;
 
+	private long curStepProg = 0;
+
+	private long curStepProgMax = 0;
+
 	public synchronized Step getCurStep(){
 		return this.curStep;
 	}
 
 	public synchronized void setCurStep(Step curStep){
 		this.curStep = curStep;
+		this.resetStepProg();
 	}
 
 	private synchronized void setTimingMap(LinkedHashMap<Step,Long> timingMap){
 		this.timingMap = timingMap;
+	}
+
+	public synchronized long getCurStepProg(){
+		return curStepProg;
+	}
+
+	public synchronized void setCurStepProg(long curStepProg){
+		this.curStepProg = curStepProg;
+	}
+
+	public synchronized long getCurStepProgMax(){
+		return curStepProgMax;
+	}
+
+	public synchronized void setCurStepProgMax(long curStepProgMax){
+		this.curStepProgMax = curStepProgMax;
+	}
+
+	private synchronized void resetStepProg(){
+		this.setCurStepProg(0);
+		this.setCurStepProgMax(0);
+	}
+
+	public synchronized byte getStepPercentDone(){
+		if(this.getCurStepProgMax() < 1){
+			return 0;
+		}
+		return (byte) (((double)this.getCurStepProg() / (double) this.getCurStepProgMax()) * 100.0);
 	}
 
 	/**
@@ -111,8 +144,9 @@ public class RunResults {
 	@Override
 	public synchronized RunResults clone(){
 		RunResults output = new RunResults(this.mode);
-
 		output.setCurStep(this.curStep);
+		output.setCurStepProg(this.getCurStepProg());
+		output.setCurStepProgMax(this.getCurStepProgMax());
 		output.setTimingMap(this.getTimingMap());
 		output.setNumBytesIn(this.getNumBytesIn());
 		output.setNumBytesOut(this.getNumBytesOut());

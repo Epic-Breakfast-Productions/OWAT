@@ -5,6 +5,7 @@ import com.ebp.owat.app.config.Globals;
 import com.ebp.owat.app.runner.DeScrambleRunner;
 import com.ebp.owat.app.runner.OwatRunner;
 import com.ebp.owat.app.runner.ScrambleRunner;
+import com.ebp.owat.app.runner.utils.RunResults;
 import com.ebp.owat.app.runner.utils.Step;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
@@ -42,6 +43,7 @@ import static javax.swing.JOptionPane.*;
  */
 public class MainGuiApp {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MainGuiApp.class);
+	private static String PROGRESS_TEXT_FORMAT = "Step (%d/%d), %s: %d%%";
 
 	private JPanel mainPanel;
 	private JButton processStartButton;
@@ -591,14 +593,31 @@ public class MainGuiApp {
 			LOGGER.trace("Running.");
 			this.runStarted();
 			boolean isRunning = true;
+			byte lastPercent = -1;
+			Step lastStep = null;
 			while (isRunning && !fut.isDone() && !fut.isCancelled()) {
 				//LOGGER.trace("In the loop.");
-				Step curStep = runner.getCurStep();
+				RunResults curResults = runner.getLastRunResults();
+				if (curResults != null) {
+					byte percent = curResults.getStepPercentDone();
 
-				int percent = (int) (((double) curStep.stepNo / (double) Step.NUM_STEPS_SCRAMBLING) * 100.0);
+					String progText = String.format(
+						PROGRESS_TEXT_FORMAT,
+						curResults.getCurStep().stepNo,
+						curResults.getCurStep().mode.numSteps,
+						curResults.getCurStep().stepName,
+						percent
+					);
+					//LOGGER.trace("Status: {}", progText);
+					this.processProgressBar.setValue((int) percent);
+					this.processProgressBar.setString(progText);
 
-				this.processProgressBar.setValue(percent);
-				this.processProgressBar.setString(percent + "% " + curStep.stepName);
+					if(lastPercent != percent || lastStep != curResults.getCurStep()){
+						lastPercent = percent;
+						lastStep = curResults.getCurStep();
+						LOGGER.info(progText);
+					}
+				}
 
 				if (!this.doKeepRunning()) {
 					fut.cancel(true);
@@ -617,8 +636,11 @@ public class MainGuiApp {
 		} catch (InterruptedException | ExecutionException e) {
 			error = e;
 		} catch (CancellationException e) {
-
 			error = e;
+		} catch (Exception e){
+			error = e;
+			LOGGER.warn("Unexpected error: ", e);
+			showMessage(ERROR_MESSAGE, "Unexpected Error", "An error occurred that we did not expect. Error: \n" + e.getMessage());
 		}
 		this.runningStopped();
 		return error;

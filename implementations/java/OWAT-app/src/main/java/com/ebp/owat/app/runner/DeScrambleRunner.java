@@ -128,11 +128,15 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		start = System.currentTimeMillis();
 		LOGGER.info("Descrambling data...");
 
-		LOGGER.debug("Number of moves: {}", this.key.getNumMoves());
 		{
+			long numMoves = this.key.getNumMoves();
+			LOGGER.debug("Number of moves: {}", numMoves);
+			runResults.setCurStepProgMax(numMoves);
+			long l = 0;
 			Iterator<ScrambleMove> it = this.key.getMovesIt();
 			while(it.hasNext()){
 				matrix.doScrambleMove(it.next());
+				runResults.setCurStepProgMax(l++);
 			}
 		}
 		end = System.currentTimeMillis();

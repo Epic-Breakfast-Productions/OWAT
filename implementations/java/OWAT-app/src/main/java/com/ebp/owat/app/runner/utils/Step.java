@@ -20,9 +20,6 @@ public enum Step {
 	OUT_DESCRAMBLED_DATA(4, "Outputting Descrambled Data", ScrambleMode.DESCRAMBLING),
 	DONE_DESCRAMBLING(5, "Done", ScrambleMode.DESCRAMBLING);
 	
-	public static final int NUM_STEPS_SCRAMBLING = 5;
-	public static final int NUM_STEPS_DE_SCRAMBLING = 4;
-	
 	public final int stepNo;
 	public final String stepName;
 	public final ScrambleMode mode;

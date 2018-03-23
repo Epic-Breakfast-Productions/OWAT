@@ -210,11 +210,13 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 
 		long numSteps = this.utils.determineNumStepsToTake(matrix, this.rand, this.minNumScrambleSteps);
 		LOGGER.debug("Number of steps in scramble: {}", numSteps);
+		runResults.setCurStepProgMax(numSteps);
 		ScrambleMoveGenerator generator = new ScrambleMoveGenerator(this.rand, matrix);
 		for(long l = 0; l < numSteps; l++){
 			ScrambleMove curMove = generator.getMove();
 			matrix.doScrambleMove(curMove);
 			this.key.addMove(curMove);
+			runResults.setCurStepProg(l);
 		}
 
 		end = System.currentTimeMillis();

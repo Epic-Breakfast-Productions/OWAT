@@ -23,7 +23,14 @@ public abstract class OwatRunner {
 	}
 
 	public synchronized RunResults getLastRunResults() {
+		if(this.lastRunResults == null){
+			return null;
+		}
 		return this.lastRunResults.clone();
+	}
+
+	public synchronized byte getLastRunCurStepPercent(){
+		return this.lastRunResults.getStepPercentDone();
 	}
 
 	public synchronized Step getCurStep() {
