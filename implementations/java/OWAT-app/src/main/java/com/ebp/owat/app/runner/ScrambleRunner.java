@@ -234,8 +234,12 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		runResults.setCurStep(Step.OUT_KEY);
 		start = System.currentTimeMillis();
 		LOGGER.info("Outputting key...");
-		
-		this.keyOutput.write(OBJECT_MAPPER.writeValueAsBytes(this.key));
+
+		{
+			byte compressedKey[] = utils.compressBytes(OBJECT_MAPPER.writeValueAsBytes(this.key));
+
+			this.keyOutput.write(compressedKey);
+		}
 
 		end = System.currentTimeMillis();
 		runResults.setElapsedTime(Step.OUT_KEY, start, end);

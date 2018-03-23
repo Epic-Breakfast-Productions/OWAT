@@ -15,11 +15,14 @@ import com.ebp.owat.lib.utils.scramble.MoveValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunnerUtilities.class);
@@ -323,5 +326,32 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 
 	public byte[] getMatrixAsBytes(M matrix, NodeMode nodeType) {
 		return getMatrixAsBytes(matrix, nodeType, matrix.size());
+	}
+
+	public byte[] compressBytes(byte[] bytes) throws IOException {
+		byte output[];
+		ByteArrayOutputStream os = new ByteArrayOutputStream(bytes.length);
+		GZIPOutputStream gzos = new GZIPOutputStream(os);
+		gzos.write(bytes);
+		gzos.close();
+		os.close();
+		output = os.toByteArray();
+		LOGGER.debug("Size of key before compression: {}. After: {}", bytes.length, output.length);
+		return output;
+	}
+
+	public byte[] decompressBytes(InputStream bytes) throws IOException {
+		byte[] buffer = new byte[1024];
+		GZIPInputStream gzipper = new GZIPInputStream(bytes);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		int len;
+		while ((len = gzipper.read(buffer)) > 0) {
+			out.write(buffer, 0, len);
+		}
+
+		gzipper.close();
+		out.close();
+		return out.toByteArray();
 	}
 }

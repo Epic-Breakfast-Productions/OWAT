@@ -103,8 +103,11 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		start = System.currentTimeMillis();
 		LOGGER.info("Loading key...");
 
-		this.key = OBJECT_MAPPER.readValue(this.keyInput, ScrambleKey.class);
-		this.nodeType = this.key.meta.getNodeMode();
+		{
+			byte decompressedKey[] = utils.decompressBytes(this.keyInput);
+			this.key = OBJECT_MAPPER.readValue(decompressedKey, ScrambleKey.class);
+			this.nodeType = this.key.meta.getNodeMode();
+		}
 
 		end = System.currentTimeMillis();
 		runResults.setElapsedTime(Step.LOAD_DATA, start, end);
