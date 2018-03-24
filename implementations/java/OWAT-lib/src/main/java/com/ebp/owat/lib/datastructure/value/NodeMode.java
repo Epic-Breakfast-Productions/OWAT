@@ -1,6 +1,6 @@
 package com.ebp.owat.lib.datastructure.value;
 
-import com.ebp.owat.lib.utils.scramble.key.SerializationConstants;
+import com.ebp.owat.lib.utils.key.SerializationConstants;
 
 public enum NodeMode {
 	BIT(SerializationConstants.BIT_TYPE_STR, BitValue.class),BYTE(SerializationConstants.BYTE_TYPE_STR, ByteValue.class);

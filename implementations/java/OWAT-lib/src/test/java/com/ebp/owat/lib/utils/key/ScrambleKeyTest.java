@@ -1,7 +1,8 @@
-package com.ebp.owat.lib.utils.scramble;
+package com.ebp.owat.lib.utils.key;
 
 import com.ebp.owat.lib.datastructure.value.BitValue;
-import com.ebp.owat.lib.utils.scramble.key.ScrambleKey;
+import com.ebp.owat.lib.utils.scramble.ScrambleMove;
+import com.ebp.owat.lib.utils.scramble.ScrambleMoves;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ScrambleKeyTest {
 	

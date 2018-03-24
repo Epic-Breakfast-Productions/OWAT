@@ -10,9 +10,9 @@ import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
+import com.ebp.owat.lib.utils.key.ScrambleKey;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
-import com.ebp.owat.lib.utils.scramble.key.ScrambleKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,7 +136,7 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 			Iterator<ScrambleMove> it = this.key.getMovesIt();
 			while(it.hasNext()){
 				matrix.doScrambleMove(it.next());
-				runResults.setCurStepProgMax(l++);
+				runResults.setCurStepProg(l++);
 			}
 		}
 		end = System.currentTimeMillis();

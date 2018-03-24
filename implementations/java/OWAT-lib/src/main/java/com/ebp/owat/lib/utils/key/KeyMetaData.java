@@ -1,4 +1,4 @@
-package com.ebp.owat.lib.utils.scramble.key;
+package com.ebp.owat.lib.utils.key;
 
 import com.ebp.owat.lib.datastructure.value.BitValue;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
-import static com.ebp.owat.lib.utils.scramble.key.SerializationConstants.*;
+import static com.ebp.owat.lib.utils.key.SerializationConstants.*;
 
 public class KeyMetaData {
 	@JsonProperty(ORIGINAL_HEIGHT)

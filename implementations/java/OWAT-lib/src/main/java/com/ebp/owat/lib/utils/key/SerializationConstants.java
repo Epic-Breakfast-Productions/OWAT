@@ -1,4 +1,4 @@
-package com.ebp.owat.lib.utils.scramble.key;
+package com.ebp.owat.lib.utils.key;
 
 public class SerializationConstants {
 	public static final String META = "meta";

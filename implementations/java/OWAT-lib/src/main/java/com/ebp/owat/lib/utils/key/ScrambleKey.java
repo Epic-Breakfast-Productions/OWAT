@@ -1,4 +1,4 @@
-package com.ebp.owat.lib.utils.scramble.key;
+package com.ebp.owat.lib.utils.key;
 
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.Value;
@@ -11,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Iterator;
 import java.util.Objects;
 
-import static com.ebp.owat.lib.utils.scramble.key.SerializationConstants.*;
+import static com.ebp.owat.lib.utils.key.SerializationConstants.META;
+import static com.ebp.owat.lib.utils.key.SerializationConstants.SCRAMBLE;
 
 public class ScrambleKey {
 	

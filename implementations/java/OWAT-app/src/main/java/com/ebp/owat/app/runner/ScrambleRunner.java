@@ -9,12 +9,12 @@ import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
+import com.ebp.owat.lib.utils.key.ScrambleKey;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
 import com.ebp.owat.lib.utils.rand.ThreadLocalRandGenerator;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
 import com.ebp.owat.lib.utils.scramble.generator.ScrambleMoveGenerator;
-import com.ebp.owat.lib.utils.scramble.key.ScrambleKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
