@@ -1,14 +1,18 @@
 package com.ebp.owat.lib.datastructure.matrix.Linked;
 
+import com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.NodePosition;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 public class LinkedMatrix<T> extends Matrix<T> {
+	/** The number of elements held in the matrix. */
+	protected long numElementsHeld = 0;
 
-	long numElementsHeld = 0;
+	protected Collection<NodePosition> referenceNodes = new LinkedList<>();
 
 
 

@@ -1,8 +1,9 @@
-package com.ebp.owat.lib.datastructure.matrix.Linked;
+package com.ebp.owat.lib.datastructure.matrix.Linked.utils;
 
-import static com.ebp.owat.lib.datastructure.matrix.Linked.Direction.*;
+import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.*;
 
 public class LinkedMatrixNode<T> {
+	private boolean hasValue = false;
 	private T value = null;
 
 	private LinkedMatrixNode<T> north = null;
@@ -66,6 +67,15 @@ public class LinkedMatrixNode<T> {
 	}
 
 	/**
+	 * Gets the value held by this node.
+	 * @param defaultVal What to return if this node does not have a value.
+	 * @return The value held by this node. The default value if not holding anything.
+	 */
+	public T getValue(T defaultVal){
+		return (this.hasValue ? this.getValue() : defaultVal);
+	}
+
+	/**
 	 * Sets the value held by this node.
 	 * @param value The new value.
 	 * @return The old value held by this node.
@@ -73,7 +83,27 @@ public class LinkedMatrixNode<T> {
 	public T setValue(T value) {
 		T old = this.getValue();
 		this.value = value;
+		this.hasValue = true;
 		return old;
+	}
+
+	/**
+	 * Clears this node of a value.
+	 * @return The old value this held.
+	 */
+	public T clearValue(){
+		T old = this.getValue();
+		this.value = null;
+		this.hasValue = false;
+		return old;
+	}
+
+	/**
+	 * Determines if this node has a value or not.
+	 * @return If this node has a value or not.
+	 */
+	public boolean hasValue(){
+		return this.hasValue;
 	}
 
 	/**

@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.structure.matrix.Linked;
 
-import com.ebp.owat.lib.datastructure.matrix.Linked.Direction;
-import com.ebp.owat.lib.datastructure.matrix.Linked.LinkedMatrixNode;
+import com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction;
+import com.ebp.owat.lib.datastructure.matrix.Linked.utils.LinkedMatrixNode;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Test;
@@ -50,8 +50,15 @@ public class LinkedMatrixNodeTest {
 	public void testGetSetValue() {
 		LinkedMatrixNode<Integer> node = new LinkedMatrixNode<>();
 
-		node.setValue(5);
+		assertFalse(node.hasValue());
+
+		assertEquals(null, node.setValue(5));
 		assertEquals((Integer) 5, node.getValue());
+
+		assertTrue(node.hasValue());
+
+		assertEquals((Integer)5, node.clearValue());
+		assertFalse(node.hasValue());
 	}
 
 	@Test

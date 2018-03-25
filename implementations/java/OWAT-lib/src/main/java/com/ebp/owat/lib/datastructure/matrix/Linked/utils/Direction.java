@@ -1,4 +1,4 @@
-package com.ebp.owat.lib.datastructure.matrix.Linked;
+package com.ebp.owat.lib.datastructure.matrix.Linked.utils;
 
 public enum  Direction {
 	NORTH,
