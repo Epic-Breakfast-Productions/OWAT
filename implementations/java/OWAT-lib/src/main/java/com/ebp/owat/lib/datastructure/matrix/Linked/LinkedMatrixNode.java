@@ -1,256 +1,267 @@
 package com.ebp.owat.lib.datastructure.matrix.Linked;
 
-/**
- * Abstract class for a single value of the matrix.
- *
- * Created by Greg Stewart on 3/23/17.
- */
+import static com.ebp.owat.lib.datastructure.matrix.Linked.Direction.*;
+
 public class LinkedMatrixNode<T> {
-	/** The Node that is 'north' or 'above' this value. */
-	private LinkedMatrixNode<T> north = null;
-	/** The value that is 'south' or 'below' this value */
-	private LinkedMatrixNode<T> south = null;
-	/** The value that is 'east' or 'to the right of' this value */
-	private LinkedMatrixNode<T> east = null;
-	/** The value that is 'west' or 'to the left of' this value */
-	private LinkedMatrixNode<T> west = null;
-	
-	/** The value this value holds. */
 	private T value = null;
-	
-	/**
-	 * Basic constructor. Does not set any values.
-	 */
-	public LinkedMatrixNode(){}
-	
-	/**
-	 * Constructor that sets this value's value.
-	 * @param nodeValue The value to set this value to.
-	 */
-	public LinkedMatrixNode(T nodeValue){
-		this();
-		this.value = nodeValue;
+
+	private LinkedMatrixNode<T> north = null;
+	private LinkedMatrixNode<T> south = null;
+	private LinkedMatrixNode<T> east = null;
+	private LinkedMatrixNode<T> west = null;
+
+	public LinkedMatrixNode(){
+
 	}
-	
+
+	public LinkedMatrixNode(T value){
+		this.value = value;
+	}
+
 	/**
-	 * Sets a value to the value of the direction given.
-	 *
-	 * Automatically sets the NodeIn's opposite direction to this.
-	 *
-	 * @param dirIn The direction of the value the nodeIn should be set to.
-	 * @param nodeIn The value to set to the direction given.
-	 * @return This Node.
+	 * Gets the LinkedMatrixNode at the direction given.
+	 * @param dir The direction of the node to get.
+	 * @return The node.
 	 */
-	public LinkedMatrixNode<T> setNeighbor(NodeDir dirIn, LinkedMatrixNode<T> nodeIn){
-		switch (dirIn) {
+	public LinkedMatrixNode<T> getDir(Direction dir){
+		switch (dir){
 			case NORTH:
-				this.north = nodeIn;
-				break;
+				return this.getNorth();
 			case SOUTH:
-				this.north = nodeIn;
-				break;
+				return this.getSouth();
 			case EAST:
-				this.north = nodeIn;
-				break;
+				return this.getEast();
 			case WEST:
-				this.north = nodeIn;
-				break;
-			default:
-				throw new IllegalArgumentException(NodeDir.BAD_DIR_GIVEN_ERR_MESSAGE + dirIn);
+				return this.getWest();
 		}
-		if(nodeIn != null && !nodeIn.borders(this, dirIn.opposite())){
-			nodeIn.setNeighbor(dirIn.opposite(), this);
-		}
-		return this;
+		throw new IllegalArgumentException("Invalid direction given.");
 	}
-	
+
 	/**
-	 * Removes the value in the direction given from this value. Does removes this value from the other value.
-	 * @param dirIn The direction to remove this from.
-	 * @return The value removed.
+	 * Sets the node on a certain direction.
+	 * @param dir The direction to set.
+	 * @param node The new node.
+	 * @return The old node at the direction.
 	 */
-	public LinkedMatrixNode<T> removeNeighbor(NodeDir dirIn){
-		LinkedMatrixNode<T> nodeToRemove = this.getNeighbor(dirIn);
-		if(nodeToRemove != null){
-			nodeToRemove.setNeighbor(dirIn.opposite(), null);
-		}else{
+	public LinkedMatrixNode<T> setDir(Direction dir, LinkedMatrixNode<T> node){
+		switch (dir) {
+			case NORTH:
+				return this.setNorth(node);
+			case SOUTH:
+				return this.setSouth(node);
+			case EAST:
+				return this.setEast(node);
+			case WEST:
+				return this.setWest(node);
+		}
+		throw new IllegalArgumentException();
+	}
+
+	/**
+	 * Gets the value held by this node.
+	 * @return The value held by this node.
+	 */
+	public T getValue() {
+		return value;
+	}
+
+	/**
+	 * Sets the value held by this node.
+	 * @param value The new value.
+	 * @return The old value held by this node.
+	 */
+	public T setValue(T value) {
+		T old = this.getValue();
+		this.value = value;
+		return old;
+	}
+
+	/**
+	 * Gets the node to the north of this node.
+	 * @return The node to the north of this node.
+	 */
+	public LinkedMatrixNode<T> getNorth() {
+		return north;
+	}
+
+	/**
+	 * Sets the node to the north of this node.
+	 *
+	 * If the north node was not null, it clears itself from that node's south.
+	 *
+	 * @param north the new node to the north of this node.
+	 * @return The node previously at this node's north.
+	 */
+	public LinkedMatrixNode<T> setNorth(LinkedMatrixNode<T> north) {
+		if(this.isBorder(NORTH)){
+			this.north = north;
+			this.ensureDoublyLinked(NORTH);
 			return null;
 		}
-		this.setNeighbor(dirIn, null);
-		return nodeToRemove;
+		LinkedMatrixNode<T> old = this.getNorth();
+		this.north = null;
+		old.setDir(NORTH.opposite(), null);
+		this.north = north;
+		this.ensureDoublyLinked(NORTH);
+		return old;
 	}
-	
+
 	/**
-	 * Removes this value from the rest of the matrix.
-	 *
-	 * @return This value.
+	 * Gets the node to the south of this node.
+	 * @return The node to the south of this node.
 	 */
-	public LinkedMatrixNode<T> removeSelf(){
-		for(NodeDir curDir : NodeDir.values()){
-			this.removeNeighbor(curDir);
+	public LinkedMatrixNode<T> getSouth() {
+		return south;
+	}
+
+	/**
+	 * Sets the node to the south of this node.
+	 *
+	 * If the south node was not null, it clears itself from that node's north.
+	 *
+	 * @param south the new node to the south of this node.
+	 * @return The node previously at this node's south.
+	 */
+	public LinkedMatrixNode<T> setSouth(LinkedMatrixNode<T> south) {
+		if(this.isBorder(SOUTH)){
+			this.south = south;
+			this.ensureDoublyLinked(SOUTH);
+			return null;
 		}
-		return this;
+		LinkedMatrixNode<T> old = this.getSouth();
+		this.south = null;
+		old.setDir(SOUTH.opposite(), null);
+		this.south = south;
+		this.ensureDoublyLinked(SOUTH);
+		return old;
 	}
-	
+
 	/**
-	 * Gets the value at the direction given.
-	 *
-	 * @param dirIn The direction to get.
-	 * @return This value.
+	 * Gets the node to the east of this node.
+	 * @return The node to the east of this node.
 	 */
-	public LinkedMatrixNode<T> getNeighbor(NodeDir dirIn){
-		switch (dirIn){
+	public LinkedMatrixNode<T> getEast() {
+		return east;
+	}
+
+	/**
+	 * Sets the node to the east of this node.
+	 *
+	 * If the east node was not null, it clears itself from that node's west.
+	 *
+	 * @param east The new node to the east of this node.
+	 * @return The node previously at this node's east.
+	 */
+	public LinkedMatrixNode<T> setEast(LinkedMatrixNode<T> east) {
+		if(this.isBorder(EAST)){
+			this.east = east;
+			this.ensureDoublyLinked(EAST);
+			return null;
+		}
+		LinkedMatrixNode<T> old = this.getEast();
+		this.east = null;
+		old.setDir(EAST.opposite(), null);
+		this.east = east;
+		this.ensureDoublyLinked(EAST);
+		return old;
+	}
+
+	/**
+	 * Gets the node to the west of this node.
+	 * @return The node to the west of this node.
+	 */
+	public LinkedMatrixNode<T> getWest() {
+		return west;
+	}
+
+	/**
+	 * Sets the node to the west of this node.
+	 *
+	 * If the west node was not null, it clears itself from that node's east.
+	 *
+	 * @param west The new node to the west of this node.
+	 * @return The node previously at this node's west.
+	 */
+	public LinkedMatrixNode<T> setWest(LinkedMatrixNode<T> west) {
+		if(this.isBorder(WEST)){
+			this.west = west;
+			this.ensureDoublyLinked(WEST);
+			return null;
+		}
+		LinkedMatrixNode<T> old = this.getWest();
+		this.west = null;
+		old.setDir(WEST.opposite(), null);
+		this.west = west;
+		this.ensureDoublyLinked(WEST);
+		return old;
+	}
+
+	/**
+	 * Determines if the node is a border on the direction given.
+	 * @param dir The direction to check.
+	 * @return If the node is a border on the direction given.
+	 */
+	public boolean isBorder(Direction dir){
+		switch (dir){
 			case NORTH:
-				return this.north;
+				return this.getNorth() == null;
 			case SOUTH:
-				return this.south;
+				return this.getSouth() == null;
 			case EAST:
-				return this.east;
+				return this.getEast() == null;
 			case WEST:
-				return this.west;
+				return this.getWest() == null;
 		}
-		throw new IllegalArgumentException(NodeDir.BAD_DIR_GIVEN_ERR_MESSAGE + dirIn);
+		throw new IllegalArgumentException();
 	}
-	
+
 	/**
-	 * Gets the value held by this value.
-	 * @return The value held by this value.
+	 * Determines if this node borders the node given on the direction given.
+	 * @param node The node to determine if it borders this node.
+	 * @param dir The direction to test the border of.
+	 * @return If this node borders the node given on the direction given.
 	 */
-	public T getValue(){
-		return this.value;
+	public boolean borders(LinkedMatrixNode<T> node, Direction dir){
+		return this.getDir(dir) == node;
 	}
-	
+
 	/**
-	 * Sets the value held by this value.
-	 * @param valueIn The value to set this value with.
-	 * @return This value object.
+	 * Determines if this node borders the node given.
+	 * @param node The node to determine if it borders this node.
+	 * @return The direction the node is in. Null if this doesn't border the node given.
 	 */
-	public LinkedMatrixNode<T> setValue(T valueIn){
-		this.value = valueIn;
-		return this;
+	public Direction borders(LinkedMatrixNode<T> node){
+		for(Direction curDir : Direction.values()){
+			if(this.borders(node, curDir)){
+				return curDir;
+			}
+		}
+		return null;
 	}
-	
+
 	/**
-	 * Sets the value of this value with the value of another value.
-	 * @param nodeIn The value to get the value from to set this value's value to.
-	 * @return This value object.
+	 * Ensures this node is doubly linked at the direction given.
+	 * @param dir The direction to ensure is doubly linked.
 	 */
-	public LinkedMatrixNode<T> setValue(LinkedMatrixNode<T> nodeIn){
-		this.value = nodeIn.getValue();
-		return this;
+	private void ensureDoublyLinked(Direction dir){
+		LinkedMatrixNode<T> node = this.getDir(dir);
+		if(node == null){
+			return;
+		}
+
+		if(node.getDir(dir.opposite()) == this){
+			return;
+		}
+
+		node.setDir(dir.opposite(), this);
 	}
-	
+
 	/**
-	 * Determines if the value is a border to any side.
-	 *
-	 * @return If the value is a border to any side.
+	 * Ensures this node is doubly linked on all sides.
 	 */
-	public boolean isBorder(){
-		return (this.north == null ||
-				this.south == null ||
-				this.east == null ||
-				this.west == null
-		);
-	}
-	
-	/**
-	 * Determines if this value is a border on a specific side.
-	 *
-	 * @param sideBorder The side we are testing to see if the value is a border of.
-	 * @return If this value is a border to a specific side.
-	 */
-	public boolean isBorder(NodeDir sideBorder){
-		switch (sideBorder){
-			case NORTH:
-				return (this.north == null);
-			case SOUTH:
-				return (this.south == null);
-			case EAST:
-				return (this.east == null);
-			case WEST:
-				return (this.west == null);
-			default:
-				throw new IllegalArgumentException(NodeDir.BAD_DIR_GIVEN_ERR_MESSAGE + sideBorder);
+	private void ensureDoublyLinked(){
+		for(Direction curDir : Direction.values()){
+			this.ensureDoublyLinked(curDir);
 		}
 	}
-	
-	/**
-	 * Determines if the given value borders this one.
-	 * @param nodeIn The value to see if it borders this value.
-	 * @return If the given value borders this one.
-	 */
-	public boolean borders(LinkedMatrixNode<T> nodeIn){
-		return this.north == nodeIn ||
-				this.south == nodeIn ||
-				this.east == nodeIn ||
-				this.west == nodeIn;
-	}
-	
-	/**
-	 * Determines if the value given borders this value in the direction given.
-	 * @param nodeIn The value to test if it borders.
-	 * @param dirIn The direction to test on.
-	 * @return If the value given borders this value in the direction given.
-	 */
-	public boolean borders(LinkedMatrixNode<T> nodeIn, NodeDir dirIn){
-		switch (dirIn){
-			case NORTH:
-				return this.north == nodeIn;
-			case SOUTH:
-				return this.south == nodeIn;
-			case EAST:
-				return this.east == nodeIn;
-			case WEST:
-				return this.west == nodeIn;
-		}
-		throw new IllegalArgumentException(NodeDir.BAD_DIR_GIVEN_ERR_MESSAGE + dirIn);
-	}
-	
-	/**
-	 * Determines if this value is a corner value.
-	 * @return If this value is a corner value.
-	 */
-	public boolean isCorner(){
-		return (
-				(this.north == null && this.east == null) ||
-				(this.north == null && this.west == null) ||
-				(this.south == null && this.east == null) ||
-				(this.south == null && this.west == null)
-				);
-	}
-	
-	/**
-	 * Trades a value with another value.
-	 *
-	 * @param nodeIn The value to trade values with.
-	 */
-	public void tradeValuesWith(LinkedMatrixNode<T> nodeIn){
-		T temp = nodeIn.getValue();
-		nodeIn.setValue(this);
-		this.setValue(temp);
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		
-		LinkedMatrixNode<?> that = (LinkedMatrixNode<?>) o;
-		
-		if (north != null ? !north.equals(that.north) : that.north != null) return false;
-		if (south != null ? !south.equals(that.south) : that.south != null) return false;
-		if (east != null ? !east.equals(that.east) : that.east != null) return false;
-		if (west != null ? !west.equals(that.west) : that.west != null) return false;
-		return getValue() != null ? getValue().equals(that.getValue()) : that.getValue() == null;
-	}
-	
-	@Override
-	public int hashCode() {
-		int result = north != null ? north.hashCode() : 0;
-		result = 31 * result + (south != null ? south.hashCode() : 0);
-		result = 31 * result + (east != null ? east.hashCode() : 0);
-		result = 31 * result + (west != null ? west.hashCode() : 0);
-		result = 31 * result + (getValue() != null ? getValue().hashCode() : 0);
-		return result;
-	}
-}//Node
+}
