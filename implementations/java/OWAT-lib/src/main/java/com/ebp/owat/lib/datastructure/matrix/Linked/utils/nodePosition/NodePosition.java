@@ -7,22 +7,16 @@ import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 
 public class NodePosition<T> extends Coordinate {
 
-	private LinkedMatrixNode<T> node = null;
+	protected LinkedMatrixNode<T> node = null;
 
-	public NodePosition(LinkedMatrix<T> matrix) {
-		super(matrix);
+	private NodePosition(Coordinate coord) {
+		super(coord.matrix, coord.getX(), coord.getY());
 	}
 
 	protected NodePosition(LinkedMatrix<T> matrix, LinkedMatrixNode<T> node) {
-		this(matrix);
+		this(node.getCoord());
 		this.node = node;
 	}
-
-	public NodePosition(LinkedMatrix<T> matrix, LinkedMatrixNode<T> node, long xIn, long yIn) {
-		super(matrix, xIn, yIn);
-	}
-
-
 
 	/**
 	 * Moves this position one node North.
@@ -77,8 +71,9 @@ public class NodePosition<T> extends Coordinate {
 
 	/**
 	 * Method to reset the position of the node, if the node needs to do so.
+	 * @return If the node actually moved or not.
 	 */
-	public void resetPosition(){
-
+	public boolean resetPosition(){
+		return false;
 	}
 }

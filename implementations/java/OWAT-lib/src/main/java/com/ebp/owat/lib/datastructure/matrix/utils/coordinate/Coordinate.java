@@ -18,7 +18,9 @@ public class Coordinate {
 	private long x;
 	/** The Y value (which row) of this coordinate. */
 	private long y;
-	
+
+	//TODO:: allow matrix to be null
+
 	/**
 	 * Constructs a new coordinate with a matrix. Sets the coordinate to 0,0
 	 * @param matrix The matrix to give to this Coordinate.

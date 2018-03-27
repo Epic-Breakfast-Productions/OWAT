@@ -1,8 +1,13 @@
 package com.ebp.owat.lib.datastructure.matrix.Linked.utils;
 
+import com.ebp.owat.lib.datastructure.matrix.Linked.LinkedMatrix;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+
 import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.*;
 
 public class LinkedMatrixNode<T> {
+	private final LinkedMatrix<T> matrix;
+
 	private boolean hasValue = false;
 	private T value = null;
 
@@ -11,11 +16,12 @@ public class LinkedMatrixNode<T> {
 	private LinkedMatrixNode<T> east = null;
 	private LinkedMatrixNode<T> west = null;
 
-	public LinkedMatrixNode(){
-
+	public LinkedMatrixNode(LinkedMatrix<T> matrix){
+		this.matrix = matrix;
 	}
 
-	public LinkedMatrixNode(T value){
+	public LinkedMatrixNode(LinkedMatrix<T> matrix, T value){
+		this(matrix);
 		this.value = value;
 	}
 
@@ -267,6 +273,36 @@ public class LinkedMatrixNode<T> {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Gets the distance this node has to get to the border.
+	 * @param dir The direction of the border.
+	 * @return The distance to the border given.
+	 */
+	public long distanceToBorder(Direction dir){
+		long count = 0;
+
+		LinkedMatrixNode<T> curNode = this;
+		while (!curNode.isBorder(dir)){
+			count++;
+			curNode = curNode.getDir(dir);
+		}
+
+		return count;
+	}
+
+	/**
+	 * Gets the coordinate that cooresponds to this node's location on the matrix.
+	 * @return The location of this node on the matrix.
+	 */
+	public Coordinate getCoord(){
+		Coordinate output = new Coordinate(this.matrix);
+
+		output.setX(this.distanceToBorder(Direction.WEST));
+		output.setY(this.distanceToBorder(Direction.NORTH));
+
+		return output;
 	}
 
 	/**
