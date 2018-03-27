@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.structure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -506,7 +506,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		
 		m.setValue(0,0,1);
 		
-		T result = (T)m.getSubMatrix(new Coordinate(m, 0,0), 1);
+		T result = (T)m.getSubMatrix(new MatrixCoordinate(m, 0,0), 1);
 		
 		assertEquals(m.numElements(), result.numElements());
 		TestUtils.assertMatrix(
@@ -521,7 +521,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		m.setValue(0,1,3);
 		m.setValue(1,1,4);
 		
-		result = (T)m.getSubMatrix(new Coordinate(m, 0,0), 2);
+		result = (T)m.getSubMatrix(new MatrixCoordinate(m, 0,0), 2);
 		
 		assertEquals(m.numElements(), result.numElements());
 		TestUtils.assertMatrix(
@@ -536,7 +536,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 			new Object[][]{
 				{1}
 			},
-			m.getSubMatrix(new Coordinate(m, 0,0), 1)
+			m.getSubMatrix(new MatrixCoordinate(m, 0,0), 1)
 		);
 		
 		m = this.getTestingInstance();
@@ -545,7 +545,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		
 		Integer n = m.getDefaultValue();
 		
-		result = (T)m.getSubMatrix(new Coordinate(m, 1,1), 3);
+		result = (T)m.getSubMatrix(new MatrixCoordinate(m, 1,1), 3);
 		
 		assertEquals(6, result.numElements());
 		TestUtils.assertMatrix(
@@ -557,7 +557,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 			result
 		);
 
-		result = (T)m.getSubMatrix(new Coordinate(m, 1,1), 3, 2);
+		result = (T)m.getSubMatrix(new MatrixCoordinate(m, 1,1), 3, 2);
 
 		assertEquals(3, result.numElements());
 		TestUtils.assertMatrix(

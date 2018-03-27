@@ -1,7 +1,7 @@
 package com.ebp.owat.app.runner.utilities;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
@@ -50,7 +50,7 @@ public class RunnerUtilPadMatrixTest extends RunnerUtilTest {
 		Matrix mTwo = utilities.getMatrix(bytes,this.nodeType);
 
 		Iterator itOrig = m.getSubMatrix(
-			new Coordinate(m),
+			new MatrixCoordinate(m),
 			initHeight, initWidth).iterator();
 		Iterator itTwo = mTwo.iterator();
 

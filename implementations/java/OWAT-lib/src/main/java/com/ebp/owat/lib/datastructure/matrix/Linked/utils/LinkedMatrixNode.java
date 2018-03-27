@@ -2,6 +2,7 @@ package com.ebp.owat.lib.datastructure.matrix.Linked.utils;
 
 import com.ebp.owat.lib.datastructure.matrix.Linked.LinkedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
 import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.*;
 
@@ -16,13 +17,26 @@ public class LinkedMatrixNode<T> {
 	private LinkedMatrixNode<T> east = null;
 	private LinkedMatrixNode<T> west = null;
 
+	public LinkedMatrixNode(){
+		this.matrix = null;
+	}
+
+	public LinkedMatrixNode(T value){
+		this();
+		this.setValue(value);
+	}
+
 	public LinkedMatrixNode(LinkedMatrix<T> matrix){
 		this.matrix = matrix;
 	}
 
 	public LinkedMatrixNode(LinkedMatrix<T> matrix, T value){
 		this(matrix);
-		this.value = value;
+		this.setValue(value);
+	}
+
+	public LinkedMatrix<T> getMatrix(){
+		return this.matrix;
 	}
 
 	/**
@@ -297,7 +311,7 @@ public class LinkedMatrixNode<T> {
 	 * @return The location of this node on the matrix.
 	 */
 	public Coordinate getCoord(){
-		Coordinate output = new Coordinate(this.matrix);
+		Coordinate output = new Coordinate();
 
 		output.setX(this.distanceToBorder(Direction.WEST));
 		output.setY(this.distanceToBorder(Direction.NORTH));

@@ -18,7 +18,7 @@ public class DistanceCalc {
 	 * @param coordTwo The coord we are getting the distance to.
 	 * @return The distance from one value to the other on the x axis
 	 */
-	public static long xDistance(Coordinate coordOne, Coordinate coordTwo) {
+	public static long xDistance(MatrixCoordinate coordOne, MatrixCoordinate coordTwo) {
 		throwIfNotOnSameMatrix(coordOne, coordTwo);
 		//TODO
 		return 0;
@@ -30,7 +30,7 @@ public class DistanceCalc {
 	 * @param coordTwo The coord we are getting the distance to.
 	 * @return The distance from one value to the other on the y axis
 	 */
-	public static long yDistance(Coordinate coordOne, Coordinate coordTwo) {
+	public static long yDistance(MatrixCoordinate coordOne, MatrixCoordinate coordTwo) {
 		throwIfNotOnSameMatrix(coordOne, coordTwo);
 		//TODO
 		return 0;
@@ -41,7 +41,7 @@ public class DistanceCalc {
 	 *
 	 * @return The euclidian distance to the coordinate given.
 	 */
-	public static double eucDistanceTo(Coordinate coordOne, Coordinate coordTwo) {
+	public static double eucDistanceTo(MatrixCoordinate coordOne, MatrixCoordinate coordTwo) {
 		//TODO
 		long distanceX = 0L;
 		long distanceY = 0L;
@@ -54,7 +54,7 @@ public class DistanceCalc {
 	 *
 	 * @return The manhattan distance to the coordinate given.
 	 */
-	public static long manDistanceTo(Coordinate coordOne, Coordinate coordTwo) {
+	public static long manDistanceTo(MatrixCoordinate coordOne, MatrixCoordinate coordTwo) {
 		return xDistance(coordOne, coordTwo) + yDistance(coordOne, coordTwo);
 	}
 	
@@ -65,7 +65,7 @@ public class DistanceCalc {
 	 * @param otherCoord The coord we are getting distance to.
 	 * @return The distance from one coord to another.
 	 */
-	public static double calculateDistance(Method method, Coordinate mainCoord, Coordinate otherCoord) {
+	public static double calculateDistance(Method method, MatrixCoordinate mainCoord, MatrixCoordinate otherCoord) {
 		switch (method) {
 			case EUCLIDEAN:
 				return eucDistanceTo(mainCoord, otherCoord);
@@ -81,7 +81,7 @@ public class DistanceCalc {
 	 * @param otherCoord The coord we are getting distance to.
 	 * @return The distance from one coord to another.
 	 */
-	public static double calculateDistance( Coordinate mainCoord, Coordinate otherCoord) {
+	public static double calculateDistance(MatrixCoordinate mainCoord, MatrixCoordinate otherCoord) {
 		return calculateDistance(DEFAULT_CALC_METHOD, mainCoord, otherCoord);
 	}
 	
@@ -92,7 +92,7 @@ public class DistanceCalc {
 	 * @param otherCoord The coord we are getting distance to.
 	 * @return The distance from one coord to another floored.
 	 */
-	public static long calculateDistanceFloor(Method method, Coordinate mainCoord, Coordinate otherCoord) {
+	public static long calculateDistanceFloor(Method method, MatrixCoordinate mainCoord, MatrixCoordinate otherCoord) {
 		return (long) Math.floor(calculateDistance(method, mainCoord, otherCoord));
 	}
 	
@@ -103,7 +103,7 @@ public class DistanceCalc {
 	 * @param otherCoord The coord we are getting distance to.
 	 * @return The distance from one coord to another ceilinged.
 	 */
-	public static long calculateDistanceCeil(Method method, Coordinate mainCoord, Coordinate otherCoord) {
+	public static long calculateDistanceCeil(Method method, MatrixCoordinate mainCoord, MatrixCoordinate otherCoord) {
 		return (long) Math.ceil(calculateDistance(method, mainCoord, otherCoord));
 	}
 	
@@ -115,7 +115,7 @@ public class DistanceCalc {
 	 * @param pos2    The value we are comparing to the first one.
 	 * @return True if pos1 is closer to the goal coordinates than pos2
 	 */
-	public static boolean nodeIsCloserThan(Method method, Coordinate coordIn, Coordinate pos1, Coordinate pos2) {
+	public static boolean nodeIsCloserThan(Method method, MatrixCoordinate coordIn, MatrixCoordinate pos1, MatrixCoordinate pos2) {
 		return (calculateDistance(method, coordIn, pos1) < calculateDistance(method, coordIn, pos2));
 	}
 	
@@ -126,7 +126,7 @@ public class DistanceCalc {
 	 * @param pos2    The value we are comparing to the first one.
 	 * @return True if pos1 is closer to the goal coordinates than pos2
 	 */
-	public static boolean nodeIsCloserThan(Coordinate coordIn, Coordinate pos1, Coordinate pos2) {
+	public static boolean nodeIsCloserThan(MatrixCoordinate coordIn, MatrixCoordinate pos1, MatrixCoordinate pos2) {
 		return nodeIsCloserThan(DEFAULT_CALC_METHOD, coordIn, pos1, pos2);
 	}
 }

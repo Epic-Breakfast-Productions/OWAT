@@ -4,13 +4,14 @@ import com.ebp.owat.lib.datastructure.matrix.Linked.LinkedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction;
 import com.ebp.owat.lib.datastructure.matrix.Linked.utils.LinkedMatrixNode;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
 public class NodePosition<T> extends Coordinate {
 
 	protected LinkedMatrixNode<T> node = null;
 
 	private NodePosition(Coordinate coord) {
-		super(coord.matrix, coord.getX(), coord.getY());
+		super(coord.getX(), coord.getY());
 	}
 
 	protected NodePosition(LinkedMatrix<T> matrix, LinkedMatrixNode<T> node) {

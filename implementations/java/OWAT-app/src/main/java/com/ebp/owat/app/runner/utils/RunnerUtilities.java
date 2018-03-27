@@ -4,7 +4,7 @@ import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.BitValue;
 import com.ebp.owat.lib.datastructure.value.ByteValue;
@@ -197,7 +197,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 
 	public void padMatrix(M matrix, OwatRandGenerator rand, NodeMode nodeType) {
 		if (!matrix.isFull()) {
-			Coordinate curPos = new Coordinate(matrix, matrix.getWidth() - 1, matrix.getHeight() - 1);
+			MatrixCoordinate curPos = new MatrixCoordinate(matrix, matrix.getWidth() - 1, matrix.getHeight() - 1);
 			do {
 				if (matrix.hasValue(curPos)) {
 					throw new IllegalStateException("Could not fill empty part of matrix; Hit a value but still not full.");

@@ -3,7 +3,7 @@ package com.ebp.owat.lib.structure.matrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,8 +22,8 @@ public class MatrixValidatorTest extends MatrixTest {
 		Matrix n = this.getTestingInstance();
 		m.grow(1);
 		
-		assertTrue(MatrixValidator.isOnMatrix(m, new Coordinate(m )));
-		assertFalse(MatrixValidator.isOnMatrix(n, new Coordinate(m )));
+		assertTrue(MatrixValidator.isOnMatrix(m, new MatrixCoordinate(m )));
+		assertFalse(MatrixValidator.isOnMatrix(n, new MatrixCoordinate(m )));
 	}
 	
 	@Test
@@ -33,11 +33,11 @@ public class MatrixValidatorTest extends MatrixTest {
 		m.grow(1);
 		n.grow(1);
 		
-		assertTrue(MatrixValidator.isOnSameMatrix(new Coordinate(m), new Coordinate(m)));
-		assertFalse(MatrixValidator.isOnSameMatrix(new Coordinate(m), new Coordinate(n)));
+		assertTrue(MatrixValidator.isOnSameMatrix(new MatrixCoordinate(m), new MatrixCoordinate(m)));
+		assertFalse(MatrixValidator.isOnSameMatrix(new MatrixCoordinate(m), new MatrixCoordinate(n)));
 		
 		try{
-			MatrixValidator.isOnSameMatrix(new Coordinate(m), null);
+			MatrixValidator.isOnSameMatrix(new MatrixCoordinate(m), null);
 			Assert.fail();
 		}catch (NullPointerException e){
 			//nothing to do
@@ -51,11 +51,11 @@ public class MatrixValidatorTest extends MatrixTest {
 		m.grow(1);
 		n.grow(1);
 		
-		assertTrue(MatrixValidator.areOnMatrix(m, new Coordinate(m), new Coordinate(m)));
-		assertFalse(MatrixValidator.areOnMatrix(m, new Coordinate(m), new Coordinate(n)));
+		assertTrue(MatrixValidator.areOnMatrix(m, new MatrixCoordinate(m), new MatrixCoordinate(m)));
+		assertFalse(MatrixValidator.areOnMatrix(m, new MatrixCoordinate(m), new MatrixCoordinate(n)));
 		
 		try{
-			MatrixValidator.areOnMatrix(null, new Coordinate(m), new Coordinate(m));
+			MatrixValidator.areOnMatrix(null, new MatrixCoordinate(m), new MatrixCoordinate(m));
 			Assert.fail();
 		}catch (NullPointerException e){
 			//nothing to do
@@ -69,12 +69,12 @@ public class MatrixValidatorTest extends MatrixTest {
 		m.grow(1);
 		n.grow(1);
 		
-		assertTrue(MatrixValidator.areOnSameMatrix(new Coordinate(m)));
-		assertTrue(MatrixValidator.areOnSameMatrix(new Coordinate(m), new Coordinate(m)));
-		assertFalse(MatrixValidator.areOnSameMatrix(new Coordinate(m), new Coordinate(n)));
+		assertTrue(MatrixValidator.areOnSameMatrix(new MatrixCoordinate(m)));
+		assertTrue(MatrixValidator.areOnSameMatrix(new MatrixCoordinate(m), new MatrixCoordinate(m)));
+		assertFalse(MatrixValidator.areOnSameMatrix(new MatrixCoordinate(m), new MatrixCoordinate(n)));
 		
 		try{
-			MatrixValidator.areOnSameMatrix(null, new Coordinate(m), new Coordinate(m));
+			MatrixValidator.areOnSameMatrix(null, new MatrixCoordinate(m), new MatrixCoordinate(m));
 			Assert.fail();
 		}catch (NullPointerException e){
 			//nothing to do
@@ -88,9 +88,9 @@ public class MatrixValidatorTest extends MatrixTest {
 		m.grow(1);
 		n.grow(1);
 		
-		MatrixValidator.throwIfNotOnMatrix(m, new Coordinate(m));
+		MatrixValidator.throwIfNotOnMatrix(m, new MatrixCoordinate(m));
 		try{
-			MatrixValidator.throwIfNotOnMatrix(m, new Coordinate(m), new Coordinate(n));
+			MatrixValidator.throwIfNotOnMatrix(m, new MatrixCoordinate(m), new MatrixCoordinate(n));
 			Assert.fail();
 		}catch (IllegalArgumentException e){
 			//nothing to do
@@ -104,11 +104,11 @@ public class MatrixValidatorTest extends MatrixTest {
 		m.grow(1);
 		n.grow(1);
 		
-		MatrixValidator.throwIfNotOnSameMatrix(new Coordinate(m));
-		MatrixValidator.throwIfNotOnSameMatrix(new Coordinate(m), new Coordinate(m));
+		MatrixValidator.throwIfNotOnSameMatrix(new MatrixCoordinate(m));
+		MatrixValidator.throwIfNotOnSameMatrix(new MatrixCoordinate(m), new MatrixCoordinate(m));
 		
 		try{
-			MatrixValidator.throwIfNotOnSameMatrix(new Coordinate(m), new Coordinate(n));
+			MatrixValidator.throwIfNotOnSameMatrix(new MatrixCoordinate(m), new MatrixCoordinate(n));
 			Assert.fail();
 		}catch (IllegalArgumentException e){
 			//nothing to do

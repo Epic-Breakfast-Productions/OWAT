@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.datastructure.matrix.utils;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
 /**
  * Validating methods for the various LinkedMatrix related classes.
@@ -24,21 +24,21 @@ public class MatrixValidator {
 	 * @param coordIn The coordinate being tested.
 	 * @return If the coordinate given is on the matrix given.
 	 */
-	public static boolean isOnMatrix(Matrix matrix, Coordinate coordIn){
+	public static boolean isOnMatrix(Matrix matrix, MatrixCoordinate coordIn){
 		return matrix == coordIn.matrix && coordIn.stillOnMatrix();
 	}
 	
 	/**
-	 * Determines if the set of coordinates given are on the matrix given.
+	 * Determines if the set of matrixCoordinates given are on the matrix given.
 	 * @param matrix The matrix to use.
-	 * @param coordinates The coordinates to test.
-	 * @return If the set of coordinates given are on the matrix given.
+	 * @param matrixCoordinates The matrixCoordinates to test.
+	 * @return If the set of matrixCoordinates given are on the matrix given.
 	 */
-	public static boolean areOnMatrix(Matrix matrix, Coordinate ... coordinates){
+	public static boolean areOnMatrix(Matrix matrix, MatrixCoordinate... matrixCoordinates){
 		if(matrix == null){
-			throw new NullPointerException("Null matrix given to MatrixValidator.areOnMatrix(LinkedMatrix, Coordinate...).");
+			throw new NullPointerException("Null matrix given to MatrixValidator.areOnMatrix(LinkedMatrix, MatrixCoordinate...).");
 		}
-		for(Coordinate curCoord : coordinates){
+		for(MatrixCoordinate curCoord : matrixCoordinates){
 			if(curCoord == null || !isOnMatrix(matrix, curCoord)){
 				return false;
 			}
@@ -47,21 +47,21 @@ public class MatrixValidator {
 	}
 	
 	/**
-	 * Deterimines of the coordinates are all on the same matrix.
-	 * @param coordinates The coordinates to test.
+	 * Deterimines of the matrixCoordinates are all on the same matrix.
+	 * @param matrixCoordinates The matrixCoordinates to test.
 	 * @return If they are all on the same matrix or not.
 	 */
-	public static boolean areOnSameMatrix(Coordinate ... coordinates){
-		if(listContainsNullVals((Object[]) coordinates)){
-			throw new NullPointerException("One or more of the coordinates given was null.");
+	public static boolean areOnSameMatrix(MatrixCoordinate... matrixCoordinates){
+		if(listContainsNullVals((Object[]) matrixCoordinates)){
+			throw new NullPointerException("One or more of the matrixCoordinates given was null.");
 		}
-		if(coordinates.length <= 1){//if there are no or one matrix, they are implicitly on the same matrix
+		if(matrixCoordinates.length <= 1){//if there are no or one matrix, they are implicitly on the same matrix
 			return true;
 		}
-		return areOnMatrix(coordinates[0].matrix, coordinates);
+		return areOnMatrix(matrixCoordinates[0].matrix, matrixCoordinates);
 	}
 	
-	public static boolean isOnSameMatrix(Coordinate coordOne, Coordinate coordTwo){
+	public static boolean isOnSameMatrix(MatrixCoordinate coordOne, MatrixCoordinate coordTwo){
 		if(coordOne == null || coordTwo == null){
 			throw new NullPointerException("One or both coordinates given were null.");
 		}
@@ -69,19 +69,19 @@ public class MatrixValidator {
 	}
 	
 	
-	public static void throwIfNotOnMatrix(Matrix matrix, Coordinate ... coordinates) throws IllegalArgumentException{
-		if(!areOnMatrix(matrix, coordinates)){
-			throw new IllegalArgumentException("Coordinate(s) not on the matrix.");
+	public static void throwIfNotOnMatrix(Matrix matrix, MatrixCoordinate... matrixCoordinates) throws IllegalArgumentException{
+		if(!areOnMatrix(matrix, matrixCoordinates)){
+			throw new IllegalArgumentException("MatrixCoordinate(s) not on the matrix.");
 		}
 	}
 	
 	/**
 	 * Throws an exception if the coordinate given is not on the same matrix as this one.
-	 * @param coordinates The coordinates to test against.
+	 * @param matrixCoordinates The matrixCoordinates to test against.
 	 * @throws IllegalArgumentException If the coordinate given is not on the same matrix as this one.
 	 */
-	public static void throwIfNotOnSameMatrix(Coordinate ... coordinates) throws IllegalArgumentException{
-		if(!areOnSameMatrix(coordinates)){
+	public static void throwIfNotOnSameMatrix(MatrixCoordinate... matrixCoordinates) throws IllegalArgumentException{
+		if(!areOnSameMatrix(matrixCoordinates)){
 			throw new IllegalArgumentException("Coordinates are not on the same matrix.");
 		}
 	}

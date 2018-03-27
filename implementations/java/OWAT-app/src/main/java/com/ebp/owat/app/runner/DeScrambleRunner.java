@@ -6,7 +6,7 @@ import com.ebp.owat.app.runner.utils.ScrambleMode;
 import com.ebp.owat.app.runner.utils.Step;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
@@ -145,7 +145,7 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		runResults.setCurStep(Step.OUT_DESCRAMBLED_DATA);
 		start = System.currentTimeMillis();
 		LOGGER.info("Outputting descrambled data...");
-		matrix = (M) matrix.getSubMatrix(new Coordinate(matrix,0,0), this.key.meta.originalHeight, this.key.meta.originalWidth);
+		matrix = (M) matrix.getSubMatrix(new MatrixCoordinate(matrix,0,0), this.key.meta.originalHeight, this.key.meta.originalWidth);
 		{
 			long length = matrix.size();
 			if(this.key.meta.lastColIndex == 0) {

@@ -2,7 +2,7 @@ package com.ebp.owat.lib.datastructure.matrix.Hash;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.utils.scramble.MoveValidator;
 import com.ebp.owat.lib.utils.scramble.ScrambleConstants;
@@ -18,8 +18,8 @@ public class HashedScramblingMatrix<T> extends HashedMatrix<T> implements Scramb
 	public void swap(ScrambleMove sm) {
 		MoveValidator.throwIfInvalidMove(this, sm, ScrambleMoves.SWAP);
 		
-		Coordinate coordOne = new Coordinate(this, sm.getArg(ScrambleConstants.Swap.X1), sm.getArg(ScrambleConstants.Swap.Y1));
-		Coordinate coordTwo = new Coordinate(this, sm.getArg(ScrambleConstants.Swap.X2), sm.getArg(ScrambleConstants.Swap.Y2));
+		MatrixCoordinate coordOne = new MatrixCoordinate(this, sm.getArg(ScrambleConstants.Swap.X1), sm.getArg(ScrambleConstants.Swap.Y1));
+		MatrixCoordinate coordTwo = new MatrixCoordinate(this, sm.getArg(ScrambleConstants.Swap.X2), sm.getArg(ScrambleConstants.Swap.Y2));
 		
 		if(this.hasValue(coordOne) && this.hasValue(coordTwo)){
 			this.setValue(coordTwo, this.setValue(coordOne, this.get(coordTwo)));
@@ -102,7 +102,7 @@ public class HashedScramblingMatrix<T> extends HashedMatrix<T> implements Scramb
 		MoveValidator.throwIfInvalidMove(this, sm, ScrambleMoves.ROT_BOX);
 		long numTimesToRotate = sm.getArg(ScrambleConstants.RotateBox.ROTNUM);
 		numTimesToRotate = (numTimesToRotate<0 ? numTimesToRotate + 4 : numTimesToRotate);
-		Coordinate topLeft = new Coordinate(this, sm.getArg(ScrambleConstants.RotateBox.X), sm.getArg(ScrambleConstants.RotateBox.Y));
+		MatrixCoordinate topLeft = new MatrixCoordinate(this, sm.getArg(ScrambleConstants.RotateBox.X), sm.getArg(ScrambleConstants.RotateBox.Y));
 		long size = sm.getArg(ScrambleConstants.RotateBox.SIZE);
 		
 		Matrix<T> subMatrix = this.getSubMatrix(topLeft, size);

@@ -1,11 +1,10 @@
 package com.ebp.owat.lib.datastructure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * General Matrix class.
@@ -262,10 +261,10 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param newValue The value to replace.
 	 * @return The previously held value.
 	 */
-	public abstract T setValue(Coordinate nodeToReplace, T newValue);
+	public abstract T setValue(MatrixCoordinate nodeToReplace, T newValue);
 	
 	/**
-	 * Sets a value based on its x/y coordinates. This implementation creates a new {@link Coordinate} and passes it to the other method ({@link Matrix#setValue(Coordinate, Object)})
+	 * Sets a value based on its x/y coordinates. This implementation creates a new {@link MatrixCoordinate} and passes it to the other method ({@link Matrix#setValue(MatrixCoordinate, Object)})
 	 * @param xIn The x index (column) of the spot to set.
 	 * @param yIn The y index (row) of the spot to set.
 	 * @param newValue The value to set the spot to.
@@ -273,7 +272,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 */
 	public T setValue(long xIn, long yIn, T newValue){
 		return this.setValue(
-			new Coordinate(this, xIn, yIn),
+			new MatrixCoordinate(this, xIn, yIn),
 			newValue
 		);
 	}
@@ -283,7 +282,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param node The coordinate of the node.
 	 * @return If the node has a value or not.
 	 */
-	public abstract boolean hasValue(Coordinate node);
+	public abstract boolean hasValue(MatrixCoordinate node);
 	
 	/**
 	 * Determines if the matrix has a value at the given index.
@@ -294,7 +293,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 */
 	public boolean hasValue(long xIn, long yIn){
 		return this.hasValue(
-			new Coordinate(this, xIn, yIn)
+			new MatrixCoordinate(this, xIn, yIn)
 		);
 	}
 	
@@ -303,7 +302,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param nodeToClear The coordinate of the value to clear the value of.
 	 * @return The value previously at the value. If nothing set, returns {@link Matrix#defaultValue}
 	 */
-	public abstract T clearNode(Coordinate nodeToClear);
+	public abstract T clearNode(MatrixCoordinate nodeToClear);
 	
 	/**
 	 * Clears the value at the coordinate given.
@@ -312,7 +311,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return The value previously at the value. If nothing set, returns {@link Matrix#defaultValue}
 	 */
 	public T clearNode(long xIn, long yIn){
-		return this.clearNode(new Coordinate(this, xIn, yIn));
+		return this.clearNode(new MatrixCoordinate(this, xIn, yIn));
 	}
 	
 	/**
@@ -322,11 +321,11 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 *
 	 * If given more values than needed to fill row, only the first number of values needed to fill row are used.
 	 *
-	 * @param coordinate A coordinate of the row to replace.
+	 * @param matrixCoordinate A matrixCoordinate of the row to replace.
 	 * @param newValues The values to use to replace the row.
 	 * @return The values this method replaced. Ordered top to bottom.
 	 */
-	public abstract List<T> replaceRow(Coordinate coordinate, Collection<T> newValues) throws IndexOutOfBoundsException;
+	public abstract List<T> replaceRow(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException;
 	
 	/**
 	 * Replaces a row of values.
@@ -340,7 +339,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return The values this method replaced. Ordered top to bottom.
 	 */
 	public List<T> replaceRow(long rowIndex, Collection<T> newValues) throws IndexOutOfBoundsException{
-		return this.replaceRow(new Coordinate(this, 0, rowIndex), newValues);
+		return this.replaceRow(new MatrixCoordinate(this, 0, rowIndex), newValues);
 	}
 	
 	/**
@@ -350,11 +349,11 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 *
 	 * If given more values than needed to fill column, only the first number of values needed to fill column are used.
 	 *
-	 * @param coordinate The coordinate of the column to replace.
+	 * @param matrixCoordinate The matrixCoordinate of the column to replace.
 	 * @param newValues The values to use to replace the column.
 	 * @return The values this method replaced. Ordered left to right.
 	 */
-	public abstract List<T> replaceCol(Coordinate coordinate, Collection<T> newValues) throws IndexOutOfBoundsException;
+	public abstract List<T> replaceCol(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException;
 	
 	/**
 	 * Replaces a column of values.
@@ -368,7 +367,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return The values this method replaced. Ordered left to right.
 	 */
 	public List<T> replaceCol(long colIndex, Collection<T> newValues) throws IndexOutOfBoundsException{
-		return this.replaceCol(new Coordinate(this, colIndex, 0), newValues);
+		return this.replaceCol(new MatrixCoordinate(this, colIndex, 0), newValues);
 	}
 	
 	/**
@@ -490,15 +489,15 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @throws IndexOutOfBoundsException If either of the indexes are out of bounds.
 	 */
 	public T get(long xIn, long yIn) throws IndexOutOfBoundsException{
-		return this.get(new Coordinate(this, xIn, yIn));
+		return this.get(new MatrixCoordinate(this, xIn, yIn));
 	}
 	
 	/**
 	 * Gets a value from this matrix.
-	 * @param coordIn The coordinate to use. Coordinate must be on this matrix.
+	 * @param coordIn The coordinate to use. MatrixCoordinate must be on this matrix.
 	 * @return The value at the coordinate given.
 	 */
-	public abstract T get(Coordinate coordIn);
+	public abstract T get(MatrixCoordinate coordIn);
 	
 	/**
 	 * Gets a column of this matrix.
@@ -513,7 +512,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param coordIn The coordinate to get the column from.
 	 * @return The list of elements in the column specified.
 	 */
-	public abstract List<T> getCol(Coordinate coordIn);
+	public abstract List<T> getCol(MatrixCoordinate coordIn);
 	
 	/**
 	 * Gets a row of this matrix.
@@ -528,7 +527,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param coordIn The coordinate to get the row from.
 	 * @return The list of elements in the row specified.
 	 */
-	public abstract List<T> getRow(Coordinate coordIn);
+	public abstract List<T> getRow(MatrixCoordinate coordIn);
 	
 	/**
 	 * Returns a basic functional iterator. Does this by using {@link #get(long, long)}. Should work, but may not be efficient for your implementation by any means. Recommended to override in implementation if this would be a terribly inefficient way to iterate.
@@ -578,19 +577,19 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param width The width of the sub matrix to get; how many columns it should have.
 	 * @return A sub matrix of this matrix.
 	 */
-	public abstract Matrix<T> getSubMatrix(Coordinate topLeft, long height, long width);
+	public abstract Matrix<T> getSubMatrix(MatrixCoordinate topLeft, long height, long width);
 	
-	public Matrix<T> getSubMatrix(Coordinate topLeft, long heightWidth){
+	public Matrix<T> getSubMatrix(MatrixCoordinate topLeft, long heightWidth){
 		return this.getSubMatrix(topLeft, heightWidth, heightWidth);
 	}
 	
-	public abstract void replaceSubMatrix(Matrix<T> matrix, Coordinate topLeft, long height, long width);
+	public abstract void replaceSubMatrix(Matrix<T> matrix, MatrixCoordinate topLeft, long height, long width);
 	
-	public void replaceSubMatrix(Matrix<T> matrix, Coordinate topLeft, long heightWidth){
+	public void replaceSubMatrix(Matrix<T> matrix, MatrixCoordinate topLeft, long heightWidth){
 		this.replaceSubMatrix(matrix, topLeft, heightWidth, heightWidth);
 	}
 	
-	public void replaceSubMatrix(Matrix<T> matrix, Coordinate topLeft){
+	public void replaceSubMatrix(Matrix<T> matrix, MatrixCoordinate topLeft){
 		this.replaceSubMatrix(matrix, topLeft, matrix.getNumRows(), matrix.getNumCols());
 	}
 	
