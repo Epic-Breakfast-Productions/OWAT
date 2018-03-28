@@ -59,12 +59,11 @@ public class RunResults {
 	}
 
 	public synchronized void setCurStepProgMax(long curStepProgMax){
-		this.resetStepProg();
+		this.setCurStepProg(0);
 		this.curStepProgMax = curStepProgMax;
 	}
 
 	private synchronized void resetStepProg(){
-		this.setCurStepProg(0);
 		this.setCurStepProgMax(0);
 	}
 
