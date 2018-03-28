@@ -21,10 +21,13 @@ public class MatrixCoordinate extends Coordinate {
 	 * @param matrix The matrix to give to this MatrixCoordinate.
 	 */
 	public MatrixCoordinate(Matrix matrix){
-		if(!matrix.hasRowsCols()){
+		this.matrix = matrix;
+		if(this.matrix == null){
+			throw new IllegalArgumentException("Matrix cannot be null.");
+		}
+		if(!this.matrix.hasRowsCols()){
 			throw new IllegalStateException("Cannot have a coordinate on an empty matrix.");
 		}
-		this.matrix = matrix;
 		this.setX(0);
 		this.setY(0);
 	}

@@ -13,7 +13,8 @@ public class Coordinate {
 	protected long y;
 
 	public Coordinate(){
-		this(0,0);
+		this.x = 0;
+		this.y = 0;
 	}
 
 	public Coordinate(long x, long y){
