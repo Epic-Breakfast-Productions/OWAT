@@ -7,6 +7,9 @@ import com.ebp.owat.lib.datastructure.matrix.Linked.utils.LinkedMatrixNode;
 import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.*;
 
 public class FixedNode<T> extends NodePosition<T>{
+	/**
+	 * Describes the fixed location of this node.
+	 */
 	public enum FixedPosition{
 		NORTH_WEST(NORTH, WEST),
 		NORTH_EAST(NORTH, EAST),
@@ -41,9 +44,7 @@ public class FixedNode<T> extends NodePosition<T>{
 	private boolean goDirTilBorder(Direction dir){
 		boolean moved = false;
 		while(!this.node.isBorder(dir)){
-			if(this.move(dir)){
-				moved = true;
-			}
+			moved |= this.move(dir);
 		}
 		return moved;
 	}
@@ -54,6 +55,7 @@ public class FixedNode<T> extends NodePosition<T>{
 			return false;
 		}
 		this.node = this.node.getDir(NORTH);
+		this.incY();
 		return true;
 	}
 
@@ -63,6 +65,7 @@ public class FixedNode<T> extends NodePosition<T>{
 			return false;
 		}
 		this.node = this.node.getDir(SOUTH);
+		this.decY();
 		return true;
 	}
 
@@ -72,6 +75,7 @@ public class FixedNode<T> extends NodePosition<T>{
 			return false;
 		}
 		this.node = this.node.getDir(EAST);
+		this.incX();
 		return true;
 	}
 
@@ -81,6 +85,7 @@ public class FixedNode<T> extends NodePosition<T>{
 			return false;
 		}
 		this.node = this.node.getDir(WEST);
+		this.decX();
 		return true;
 	}
 }

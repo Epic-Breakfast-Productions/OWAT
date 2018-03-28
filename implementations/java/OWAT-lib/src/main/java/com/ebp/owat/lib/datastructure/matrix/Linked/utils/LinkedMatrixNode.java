@@ -1,14 +1,17 @@
 package com.ebp.owat.lib.datastructure.matrix.Linked.utils;
 
-import com.ebp.owat.lib.datastructure.matrix.Linked.LinkedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
 import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.*;
 
+/**
+ * A single node of the LinkedMatrix.
+ *
+ * Holds the nodes to the north, south, east and west of this node, and a value.
+ *
+ * @param <T> The type of value this holds.
+ */
 public class LinkedMatrixNode<T> {
-	private final LinkedMatrix<T> matrix;
-
 	private boolean hasValue = false;
 	private T value = null;
 
@@ -18,25 +21,12 @@ public class LinkedMatrixNode<T> {
 	private LinkedMatrixNode<T> west = null;
 
 	public LinkedMatrixNode(){
-		this.matrix = null;
+
 	}
 
 	public LinkedMatrixNode(T value){
 		this();
 		this.setValue(value);
-	}
-
-	public LinkedMatrixNode(LinkedMatrix<T> matrix){
-		this.matrix = matrix;
-	}
-
-	public LinkedMatrixNode(LinkedMatrix<T> matrix, T value){
-		this(matrix);
-		this.setValue(value);
-	}
-
-	public LinkedMatrix<T> getMatrix(){
-		return this.matrix;
 	}
 
 	/**

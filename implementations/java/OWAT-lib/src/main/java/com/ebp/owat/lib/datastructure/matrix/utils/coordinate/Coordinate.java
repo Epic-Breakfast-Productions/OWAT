@@ -1,22 +1,32 @@
 package com.ebp.owat.lib.datastructure.matrix.utils.coordinate;
 
-import com.ebp.owat.lib.datastructure.matrix.OwatMatrixException;
-import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
-import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
-
 import java.util.Objects;
 
+/**
+ * Describes a spot on a matrix.
+ *
+ * TODO:
+ *  Test this specifically.
+ */
 public class Coordinate {
 	/** The X value (which col) of this coordinate. */
 	protected long x;
 	/** The Y value (which row) of this coordinate. */
 	protected long y;
 
+	/**
+	 * Base constructor. Initializes X/Y to 0.
+	 */
 	public Coordinate(){
 		this.x = 0;
 		this.y = 0;
 	}
 
+	/**
+	 * Constructor to set the x/y values.
+	 * @param x The x value of this coordinate.
+	 * @param y The y value of this coordinate.
+	 */
 	public Coordinate(long x, long y){
 		this.setX(x);
 		this.setY(y);
@@ -35,6 +45,24 @@ public class Coordinate {
 	}
 
 	/**
+	 * Increments this node's X position.
+	 * @return This coordinate.
+	 */
+	public Coordinate incX(){
+		this.setX(this.getX() + 1);
+		return this;
+	}
+
+	/**
+	 * Decrements this node's X position.
+	 * @return This coordinate.
+	 */
+	public Coordinate decX(){
+		this.setX(this.getX() - 1);
+		return this;
+	}
+
+	/**
 	 * Sets the Y value (which row) of this coordinate.
 	 * @param yIn The Y value (which row) of this coordinate.
 	 * @return This MatrixCoordinate.
@@ -43,6 +71,24 @@ public class Coordinate {
 	public Coordinate setY(long yIn) {
 		throwIfInvalidIndex(yIn);
 		this.y = yIn;
+		return this;
+	}
+
+	/**
+	 * Increments this node's y position.
+	 * @return This coordinate.
+	 */
+	public Coordinate incY(){
+		this.setY(this.getY() + 1);
+		return this;
+	}
+
+	/**
+	 * Decrements this node's y position.
+	 * @return This coordinate.
+	 */
+	public Coordinate decY(){
+		this.setY(this.getY() - 1);
 		return this;
 	}
 
@@ -92,7 +138,7 @@ public class Coordinate {
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	protected Object clone() {
 		return new Coordinate(this.getX(), this.getY());
 	}
 
