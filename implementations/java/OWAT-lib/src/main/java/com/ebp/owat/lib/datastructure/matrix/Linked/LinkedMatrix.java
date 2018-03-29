@@ -4,6 +4,9 @@ import com.ebp.owat.lib.datastructure.matrix.Linked.utils.LinkedMatrixNode;
 import com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode;
 import com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.NodePosition;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
+import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.DistanceCalc;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
 import java.util.Collection;
@@ -55,9 +58,65 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		return movedNodes;
 	}
 
+	/**
+	 * Gets the node closest to the coordinate given.
+	 * @param coord The coordinate we want to get.
+	 * @return The node closest node to the coordinate given.
+	 */
+	private NodePosition<T> getClosestHeldPosition(MatrixCoordinate coord){
+		NodePosition<T> output = null;
+		for(NodePosition<T> curPosition : this.referenceNodes){
+			if(output == null){
+				output = curPosition;
+				continue;
+			}
+			if(DistanceCalc.nodeIsCloserThan(coord, curPosition, output)){
+				output = curPosition;
+			}
+		}
+		if(output == null){
+			//TODO:: handle this better?
+			throw new IllegalStateException("No nodes held.");
+		}
+		return output.clone();
+	}
+
+	/**
+	 * Gets the matrixNode at the coordinate given.
+	 * @param coord The coordinate of the node to get.
+	 * @return The node at the coordinate given.
+	 */
+	private LinkedMatrixNode<T> getMatrixNode(MatrixCoordinate coord){
+		NodePosition<T> curPosition = this.getClosestHeldPosition(coord);
+
+		while(!curPosition.baseCoordEquals(coord)){
+			if(curPosition.getY() > coord.getY()){
+				curPosition.moveNorth();
+			}
+			if(curPosition.getY() < coord.getY()){
+				curPosition.moveSouth();
+			}
+			if(curPosition.getX() > coord.getX()){
+				curPosition.moveEast();
+			}
+			if(curPosition.getX() < coord.getX()){
+				curPosition.moveWest();
+			}
+		}
+		return curPosition.getNode();
+	}
+
 	@Override
 	public void addRow() {
-		//TODO
+		if(this.initIfNoRowsCols()){
+			return;
+		}
+
+		for(long l = 0; l < this.getNumCols(); l++){
+
+		}
+
+		this.resetNodePositions();
 	}
 
 	@Override
@@ -137,8 +196,7 @@ public class LinkedMatrix<T> extends Matrix<T> {
 
 	@Override
 	public T get(MatrixCoordinate coordIn) {
-		//TODO
-		return null;
+		return this.getMatrixNode(coordIn).getValue(this.getDefaultValue());
 	}
 
 	@Override

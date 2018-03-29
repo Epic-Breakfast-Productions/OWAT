@@ -124,6 +124,18 @@ public class Coordinate {
 			y == that.y;
 	}
 
+	/**
+	 * Determines if the coordinate given is equal to this one, incorporating just the base x/y values.
+	 * @param coordinate The coordinate to test.
+	 * @return If the coordinate given is equal to this one, incorporating just the base x/y values.
+	 */
+	public boolean baseCoordEquals(Coordinate coordinate){
+		if(coordinate == null){
+			return false;
+		}
+		return this.getX() == coordinate.getX() && this.getY() == coordinate.getY();
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(x, y);
@@ -139,6 +151,10 @@ public class Coordinate {
 
 	@Override
 	protected Object clone() {
+		return new Coordinate(this.getX(), this.getY());
+	}
+
+	protected Object cloneBase() {
 		return new Coordinate(this.getX(), this.getY());
 	}
 

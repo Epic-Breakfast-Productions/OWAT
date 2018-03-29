@@ -48,44 +48,4 @@ public class FixedNode<T> extends NodePosition<T>{
 		}
 		return moved;
 	}
-
-	@Override
-	protected boolean moveNorth() {
-		if(this.node.isBorder(NORTH)){
-			return false;
-		}
-		this.node = this.node.getDir(NORTH);
-		this.incY();
-		return true;
-	}
-
-	@Override
-	protected boolean moveSouth() {
-		if(this.node.isBorder(SOUTH)){
-			return false;
-		}
-		this.node = this.node.getDir(SOUTH);
-		this.decY();
-		return true;
-	}
-
-	@Override
-	protected boolean moveEast() {
-		if(this.node.isBorder(EAST)){
-			return false;
-		}
-		this.node = this.node.getDir(EAST);
-		this.incX();
-		return true;
-	}
-
-	@Override
-	protected boolean moveWest() {
-		if(this.node.isBorder(WEST)){
-			return false;
-		}
-		this.node = this.node.getDir(WEST);
-		this.decX();
-		return true;
-	}
 }
