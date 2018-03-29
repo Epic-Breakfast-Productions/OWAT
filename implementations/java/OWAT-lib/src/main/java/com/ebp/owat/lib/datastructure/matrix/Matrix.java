@@ -99,6 +99,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	
 	/**
 	 * Adds the number of rows specified. Adds rows below the existing matrix.
+	 * TODO:: implement this here
 	 * @param numRows The number of rows to add.
 	 */
 	public abstract void addRows(long numRows);
@@ -117,6 +118,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	
 	/**
 	 * Adds the number of columns specified. Adds columns to the right of the existing matrix.
+	 * TODO:: implement this here
 	 * @param numCols The number of columns to add.
 	 */
 	public abstract void addCols(long numCols);

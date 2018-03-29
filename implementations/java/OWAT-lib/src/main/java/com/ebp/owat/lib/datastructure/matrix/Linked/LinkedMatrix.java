@@ -14,8 +14,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LinkedMatrix<T> extends Matrix<T> {
+	/**
+	 * The frequency of how often reference nodes are added.
+	 */
+	private static final long ADD_REFERENCE_FREQUENCY = 100;
+
 	/** The number of elements held in the matrix. */
 	protected long numElementsHeld = 0;
+
+	private long curAddCount = 0;
+
+	/**
+	 * @return If the added node should be made a reference.
+	 */
+	private boolean addedNode(){
+		this.curAddCount++;
+		if(curAddCount >= ADD_REFERENCE_FREQUENCY){
+			this.curAddCount = 0;
+			return true;
+		}
+		return false;
+	}
 
 	/** The nodes we have to keep track of. */
 	protected Collection<NodePosition<T>> referenceNodes = new LinkedList<>();
@@ -112,8 +131,21 @@ public class LinkedMatrix<T> extends Matrix<T> {
 			return;
 		}
 
-		for(long l = 0; l < this.getNumCols(); l++){
+		this.numRows++;
+		LinkedMatrixNode<T> lastNode = new LinkedMatrixNode<>();
+		lastNode.setNorth(this.getMatrixNode(new MatrixCoordinate(this, 0, this.getNumRows())));
+		for(long l = 1; l < this.getNumCols(); l++){
+			LinkedMatrixNode<T> curNode = new LinkedMatrixNode<>();
 
+			lastNode.setEast(curNode);
+
+			curNode.getWest().getNorth().getEast().setSouth(curNode);
+
+			if(this.addedNode()){
+				this.referenceNodes.add(new NodePosition<>(this, curNode));
+			}
+
+			lastNode = curNode;
 		}
 
 		this.resetNodePositions();
@@ -132,7 +164,29 @@ public class LinkedMatrix<T> extends Matrix<T> {
 
 	@Override
 	public void addCol() {
-		//TODO
+
+		if(this.initIfNoRowsCols()){
+			return;
+		}
+
+		this.numCols++;
+		LinkedMatrixNode<T> lastNode = new LinkedMatrixNode<>();
+		lastNode.setEast(this.getMatrixNode(new MatrixCoordinate(this, this.getNumCols(), 0)));
+		for(long l = 1; l < this.getNumRows(); l++){
+			LinkedMatrixNode<T> curNode = new LinkedMatrixNode<>();
+
+			lastNode.setWest(curNode);
+
+			curNode.getNorth().getEast().getSouth().setWest(curNode);
+
+			if(this.addedNode()){
+				this.referenceNodes.add(new NodePosition<>(this, curNode));
+			}
+
+			lastNode = curNode;
+		}
+
+		this.resetNodePositions();
 	}
 
 	@Override

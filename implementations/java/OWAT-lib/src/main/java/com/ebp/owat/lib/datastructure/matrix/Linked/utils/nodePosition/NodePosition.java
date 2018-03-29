@@ -21,7 +21,7 @@ public class NodePosition<T> extends MatrixCoordinate {
 		super(matrix, coord.getX(), coord.getY());
 	}
 
-	protected NodePosition(LinkedMatrix<T> matrix, LinkedMatrixNode<T> node) {
+	public NodePosition(LinkedMatrix<T> matrix, LinkedMatrixNode<T> node) {
 		this(matrix, node.getCoord());
 		this.node = node;
 	}
