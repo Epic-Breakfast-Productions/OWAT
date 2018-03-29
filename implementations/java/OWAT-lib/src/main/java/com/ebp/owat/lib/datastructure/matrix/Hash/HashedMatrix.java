@@ -62,22 +62,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	}
 	
 	/**
-	 * Adds the number of rows specified. Adds rows to the right of the existing matrix.
-	 *
-	 * @param numRows The number of rows to add.
-	 */
-	@Override
-	public void addRows(long numRows) {
-		if(numRows < 0){
-			throw new IllegalArgumentException("Cannot add a negative number of rows.");
-		}
-		if(this.numCols == 0){
-			this.numCols++;
-		}
-		this.numRows += numRows;
-	}
-	
-	/**
 	 * Adds a column to the matrix. Will be added to the bottom of the existing matrix.
 	 */
 	@Override
@@ -112,22 +96,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 			curCol++;
 		}
 		return true;
-	}
-	
-	/**
-	 * Adds the number of rows specified. Adds rows to the right of the existing matrix.
-	 *
-	 * @param numCols The number of columns to add.
-	 */
-	@Override
-	public void addCols(long numCols) {
-		if(numCols < 0){
-			throw new IllegalArgumentException("Cannot add a negative number of rows.");
-		}
-		if(this.numRows == 0){
-			this.numRows++;
-		}
-		this.numCols += numCols;
 	}
 	
 	/**

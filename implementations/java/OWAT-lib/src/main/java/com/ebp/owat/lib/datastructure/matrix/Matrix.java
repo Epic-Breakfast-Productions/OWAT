@@ -99,10 +99,16 @@ public abstract class Matrix<T> implements Iterable<T> {
 	
 	/**
 	 * Adds the number of rows specified. Adds rows below the existing matrix.
-	 * TODO:: implement this here
 	 * @param numRows The number of rows to add.
 	 */
-	public abstract void addRows(long numRows);
+	public void addRows(long numRows){
+		if(numRows < 0){
+			throw new IllegalArgumentException("Cannot add a negative number of rows.");
+		}
+		for(long l = 0; l < numRows; l++){
+			this.addRow();
+		}
+	}
 	
 	/**
 	 * Adds a column to the matrix. Will be added to the right of the existing matrix.
@@ -118,10 +124,16 @@ public abstract class Matrix<T> implements Iterable<T> {
 	
 	/**
 	 * Adds the number of columns specified. Adds columns to the right of the existing matrix.
-	 * TODO:: implement this here
 	 * @param numCols The number of columns to add.
 	 */
-	public abstract void addCols(long numCols);
+	public void addCols(long numCols){
+		if(numCols < 0){
+			throw new IllegalArgumentException("Cannot add a negative number of rows.");
+		}
+		for(long l = 0; l < numCols; l++){
+			this.addCol();
+		}
+	}
 	
 	/**
 	 * Grows the matrix my the numbers specified.

@@ -158,11 +158,6 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	}
 
 	@Override
-	public void addRows(long numRows) {
-		//TODO
-	}
-
-	@Override
 	public void addCol() {
 
 		if(this.initIfNoRowsCols()){
@@ -193,11 +188,6 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	public boolean addCols(Collection<T> valuesIn) {
 		//TODO
 		return false;
-	}
-
-	@Override
-	public void addCols(long numCols) {
-		//TODO
 	}
 
 	@Override

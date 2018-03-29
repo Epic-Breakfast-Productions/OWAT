@@ -54,50 +54,6 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 	}
 	
 	@Test
-	public void addRowsColsWithNumTest() throws Exception {
-		T m = this.getTestingInstance();
-		
-		m.addCols(1);
-		assertEquals(1, m.getNumCols());
-		assertEquals(1, m.getNumRows());
-		
-		m.addCols(2);
-		assertEquals(3, m.getNumCols());
-		assertEquals(1, m.getNumRows());
-		
-		m = this.getTestingInstance();
-		
-		m.addRows(1);
-		assertEquals(1, m.getNumCols());
-		assertEquals(1, m.getNumRows());
-		
-		m.addRows(2);
-		assertEquals(1, m.getNumCols());
-		assertEquals(3, m.getNumRows());
-		
-		m.addCols(2);
-		assertEquals(3, m.getNumCols());
-		assertEquals(3, m.getNumRows());
-		
-		m.addCols(0);
-		assertEquals(3, m.getNumCols());
-		assertEquals(3, m.getNumRows());
-		
-		try{
-			m.addCols(-1);
-			Assert.fail();
-		}catch (IllegalArgumentException e){
-			//nothing to do
-		}
-		try{
-			m.addRows(-1);
-			Assert.fail();
-		}catch (IllegalArgumentException e){
-			//nothing to do
-		}
-	}
-	
-	@Test
 	public void addColsWithCollectionTest() throws Exception {
 		T m = this.getTestingInstance();
 		Object def = m.getDefaultValue();
