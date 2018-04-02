@@ -5,7 +5,6 @@ import com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode
 import com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.NodePosition;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.DistanceCalc;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
@@ -106,6 +105,8 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	 * @return The node at the coordinate given.
 	 */
 	private LinkedMatrixNode<T> getMatrixNode(MatrixCoordinate coord){
+		MatrixValidator.throwIfNotOnMatrix(this, coord);
+
 		NodePosition<T> curPosition = this.getClosestHeldPosition(coord);
 
 		while(!curPosition.baseCoordEquals(coord)){
@@ -204,20 +205,28 @@ public class LinkedMatrix<T> extends Matrix<T> {
 
 	@Override
 	public T setValue(MatrixCoordinate nodeToReplace, T newValue) {
-		//TODO
-		return null;
+		LinkedMatrixNode<T> node = this.getMatrixNode(nodeToReplace);
+
+		T valToReturn = node.getValue();
+		node.setValue(newValue);
+		this.numElementsHeld++;
+
+		return valToReturn;
 	}
 
 	@Override
-	public boolean hasValue(MatrixCoordinate node) {
-		//TODO
-		return false;
+	public boolean hasValue(MatrixCoordinate coordinate) {
+		LinkedMatrixNode<T> node = this.getMatrixNode(coordinate);
+
+		return node.hasValue();
 	}
 
 	@Override
 	public T clearNode(MatrixCoordinate nodeToClear) {
-		//TODO
-		return null;
+		LinkedMatrixNode<T> node = this.getMatrixNode(nodeToClear);
+
+		this.numElementsHeld--;
+		return node.clearValue();
 	}
 
 	@Override
@@ -234,7 +243,6 @@ public class LinkedMatrix<T> extends Matrix<T> {
 
 	@Override
 	public long numElements() {
-		//TODO
 		return this.numElementsHeld;
 	}
 
@@ -244,19 +252,7 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	}
 
 	@Override
-	public List<T> getCol(long xIn) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
-	}
-
-	@Override
 	public List<T> getCol(MatrixCoordinate coordIn) {
-		//TODO
-		return null;
-	}
-
-	@Override
-	public List<T> getRow(long yIn) throws IndexOutOfBoundsException {
 		//TODO
 		return null;
 	}

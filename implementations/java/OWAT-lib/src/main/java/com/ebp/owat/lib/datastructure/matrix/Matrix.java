@@ -4,7 +4,10 @@ import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Queue;
 
 /**
  * General Matrix class.
@@ -519,7 +522,9 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return The list of elements in the column.
 	 * @throws IndexOutOfBoundsException If the index given is out of bounds.
 	 */
-	public abstract List<T> getCol(long xIn) throws IndexOutOfBoundsException;
+	public List<T> getCol(long xIn) throws IndexOutOfBoundsException {
+		return this.getCol(new MatrixCoordinate(this, xIn, 0));
+	}
 	
 	/**
 	 * Gets the row the coordinate is on.
@@ -534,7 +539,9 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @return The list of elements in the column.
 	 * @throws IndexOutOfBoundsException If the index given is out of bounds.
 	 */
-	public abstract List<T> getRow(long yIn) throws IndexOutOfBoundsException;
+	public List<T> getRow(long yIn) throws IndexOutOfBoundsException {
+		return this.getRow(new MatrixCoordinate(this, 0, yIn));
+	}
 	
 	/**
 	 * Gets the row the coordinate is on.

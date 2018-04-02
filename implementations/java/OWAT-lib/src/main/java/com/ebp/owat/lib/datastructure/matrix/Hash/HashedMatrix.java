@@ -282,51 +282,20 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	}
 	
 	/**
-	 * Gets a column of this matrix.
-	 *
-	 * @param xIn The index of the column to get.
-	 * @return The list of elements in the column.
-	 * @throws IndexOutOfBoundsException If the index given is out of bounds.
-	 */
-	@Override
-	public List<T> getCol(long xIn) throws IndexOutOfBoundsException {
-		MatrixValidator.throwIfBadIndex(this, xIn, Plane.X);
-		LinkedList<T> output = new LinkedList<>();
-		
-		for(long i = 0; i < this.getNumRows(); i++){
-			output.addLast(this.get(xIn, i));
-		}
-		
-		return output;
-	}
-	
-	/**
 	 * Gets the row the coordinate is on.
 	 *
 	 * @param coordIn The coordinate to get the column from.
 	 * @return The list of elements in the column specified.
 	 */
 	@Override
-	public List<T> getCol(MatrixCoordinate coordIn) {
-		return this.getCol(coordIn.getX());
-	}
-	
-	/**
-	 * Gets a row of this matrix.
-	 *
-	 * @param yIn The index of the column to get.
-	 * @return The list of elements in the column.
-	 * @throws IndexOutOfBoundsException If the index given is out of bounds.
-	 */
-	@Override
-	public List<T> getRow(long yIn) throws IndexOutOfBoundsException {
-		MatrixValidator.throwIfBadIndex(this, yIn, Plane.Y);
+	public List<T> getCol(MatrixCoordinate coordIn){
+		MatrixValidator.throwIfNotOnMatrix(this, coordIn);
 		LinkedList<T> output = new LinkedList<>();
-		
-		for(long i = 0; i < this.getNumCols(); i++){
-			output.addLast(this.get(i, yIn));
+
+		for(long i = 0; i < this.getNumRows(); i++){
+			output.addLast(this.get(coordIn.getX(), i));
 		}
-		
+
 		return output;
 	}
 	
@@ -337,8 +306,15 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	 * @return The list of elements in the row specified.
 	 */
 	@Override
-	public List<T> getRow(MatrixCoordinate coordIn) {
-		return this.getRow(coordIn.getY());
+	public List<T> getRow(MatrixCoordinate coordIn){
+		MatrixValidator.throwIfNotOnMatrix(this, coordIn);
+		LinkedList<T> output = new LinkedList<>();
+
+		for(long i = 0; i < this.getNumCols(); i++){
+			output.addLast(this.get(i, coordIn.getY()));
+		}
+
+		return output;
 	}
 	
 	@Override
