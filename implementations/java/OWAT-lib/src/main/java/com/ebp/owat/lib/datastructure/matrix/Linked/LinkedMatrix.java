@@ -46,6 +46,8 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		}
 
 		LinkedMatrixNode<T> headNode = new LinkedMatrixNode<>();
+		this.numCols++;
+		this.numRows++;
 
 		for(FixedNode.FixedPosition curPos : FixedNode.FixedPosition.values()){
 			this.referenceNodes.add(
@@ -166,7 +168,6 @@ public class LinkedMatrix<T> extends Matrix<T> {
 
 	@Override
 	public void addCol() {
-
 		if(this.initIfNoRowsCols()){
 			return;
 		}
