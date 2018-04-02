@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.datastructure.matrix.Linked;
 
+import com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction;
 import com.ebp.owat.lib.datastructure.matrix.Linked.utils.LinkedMatrixNode;
 import com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode;
 import com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.NodePosition;
@@ -7,6 +8,7 @@ import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.DistanceCalc;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
+import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -124,6 +126,10 @@ public class LinkedMatrix<T> extends Matrix<T> {
 			}
 		}
 		return curPosition.getNode();
+	}
+
+	private LinkedMatrixNode<T> getMatrixNode(long xIn, long yIn){
+		return this.getMatrixNode(new MatrixCoordinate(this, xIn, yIn));
 	}
 
 	@Override
@@ -253,14 +259,34 @@ public class LinkedMatrix<T> extends Matrix<T> {
 
 	@Override
 	public List<T> getCol(MatrixCoordinate coordIn) {
-		//TODO
-		return null;
+		MatrixValidator.throwIfNotOnMatrix(this, coordIn);
+
+		LongLinkedList<T> output = new LongLinkedList<>();
+		LinkedMatrixNode<T> node = this.getMatrixNode(coordIn.getX(), 0);
+		output.add(node.getValue());
+
+		do{
+			node = node.getDir(Direction.SOUTH);
+			output.add(node.getValue());
+		}while(!node.isBorder(Direction.SOUTH));
+
+		return output;
 	}
 
 	@Override
 	public List<T> getRow(MatrixCoordinate coordIn) {
-		//TODO
-		return null;
+		MatrixValidator.throwIfNotOnMatrix(this, coordIn);
+
+		LongLinkedList<T> output = new LongLinkedList<>();
+		LinkedMatrixNode<T> node = this.getMatrixNode(0, coordIn.getY());
+		output.add(node.getValue());
+
+		do{
+			node = node.getDir(Direction.EAST);
+			output.add(node.getValue());
+		}while(!node.isBorder(Direction.EAST));
+
+		return output;
 	}
 
 	@Override
