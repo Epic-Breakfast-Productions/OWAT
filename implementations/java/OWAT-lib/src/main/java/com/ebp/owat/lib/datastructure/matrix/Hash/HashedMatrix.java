@@ -97,18 +97,13 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		}
 		return true;
 	}
-	
-	/**
-	 * Removes a row from this matrix.
-	 *
-	 * @param rowIndex The index of the row to remove.
-	 * @return The elements that comprised the row.
-	 * @throws IndexOutOfBoundsException If the row index given is out of bounds.
-	 */
+
 	@Override
-	public List<T> removeRow(long rowIndex) throws IndexOutOfBoundsException {
-		MatrixValidator.throwIfBadIndex(this, rowIndex, Plane.Y);
-		
+	public List<T> removeRow(){
+		if(!this.hasRowsCols()){
+			return null;
+		}
+		long rowIndex = this.getNumRows() - 1;
 		List<T> removedItems = this.getRow(rowIndex);
 		
 		this.numRows--;
@@ -145,14 +140,15 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	/**
 	 * Removes a column from this matrix.
 	 *
-	 * @param colIndex
 	 * @return The elements that comprised the column.
 	 * @throws IndexOutOfBoundsException If the column index given is out of bounds.
 	 */
 	@Override
-	public List<T> removeCol(long colIndex) throws IndexOutOfBoundsException {
-		MatrixValidator.throwIfBadIndex(this, colIndex, Plane.X);
-		
+	public List<T> removeCol(){
+		if(!this.hasRowsCols()){
+			return null;
+		}
+		long colIndex = this.getNumCols() - 1;
 		List<T> removedItems = this.getCol(colIndex);
 
 		this.numCols--;

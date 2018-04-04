@@ -1,20 +1,20 @@
 package com.ebp.owat.lib.structure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.testUtils.TestUtils;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.ebp.owat.lib.testUtils.TestUtils;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.*;
 import static com.ebp.owat.lib.testUtils.TestUtils.assert2dArrayEquals;
+import static org.junit.Assert.*;
 
 /**
  * A test of methods from the abstract Matrix class that are already implemented in that class.
@@ -61,11 +61,11 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 		m.grow(1);
 		assertEquals(9,m.size());
 		
-		m.removeCol(0);
+		m.removeCol();
 		
 		assertEquals(6,m.size());
 		
-		m.removeRow(0);
+		m.removeRow();
 		
 		assertEquals(4,m.size());
 	}

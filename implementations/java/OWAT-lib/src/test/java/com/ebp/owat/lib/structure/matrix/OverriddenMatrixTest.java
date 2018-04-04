@@ -2,11 +2,10 @@ package com.ebp.owat.lib.structure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
-import org.junit.Assert;
+import com.ebp.owat.lib.testUtils.TestUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.ebp.owat.lib.testUtils.TestUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -211,34 +210,6 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 			},
 			m
 		);
-		
-		m.setValue(1, 0, 1);
-		m.setValue(1, 1, 2);
-		m.setValue(1, 2, 3);
-		m.setValue(1, 3, 4);
-		m.setValue(1, 4, 5);
-		
-		m.setValue(2, 0, 6);
-		m.setValue(2, 1, 7);
-		m.setValue(2, 2, 8);
-		m.setValue(2, 3, 9);
-		m.setValue(2, 4, 10);
-		
-		assertEquals(Arrays.asList(1,2,3,4,5), m.removeCol(1));
-		
-		assertEquals(2, m.getNumCols());
-		assertEquals(5, m.getNumRows());
-		assertEquals(5, m.numElements());
-		TestUtils.assertMatrix(
-			new Object[][]{
-				{d,6},
-				{d,7},
-				{d,8},
-				{d,9},
-				{d,10}
-			},
-			m
-		);
 	}
 	
 	@Test
@@ -279,31 +250,6 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 				{d,d,d,d,d},
 				{d,d,d,d,d},
 				{d,d,d,d,d}
-			},
-			m
-		);
-		
-		m.setValue(0, 1, 1);
-		m.setValue(1, 1, 2);
-		m.setValue(2, 1, 3);
-		m.setValue(3, 1, 4);
-		m.setValue(4, 1, 5);
-		
-		m.setValue(0, 2, 6);
-		m.setValue(1, 2, 7);
-		m.setValue(2, 2, 8);
-		m.setValue(3, 2, 9);
-		m.setValue(4, 2, 10);
-		
-		assertEquals(Arrays.asList(1,2,3,4,5), m.removeRow(1));
-		
-		assertEquals(2, m.getNumRows());
-		assertEquals(5, m.getNumCols());
-		assertEquals(5, m.numElements());
-		TestUtils.assertMatrix(
-			new Object[][]{
-				{d,d,d,d,d},
-				{6,7,8,9,10}
 			},
 			m
 		);

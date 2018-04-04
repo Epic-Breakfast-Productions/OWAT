@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.EAST;
+
 public class LinkedMatrix<T> extends Matrix<T> {
 	/**
 	 * The frequency of how often reference nodes are added.
@@ -199,13 +201,20 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	}
 
 	@Override
-	public List<T> removeRow(long rowIndex) throws IndexOutOfBoundsException {
+	public List<T> removeRow() throws IndexOutOfBoundsException {
+		if(!this.hasRowsCols()){
+			return null;
+		}
+
 		//TODO
 		return null;
 	}
 
 	@Override
-	public List<T> removeCol(long colIndex) throws IndexOutOfBoundsException {
+	public List<T> removeCol() throws IndexOutOfBoundsException {
+		if(!this.hasRowsCols()){
+			return null;
+		}
 		//TODO
 		return null;
 	}
@@ -283,9 +292,9 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		output.add(node.getValue());
 
 		do{
-			node = node.getDir(Direction.EAST);
+			node = node.getDir(EAST);
 			output.add(node.getValue());
-		}while(!node.isBorder(Direction.EAST));
+		}while(!node.isBorder(EAST));
 
 		return output;
 	}

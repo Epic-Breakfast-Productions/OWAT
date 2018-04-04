@@ -235,42 +235,18 @@ public abstract class Matrix<T> implements Iterable<T> {
 		
 		return lastResult;
 	}
-	
-	/**
-	 * Removes a row from this matrix.
-	 * @return The elements that comprised the row.
-	 * @throws IndexOutOfBoundsException If the row index given is out of bounds.
-	 */
-	public abstract List<T> removeRow(long rowIndex) throws IndexOutOfBoundsException;
-	
+
 	/**
 	 * Removes a single row from this matrix, removes the bottom most, highest indexed row.
 	 * @return The elements that comprised the row. Null if empty before removal.
 	 */
-	public List<T> removeRow(){
-		if(this.hasRowsCols()){
-			return this.removeRow(this.getNumRows() - 1);
-		}
-		return null;
-	}
-	
-	/**
-	 * Removes a column from this matrix.
-	 * @return The elements that comprised the column.
-	 * @throws IndexOutOfBoundsException If the column index given is out of bounds.
-	 */
-	public abstract List<T> removeCol(long colIndex) throws IndexOutOfBoundsException;
-	
+	public abstract List<T> removeRow();
+
 	/**
 	 * Removes a single column from this matrix, removes the rightmost, highest indexed column.
 	 * @return The elements that comprised the column. Null if empty before removal.
 	 */
-	public List<T> removeCol(){
-		if(this.hasRowsCols()){
-			return this.removeCol(this.getNumCols() - 1);
-		}
-		return null;
-	}
+	public abstract List<T> removeCol();
 	
 	/**
 	 * Replaces a particular value's value. Not to be used to remove a value by setting it's value to null or the {@link Matrix#defaultValue}
