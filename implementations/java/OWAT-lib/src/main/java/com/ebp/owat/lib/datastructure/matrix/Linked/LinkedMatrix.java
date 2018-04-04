@@ -15,6 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.EAST;
+import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode.FixedPosition;
+import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode.FixedPosition.NORTH_EAST;
+import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode.FixedPosition.SOUTH_WEST;
 
 public class LinkedMatrix<T> extends Matrix<T> {
 	/**
@@ -111,6 +114,7 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	 * @return The node at the coordinate given.
 	 */
 	private LinkedMatrixNode<T> getMatrixNode(MatrixCoordinate coord){
+		//TODO:: returns null sometimes, unacceptable.
 		MatrixValidator.throwIfNotOnMatrix(this, coord);
 
 		NodePosition<T> curPosition = this.getClosestHeldPosition(coord);
@@ -130,6 +134,23 @@ public class LinkedMatrix<T> extends Matrix<T> {
 			}
 		}
 		return curPosition.getNode();
+	}
+
+	/**
+	 * Gets a fixed position's node.
+	 * @param fixedPosition The fixed position to get the node of.
+	 * @return The node at the fixed position.
+	 */
+	private LinkedMatrixNode<T> getMatrixNode(FixedPosition fixedPosition){
+		MatrixValidator.throwIfNoRowsCols(this);
+
+		for(NodePosition<T> curNode : this.referenceNodes){
+			if(curNode instanceof FixedNode && ((FixedNode<T>) curNode).position == fixedPosition){
+				return curNode.getNode();
+			}
+		}
+
+		throw new IllegalStateException("Invalid fixed position given.");
 	}
 
 	private LinkedMatrixNode<T> getMatrixNode(long xIn, long yIn){
@@ -206,8 +227,21 @@ public class LinkedMatrix<T> extends Matrix<T> {
 			return null;
 		}
 
-		//TODO
-		return null;
+		List<T> output = new LongLinkedList<>();
+		LinkedMatrixNode<T> node = this.getMatrixNode(SOUTH_WEST);
+
+		do{
+			output.add(node.getValue());
+			LinkedMatrixNode<T> upper = node.getNorth();
+			upper.setSouth(null);
+
+			node.setNorth(null);
+			node.setWest(null);
+
+			node = node.getEast();
+		}while(node != null);
+
+		return output;
 	}
 
 	@Override
@@ -215,8 +249,22 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		if(!this.hasRowsCols()){
 			return null;
 		}
-		//TODO
-		return null;
+
+		List<T> output = new LongLinkedList<>();
+		LinkedMatrixNode<T> node = this.getMatrixNode(NORTH_EAST);
+
+		do{
+			output.add(node.getValue());
+			LinkedMatrixNode<T> west = node.getWest();
+			west.setEast(null);
+
+			node.setWest(null);
+			node.setNorth(null);
+
+			node = node.getSouth();
+		}while(node != null);
+
+		return output;
 	}
 
 	@Override
