@@ -1,4 +1,4 @@
-package com.ebp.owat.app.runner;
+package com.ebp.owat.lib.runner;
 
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import org.junit.Test;

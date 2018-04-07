@@ -1,8 +1,8 @@
-package com.ebp.owat.app.runner;
+package com.ebp.owat.lib.runner;
 
-import com.ebp.owat.app.runner.utils.RunResults;
-import com.ebp.owat.app.runner.utils.ScrambleRunnerThread;
-import com.ebp.owat.app.runner.utils.Step;
+import com.ebp.owat.lib.runner.utils.RunResults;
+import com.ebp.owat.lib.runner.utils.ScrambleRunnerThread;
+import com.ebp.owat.lib.runner.utils.Step;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

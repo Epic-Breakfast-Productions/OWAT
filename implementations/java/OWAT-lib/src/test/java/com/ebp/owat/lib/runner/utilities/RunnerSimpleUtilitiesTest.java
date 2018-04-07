@@ -1,4 +1,4 @@
-package com.ebp.owat.app.runner.utilities;
+package com.ebp.owat.lib.runner.utilities;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;

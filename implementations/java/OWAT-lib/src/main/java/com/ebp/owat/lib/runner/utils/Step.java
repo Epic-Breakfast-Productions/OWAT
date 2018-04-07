@@ -1,4 +1,4 @@
-package com.ebp.owat.app.runner.utils;
+package com.ebp.owat.lib.runner.utils;
 
 import java.util.LinkedList;
 import java.util.List;

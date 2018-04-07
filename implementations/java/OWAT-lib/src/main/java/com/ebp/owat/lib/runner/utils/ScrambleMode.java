@@ -1,4 +1,4 @@
-package com.ebp.owat.app.runner.utils;
+package com.ebp.owat.lib.runner.utils;
 
 public enum ScrambleMode {
 	SCRAMBLING("scrambling", 5),

@@ -1,9 +1,9 @@
-package com.ebp.owat.app.runner;
+package com.ebp.owat.lib.runner;
 
-import com.ebp.owat.app.runner.utils.RunResults;
-import com.ebp.owat.app.runner.utils.RunnerUtilities;
-import com.ebp.owat.app.runner.utils.ScrambleMode;
-import com.ebp.owat.app.runner.utils.Step;
+import com.ebp.owat.lib.runner.utils.RunResults;
+import com.ebp.owat.lib.runner.utils.RunnerUtilities;
+import com.ebp.owat.lib.runner.utils.ScrambleMode;
+import com.ebp.owat.lib.runner.utils.Step;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;

@@ -2,11 +2,11 @@ package com.ebp.owat.app.gui;
 
 import com.ebp.owat.app.InputValidator;
 import com.ebp.owat.app.config.Globals;
-import com.ebp.owat.app.runner.DeScrambleRunner;
-import com.ebp.owat.app.runner.OwatRunner;
-import com.ebp.owat.app.runner.ScrambleRunner;
-import com.ebp.owat.app.runner.utils.RunResults;
-import com.ebp.owat.app.runner.utils.Step;
+import com.ebp.owat.lib.runner.DeScrambleRunner;
+import com.ebp.owat.lib.runner.OwatRunner;
+import com.ebp.owat.lib.runner.ScrambleRunner;
+import com.ebp.owat.lib.runner.utils.RunResults;
+import com.ebp.owat.lib.runner.utils.Step;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
 import com.intellij.uiDesigner.core.GridConstraints;

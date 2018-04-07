@@ -1,4 +1,4 @@
-package com.ebp.owat.app.runner.utils;
+package com.ebp.owat.lib.runner.utils;
 
 import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;

@@ -3,9 +3,9 @@ package com.ebp.owat.app;
 import com.ebp.owat.app.config.CommandLineOps;
 import com.ebp.owat.app.config.Globals;
 import com.ebp.owat.app.gui.MainGuiApp;
-import com.ebp.owat.app.runner.DeScrambleRunner;
-import com.ebp.owat.app.runner.ScrambleRunner;
-import com.ebp.owat.app.runner.utils.RunResults;
+import com.ebp.owat.lib.runner.DeScrambleRunner;
+import com.ebp.owat.lib.runner.ScrambleRunner;
+import com.ebp.owat.lib.runner.utils.RunResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
-package com.ebp.owat.app.runner.utilities;
+package com.ebp.owat.lib.runner.utilities;
 
-import com.ebp.owat.app.runner.utils.RunnerUtilities;
+import com.ebp.owat.lib.runner.utils.RunnerUtilities;
 
 public abstract class RunnerUtilTest {
 	protected final RunnerUtilities utilities = new RunnerUtilities();
