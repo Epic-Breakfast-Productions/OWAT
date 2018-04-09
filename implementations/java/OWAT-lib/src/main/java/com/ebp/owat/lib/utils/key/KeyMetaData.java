@@ -11,20 +11,38 @@ import java.util.Objects;
 
 import static com.ebp.owat.lib.utils.key.SerializationConstants.*;
 
+/**
+ * Class to organize the data in the key's metadata section.
+ */
 public class KeyMetaData {
+	/** The height of the original data. */
 	@JsonProperty(ORIGINAL_HEIGHT)
 	public final long originalHeight;
+	/** The width of the original data. */
 	@JsonProperty(ORIGINAL_WIDTH)
 	public final long originalWidth;
+	/** The height of the data */
 	@JsonProperty(DATA_HEIGHT)
 	public final long dataHeight;
+	/** The width of the data */
 	@JsonProperty(DATA_WIDTH)
 	public final long dataWidth;
+	/** The type of node used. */
 	@JsonProperty(NODE_TYPE)
 	public final String nodeType;
+	/** The end of the original data in the last row of the original dataset. */
 	@JsonProperty(LAST_COL_INDEX)
 	public final long lastColIndex;
-	
+
+	/**
+	 * Constructor to set all the data.
+	 * @param originalHeight The height of the original data.
+	 * @param originalWidth The width of the original data.
+	 * @param dataHeight The height of the overall data.
+	 * @param dataWidth The width of the overall data.
+	 * @param nodeType The type of node used.
+	 * @param lastColIndex The  end of the original data in the last row of the original dataset.
+	 */
 	@JsonCreator
 	public KeyMetaData(
 		@JsonProperty(ORIGINAL_HEIGHT) long originalHeight,
@@ -53,7 +71,11 @@ public class KeyMetaData {
 		}
 		return BYTE_TYPE_STR;
 	}
-	
+
+	/**
+	 * Gets the type of node used.
+	 * @return The type of node used.
+	 */
 	@JsonIgnore
 	public NodeMode getNodeMode(){
 		switch (this.nodeType){

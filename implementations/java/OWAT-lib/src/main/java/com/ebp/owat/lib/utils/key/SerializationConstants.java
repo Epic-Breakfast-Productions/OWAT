@@ -1,5 +1,8 @@
 package com.ebp.owat.lib.utils.key;
 
+/**
+ * Constants used in the serialization/deserialization of keys.
+ */
 public class SerializationConstants {
 	public static final String META = "meta";
 	public static final String SCRAMBLE = "scramble";

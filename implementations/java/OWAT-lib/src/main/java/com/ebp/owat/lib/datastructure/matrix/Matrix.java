@@ -66,7 +66,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	}
 	
 	/**
-	 * Gets the {@link #defaultValue default value}. Does NOT do a defensive copy.
+	 * Gets the {@link #defaultValue default value}. Does NOT do a defensive copy, due to not knowing if the object held supports it.
 	 * @return {@link #defaultValue default value}
 	 */
 	public T getDefaultValue(){

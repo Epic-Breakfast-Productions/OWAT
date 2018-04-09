@@ -7,25 +7,47 @@ import com.ebp.owat.lib.utils.scramble.ScrambleConstants;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
 import com.ebp.owat.lib.utils.scramble.ScrambleMoves;
 
+/**
+ * Generator of scrambling moves.
+ */
 public class ScrambleMoveGenerator {
-	
+	/** The number generator to use. */
 	protected OwatRandGenerator numGenerator;
+	/** The matrix to generate moves for. */
 	protected final Matrix matrix;
-	
+
+	/**
+	 * Constructor for the generator.
+	 * @param numGenerator The number generator to use.
+	 * @param matrix The matrix to generate moves for.
+	 */
 	public ScrambleMoveGenerator(OwatRandGenerator numGenerator, Matrix matrix) {
 		this.numGenerator = numGenerator;
 		this.matrix = matrix;
 	}
-	
+
+	/**
+	 * Gets the number generator being used.
+	 * @return The number generator being used by this move generator
+	 */
 	public OwatRandGenerator getNumGenerator(){
 		return numGenerator;
 	}
-	
+
+	/**
+	 * Sets the number generator being used.
+	 * @param numGenerator The new generator to use.
+	 * @return This move generator.
+	 */
 	public ScrambleMoveGenerator setNumGenerator(OwatRandGenerator numGenerator){
 		this.numGenerator = numGenerator;
 		return this;
 	}
-	
+
+	/**
+	 * Gets a new move.
+	 * @return A new move to be used to scramble the matrix.
+	 */
 	public ScrambleMove getMove(){
 		MoveValidator.throwIfMatrixTooSmallForScrambling(this.matrix);
 		ScrambleMoves sm = this.numGenerator.getRandValue(ScrambleMoves.values());
@@ -89,7 +111,7 @@ public class ScrambleMoveGenerator {
 	 * [2] = X2 \
 	 * [3] = Y2 |- "Bottom Right"
 	 *
-	 * @return
+	 * @return a set of coords to describe a box.
 	 */
 	private long[] getBoxCoords(){
 		long

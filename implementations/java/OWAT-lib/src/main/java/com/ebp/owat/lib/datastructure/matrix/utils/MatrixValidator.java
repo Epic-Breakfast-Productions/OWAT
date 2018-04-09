@@ -108,7 +108,13 @@ public class MatrixValidator {
 				break;
 		}
 	}
-	
+
+	/**
+	 * Throws an exception if the index given is invalid for both the x or y plane.
+	 * @param matrix The matrix we are validating for.
+	 * @param index The index given.
+	 * @throws IndexOutOfBoundsException If the index given is out of bounds in either the x or y plane.
+	 */
 	public static void throwIfBadIndex(Matrix matrix, long index){
 		throwIfBadIndex(matrix, index, Plane.X);
 		throwIfBadIndex(matrix, index, Plane.Y);
@@ -116,15 +122,20 @@ public class MatrixValidator {
 	
 	/**
 	 * Throws an IllegalStateException if the matrix has no rows or columns.
-	 * @param matrix
-	 * @throws IllegalStateException
+	 * @param matrix The matrix we are validating for.
+	 * @throws IllegalStateException if the matrix has no rows or columns.
 	 */
 	public static void throwIfNoRowsCols(Matrix matrix) throws IllegalStateException{
 		if(!matrix.hasRowsCols()){
 			throw new IllegalStateException("Matrix has rows and columns.");
 		}
 	}
-	
+
+	/**
+	 * Throws an exception if the matrix has rows or columns
+	 * @param matrix The matrix we are validating for.
+	 * @throws IllegalStateException If the matrix has rows or columns
+	 */
 	public static void throwIfHasRowsCols(Matrix matrix) throws IllegalStateException{
 		if(matrix.hasRowsCols()){
 			throw new IllegalStateException("Matrix rows and columns.");

@@ -132,11 +132,19 @@ class LongListNode<T> implements Serializable, Cloneable{
 		this.setPrev(prev);
 		return curPrev;
 	}
-	
+
+	/**
+	 * Determines if this node has a previous node.
+	 * @return If this node has a previous one.
+	 */
 	public boolean hasPrev(){
 		return this.prev() != null;
 	}
-	
+
+	/**
+	 * Determines if this node has one after it.
+	 * @return If this node has one after it.
+	 */
 	public boolean hasNext(){
 		return this.next() != null;
 	}

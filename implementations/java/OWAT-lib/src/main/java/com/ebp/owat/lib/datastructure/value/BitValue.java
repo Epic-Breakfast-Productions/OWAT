@@ -4,20 +4,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *  A Node that holds a BitValue.
- *
- *  Holds that bit value in the {@link #flags} byte to save space.
+ * Holds that bit value in the {@link #flags} byte to save space.
  *
  * Created by Greg Stewart on 3/26/17.
  */
 public class BitValue extends Value<Boolean> {
-	
+
+	/**
+	 * Constructor that sets this value's value.
+	 * @param value The value to give this value.
+	 */
 	public BitValue(boolean value){
 		if(value) {
 			this.flags = ValueFlag.VALUE.setFlag(this.flags);
 		}
 	}
-	
+
+	/**
+	 * Constructor to set the value and isOriginal flags
+	 * @param value The value to set
+	 * @param isOriginal If this is an original value or not.
+	 */
 	public BitValue(boolean value, boolean isOriginal){
 		this(value);
 		if(isOriginal){
@@ -29,13 +36,19 @@ public class BitValue extends Value<Boolean> {
 	public Boolean getValue() {
 		return ValueFlag.VALUE.getFlag(this.flags);
 	}
-	
+
+	/**
+	 * Determines if a certain bit is set.
+	 * @param b The byte
+	 * @param bit The bit to check
+	 * @return If the bit is set or not.
+	 */
 	private static boolean isBitSet(byte b, short bit){
 		return (b & (1 << bit)) != 0;
 	}
 	
 	/**
-	 * Turns a byte into a list of 8 BitValues.3
+	 * Turns a byte into a list of 8 BitValues.
 	 *
 	 * @param source The byte to get the info from.
 	 * @return The list of 8 BitValues.

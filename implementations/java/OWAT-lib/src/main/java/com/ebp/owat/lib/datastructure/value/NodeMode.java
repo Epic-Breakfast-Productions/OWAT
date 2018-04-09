@@ -2,6 +2,9 @@ package com.ebp.owat.lib.datastructure.value;
 
 import com.ebp.owat.lib.utils.key.SerializationConstants;
 
+/**
+ * Enum representations of the value types.
+ */
 public enum NodeMode {
 	BIT(SerializationConstants.BIT_TYPE_STR, BitValue.class),BYTE(SerializationConstants.BYTE_TYPE_STR, ByteValue.class);
 	

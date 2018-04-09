@@ -17,10 +17,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
-public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
+/**
+ * The runner that descrambles data.
+ * @param <N> The type of value to use
+ * @param <M> The type of matrix to use
+ * @param <R> The random number generator to use
+ */
+public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner<N,M,R> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeScrambleRunner.class);
 
 	/** The key that will be used. */
@@ -33,10 +38,18 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 	private final InputStream keyInput;
 	/** The stream to use to write the data out */
 	private final OutputStream dataOutput;
-	
-	private RunnerUtilities<N, M, R> utils = new RunnerUtilities<>();
-	
-	private DeScrambleRunner(InputStream dataInput, InputStream keyInput, OutputStream dataOutput){
+
+	/**
+	 * Constructor to set up the descrambler. To be called by the builder.
+	 * @param dataInput The scrambled data to input.
+	 * @param keyInput The key data to input.
+	 * @param dataOutput The stream to output the descrambled data.
+	 */
+	private DeScrambleRunner(
+		InputStream dataInput,
+		InputStream keyInput,
+		OutputStream dataOutput
+	){
 		if(dataInput == null){
 			throw new IllegalArgumentException("Invalid null parameter(s) given. Must specify data to input.");
 		}
@@ -51,7 +64,10 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		this.keyInput = keyInput;
 		this.dataOutput = dataOutput;
 	}
-	
+
+	/**
+	 * Builder for the descrambler class. Used to easily setup the descrambler class.
+	 */
 	public static class Builder{
 		/** The stream to use to read the scrambled data in. */
 		private InputStream dataInput;
@@ -59,20 +75,35 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		private InputStream keyInput;
 		/** The stream to use to write the data out */
 		private OutputStream dataOutput;
-		
-		private byte[] getByteArrFromString(String str){
-			return str.getBytes(StandardCharsets.UTF_8);
-		}
-		
+
+		/**
+		 * Sets the scrambler data input stream to give the descrambler.
+		 * @param is The input stream
+		 * @return This builder for chained setting methods.
+		 */
 		public DeScrambleRunner.Builder setDataInput(InputStream is){
 			this.dataInput = is;
 			return this;
 		}
-		
+
+		/**
+		 * Sets the scrambled data in the form of a string.
+		 * @param data The scrambled data to set.
+		 * @return This builder for chained setting methods.
+		 */
 		public DeScrambleRunner.Builder setDataInput(String data){
-			return this.setDataInput(new ByteArrayInputStream(getByteArrFromString(data)));
+			return this.setDataInput(new ByteArrayInputStream(RunnerUtilities.getByteArrFromString(data)));
 		}
-		
+
+		/**
+		 * Sets the data input stream to the file specified.
+		 *
+		 * TODO:: move file verification from running code to this method.
+		 *
+		 * @param file The file of scrambed data to descramble.
+		 * @return This builder for chained setting methods.
+		 * @throws FileNotFoundException If something went wrong.
+		 */
 		public DeScrambleRunner.Builder setDataInput(File file) throws FileNotFoundException {
 			return this.setDataInput(new FileInputStream(file));
 		}
@@ -81,12 +112,21 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 			this.dataOutput = os;
 			return this;
 		}
-		
+
+		/**
+		 * Sets the key input stream to use.
+		 * @param is The input stream of the key.
+		 * @return This builder, for chaining calls.
+		 */
 		public DeScrambleRunner.Builder setKeyInput(InputStream is){
 			this.keyInput = is;
 			return this;
 		}
-		
+
+		/**
+		 * Builds the actual runner.
+		 * @return The runner setup with the builder.
+		 */
 		public DeScrambleRunner build(){
 			return new DeScrambleRunner(dataInput, keyInput, dataOutput);
 		}

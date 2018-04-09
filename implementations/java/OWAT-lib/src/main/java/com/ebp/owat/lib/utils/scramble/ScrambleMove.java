@@ -7,12 +7,24 @@ import java.util.Objects;
 
 import static com.ebp.owat.lib.utils.scramble.ScrambleConstants.*;
 
+/**
+ * Describes a move for scrambling.
+ */
 public class ScrambleMove {
+	/** If we should use the opcode or not. */
 	private static boolean useOpCode = true;
-	
+
+	/** The type of move this is. */
 	public final ScrambleMoves move;
+	/** The arguments that make up this move. */
 	private final long[] args;
-	
+
+	/**
+	 * Constructor to set up a move.
+	 * @param move The type of move this is.
+	 * @param args The arguments that make up this move.
+	 * @throws IllegalArgumentException If the number of arguments is invalid.
+	 */
 	public ScrambleMove(ScrambleMoves move, long ... args) {
 		this.move = move;
 		if (args.length != this.move.numArgs) {
@@ -20,11 +32,20 @@ public class ScrambleMove {
 		}
 		this.args = args;
 	}
-	
+
+	/**
+	 * Gets a particular argument from the args
+	 * @param argIndex The index of the argument to get.
+	 * @return The value of the argument specified.
+	 */
 	public long getArg(int argIndex){
 		return this.args[argIndex];
 	}
-	
+
+	/**
+	 * Gets the op number or string, whichever specified by {@link #isUsingOpCode()}
+	 * @return The op number or string.
+	 */
 	private String getOpOrStr(){
 		if(isUsingOpCode()){
 			return this.move.opCode;
@@ -32,6 +53,9 @@ public class ScrambleMove {
 		return this.move.opStr;
 	}
 
+	/**
+	 * Turns this move into the move that will undo this one.
+	 */
 	public void toReverse(){
 		switch (this.move){
 			case SLIDE_COL:
@@ -100,11 +124,20 @@ public class ScrambleMove {
 		}
 		return sb.toString();
 	}
-	
+
+	/**
+	 * Turns this move into its key string. Reverses the move for later descrambling.
+	 * @return The key string representing this moves reversal.
+	 */
 	public String toKeyString() {
 		return this.toKeyString(null, true);
 	}
-	
+
+	/**
+	 * Parses a move from the string given.
+	 * @param move The move as a string.
+	 * @return The move parsed from the string.
+	 */
 	public static ScrambleMove parse(String move) {
 		ScrambleMoves sm = ScrambleMoves.determineMove(move);
 		String sanitizedMove = move.replaceAll("\\s", "");
@@ -116,7 +149,12 @@ public class ScrambleMove {
 		}
 		return new ScrambleMove(sm, args);
 	}
-	
+
+	/**
+	 * Parses multiple moves from a string.
+	 * @param moves The string with moves to parse.
+	 * @return A list of moves parsed from the string given.
+	 */
 	public static LongLinkedList<ScrambleMove> parseMulti(String moves) {
 		LongLinkedList<ScrambleMove> output = new LongLinkedList<>();
 		
@@ -127,11 +165,19 @@ public class ScrambleMove {
 		}
 		return output;
 	}
-	
+
+	/**
+	 * Determines if we are using the moves' opcode or not.
+	 * @return If we are using the moves' opcode or not.
+	 */
 	public static synchronized boolean isUsingOpCode(){
 		return useOpCode;
 	}
-	
+
+	/**
+	 * Sets the flag to use the moves' opcode or not.
+	 * @param use
+	 */
 	public static synchronized void useOpCode(boolean use){
 		useOpCode = use;
 	}

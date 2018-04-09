@@ -12,6 +12,11 @@ import com.ebp.owat.lib.utils.scramble.ScrambleMoves;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * This hashed matrix implements the methods needed to scramble.
+ *
+ * @param <T> The type of data this holds.
+ */
 public class HashedScramblingMatrix<T> extends HashedMatrix<T> implements Scrambler {
 	
 	@Override
@@ -59,17 +64,23 @@ public class HashedScramblingMatrix<T> extends HashedMatrix<T> implements Scramb
 		this.replaceCol(colIndexOne, colTwo);
 		this.replaceCol(colIndexTwo, colOne);
 	}
-	
+
+	/**
+	 * This slides a list of values down the number of spots specified.
+	 * @param list The list of values to slide.
+	 * @param numToSlide The number of spots to slide.
+	 * @return The slid list.
+	 */
 	private List<T> slideList(List<T> list, long numToSlide){
 		LongLinkedList<T> output = new LongLinkedList<>(list);
-		
+
 		Iterator<T> it = list.iterator();
 		for(long curInd = 0; curInd < output.sizeL(); curInd++){
 			T curVal = it.next();
 			long newIndex = Math.floorMod((curInd + numToSlide),output.sizeL());
 			output.set(newIndex, curVal);
 		}
-		
+
 		return output;
 	}
 	

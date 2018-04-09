@@ -2,6 +2,7 @@ package com.ebp.owat.lib.utils.key;
 
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.Value;
+import com.ebp.owat.lib.runner.utils.ScrambleMode;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -11,15 +12,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Iterator;
 import java.util.Objects;
 
+import static com.ebp.owat.lib.runner.utils.ScrambleMode.DESCRAMBLING;
+import static com.ebp.owat.lib.runner.utils.ScrambleMode.SCRAMBLING;
 import static com.ebp.owat.lib.utils.key.SerializationConstants.META;
 import static com.ebp.owat.lib.utils.key.SerializationConstants.SCRAMBLE;
 
+/**
+ * The key for scrambling the data.
+ */
 public class ScrambleKey {
-	
-	private enum Mode{
-		SCRAMBLING,DESCRAMBLING;
-	}
-	
 	/** The metadata that describes the matrix. */
 	@JsonProperty(META)
 	public final KeyMetaData meta;
@@ -29,8 +30,17 @@ public class ScrambleKey {
 	
 	/** If this key is part of the scrambling or descrambling process. */
 	@JsonIgnore
-	public final Mode mode;
-	
+	public final ScrambleMode mode;
+
+	/**
+	 * Sets up the key.
+	 * @param originalHeight The height of the original data
+	 * @param originalWidth The width of the original data
+	 * @param dataHeight The height of the whole data
+	 * @param dataWidth The width of the whole data
+	 * @param type The type of value to use.
+	 * @param lastRowIndex The end of the original data in the last row of the original dataset.
+	 */
 	public ScrambleKey(
 		long originalHeight,
 		long originalWidth,
@@ -39,14 +49,19 @@ public class ScrambleKey {
 		Class<? extends Value> type,
 		long lastRowIndex
 	) {
-		this.mode = Mode.SCRAMBLING;
+		this.mode = SCRAMBLING;
 		this.meta = new KeyMetaData(originalHeight, originalWidth, dataHeight, dataWidth, KeyMetaData.getTypeStr(type), lastRowIndex);
 		this.moves = new LongLinkedList<>();
 	}
-	
+
+	/**
+	 * Constructor to setup the scramble key.
+	 * @param meta The metadata to use.
+	 * @param movesStr The string of moves
+	 */
 	@JsonCreator
 	public ScrambleKey(@JsonProperty(META) KeyMetaData meta, @JsonProperty(SCRAMBLE) String movesStr){
-		this.mode = Mode.DESCRAMBLING;
+		this.mode = DESCRAMBLING;
 		this.meta = meta;
 		this.moves = ScrambleMove.parseMulti(movesStr);
 	}
@@ -57,7 +72,7 @@ public class ScrambleKey {
 	 * @throws IllegalStateException If the key is not set to be scrambling.
 	 */
 	public void addMove(ScrambleMove move){
-		if(this.mode != Mode.SCRAMBLING){
+		if(this.mode != SCRAMBLING){
 			throw new IllegalStateException("The mode of the ScrambleKey is not set to SCRAMBLING. Cannot add a move when descrambling.");
 		}
 		this.moves.addFirst(move);
@@ -70,12 +85,16 @@ public class ScrambleKey {
 	 */
 	@JsonIgnore
 	public Iterator<ScrambleMove> getMovesIt(){
-		if(this.mode != Mode.DESCRAMBLING){
+		if(this.mode != DESCRAMBLING){
 			throw new IllegalStateException("The mode of the ScrambleKey is not set to DESCRAMBLING. Cannot remove moves when scrambling.");
 		}
 		return this.moves.destructiveIterator();
 	}
-	
+
+	/**
+	 * Gets the moves in this key as a string.
+	 * @return The moves in this key as a string.
+	 */
 	@JsonGetter(SCRAMBLE)
 	public String getMoves(){
 		StringBuilder sb = new StringBuilder();
@@ -86,7 +105,11 @@ public class ScrambleKey {
 		
 		return sb.toString();
 	}
-	
+
+	/**
+	 * The number of moves held in this key.
+	 * @return The number of moves in the key.
+	 */
 	@JsonIgnore
 	public long getNumMoves(){
 		return this.moves.sizeL();

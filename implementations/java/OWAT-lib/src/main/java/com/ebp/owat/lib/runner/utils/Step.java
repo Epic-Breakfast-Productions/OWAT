@@ -3,6 +3,9 @@ package com.ebp.owat.lib.runner.utils;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Enum to describe the steps in the processes.
+ */
 public enum Step {
 	NOT_STARTED_SCRAMBLE(0, "Not Started", ScrambleMode.SCRAMBLING),
 	NOT_STARTED_DESCRAMBLE(0, "Not Started", ScrambleMode.DESCRAMBLING),
@@ -19,9 +22,12 @@ public enum Step {
 	DESCRAMBLING(3, "Descrambling", ScrambleMode.DESCRAMBLING),
 	OUT_DESCRAMBLED_DATA(4, "Outputting Descrambled Data", ScrambleMode.DESCRAMBLING),
 	DONE_DESCRAMBLING(5, "Done", ScrambleMode.DESCRAMBLING);
-	
+
+	/** The step number of the step. */
 	public final int stepNo;
+	/** The name of the step. */
 	public final String stepName;
+	/** The mode the step is part of. */
 	public final ScrambleMode mode;
 	
 	Step(int stepNo, String name, ScrambleMode mode){
@@ -30,6 +36,11 @@ public enum Step {
 		this.mode = mode;
 	}
 
+	/**
+	 * Gets the steps that are part of a mode.
+	 * @param mode The mode to get the steps of
+	 * @return The list of steps in the mode.
+	 */
 	public static List<Step> getStepsIn(ScrambleMode mode){
 		List<Step> steps = new LinkedList<>();
 

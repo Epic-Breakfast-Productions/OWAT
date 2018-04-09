@@ -1,7 +1,5 @@
 package com.ebp.owat.lib.datastructure.matrix.utils.coordinate;
 
-import static com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator.throwIfNotOnSameMatrix;
-
 public class DistanceCalc {
 	/**
 	 * The supported ways to calculate distance between Coordinates.
@@ -9,9 +7,26 @@ public class DistanceCalc {
 	public enum Method {
 		MANHATTAN, EUCLIDEAN;
 	}
+
 	/** The default calculation method to use. */
 	public static final Method DEFAULT_CALC_METHOD = Method.MANHATTAN;
-	
+
+	/**
+	 * Gets the distance between two long values.
+	 * @param valOne The first value.
+	 * @param valTwo The second value.
+	 * @return The distance between them.
+	 */
+	private static long getDistance(long valOne, long valTwo){
+		if(valOne > valTwo) {
+			return valOne - valTwo;
+		}else if(valTwo > valOne){
+			return valTwo - valOne;
+		}else{
+			return 0;
+		}
+	}
+
 	/**
 	 * Gets the distance from one value to the other on the x axis
 	 * @param coordOne The coord we are dealing with.
@@ -19,8 +34,7 @@ public class DistanceCalc {
 	 * @return The distance from one value to the other on the x axis
 	 */
 	public static long xDistance(Coordinate coordOne, Coordinate coordTwo) {
-		//TODO
-		return 0;
+		return getDistance(coordOne.getX(), coordTwo.getX());
 	}
 	
 	/**
@@ -30,8 +44,7 @@ public class DistanceCalc {
 	 * @return The distance from one value to the other on the y axis
 	 */
 	public static long yDistance(Coordinate coordOne, Coordinate coordTwo) {
-		//TODO
-		return 0;
+		return getDistance(coordOne.getY(), coordTwo.getY());
 	}
 	
 	/**
@@ -40,9 +53,8 @@ public class DistanceCalc {
 	 * @return The euclidian distance to the coordinate given.
 	 */
 	public static double eucDistanceTo(Coordinate coordOne, Coordinate coordTwo) {
-		//TODO
-		long distanceX = 0L;
-		long distanceY = 0L;
+		long distanceX = xDistance(coordOne, coordTwo);
+		long distanceY = yDistance(coordOne, coordTwo);
 		//average distances
 		return (distanceX + distanceY) / 2L;
 	}

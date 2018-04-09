@@ -3,7 +3,7 @@ package com.ebp.owat.lib.datastructure.matrix.utils.coordinate;
 import java.util.Objects;
 
 /**
- * Describes a spot on a matrix.
+ * Describes a spot on a matrix. Non-validating inherently.
  *
  * TODO:
  *  Test this specifically.
@@ -100,6 +100,10 @@ public class Coordinate {
 		return this.x;
 	}
 
+	/**
+	 * Same as {@link #getX()}.
+	 * @return The column of this coordinate (the X value).
+	 */
 	public long getCol(){
 		return this.getX();
 	}
@@ -111,6 +115,11 @@ public class Coordinate {
 	public long getY(){
 		return this.y;
 	}
+
+	/**
+	 * Same as {@link #getY()}.
+	 * @return The row of this coordinate (the Y value).
+	 */
 	public long getRow(){
 		return this.getY();
 	}
@@ -154,10 +163,19 @@ public class Coordinate {
 		return new Coordinate(this.getX(), this.getY());
 	}
 
+	/**
+	 * Clones this coordinate as the base {@link Coordinate} class.
+	 * @return This coordinate represented by the base {@link Coordinate} class.
+	 */
 	protected Object cloneBase() {
 		return new Coordinate(this.getX(), this.getY());
 	}
 
+	/**
+	 * Throws {@link IllegalArgumentException if index given was invalid.}
+	 * @param index The index to check.
+	 * @throws IllegalArgumentException If the index given is invalid.
+	 */
 	private void throwIfInvalidIndex(long index){
 		if(index < 0){
 			throw new IllegalArgumentException("Index given was invalid.");

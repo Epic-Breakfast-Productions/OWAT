@@ -7,9 +7,18 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Results of a run, keeps information about it for reporting.
+ *
+ * TODO:: finish javadocs
+ */
 public class RunResults {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunResults.class);
 
+	/**
+	 * Constructor to set the mode of this scramble mode
+	 * @param mode The mode of this run.
+	 */
 	public RunResults(ScrambleMode mode){
 		this.mode = mode;
 		if(this.mode == ScrambleMode.SCRAMBLING){
@@ -20,8 +29,11 @@ public class RunResults {
 		}
 	}
 
+	/** The mode of this run. */
 	private final ScrambleMode mode;
+	/** The number of bytes read in for the data. */
 	private long numBytesIn = -1;
+	/** The number of bytes in the data written out. */
 	private long numBytesOut = -1;
 
 	/** The map of timing data. */

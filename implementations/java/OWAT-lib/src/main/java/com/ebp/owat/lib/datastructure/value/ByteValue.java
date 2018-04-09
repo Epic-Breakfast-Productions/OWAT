@@ -3,18 +3,27 @@ package com.ebp.owat.lib.datastructure.value;
 import java.util.Objects;
 
 /**
- *  A Node that holds a ByteValue.
+ * A value that holds a byte.
  *
  * Created by Greg Stewart on 3/26/17.
  */
 public class ByteValue extends Value<Byte> {
 	/** The value of the value. Big 'B' Byte to prevent unnecessary auto unboxing. */
 	public final Byte value;
-	
+
+	/**
+	 * Constructor to set the value.
+	 * @param value The value to set.
+	 */
 	public ByteValue(Byte value) {
 		this.value = value;
 	}
-	
+
+	/**
+	 * Constructor to set the value and the is original flag.
+	 * @param value The value to set.
+	 * @param isOriginal If the value is original or not.
+	 */
 	public ByteValue(Byte value, boolean isOriginal) {
 		this.value = value;
 		if(isOriginal){

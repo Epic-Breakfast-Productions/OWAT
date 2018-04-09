@@ -19,13 +19,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner {
+import static com.ebp.owat.lib.runner.utils.RunnerUtilities.getByteArrFromString;
+
+/**
+ * Runner for scrambling data.
+ * @param <N> The type of value to use
+ * @param <M> The type of matrix to use
+ * @param <R> The random number generator to use
+ */
+public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner<N,M,R> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScrambleRunner.class);
 	private static final java.util.Base64.Encoder ENCODER = Base64.getEncoder();
+
+	/**
+	 * The default mode of creating a matrix.
+	 */
+	protected static final NodeMode DEFAULT_MODE = NodeMode.BIT;
 	
 	/** The random number generator to use. */
 	private R rand;
@@ -41,10 +53,22 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 	private final OutputStream keyOutput;
 	/** The minimum number of steps */
 	private long minNumScrambleSteps = -1;
-	
-	private RunnerUtilities<N, M, R> utils = new RunnerUtilities<>();
-	
-	private ScrambleRunner(R rand, InputStream dataInput, OutputStream dataOutput, OutputStream keyOutput, NodeMode nodeType){
+
+	/**
+	 * Constructor to setup the runner. To be called by the builder.
+	 * @param rand The random number generator to use.
+	 * @param dataInput The data to scramble.
+	 * @param dataOutput The data stream to output the scrambled data to.
+	 * @param keyOutput The data stream to output the key to.
+	 * @param nodeType The type of node to use in the matrix.
+	 */
+	private ScrambleRunner(
+		R rand,
+		InputStream dataInput,
+		OutputStream dataOutput,
+		OutputStream keyOutput,
+		NodeMode nodeType
+	){
 		if(rand == null){
 			throw new IllegalArgumentException("Invalid null parameter(s) given. Must specify a random number generator or seed.");
 		}
@@ -67,11 +91,21 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		this.keyOutput = keyOutput;
 		this.nodeType = nodeType;
 	}
-	
+
+	/**
+	 * Sets the minimum number of scramble steps to use.
+	 * @param num The number to use.
+	 */
 	private void setMinNumScrambleSteps(long num){
 		this.minNumScrambleSteps = num;
 	}
-	
+
+	/**
+	 * Builder to setup the scramble runner.
+	 * @param <N> The type of value to use
+	 * @param <M> The type of matrix to use
+	 * @param <R> The random number generator to use
+	 */
 	public static class Builder<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> {
 		/** The random number generator to use. */
 		private R rand = (R)new ThreadLocalRandGenerator();
@@ -85,53 +119,108 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		private OutputStream keyOutput = null;
 		/** The minimum number of steps */
 		private long minNumScrambleSteps = -1;
-		
-		private byte[] getByteArrFromString(String str){
-			return str.getBytes(StandardCharsets.UTF_8);
-		}
-		
+
+		/**
+		 * Sets the random number generator using the seed given.
+		 * @param seed The seed to use to make the random number generator.
+		 * @return This builder, for chaining setter calls.
+		 */
 		public Builder setRand(byte[] seed){
 			this.rand = (R)new RandGenerator(new SecureRandom(seed));
 			return this;
 		}
-		
+
+		/**
+		 * Sets the random number generator using the seed given.
+		 * @param seed The seed to use to make the random number generator.
+		 * @return This builder, for chaining setter calls.
+		 */
 		public Builder setRand(String seed){
 			return this.setRand(getByteArrFromString(seed));
 		}
-		
+
+		/**
+		 * Sets the random number generator to use.
+		 * @param rand The random number generator to use.
+		 * @return This builder, for chaining setter calls.
+		 */
 		public Builder setRand(R rand){
 			this.rand = rand;
 			return this;
 		}
-		
+
+		/**
+		 * Sets the type of node to use.
+		 * @param nodeType The type of node to use.
+		 * @return This builder, for chaining setter calls.
+		 */
 		public Builder setNodeType(NodeMode nodeType){
 			this.nodeType = nodeType;
 			return this;
 		}
-		
+
+		/**
+		 * Sets the input stream of data to scramble.
+		 * @param is The input stream to use.
+		 * @return This builder, for chaining setter calls.
+		 */
 		public Builder setDataInput(InputStream is){
 			this.dataInput = is;
 			return this;
 		}
-		
+
+		/**
+		 * Sets the data to scramble.
+		 * @param data The data to scramble.
+		 * @return This builder, for chaining setter calls.
+		 */
 		public Builder setDataInput(String data){
 			return this.setDataInput(new ByteArrayInputStream(getByteArrFromString(data)));
 		}
-		
+
+		/**
+		 * Sets the data to scramble from a file.
+		 *
+		 * TODO:: change the file validation to this
+		 *
+		 * @param file The file to use.
+		 * @return This builer, for chaining setter calls.
+		 * @throws FileNotFoundException
+		 */
 		public Builder setDataInput(File file) throws FileNotFoundException {
 			return this.setDataInput(new FileInputStream(file));
 		}
-		
+
+		/**
+		 * Sets the scrambled data output to the one given.
+		 *
+		 * @param os The output stream to use.
+		 * @return This builder, for chaining setter calls.
+		 */
 		public Builder setDataOutput(OutputStream os){
 			this.dataOutput = os;
 			return this;
 		}
-		
+
+		//TODO:: make setDataOutput(File)
+
+		/**
+		 * Sets the output stream to use for outputting the key.
+		 * @param os The output stream to use.
+		 * @return This builder, for chaining calls.
+		 */
 		public Builder setKeyOutput(OutputStream os){
 			this.keyOutput = os;
 			return this;
 		}
 
+		//TODO:: make setKeyOutput(File)
+
+		/**
+		 * Sets the minimum number of scramble steps to use.
+		 * @param num The minimum number of steps to use.
+		 * @return This builder, for chaining setter calls.
+		 */
 		public Builder setMinNumScrambleSteps(long num){
 			this.minNumScrambleSteps = num;
 			return this;
@@ -142,7 +231,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		 * @return The runner setup with the data given.
 		 */
 		public ScrambleRunner build(){
-			ScrambleRunner runner =  new ScrambleRunner(
+			ScrambleRunner<N, M, R> runner =  new ScrambleRunner<>(
 				this.rand,
 				this.dataInput,
 				this.dataOutput,

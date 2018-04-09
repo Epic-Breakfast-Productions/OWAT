@@ -18,16 +18,40 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * Utilities to abstract the functionality needed by the runners.
+ *
+ * Not static due to the types.
+ *
+ * TODO:: finish javadocs
+ *
+ * @param <N> The type of value held
+ * @param <M> The matrix with the type N
+ * @param <R> The type of random generator
+ */
 public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunnerUtilities.class);
 	private static final java.util.Base64.Decoder DECODER = Base64.getDecoder();
 
+	/**
+	 * Gets a byte array from a string.
+	 * @param str The string to turn into a byte array.
+	 * @return The byte array from the string.
+	 */
+	public static byte[] getByteArrFromString(String str){
+		return str.getBytes(StandardCharsets.UTF_8);
+	}
+
+	/**
+	 * General constructor. Needed for the types.
+	 */
 	public RunnerUtilities() {
 
 	}

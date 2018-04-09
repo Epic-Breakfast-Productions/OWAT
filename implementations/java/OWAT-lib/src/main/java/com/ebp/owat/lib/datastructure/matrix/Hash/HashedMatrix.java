@@ -10,9 +10,9 @@ import java.util.*;
 
 /**
  * Matrix created by inserting elements into a {@link java.util.HashMap}, with a {@link MatrixCoordinate MatrixCoordinate} as the key for the value.
- *
+ * <p>
  * Best used for smaller matrices.
- *
+ * <p>
  * Created by Greg Stewart on 10/15/17.
  *
  * @param <T> The type of object this matrix holds.
@@ -23,10 +23,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	 * The map of values the matrix holds.
 	 */
 	protected HashMap<MatrixCoordinate, T> valueMap = new HashMap<>();
-	
-	/**
-	 * Adds a row to the matrix. Will be added to the right of the existing matrix.
-	 */
+
 	@Override
 	public void addRow() {
 		if(this.numCols == 0){
@@ -34,13 +31,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		}
 		this.numRows++;
 	}
-	
-	/**
-	 * Adds rows to the matrix until capacity is added for all the values given to be added, and the values are added. Values are added top-down on the new rows.
-	 *
-	 * @param valuesIn The values to add to the rows.
-	 * @return If all the rows added were added completely by the values given.
-	 */
+
 	@Override
 	public boolean addRows(Collection<T> valuesIn) {
 		Queue<T> valuesToAdd = new LinkedList<>(valuesIn);
@@ -60,10 +51,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		}
 		return true;
 	}
-	
-	/**
-	 * Adds a column to the matrix. Will be added to the bottom of the existing matrix.
-	 */
+
 	@Override
 	public void addCol() {
 		if(this.numRows == 0){
@@ -71,13 +59,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		}
 		this.numCols++;
 	}
-	
-	/**
-	 * Adds columns to the matrix until capacity is added for all the values given to be added, and the values are added to those rows. Values are added left to right to the new columns.
-	 *
-	 * @param valuesIn The values to add to the rows.
-	 * @return If all the columns added were added completely by the values given.
-	 */
+
 	@Override
 	public boolean addCols(Collection<T> valuesIn) {
 		Queue<T> valuesToAdd = new LinkedList<>(valuesIn);
@@ -136,13 +118,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		
 		return removedItems;
 	}
-	
-	/**
-	 * Removes a column from this matrix.
-	 *
-	 * @return The elements that comprised the column.
-	 * @throws IndexOutOfBoundsException If the column index given is out of bounds.
-	 */
+
 	@Override
 	public List<T> removeCol(){
 		if(!this.hasRowsCols()){
@@ -265,24 +241,12 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		return this.valueMap.size();
 	}
 
-	/**
-	 * Gets a value from this matrix.
-	 *
-	 * @param coordIn The coordinate to use. MatrixCoordinate must be on this matrix.
-	 * @return The value at the coordinate given.
-	 */
 	@Override
 	public T get(MatrixCoordinate coordIn) {
 		MatrixValidator.throwIfNotOnMatrix(this, coordIn);
 		return this.valueMap.getOrDefault(coordIn, this.defaultValue);
 	}
-	
-	/**
-	 * Gets the row the coordinate is on.
-	 *
-	 * @param coordIn The coordinate to get the column from.
-	 * @return The list of elements in the column specified.
-	 */
+
 	@Override
 	public List<T> getCol(MatrixCoordinate coordIn){
 		MatrixValidator.throwIfNotOnMatrix(this, coordIn);
@@ -294,13 +258,7 @@ public class HashedMatrix<T>  extends Matrix<T> {
 
 		return output;
 	}
-	
-	/**
-	 * Gets the row the coordinate is on.
-	 *
-	 * @param coordIn The coordinate to get the row from.
-	 * @return The list of elements in the row specified.
-	 */
+
 	@Override
 	public List<T> getRow(MatrixCoordinate coordIn){
 		MatrixValidator.throwIfNotOnMatrix(this, coordIn);

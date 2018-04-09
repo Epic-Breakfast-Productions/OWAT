@@ -5,17 +5,24 @@ import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 
 public class MoveValidator {
+	/** The minimum size of a matrix for scrambling. */
 	public static final long MIN_SIZE_FOR_SCRAMBLING = 4;
+	/** The minimum size of a matrix to be rotated. */
 	public static final long MIN_SIZE_FOR_ROTATION = 2;
-	
+
+	/**
+	 * Determines if the matrix given is too small for scrambling.
+	 * @param matrix The matrix to use.
+	 * @return If the matrix given is too small for scrambling.
+	 */
 	public static boolean matrixIsTooSmallForScrambling(Matrix matrix) {
 		return matrix.getNumCols() < MIN_SIZE_FOR_SCRAMBLING ||
 			matrix.getNumRows() < MIN_SIZE_FOR_SCRAMBLING;
 	}
 	
 	/**
-	 *
-	 * @param matrix
+	 * Throws an exception if the matrix is too small for scrambling.
+	 * @param matrix The matrix to use.
 	 * @throws IllegalStateException If the matrix is too small for scrambling.
 	 */
 	public static void throwIfMatrixTooSmallForScrambling(Matrix matrix) {
@@ -23,7 +30,12 @@ public class MoveValidator {
 			throw new IllegalStateException("Matrix too small for scrambling.");
 		}
 	}
-	
+
+	/**
+	 * Throws an exception of the move given is invalid.
+	 * @param matrix The matrix to use.
+	 * @param move The move to test.
+	 */
 	public static void throwIfInvalidMove(Matrix matrix, ScrambleMove move) {
 		switch (move.move) {
 			case SWAP:
@@ -70,7 +82,13 @@ public class MoveValidator {
 				throw new IllegalArgumentException("Unsupported move passed to validator.");
 		}
 	}
-	
+
+	/**
+	 * Throws an exception if the move given is invalid, expecting it to be a certain type.
+	 * @param matrix The matrix to use.
+	 * @param move The move to test
+	 * @param moveToBe The move to expect it to be.
+	 */
 	public static void throwIfInvalidMove(Matrix matrix, ScrambleMove move, ScrambleMoves moveToBe) {
 		if(move.move != moveToBe){
 			throw new IllegalArgumentException("Move given was not what was expected. Expected: " + moveToBe + ", Got: " + move.move);
