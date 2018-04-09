@@ -40,6 +40,16 @@ run {
 	}
 }
 
+task bundleForRelease {
+	group 'distribution';
+	dependsOn ':OWAT-lib:test';
+	dependsOn 'test';
+
+	dependsOn 'clean';
+	dependsOn 'distTar';
+	dependsOn 'distZip';
+}
+
 //config for the application plugin
 mainClassName = "com.ebp.owat.app.Main"
 applicationName = "owatj"
