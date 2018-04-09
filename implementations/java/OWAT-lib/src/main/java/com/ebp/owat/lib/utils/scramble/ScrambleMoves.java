@@ -4,6 +4,9 @@ import java.util.regex.Pattern;
 
 import static com.ebp.owat.lib.utils.scramble.ScrambleConstants.*;
 
+/**
+ * Enum to describe the types of moves.
+ */
 public enum ScrambleMoves {
 	SWAP		(Swap.OPNO,Swap.OP,4, "\\s*("+Swap.OP+"|1)\\s*"+OP_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+COORD_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*"),
 	SWAP_ROW	(SwapRow.OPNO,SwapRow.OP,2, "\\s*("+SwapRow.OP+"|2)\\s*"+OP_SEP+"\\s*\\d+\\s*"+ARG_SEP+"\\s*\\d+\\s*"+MOVE_END+"\\s*"),

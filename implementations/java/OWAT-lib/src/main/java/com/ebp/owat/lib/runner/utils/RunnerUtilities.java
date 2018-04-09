@@ -60,6 +60,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	 * Reads the data in from they input stream. Closes stream when done.
 	 *
 	 * @param dataInput The stream to get the data from.
+	 * @param decode If we need to decode from Base64
 	 * @return A list of the data read in.
 	 * @throws IOException If something goes wrong with the read.
 	 */
@@ -67,11 +68,13 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		LongLinkedList<Byte> output = new LongLinkedList<>();
 
 		try {
-			byte curByte = (byte) dataInput.read();
 
-			while (curByte != -1) {
+			int readResult = dataInput.read();
+
+			while (readResult != -1) {
+				byte curByte = (byte) readResult;
 				output.addLast(curByte);
-				curByte = (byte) dataInput.read();
+				readResult = dataInput.read();
 			}
 		} finally {
 			if (dataInput != null) {

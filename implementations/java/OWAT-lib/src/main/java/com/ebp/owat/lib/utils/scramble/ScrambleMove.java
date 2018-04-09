@@ -176,7 +176,7 @@ public class ScrambleMove {
 
 	/**
 	 * Sets the flag to use the moves' opcode or not.
-	 * @param use
+	 * @param use If we are to use opcodes or numbers.
 	 */
 	public static synchronized void useOpCode(boolean use){
 		useOpCode = use;
