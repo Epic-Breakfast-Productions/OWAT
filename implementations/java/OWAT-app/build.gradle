@@ -40,14 +40,20 @@ run {
 	}
 }
 
-task bundleForRelease {
-	group 'distribution';
+test {
 	dependsOn ':OWAT-lib:test';
-	dependsOn 'test';
+}
 
-	dependsOn 'clean';
-	dependsOn 'distTar';
-	dependsOn 'distZip';
+task bundleForRelease(dependsOn: test) {
+	group 'distribution';
+
+	doFirst{
+		clean
+	}
+	doLast {
+		distTar;
+		distZip;
+	}
 }
 
 //config for the application plugin
