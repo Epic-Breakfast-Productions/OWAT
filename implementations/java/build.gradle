@@ -4,3 +4,8 @@ task updateWrapper(type: Wrapper) {
 	description "Rebuilds the wrapper with the version listed below. Use to update to new versions of Gradle"
 	gradleVersion = '4.4.1'
 }
+
+//Gradle TODOs:
+//TODO:: move app/lib version to gradle. Want the app version, app name, lib version available seprately to the app
+//TODO:: setup for deployment of lib to a repository for distribution to the masses
+//TODO:: ensure javaDocs get wrapped up with the library jars, so people can use them
