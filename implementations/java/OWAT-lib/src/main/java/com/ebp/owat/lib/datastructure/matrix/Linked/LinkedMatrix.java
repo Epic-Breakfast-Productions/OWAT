@@ -15,10 +15,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.EAST;
+import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.SOUTH;
 import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode.FixedPosition;
 import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode.FixedPosition.NORTH_EAST;
 import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode.FixedPosition.SOUTH_WEST;
 
+/**
+ * A matrix whose underlying structure is a linked lattice.
+ * @param <T>
+ */
 public class LinkedMatrix<T> extends Matrix<T> {
 	/**
 	 * The frequency of how often reference nodes are added.
@@ -114,8 +119,8 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	 * @return The node at the coordinate given.
 	 */
 	private LinkedMatrixNode<T> getMatrixNode(MatrixCoordinate coord){
-		//TODO:: returns null sometimes, unacceptable.
 		MatrixValidator.throwIfNotOnMatrix(this, coord);
+		//TODO:: returns null sometimes, unacceptable.
 
 		NodePosition<T> curPosition = this.getClosestHeldPosition(coord);
 
@@ -165,7 +170,7 @@ public class LinkedMatrix<T> extends Matrix<T> {
 
 		this.numRows++;
 		LinkedMatrixNode<T> lastNode = new LinkedMatrixNode<>();
-		lastNode.setNorth(this.getMatrixNode(new MatrixCoordinate(this, 0, this.getNumRows())));
+		lastNode.setNorth(this.getMatrixNode(FixedPosition.SOUTH_WEST));
 		for(long l = 1; l < this.getNumCols(); l++){
 			LinkedMatrixNode<T> curNode = new LinkedMatrixNode<>();
 
@@ -197,7 +202,7 @@ public class LinkedMatrix<T> extends Matrix<T> {
 
 		this.numCols++;
 		LinkedMatrixNode<T> lastNode = new LinkedMatrixNode<>();
-		lastNode.setEast(this.getMatrixNode(new MatrixCoordinate(this, this.getNumCols(), 0)));
+		lastNode.setEast(this.getMatrixNode(FixedPosition.NORTH_EAST));
 		for(long l = 1; l < this.getNumRows(); l++){
 			LinkedMatrixNode<T> curNode = new LinkedMatrixNode<>();
 
@@ -221,6 +226,20 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		return false;
 	}
 
+	private void moveOrRemoveBordering(Direction dir){
+		List<NodePosition<T>> toRemove = new LinkedList<>();
+		for(NodePosition<T> curPos : this.referenceNodes){
+			if(curPos.getNode().isBorder(dir)){
+				if(!curPos.move(dir.opposite())){
+					toRemove.add(curPos);
+				}
+			}
+		}
+		for (NodePosition<T> curToRem : toRemove){
+			this.referenceNodes.remove(curToRem);
+		}
+	}
+
 	@Override
 	public List<T> removeRow() throws IndexOutOfBoundsException {
 		if(!this.hasRowsCols()){
@@ -228,7 +247,10 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		}
 
 		List<T> output = new LongLinkedList<>();
+
 		LinkedMatrixNode<T> node = this.getMatrixNode(SOUTH_WEST);
+
+		this.moveOrRemoveBordering(SOUTH);
 
 		do{
 			output.add(node.getValue());
@@ -241,6 +263,7 @@ public class LinkedMatrix<T> extends Matrix<T> {
 			node = node.getEast();
 		}while(node != null);
 
+		this.resetNodePositions();
 		return output;
 	}
 
@@ -249,9 +272,13 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		if(!this.hasRowsCols()){
 			return null;
 		}
+		//TODO:: move node positions left one in last col
+		LinkedMatrixNode<T> node = this.getMatrixNode(NORTH_EAST);
+
+		this.moveOrRemoveBordering(EAST);
+
 
 		List<T> output = new LongLinkedList<>();
-		LinkedMatrixNode<T> node = this.getMatrixNode(NORTH_EAST);
 
 		do{
 			output.add(node.getValue());
@@ -264,6 +291,7 @@ public class LinkedMatrix<T> extends Matrix<T> {
 			node = node.getSouth();
 		}while(node != null);
 
+		this.resetNodePositions();
 		return output;
 	}
 

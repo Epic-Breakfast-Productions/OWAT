@@ -116,7 +116,7 @@ public class RunnerTestPlusPlus {
 		LinkedList<byte[]> testData = new LinkedList<>();
 
 
-		for(int i = START; i <= BOUND; i+= (SHORT?BOUND/3:INC)){
+		for(int i = START; i <= BOUND; i+= (SHORT?BOUND/10:INC)){
 			testData.add(getTestData(i));
 		}
 
