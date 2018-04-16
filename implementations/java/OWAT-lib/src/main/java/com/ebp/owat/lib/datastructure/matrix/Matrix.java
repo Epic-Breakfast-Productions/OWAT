@@ -488,7 +488,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	/**
 	 * Gets a value from this matrix.
 	 * @param coordIn The coordinate to use. MatrixCoordinate must be on this matrix.
-	 * @return The value at the coordinate given.
+	 * @return The value at the coordinate given. {@link #defaultValue Default value} if no value held at this location.
 	 */
 	public abstract T get(MatrixCoordinate coordIn);
 	
