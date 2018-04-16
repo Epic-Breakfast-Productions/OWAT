@@ -4,6 +4,7 @@ import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Linked.LinkedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.array.ArrayMatrix;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -32,7 +33,8 @@ public abstract class MatrixTest <T extends Matrix<Integer>> {
 		return Arrays.asList(new Object[][] {
 			{ HashedMatrix.class },
 			{ HashedScramblingMatrix.class },
-			//{ LinkedMatrix.class }//27 tests fail
+			//{ LinkedMatrix.class },//27 tests fail,
+			//{ ArrayMatrix.class }
 		});
 	}
 	
