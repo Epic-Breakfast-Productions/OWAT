@@ -13,6 +13,8 @@ import java.util.List;
  * Matrix that utilizes a 2d array as its internal structure.
  *
  * Only supports coordinates up to int max size.
+ *
+ * Does not support setting null values.
  * @param <T> The type of data the matrix holds.
  */
 public class ArrayMatrix<T> extends Matrix<T> {
@@ -53,7 +55,16 @@ public class ArrayMatrix<T> extends Matrix<T> {
 
 	@Override
 	public void addCol() {
-		//TODO
+		if(this.initIfNoRowsCols()){
+			return;
+		}
+
+		this.array.add(new ArrayList<>());
+		ArrayList<T> newCol = this.array.get(this.array.size() - 1);
+
+		for(int i = 0; i < this.array.size(); i++){
+			newCol.add(null);
+		}
 	}
 
 	@Override
