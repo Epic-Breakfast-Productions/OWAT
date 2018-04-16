@@ -6,6 +6,7 @@ import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,7 +27,8 @@ public class ArrayMatrix<T> extends Matrix<T> {
 		if(!this.hasRowsCols()){
 			this.array = new ArrayList<>();
 			ArrayList<T> newCol = new ArrayList<>();
-			//TODO:: properly init this
+			newCol.add(null);
+			this.array.add(newCol);
 			return true;
 		}
 		return false;
@@ -36,6 +38,10 @@ public class ArrayMatrix<T> extends Matrix<T> {
 	public void addRow() {
 		if(this.initIfNoRowsCols()){
 			return;
+		}
+
+		for(ArrayList<T> curCol : this.array){
+			curCol.add(null);
 		}
 	}
 
@@ -58,20 +64,44 @@ public class ArrayMatrix<T> extends Matrix<T> {
 
 	@Override
 	public List<T> removeRow() {
-		//TODO
-		return null;
+		MatrixValidator.throwIfNoRowsCols(this);
+		LinkedList<T> out = new LinkedList<>();
+
+		for (ArrayList<T> curCol : this.array) {
+			out.addLast(curCol.remove(curCol.size() - 1));
+		}
+
+		if(this.array.get(0).size() == 0){
+			this.array = null;
+		}
+
+		return out;
 	}
 
 	@Override
 	public List<T> removeCol() {
-		//TODO
-		return null;
+		MatrixValidator.throwIfNoRowsCols(this);
+		List<T> out = this.array.remove(this.array.size() - 1);
+
+		if(this.array.size() == 0){
+			this.array = null;
+		}
+		return out;
 	}
 
 	@Override
 	public T setValue(MatrixCoordinate nodeToReplace, T newValue) {
-		//TODO
-		return null;
+		MatrixValidator.throwIfNotOnMatrix(this, nodeToReplace);
+		T old = this.array.get((int)nodeToReplace.getX()).set((int)nodeToReplace.getY(), newValue);
+
+		//TODO;; contemplate what happens when a user inserts a null value
+		if(old == null && newValue != null){
+			this.numElementsHeld++;
+		}else if(old != null && newValue == null){
+			this.numElementsHeld--;
+		}
+
+		return old;
 	}
 
 	@Override
@@ -82,8 +112,7 @@ public class ArrayMatrix<T> extends Matrix<T> {
 
 	@Override
 	public T clearNode(MatrixCoordinate nodeToClear) {
-		//TODO
-		return null;
+		return this.setValue(nodeToClear, null);
 	}
 
 	@Override
