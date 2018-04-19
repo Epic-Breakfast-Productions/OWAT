@@ -34,7 +34,7 @@ public abstract class MatrixTest <T extends Matrix<Integer>> {
 			{ HashedMatrix.class },
 			{ HashedScramblingMatrix.class },
 			//{ LinkedMatrix.class },//27 tests fail,
-			//{ ArrayMatrix.class }
+			//{ ArrayMatrix.class }//30 tests fail
 		});
 	}
 	
