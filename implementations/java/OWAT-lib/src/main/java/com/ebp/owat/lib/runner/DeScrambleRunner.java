@@ -153,7 +153,7 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 
 	@Override
 	public void doSteps() throws IOException {
-		RunResults runResults = new RunResults(ScrambleMode.DESCRAMBLING);
+		RunResults runResults = new RunResults(ScrambleMode.DESCRAMBLING, this.nodeType);
 		this.setLastRunResults(runResults);
 		long start, end;
 		M matrix;

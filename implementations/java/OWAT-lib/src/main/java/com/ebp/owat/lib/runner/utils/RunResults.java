@@ -1,5 +1,6 @@
 package com.ebp.owat.lib.runner.utils;
 
+import com.ebp.owat.lib.datastructure.value.NodeMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,25 +17,30 @@ public class RunResults {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunResults.class);
 
 	/**
-	 * Constructor to set the mode of this scramble mode
-	 * @param mode The mode of this run.
+	 * Constructor to set the scrambleMode of this scramble scrambleMode
+	 * @param nodeMode The scrambleMode of this run.
 	 */
-	public RunResults(ScrambleMode mode){
-		this.mode = mode;
-		if(this.mode == ScrambleMode.SCRAMBLING){
+	public RunResults(ScrambleMode scrambleMode, NodeMode nodeMode){
+		this.scrambleMode = scrambleMode;
+		this.nodeMode = nodeMode;
+		if(this.scrambleMode == ScrambleMode.SCRAMBLING){
 			this.curStep = Step.NOT_STARTED_SCRAMBLE;
 		}
-		if(this.mode == ScrambleMode.DESCRAMBLING){
+		if(this.scrambleMode == ScrambleMode.DESCRAMBLING){
 			this.curStep = Step.NOT_STARTED_DESCRAMBLE;
 		}
+
 	}
 
-	/** The mode of this run. */
-	private final ScrambleMode mode;
+	/** The scrambleMode of this run. */
+	private final ScrambleMode scrambleMode;
 	/** The number of bytes read in for the data. */
 	private long numBytesIn = -1;
 	/** The number of bytes in the data written out. */
 	private long numBytesOut = -1;
+
+	//TODO:: add data: matrix scrambleMode, node type,
+	private final NodeMode nodeMode;
 
 	/** The map of timing data. */
 	private LinkedHashMap<Step, Long> timingMap = new LinkedHashMap<>();
@@ -44,6 +50,10 @@ public class RunResults {
 	private long curStepProg = 0;
 
 	private long curStepProgMax = 0;
+
+	public NodeMode getNodeMode(){
+		return this.nodeMode;
+	}
 
 	public synchronized Step getCurStep(){
 		return this.curStep;
@@ -155,7 +165,7 @@ public class RunResults {
 
 	@Override
 	public synchronized RunResults clone(){
-		RunResults output = new RunResults(this.mode);
+		RunResults output = new RunResults(this.scrambleMode, this.nodeMode);
 		output.setCurStep(this.curStep);
 		output.setCurStepProg(this.getCurStepProg());
 		output.setCurStepProgMax(this.getCurStepProgMax());
@@ -167,9 +177,9 @@ public class RunResults {
 	}
 
 	public String getCsvHead(){
-		StringBuilder sb = new StringBuilder("mode,lastStep,numBytesIn,numBytesOut");
+		StringBuilder sb = new StringBuilder("scrambleMode,nodeMode,lastStep,numBytesIn,numBytesOut");
 
-		for (Step curStep : Step.getStepsIn(this.mode)) {
+		for (Step curStep : Step.getStepsIn(this.scrambleMode)) {
 			sb.append(",");
 			sb.append(curStep.stepName);
 		}
@@ -185,7 +195,9 @@ public class RunResults {
 			);
 		}
 
-		sb.append(this.mode.name);
+		sb.append(this.scrambleMode.name);
+		sb.append(",");
+		sb.append(this.nodeMode.typeStr);
 		sb.append(",");
 		sb.append(this.getCurStep().stepName);
 		sb.append(",");
@@ -194,7 +206,7 @@ public class RunResults {
 		sb.append(this.getNumBytesOut());
 
 		LinkedHashMap<Step, Long> steps = this.getTimingMap();
-		for (Step curStep : Step.getStepsIn(this.mode)) {
+		for (Step curStep : Step.getStepsIn(this.scrambleMode)) {
 			Long val = steps.get(curStep);
 			sb.append(",");
 			sb.append(

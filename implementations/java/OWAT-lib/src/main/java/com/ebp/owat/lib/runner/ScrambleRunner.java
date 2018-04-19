@@ -262,7 +262,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 	
 	@Override
 	public void doSteps() throws IOException {
-		RunResults runResults = new RunResults(ScrambleMode.SCRAMBLING);
+		RunResults runResults = new RunResults(ScrambleMode.SCRAMBLING, this.nodeType);
 		this.setLastRunResults(runResults);
 
 		long start, end;
