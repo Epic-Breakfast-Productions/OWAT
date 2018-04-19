@@ -4,6 +4,7 @@ import com.ebp.owat.lib.datastructure.value.NodeMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -39,8 +40,10 @@ public class RunResults {
 	/** The number of bytes in the data written out. */
 	private long numBytesOut = -1;
 
-	//TODO:: add data: matrix scrambleMode, node type,
+	/** The node type that was used. */
 	private final NodeMode nodeMode;
+	/** The type of matrix used. */
+	private MatrixMode matrixMode;
 
 	/** The map of timing data. */
 	private LinkedHashMap<Step, Long> timingMap = new LinkedHashMap<>();
@@ -53,6 +56,17 @@ public class RunResults {
 
 	public NodeMode getNodeMode(){
 		return this.nodeMode;
+	}
+
+	public ScrambleMode getScrambleMode(){
+		return this.scrambleMode;
+	}
+
+	public synchronized MatrixMode getMatrixMode(){
+		return this.matrixMode;
+	}
+	public synchronized void setMatrixMode(MatrixMode matrixMode){
+		this.matrixMode = matrixMode;
 	}
 
 	public synchronized Step getCurStep(){
@@ -166,6 +180,7 @@ public class RunResults {
 	@Override
 	public synchronized RunResults clone(){
 		RunResults output = new RunResults(this.scrambleMode, this.nodeMode);
+		output.setMatrixMode(this.getMatrixMode());
 		output.setCurStep(this.curStep);
 		output.setCurStepProg(this.getCurStepProg());
 		output.setCurStepProgMax(this.getCurStepProgMax());
@@ -176,8 +191,12 @@ public class RunResults {
 		return output;
 	}
 
+	/**
+	 * Gets the header for a CSV file.
+	 * @return The header for a CSV file.
+	 */
 	public String getCsvHead(){
-		StringBuilder sb = new StringBuilder("scrambleMode,nodeMode,lastStep,numBytesIn,numBytesOut");
+		StringBuilder sb = new StringBuilder("scrambleMode,nodeMode,matrixMode,lastStep,numBytesIn,numBytesOut");
 
 		for (Step curStep : Step.getStepsIn(this.scrambleMode)) {
 			sb.append(",");
@@ -187,6 +206,11 @@ public class RunResults {
 		return sb.toString();
 	}
 
+	/**
+	 * Gets a csv line
+	 * @param includeHead If the header line is to be included.
+	 * @return A csv line.
+	 */
 	public String getCsvLine(boolean includeHead){
 		StringBuilder sb = new StringBuilder();
 		if(includeHead){
@@ -198,6 +222,8 @@ public class RunResults {
 		sb.append(this.scrambleMode.name);
 		sb.append(",");
 		sb.append(this.nodeMode.typeStr);
+		sb.append(",");
+		sb.append(this.matrixMode.name);
 		sb.append(",");
 		sb.append(this.getCurStep().stepName);
 		sb.append(",");
@@ -217,7 +243,35 @@ public class RunResults {
 		return sb.toString();
 	}
 
+	/**
+	 * Gets a csv line for this result.
+	 * @return a csv line representing this result.
+	 */
 	public String getCsvLine(){
 		return this.getCsvLine(false);
+	}
+
+	/**
+	 * Gets all the csv lines of the results in the collection.
+	 * @param results The run results to use
+	 * @return The string of csv's from the results.
+	 * @throws IllegalArgumentException If the results are of mixed scrambling modes.
+	 */
+	public static String getCsvLines(Collection<RunResults> results) throws IllegalArgumentException{
+		StringBuilder sb = new StringBuilder();
+		ScrambleMode mode = null;
+
+		for(RunResults curResults : results){
+			if(mode == null){
+				mode = curResults.getScrambleMode();
+				sb.append(curResults.getCsvHead());
+			}
+
+			if(curResults.getScrambleMode() != mode){
+				throw new IllegalArgumentException("The list of run results were not all the same scrambling mode.");
+			}
+			sb.append(curResults.getCsvLine());
+		}
+		return sb.toString();
 	}
 }

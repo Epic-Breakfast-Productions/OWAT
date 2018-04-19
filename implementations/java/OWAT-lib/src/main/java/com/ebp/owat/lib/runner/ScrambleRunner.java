@@ -279,7 +279,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 				this.matrixMode = MatrixMode.determineModeToUse(data.sizeL());
 			}
 
-			//TODO:: add matrix type to run results
+			runResults.setMatrixMode(this.matrixMode);
 
 			LOGGER.debug("Length of original data: {} bytes", data.sizeL());
 			LOGGER.debug("Using matrix type: {}", this.matrixMode.name);

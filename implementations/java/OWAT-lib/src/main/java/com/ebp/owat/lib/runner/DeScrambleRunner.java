@@ -121,7 +121,12 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		public DeScrambleRunner.Builder setDataInput(File file) throws FileNotFoundException {
 			return this.setDataInput(new FileInputStream(file));
 		}
-		
+
+		/**
+		 * Sets the output stream to send the descrambled data to.
+		 * @param os The output stream to use.
+		 * @return This builder object, for chaining calls.
+		 */
 		public DeScrambleRunner.Builder setDataOutput(OutputStream os){
 			this.dataOutput = os;
 			return this;
@@ -182,7 +187,7 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 				this.matrixMode = MatrixMode.determineModeToUse(data.sizeL());
 			}
 
-			//TODO:: add matrix mode to results
+			runResults.setMatrixMode(this.matrixMode);
 
 			LOGGER.debug("Length of scrambled data: {} bytes", data.sizeL());
 			LOGGER.debug("Using matrix type: {}", this.matrixMode.name);
