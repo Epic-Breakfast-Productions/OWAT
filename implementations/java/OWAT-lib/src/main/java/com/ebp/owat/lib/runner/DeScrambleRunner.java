@@ -1,9 +1,6 @@
 package com.ebp.owat.lib.runner;
 
-import com.ebp.owat.lib.runner.utils.RunResults;
-import com.ebp.owat.lib.runner.utils.RunnerUtilities;
-import com.ebp.owat.lib.runner.utils.ScrambleMode;
-import com.ebp.owat.lib.runner.utils.Step;
+import com.ebp.owat.lib.runner.utils.*;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
@@ -30,6 +27,8 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 
 	/** The key that will be used. */
 	private ScrambleKey key;
+	/** The type of matrix to use. */
+	private MatrixMode matrixMode;
 	/** The type of data that will be used. */
 	private NodeMode nodeType;
 	/** The stream to use to read the scrambled data in. */
@@ -41,11 +40,13 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 
 	/**
 	 * Constructor to set up the descrambler. To be called by the builder.
+	 * @param matrixMode The type of matrix to use. Null to auto determine best one to use.
 	 * @param dataInput The scrambled data to input.
 	 * @param keyInput The key data to input.
 	 * @param dataOutput The stream to output the descrambled data.
 	 */
 	private DeScrambleRunner(
+		MatrixMode matrixMode,
 		InputStream dataInput,
 		InputStream keyInput,
 		OutputStream dataOutput
@@ -59,7 +60,8 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		if(keyInput == null) {
 			throw new IllegalArgumentException("Invalid null parameter(s) given. Must specify a method of inputting the key data.");
 		}
-		
+
+		this.matrixMode = matrixMode;
 		this.dataInput = dataInput;
 		this.keyInput = keyInput;
 		this.dataOutput = dataOutput;
@@ -69,12 +71,24 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 	 * Builder for the descrambler class. Used to easily setup the descrambler class.
 	 */
 	public static class Builder{
+		/** The type of matrix to use */
+		private MatrixMode matrixMode = null;
 		/** The stream to use to read the scrambled data in. */
 		private InputStream dataInput;
 		/** The stream to use to read the key in */
 		private InputStream keyInput;
 		/** The stream to use to write the data out */
 		private OutputStream dataOutput;
+
+		/**
+		 * Sets the type of matrix to use.
+		 * @param matrixMode The type of matrix to use.
+		 * @return This builder, for chaining calls.
+		 */
+		public Builder setMatrixMode(MatrixMode matrixMode){
+			this.matrixMode = matrixMode;
+			return this;
+		}
 
 		/**
 		 * Sets the scrambler data input stream to give the descrambler.
@@ -128,7 +142,12 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		 * @return The runner setup with the builder.
 		 */
 		public DeScrambleRunner build(){
-			return new DeScrambleRunner(dataInput, keyInput, dataOutput);
+			return new DeScrambleRunner(
+				matrixMode,
+				dataInput,
+				keyInput,
+				dataOutput
+			);
 		}
 	}
 
@@ -158,8 +177,16 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 
 		{
 			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput, true);
+
+			if(this.matrixMode == null){
+				this.matrixMode = MatrixMode.determineModeToUse(data.sizeL());
+			}
+
+			//TODO:: add matrix mode to results
+
 			LOGGER.debug("Length of scrambled data: {} bytes", data.sizeL());
-			matrix = this.utils.getMatrix(data, this.nodeType, this.key.meta.dataHeight, this.key.meta.dataWidth);
+			LOGGER.debug("Using matrix type: {}", this.matrixMode.name);
+			matrix = this.utils.getMatrix(data, this.matrixMode, this.nodeType, this.key.meta.dataHeight, this.key.meta.dataWidth);
 		}
 		end = System.currentTimeMillis();
 		runResults.setElapsedTime(Step.LOAD_SCRAMBLED_DATA, start, end);

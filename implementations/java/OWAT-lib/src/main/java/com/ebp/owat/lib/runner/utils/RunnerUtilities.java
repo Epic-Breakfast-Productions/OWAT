@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import static com.ebp.owat.lib.datastructure.value.NodeMode.BIT;
+import static com.ebp.owat.lib.datastructure.value.NodeMode.BYTE;
+
 /**
  * Utilities to abstract the functionality needed by the runners.
  *
@@ -113,10 +116,32 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		}
 	}
 
+	/**
+	 * Gets a matrix of the type appropriate for the size of matrix.
+	 * @param matrixMode The type of matrix to use.
+	 * @param mode The nodemode to use
+	 * @return The matrix
+	 */
+	private M getNewMatrix(MatrixMode matrixMode, NodeMode mode){
+		switch (matrixMode){
+			case HASHED:
+				return (M)(
+					mode == BIT ?
+					new HashedScramblingMatrix<BitValue>() :
+					new HashedScramblingMatrix<ByteValue>()
+				);
+			/*
+			 * Only add a type when it is fully implemented; ALL tests pass
+			 */
+			default:
+				throw new UnsupportedOperationException("Attempted to use unsupported matrix type: "+matrixMode.name);
+		}
+	}
 
 	@SuppressWarnings("unchecked")
-	private M getBitMatrix(LongLinkedList<Byte> data, long height, long width) {
-		M matrix = (M) new HashedScramblingMatrix<BitValue>();
+	private M getBitMatrix(MatrixMode matrixMode, LongLinkedList<Byte> data, long height, long width) {
+
+		M matrix = this.getNewMatrix(matrixMode, BIT);
 
 		Iterator<Byte> it = data.destructiveIterator();
 		LongLinkedList<BitValue> bitValues = new LongLinkedList<>();
@@ -131,8 +156,8 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	}
 
 	@SuppressWarnings("unchecked")
-	private M getByteMatrix(LongLinkedList<Byte> data, long height, long width) {
-		M matrix = (M) new HashedScramblingMatrix<ByteValue>();
+	private M getByteMatrix(MatrixMode matrixMode, LongLinkedList<Byte> data, long height, long width) {
+		M matrix = this.getNewMatrix(matrixMode, BYTE);
 
 		Iterator<Byte> it = data.destructiveIterator();
 		LongLinkedList<ByteValue> byteValues = new LongLinkedList<>();
@@ -156,14 +181,14 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	 * @param width    The width of the matrix to make. -1 for Automatic.
 	 * @return A matrix built with the data given.
 	 */
-	public M getMatrix(LongLinkedList<Byte> data, NodeMode nodeType, long height, long width) {
+	public M getMatrix(LongLinkedList<Byte> data, MatrixMode matrixMode, NodeMode nodeType, long height, long width) {
 		switch (nodeType) {
 			case BIT:
 				LOGGER.debug("Matrix set to Bit nodes.");
-				return this.getBitMatrix(data, height, width);
+				return this.getBitMatrix(matrixMode, data, height, width);
 			case BYTE:
 				LOGGER.debug("Matrix set to Bit nodes.");
-				return this.getByteMatrix(data, height, width);
+				return this.getByteMatrix(matrixMode, data, height, width);
 			default:
 				throw new IllegalStateException();
 		}
@@ -176,18 +201,18 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	 * @param nodeType The type of node to use.
 	 * @return A matrix built with the data given.
 	 */
-	public M getMatrix(LongLinkedList<Byte> data, NodeMode nodeType) {
-		return getMatrix(data, nodeType, -1, -1);
+	public M getMatrix(LongLinkedList<Byte> data, MatrixMode matrixMode, NodeMode nodeType) {
+		return getMatrix(data, matrixMode, nodeType, -1, -1);
 	}
 
 	public LongLinkedList<N> getListOfValues(long numValues, OwatRandGenerator rand, NodeMode nodeType) {
 		LongLinkedList<N> output = new LongLinkedList<>();
 
-		if (nodeType == NodeMode.BIT) {
+		if (nodeType == BIT) {
 			for (long i = 0; i < numValues; i++) {
 				output.add((N) new BitValue(rand.nextBool(), false));
 			}
-		} else if (nodeType == NodeMode.BYTE) {
+		} else if (nodeType == BYTE) {
 			for (long i = 0; i < numValues; i++) {
 				output.add((N) new ByteValue(rand.nextByte(), false));
 			}
@@ -266,7 +291,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		}
 
 		//ensure that bit marices can be serialized properly
-		if (nodeType == NodeMode.BIT) {
+		if (nodeType == BIT) {
 			while (matrix.size() % 8 != 0) {
 				addRandRowOrCol(matrix, rand, nodeType);
 			}
@@ -309,7 +334,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 
 	public byte[] getMatrixAsBytes(M matrix, NodeMode nodeType, long length) {
 		byte[] bytes;
-		if (nodeType == NodeMode.BIT) {
+		if (nodeType == BIT) {
 			MatrixIterator<BitValue> bitIt = (MatrixIterator<BitValue>) matrix.iterator();
 
 			LongLinkedList<BitValue> tempBits;

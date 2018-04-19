@@ -1,9 +1,6 @@
 package com.ebp.owat.lib.runner;
 
-import com.ebp.owat.lib.runner.utils.RunResults;
-import com.ebp.owat.lib.runner.utils.RunnerUtilities;
-import com.ebp.owat.lib.runner.utils.ScrambleMode;
-import com.ebp.owat.lib.runner.utils.Step;
+import com.ebp.owat.lib.runner.utils.*;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
@@ -43,6 +40,8 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 	private R rand;
 	/** The key that will be used. */
 	private ScrambleKey key;
+	/** The type of matrix to use. */
+	private MatrixMode matrixMode;
 	/** The type of data that will be used. */
 	private final NodeMode nodeType;
 	/** The stream to use to read the original data in. */
@@ -60,6 +59,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 	 * @param dataInput The data to scramble.
 	 * @param dataOutput The data stream to output the scrambled data to.
 	 * @param keyOutput The data stream to output the key to.
+	 * @param matrixMode The type of matrix to use.
 	 * @param nodeType The type of node to use in the matrix.
 	 */
 	private ScrambleRunner(
@@ -67,6 +67,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		InputStream dataInput,
 		OutputStream dataOutput,
 		OutputStream keyOutput,
+		MatrixMode matrixMode,
 		NodeMode nodeType
 	){
 		if(rand == null){
@@ -89,6 +90,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		this.dataInput = dataInput;
 		this.dataOutput = dataOutput;
 		this.keyOutput = keyOutput;
+		this.matrixMode = matrixMode;
 		this.nodeType = nodeType;
 	}
 
@@ -109,6 +111,8 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 	public static class Builder<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> {
 		/** The random number generator to use. */
 		private R rand = (R)new ThreadLocalRandGenerator();
+		/** The type of matrix to use. */
+		private MatrixMode matrixMode = null;
 		/** The type of data that will be used. */
 		private NodeMode nodeType = DEFAULT_MODE;
 		/** The stream to use to read the original data in. */
@@ -146,6 +150,16 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		 */
 		public Builder setRand(R rand){
 			this.rand = rand;
+			return this;
+		}
+
+		/**
+		 * Sets the type of matrix to use.
+		 * @param matrixMode The type of matrix to use.
+		 * @return This builder, for chaining setter calls.
+		 */
+		public Builder setMatrixMode(MatrixMode matrixMode){
+			this.matrixMode = matrixMode;
 			return this;
 		}
 
@@ -236,6 +250,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 				this.dataInput,
 				this.dataOutput,
 				this.keyOutput,
+				this.matrixMode,
 				this.nodeType
 			);
 
@@ -259,8 +274,16 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			LOGGER.info("Loading data...");
 			
 			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput);
+
+			if(this.matrixMode == null){
+				this.matrixMode = MatrixMode.determineModeToUse(data.sizeL());
+			}
+
+			//TODO:: add matrix type to run results
+
 			LOGGER.debug("Length of original data: {} bytes", data.sizeL());
-			matrix = this.utils.getMatrix(data, this.nodeType);
+			LOGGER.debug("Using matrix type: {}", this.matrixMode.name);
+			matrix = this.utils.getMatrix(data, this.matrixMode, this.nodeType);
 
 			LOGGER.debug("Size of matrix with just original data: {}rows x {}cols, {} values", matrix.getHeight(), matrix.getWidth(), matrix.numElements());
 

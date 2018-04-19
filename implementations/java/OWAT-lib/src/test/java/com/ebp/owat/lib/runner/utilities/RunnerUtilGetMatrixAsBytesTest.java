@@ -5,6 +5,7 @@ import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.ByteValue;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
+import com.ebp.owat.lib.runner.utils.MatrixMode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -32,9 +33,10 @@ public class RunnerUtilGetMatrixAsBytesTest extends RunnerUtilTest {
 	@Test
 	public void testGetMatrixAsBytes() throws IOException {
 		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
-		Matrix m = utilities.getMatrix(bytes,this.nodeType);
+		Matrix m = utilities.getMatrix(bytes,MatrixMode.HASHED,this.nodeType);
 
 		//this.utilities.getMatrixAsBytes(m, this.nodeType);
+		//TODO actually... do something?
 	}
 
 

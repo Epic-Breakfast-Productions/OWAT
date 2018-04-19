@@ -4,6 +4,7 @@ import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
+import com.ebp.owat.lib.runner.utils.MatrixMode;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ public class RunnerUtilPadMatrixTest extends RunnerUtilTest {
 	@Test
 	public void testPadMatrix() throws IOException {
 		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
-		Matrix m = utilities.getMatrix(bytes,this.nodeType);
+		Matrix m = utilities.getMatrix(bytes,MatrixMode.HASHED,this.nodeType);
 
 		long initHeight = m.getHeight();
 		long initWidth = m.getWidth();
@@ -47,7 +48,7 @@ public class RunnerUtilPadMatrixTest extends RunnerUtilTest {
 		assertTrue(m.getWidth() >= initWidth);
 
 		bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
-		Matrix mTwo = utilities.getMatrix(bytes,this.nodeType);
+		Matrix mTwo = utilities.getMatrix(bytes,MatrixMode.HASHED,this.nodeType);
 
 		Iterator itOrig = m.getSubMatrix(
 			new MatrixCoordinate(m),
