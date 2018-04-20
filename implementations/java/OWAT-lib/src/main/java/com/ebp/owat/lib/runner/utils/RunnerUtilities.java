@@ -33,9 +33,6 @@ import static com.ebp.owat.lib.datastructure.value.NodeMode.BYTE;
  *
  * Not static due to the types.
  *
- * TODO:: finish javadocs
- * TODO:: make this an abstract class, turn scramb/descramb to sub classes
- *
  * @param <N> The type of value held
  * @param <M> The matrix with the type N
  * @param <R> The type of random generator
@@ -70,11 +67,8 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	 */
 	public LongLinkedList<Byte> readDataIn(InputStream dataInput, boolean decode) throws IOException {
 		LongLinkedList<Byte> output = new LongLinkedList<>();
-
 		try {
-
 			int readResult = dataInput.read();
-
 			while (readResult != -1) {
 				byte curByte = (byte) readResult;
 				output.addLast(curByte);
@@ -105,14 +99,31 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		return output;
 	}
 
+	/**
+	 * Reads the data into a {@link LongLinkedList<Byte> long linked list}, not Base64 decoding the data.
+	 * @param dataInput The input stream to read bytes from.
+	 * @return The list of bytes gotten.
+	 * @throws IOException If something went wrong during IO.
+	 */
 	public LongLinkedList<Byte> readDataIn(InputStream dataInput) throws IOException {
 		return readDataIn(dataInput, false);
 	}
 
+	/**
+	 * Fills the matrix given with the data given.
+	 *
+	 * @param emptyMatrix The empty matrix to insert values into.
+	 * @param values The values to enter into the matrix
+	 * @param height The hight of the resulting matrix. (optional, to be used with height)
+	 * @param width The width of the resulting matrix. (optional, to be used with width)
+	 * @throws IllegalStateException if the matrix given is not empty.
+	 */
 	private void fillMatrixWithData(M emptyMatrix, LongLinkedList values, long height, long width) {
 		if (height < 1 || width < 1) {
+			//noinspection unchecked
 			emptyMatrix.grow(values);
 		} else {
+			//noinspection unchecked
 			emptyMatrix.grow(height, width, values);
 		}
 	}
@@ -126,6 +137,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	private M getNewMatrix(MatrixMode matrixMode, NodeMode mode){
 		switch (matrixMode){
 			case HASHED:
+				//noinspection unchecked
 				return (M)(
 					mode == BIT ?
 					new HashedScramblingMatrix<BitValue>() :
@@ -139,7 +151,15 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Gets a bit matrix from the data given.
+	 *
+	 * @param matrixMode The type of matrix to use.
+	 * @param data The data to fill the matrix with.
+	 * @param height The height to make the matrix. (-1 for auto)
+	 * @param width The width to make the matrix. (-1 for auto)
+	 * @return The bit matrix with the data given.
+	 */
 	private M getBitMatrix(MatrixMode matrixMode, LongLinkedList<Byte> data, long height, long width) {
 
 		M matrix = this.getNewMatrix(matrixMode, BIT);
@@ -156,7 +176,14 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		return matrix;
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Gets a byte matrix comprising the data given.
+	 * @param matrixMode The type of matrix to use.
+	 * @param data The data to put into the matrix.
+	 * @param height The height of the matrix (-1 for auto)
+	 * @param width The width of the matrix (-1 for auto)
+	 * @return The matrix with the data given.
+	 */
 	private M getByteMatrix(MatrixMode matrixMode, LongLinkedList<Byte> data, long height, long width) {
 		M matrix = this.getNewMatrix(matrixMode, BYTE);
 
@@ -199,6 +226,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	 * Gets a matrix built with the data given, automatically setting height/width.
 	 *
 	 * @param data     The data read in.
+	 * @param matrixMode The type of matrix this should be.
 	 * @param nodeType The type of node to use.
 	 * @return A matrix built with the data given.
 	 */
@@ -206,15 +234,24 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		return getMatrix(data, matrixMode, nodeType, -1, -1);
 	}
 
-	public LongLinkedList<N> getListOfValues(long numValues, OwatRandGenerator rand, NodeMode nodeType) {
+	/**
+	 * Gets a list of random values.
+	 * @param numValues The number of values to generate.
+	 * @param rand The random number generator to use.
+	 * @param nodeType The type of node used.
+	 * @return A list of random values.
+	 */
+	public LongLinkedList<N> getRandListOfValues(long numValues, OwatRandGenerator rand, NodeMode nodeType) {
 		LongLinkedList<N> output = new LongLinkedList<>();
 
 		if (nodeType == BIT) {
 			for (long i = 0; i < numValues; i++) {
+				//noinspection unchecked
 				output.add((N) new BitValue(rand.nextBool(), false));
 			}
 		} else if (nodeType == BYTE) {
 			for (long i = 0; i < numValues; i++) {
+				//noinspection unchecked
 				output.add((N) new ByteValue(rand.nextByte(), false));
 			}
 		}
@@ -222,24 +259,35 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		return output;
 	}
 
+	/**
+	 * Adds a random row or column to the matrix given.
+	 * @param matrix The matrix to add to.
+	 * @param rand The random number generator to use.
+	 * @param nodeType The type of node used.
+	 */
 	public void addRandRowOrCol(M matrix, OwatRandGenerator rand, NodeMode nodeType) {
 		if (rand.nextBool()) {
 			matrix.addRow();
-			List<N> newVals = this.getListOfValues(matrix.getNumCols(), rand, nodeType);
+			List<N> newVals = this.getRandListOfValues(matrix.getNumCols(), rand, nodeType);
 
 			matrix.replaceRow(matrix.getNumRows() - 1, newVals);
 		} else {
 			matrix.addCol();
-			List<N> newVals = this.getListOfValues(matrix.getNumRows(), rand, nodeType);
+			List<N> newVals = this.getRandListOfValues(matrix.getNumRows(), rand, nodeType);
 
 			matrix.replaceCol(matrix.getNumCols() - 1, newVals);
 		}
 	}
 
 	/**
+	 * Determines the number of rows and columns that should be used to pad the matrix.
+	 *
+	 * Does this based on the number of elements already in the matrix.
+	 *
+	 * Link to graph of the function used:
 	 * https://www.desmos.com/calculator/tq6r7kviyc
-	 * @param num
-	 * @return
+	 * @param num The number of elements already in the matrix.
+	 * @return The number of rows and/or columns to be added.
 	 */
 	private static long determineNumToPad(long num) {
 		long a = 5,
@@ -248,6 +296,12 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		return (long) (Math.pow(Math.E, (a - (num / b))) + c);
 	}
 
+	/**
+	 * Pads the matrix given with random data.
+	 * @param matrix The matrix to add data to.
+	 * @param rand The random number generator to use.
+	 * @param nodeType The type of node used.
+	 */
 	public void padMatrix(M matrix, OwatRandGenerator rand, NodeMode nodeType) {
 		if (!matrix.isFull()) {
 			MatrixCoordinate curPos = new MatrixCoordinate(matrix, matrix.getWidth() - 1, matrix.getHeight() - 1);
@@ -257,9 +311,11 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 				}
 				switch (nodeType) {
 					case BIT:
+						//noinspection unchecked
 						matrix.setValue(curPos, (N) new BitValue(rand.nextBool(), false));
 						break;
 					case BYTE:
+						//noinspection unchecked
 						matrix.setValue(curPos, (N) new ByteValue(rand.nextByte(), false));
 						break;
 				}
@@ -276,12 +332,14 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 
 		while (matrix.getNumCols() < MoveValidator.MIN_SIZE_FOR_SCRAMBLING) {
 			matrix.addCol();
-			List list = this.getListOfValues(matrix.getNumRows(), rand, nodeType);
+			List list = this.getRandListOfValues(matrix.getNumRows(), rand, nodeType);
+			//noinspection unchecked
 			matrix.replaceCol(matrix.getNumCols() - 1, list);
 		}
 		while (matrix.getNumRows() < MoveValidator.MIN_SIZE_FOR_SCRAMBLING) {
 			matrix.addRow();
-			List list = this.getListOfValues(matrix.getNumCols(), rand, nodeType);
+			List list = this.getRandListOfValues(matrix.getNumCols(), rand, nodeType);
+			//noinspection unchecked
 			matrix.replaceRow(matrix.getNumRows() - 1, list);
 		}
 
@@ -300,12 +358,15 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 	}
 
 	/**
+	 * Gets a number based on the number given. Used to help determine what number of steps to use.
+	 *
+	 * Link to graph of function used:
 	 * https://www.desmos.com/calculator/6lusvo9prb
 	 *
-	 * @param num
-	 * @return
+	 * @param num The number to base the calculation on.
+	 * @return The number gotten from the function.
 	 */
-	private static long getNumFromNum(long num) {
+	private static long getNormallizedNumber(long num) {
 		long a = 50,
 			b = 1,
 			h = 1,
@@ -319,23 +380,44 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		);
 	}
 
+	/**
+	 * Determines the number of steps to take to scramble the matrix.
+	 * @param matrix The matrix being scrambled.
+	 * @param rand The random number generator to use.
+	 * @param minNumScrambleSteps The bare minimum number of steps to use.
+	 * @return The number of steps to take to scramble the matrix.
+	 */
 	public long determineNumStepsToTake(M matrix, OwatRandGenerator rand, long minNumScrambleSteps) {
-		long min = minNumScrambleSteps + getNumFromNum(matrix.size()) + matrix.size();
+		long min = minNumScrambleSteps + getNormallizedNumber(matrix.size()) + matrix.size();
 		long max = rand.nextLong(min, min + (long) Math.ceil(Math.sqrt(matrix.size())) + rand.nextLong(1000));
 		return rand.nextLong(min, max);
 	}
 
+	/**
+	 * Determines the appropriate minimum number of steps to take.
+	 * @param matrix The matrix being scrambled.
+	 * @param rand The random number generator being used.
+	 * @return The appropriate minimum number of steps to take.
+	 */
 	public long determineMinStepsToTake(M matrix, OwatRandGenerator rand) {
 		return determineNumStepsToTake(
 			matrix,
 			rand,
-			getNumFromNum(matrix.size())
+			getNormallizedNumber(matrix.size())
 		);
 	}
 
+	/**
+	 * Gets the matrix given as an array of bytes.
+	 * @param matrix The matrix
+	 * @param nodeType The node type used
+	 * @param length The number of elements in the matrix to go through.
+	 * @return The matrix given as an array of bytes.
+	 */
 	public byte[] getMatrixAsBytes(M matrix, NodeMode nodeType, long length) {
 		byte[] bytes;
 		if (nodeType == BIT) {
+			//noinspection unchecked
 			MatrixIterator<BitValue> bitIt = (MatrixIterator<BitValue>) matrix.iterator();
 
 			LongLinkedList<BitValue> tempBits;
@@ -367,6 +449,7 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 			}
 		} else if (nodeType == NodeMode.BYTE) {
 			bytes = new byte[(int)length];
+			//noinspection unchecked
 			Iterator<ByteValue> it = (Iterator<ByteValue>) matrix.iterator();
 			for (int i = 0; i < length; i++) {
 				bytes[i] = it.next().getValue();
@@ -377,34 +460,62 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 		return bytes;
 	}
 
+	/**
+	 * Gets the matrix given as an array of bytes.
+	 * @param matrix The matrix
+	 * @param nodeType The type of node used.
+	 * @return The matrix given as an array of bytes.
+	 */
 	public byte[] getMatrixAsBytes(M matrix, NodeMode nodeType) {
 		return getMatrixAsBytes(matrix, nodeType, matrix.size());
 	}
 
-	public byte[] compressBytes(byte[] bytes) throws IOException {
+	/**
+	 * Compresses a set of bytes using GZIP.
+	 * @param bytes The bytes to compress.
+	 * @return The compressed bytes.
+	 */
+	public byte[] compressBytes(byte[] bytes){
 		byte output[];
-		ByteArrayOutputStream os = new ByteArrayOutputStream(bytes.length);
-		GZIPOutputStream gzos = new GZIPOutputStream(os);
-		gzos.write(bytes);
-		gzos.close();
-		os.close();
-		output = os.toByteArray();
+		try(
+			ByteArrayOutputStream os = new ByteArrayOutputStream(bytes.length);
+			GZIPOutputStream gzos = new GZIPOutputStream(os);
+		) {
+			gzos.write(bytes);
+			gzos.close();
+			os.close();
+			output = os.toByteArray();
+		} catch (IOException e) {
+			LOGGER.error("Somehow an exception happened compressing the data. Error: ", e);
+			throw new RuntimeException(e);
+		}
 		LOGGER.debug("Size of key before compression: {}. After: {}", bytes.length, output.length);
 		return output;
 	}
 
+	/**
+	 * Decompresses a set of bytes compressed using GZip.
+	 * @param bytes The compressed bytes.
+	 * @return The decompressed bytes.
+	 * @throws IOException If something went wrong during decompression.
+	 */
 	public byte[] decompressBytes(InputStream bytes) throws IOException {
 		byte[] buffer = new byte[1024];
-		GZIPInputStream gzipper = new GZIPInputStream(bytes);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try(
+			GZIPInputStream gzipper = new GZIPInputStream(bytes);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+		){
+			int len;
+			while ((len = gzipper.read(buffer)) > 0) {
+				out.write(buffer, 0, len);
+			}
 
-		int len;
-		while ((len = gzipper.read(buffer)) > 0) {
-			out.write(buffer, 0, len);
+			gzipper.close();
+			out.close();
+			return out.toByteArray();
+		} catch (IOException e) {
+			LOGGER.error("Error decompressing data: ", e);
+			throw e;
 		}
-
-		gzipper.close();
-		out.close();
-		return out.toByteArray();
 	}
 }

@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Results of a run, keeps information about it for reporting.
  *
- * TODO:: finish javadocs
+ * This is the abstract class to genericize data kept by both types of run (scrambling/descrambling)
  */
 public abstract class RunResults {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunResults.class);
@@ -34,12 +34,17 @@ public abstract class RunResults {
 		}
 	}
 
+	/**
+	 * Constructor to setup the scramble and node modes.
+	 * @param scrambleMode The scramble mode of this run.
+	 * @param nodeMode The node mode of this run.
+	 */
 	public RunResults(ScrambleMode scrambleMode, NodeMode nodeMode) {
 		this(scrambleMode);
 		this.setNodeMode(nodeMode);
 	}
 
-		/** The scrambleMode of this run. */
+	/** The scrambleMode of this run. */
 	private final ScrambleMode scrambleMode;
 	/** The number of bytes read in for the data. */
 	private long numBytesIn = -1;
@@ -54,65 +59,132 @@ public abstract class RunResults {
 	/** The map of timing data. */
 	private LinkedHashMap<Step, Long> timingMap = new LinkedHashMap<>();
 
+	/** The step we are currently on in the run. */
 	private Step curStep;
 
+	/** The progress of the current step. */
 	private long curStepProg = 0;
-
+	/** The max progress value for the step. */
 	private long curStepProgMax = 0;
 
+	/**
+	 * Gets the node mode of this run.
+	 * @return The node mode of this run.
+	 */
 	public synchronized NodeMode getNodeMode(){
 		return this.nodeMode;
 	}
 
+	/**
+	 * Sets the node mode of this run
+	 *
+	 * TODO:: throw exception if already set?
+	 *
+	 * @param nodeMode The node mode to set.
+	 */
 	public synchronized void setNodeMode(NodeMode nodeMode){
 		this.nodeMode = nodeMode;
 	}
 
+	/**
+	 * Gets the scramble mode of the run.
+	 * @return The scramble mode of the run.
+	 */
 	public ScrambleMode getScrambleMode(){
 		return this.scrambleMode;
 	}
 
+	/**
+	 * Gets the type of matrix used on this run.
+	 * @return The type of matrix used on this run.
+	 */
 	public synchronized MatrixMode getMatrixMode(){
 		return this.matrixMode;
 	}
+
+	/**
+	 * Sets the type matrix used in this run
+	 *
+	 * TODO:: throw exception if already set?
+	 *
+	 * @param matrixMode The type of matrix used in the run.
+	 */
 	public synchronized void setMatrixMode(MatrixMode matrixMode){
 		this.matrixMode = matrixMode;
 	}
 
+	/**
+	 * Gets the current step that the run is currently on.
+	 * @return The current step that the run is currently on.
+	 */
 	public synchronized Step getCurStep(){
 		return this.curStep;
 	}
 
+	/**
+	 * Sets the current step that the run is currently on.
+	 *
+	 * TODO:: throw exception if step already set?
+	 *
+	 * @param curStep The current step that the run is currently on.
+	 */
 	public synchronized void setCurStep(Step curStep){
 		this.curStep = curStep;
 		this.resetStepProg();
 	}
 
+	/**
+	 * Sets the {@link #timingMap timing map}.
+	 * @param timingMap The new timing map to use.
+	 */
 	protected synchronized void setTimingMap(LinkedHashMap<Step,Long> timingMap){
 		this.timingMap = timingMap;
 	}
 
+	/**
+	 * Gets {@link #curStepProg current step progress}.
+	 * @return The current step progress.
+	 */
 	public synchronized long getCurStepProg(){
 		return curStepProg;
 	}
 
+	/**
+	 * Sets the {@link #curStepProg current step progress}.
+	 * @param curStepProg The current step progress to use.
+	 */
 	public synchronized void setCurStepProg(long curStepProg){
 		this.curStepProg = curStepProg;
 	}
 
+	/**
+	 * Gets the {@link #curStepProgMax current step progress max value}.
+	 * @return The current max step progress.
+	 */
 	public synchronized long getCurStepProgMax(){
 		return curStepProgMax;
 	}
 
+	/**
+	 * Sets the {@link #curStepProgMax current step progress max value}. Also resets {@link #curStepProg current step progress}.
+	 * @param curStepProgMax The new max value to use.
+	 */
 	public synchronized void setCurStepProgMax(long curStepProgMax){
 		this.setCurStepProg(0);
 		this.curStepProgMax = curStepProgMax;
 	}
 
+	/**
+	 * Resets the current step progress, setting {@link #curStepProg current step progress}. and {@link #curStepProgMax current step progress max} to 0.
+	 */
 	private synchronized void resetStepProg(){
 		this.setCurStepProgMax(0);
 	}
 
+	/**
+	 * Gets the percentage complete of the current step.
+	 * @return The percentage of the step completed.
+	 */
 	public synchronized byte getStepPercentDone(){
 		if(this.getCurStepProgMax() < 1){
 			return 0;
@@ -124,6 +196,8 @@ public abstract class RunResults {
 	 * Sets the time it took to complete a specific step.
 	 * @param step The step.
 	 * @param timeTook How long it took to complete the step.
+	 * @throws IllegalArgumentException If the step given is not in the set of steps for this run.
+	 * @throws IllegalStateException If the step is already in the timing data.
 	 */
 	public synchronized void setElapsedTime(Step step, long timeTook){
 		if(step.mode != this.scrambleMode){
@@ -136,10 +210,12 @@ public abstract class RunResults {
 	}
 
 	/**
-	 *
+	 * Sets the time taken to run a step.
 	 * @param step The step that took place.
 	 * @param startTime Time in milliseconds when the step started.
 	 * @param endTime Time in milliseconds when the step ended.
+	 * @throws IllegalArgumentException If the step given is not in the set of steps for this run.
+	 * @throws IllegalStateException If the step is already in the timing data.
 	 */
 	public synchronized void setElapsedTime(Step step, long startTime, long endTime){
 		this.setElapsedTime(step, endTime - startTime);
@@ -165,22 +241,44 @@ public abstract class RunResults {
 		return (LinkedHashMap<Step, Long>) this.timingMap.clone();
 	}
 
+	/**
+	 * Sets the number of bytes in the data read in. Note this is not meant to include key data.
+	 * @param numBytesIn The number of bytes in the data read in.
+	 */
 	public synchronized void setNumBytesIn(long numBytesIn){
 		this.numBytesIn = numBytesIn;
 	}
 
+	/**
+	 * Gets the number of bytes in the data read in. Note this is not meant to include key data.
+	 * @return The number of bytes of the data read in.
+	 */
 	public synchronized long getNumBytesIn(){
 		return this.numBytesIn;
 	}
 
+	/**
+	 * Sets the number of bytes written out. Note this is not meant to include key data.
+	 *
+	 * TODO:: throw exception if already set
+	 *
+	 * @param numBytesOut The number of bytes in the data written out.
+	 */
 	public synchronized void setNumBytesOut(long numBytesOut){
 		this.numBytesOut = numBytesOut;
 	}
 
+	/**
+	 * Gets the number of bytes written out. Note this is not meant to include key data.
+	 * @return The number of bytes written out.
+	 */
 	public synchronized long getNumBytesOut(){
 		return this.numBytesOut;
 	}
 
+	/**
+	 * Logs out the timing data to the {@link #LOGGER}.
+	 */
 	public void logOutTimingData(){
 		HashMap<Step, Long> timingMap = this.getTimingMap();
 
@@ -190,11 +288,18 @@ public abstract class RunResults {
 		}
 	}
 
-
+	/**
+	 * Gets the base CSV header applicable to all run modes.
+	 * @return The base CSV header applicable to all run modes.
+	 */
 	public static String getCsvHeadBase(){
 		return "scrambleMode,nodeMode,matrixMode,lastStep,numBytesIn,numBytesOut";
 	}
 
+	/**
+	 * Gets the base CSV line applicable to all run modes.
+	 * @return The base CSV line applicable to all run modes.
+	 */
 	public String getCsvLineBase(){
 		StringBuilder sb = new StringBuilder();
 
@@ -213,6 +318,13 @@ public abstract class RunResults {
 		return sb.toString();
 	}
 
+	/**
+	 * Gets the csv values for the timing data held.
+	 *
+	 * Note that this is run type dependant.
+	 *
+	 * @return The csv values for the timing data held.
+	 */
 	public String getCsvTiming(){
 		StringBuilder sb = new StringBuilder();
 		LinkedHashMap<Step, Long> steps = this.getTimingMap();
@@ -220,7 +332,7 @@ public abstract class RunResults {
 			Long val = steps.get(curStep);
 			sb.append(",");
 			sb.append(
-				(val == null ? "<undefined>" : val)
+				(val == null ? -1 : val)
 			);
 		}
 		return sb.toString();
@@ -235,6 +347,10 @@ public abstract class RunResults {
 	 */
 	public abstract String getCsvLine(boolean header);
 
+	/**
+	 * Gets the csv line for this result. Does not include the header.
+	 * @return The csv line for this result.
+	 */
 	public String getCsvLine(){
 		return this.getCsvLine(false);
 	}

@@ -5,11 +5,21 @@ import com.ebp.owat.lib.runner.utils.Step;
 
 import static com.ebp.owat.lib.runner.utils.ScrambleMode.DESCRAMBLING;
 
+/**
+ * Represents the run results from descrambling.
+ */
 public class DescrambleResults extends RunResults {
+	/**
+	 * Base constructor.
+	 */
 	public DescrambleResults(){
 		super(DESCRAMBLING);
 	}
 
+	/**
+	 * Constructor to setup the node mode.
+	 * @param nodeMode The node mode used.
+	 */
 	public DescrambleResults(NodeMode nodeMode){
 		super(DESCRAMBLING, nodeMode);
 	}
@@ -28,6 +38,10 @@ public class DescrambleResults extends RunResults {
 		return output;
 	}
 
+	/**
+	 * Gets the CSV head used for descrambling data results.
+	 * @return The CSV head used for descrambling data results.
+	 */
 	public static String getCsvHead(){
 		StringBuilder sb = new StringBuilder(RunResults.getCsvHeadBase());
 
@@ -39,6 +53,7 @@ public class DescrambleResults extends RunResults {
 		return sb.toString();
 	}
 
+	@Override
 	public String getCsvLine(boolean header){
 		StringBuilder sb = new StringBuilder();
 
@@ -53,5 +68,4 @@ public class DescrambleResults extends RunResults {
 
 		return sb.toString();
 	}
-
 }

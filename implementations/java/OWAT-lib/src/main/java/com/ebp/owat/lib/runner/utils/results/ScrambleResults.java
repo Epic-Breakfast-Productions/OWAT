@@ -1,15 +1,25 @@
 package com.ebp.owat.lib.runner.utils.results;
 
-import static com.ebp.owat.lib.runner.utils.ScrambleMode.SCRAMBLING;
-
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.runner.utils.Step;
 
+import static com.ebp.owat.lib.runner.utils.ScrambleMode.SCRAMBLING;
+
+/**
+ * Represents the results from scrambling.
+ */
 public class ScrambleResults extends RunResults {
+	/**
+	 * Base constructor.
+	 */
 	public ScrambleResults(){
 		super(SCRAMBLING);
 	}
 
+	/**
+	 * Constructor to set the node mode used.
+	 * @param nodeMode The node mode used.
+	 */
 	public ScrambleResults(NodeMode nodeMode){
 		super(SCRAMBLING, nodeMode);
 	}
@@ -28,6 +38,10 @@ public class ScrambleResults extends RunResults {
 		return output;
 	}
 
+	/**
+	 * Gets the CSV head used for scrambling data results.
+	 * @return The CSV head used for scrambling data results.
+	 */
 	public static String getCsvHead(){
 		StringBuilder sb = new StringBuilder(RunResults.getCsvHeadBase());
 

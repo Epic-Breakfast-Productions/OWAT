@@ -43,23 +43,23 @@ public class RunnerSimpleUtilitiesTest extends RunnerUtilTest {
 	@Test
 	public void testGetListOfValues() {
 		this.assertListOfValues(
-			utilities.getListOfValues(1, new RandGenerator(), NodeMode.BIT),
+			utilities.getRandListOfValues(1, new RandGenerator(), NodeMode.BIT),
 			1
 		);
 		this.assertListOfValues(
-			utilities.getListOfValues(2, new RandGenerator(), NodeMode.BIT),
+			utilities.getRandListOfValues(2, new RandGenerator(), NodeMode.BIT),
 			2
 		);
 		this.assertListOfValues(
-			utilities.getListOfValues(10, new RandGenerator(), NodeMode.BIT),
+			utilities.getRandListOfValues(10, new RandGenerator(), NodeMode.BIT),
 			10
 		);
 		this.assertListOfValues(
-			utilities.getListOfValues(50, new RandGenerator(), NodeMode.BIT),
+			utilities.getRandListOfValues(50, new RandGenerator(), NodeMode.BIT),
 			50
 		);
 		this.assertListOfValues(
-			utilities.getListOfValues(11, new RandGenerator(), NodeMode.BIT),
+			utilities.getRandListOfValues(11, new RandGenerator(), NodeMode.BIT),
 			11
 		);
 	}
