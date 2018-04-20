@@ -1,6 +1,9 @@
-package com.ebp.owat.lib.runner.utils;
+package com.ebp.owat.lib.runner.utils.results;
 
 import com.ebp.owat.lib.datastructure.value.NodeMode;
+import com.ebp.owat.lib.runner.utils.MatrixMode;
+import com.ebp.owat.lib.runner.utils.ScrambleMode;
+import com.ebp.owat.lib.runner.utils.Step;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +17,7 @@ import java.util.Map;
  *
  * TODO:: finish javadocs
  */
-public class RunResults {
+public abstract class RunResults {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunResults.class);
 
 	/**
@@ -29,7 +32,6 @@ public class RunResults {
 		if(this.scrambleMode == ScrambleMode.DESCRAMBLING){
 			this.curStep = Step.NOT_STARTED_DESCRAMBLE;
 		}
-
 	}
 
 	public RunResults(ScrambleMode scrambleMode, NodeMode nodeMode) {
@@ -86,7 +88,7 @@ public class RunResults {
 		this.resetStepProg();
 	}
 
-	private synchronized void setTimingMap(LinkedHashMap<Step,Long> timingMap){
+	protected synchronized void setTimingMap(LinkedHashMap<Step,Long> timingMap){
 		this.timingMap = timingMap;
 	}
 
@@ -124,6 +126,9 @@ public class RunResults {
 	 * @param timeTook How long it took to complete the step.
 	 */
 	public synchronized void setElapsedTime(Step step, long timeTook){
+		if(step.mode != this.scrambleMode){
+			throw new IllegalArgumentException("Step given was not part of the mode setup.");
+		}
 		if(this.timingMap.containsKey(step)){
 			throw new IllegalStateException("Cannot overwrite step timing.");
 		}
@@ -185,47 +190,13 @@ public class RunResults {
 		}
 	}
 
-	@Override
-	public synchronized RunResults clone(){
-		RunResults output = new RunResults(this.scrambleMode, this.nodeMode);
-		output.setMatrixMode(this.getMatrixMode());
-		output.setCurStep(this.curStep);
-		output.setCurStepProg(this.getCurStepProg());
-		output.setCurStepProgMax(this.getCurStepProgMax());
-		output.setTimingMap(this.getTimingMap());
-		output.setNumBytesIn(this.getNumBytesIn());
-		output.setNumBytesOut(this.getNumBytesOut());
 
-		return output;
+	public static String getCsvHeadBase(){
+		return "scrambleMode,nodeMode,matrixMode,lastStep,numBytesIn,numBytesOut";
 	}
 
-	/**
-	 * Gets the header for a CSV file.
-	 * @return The header for a CSV file.
-	 */
-	public String getCsvHead(){
-		StringBuilder sb = new StringBuilder("scrambleMode,nodeMode,matrixMode,lastStep,numBytesIn,numBytesOut");
-
-		for (Step curStep : Step.getStepsIn(this.scrambleMode)) {
-			sb.append(",");
-			sb.append(curStep.stepName);
-		}
-
-		return sb.toString();
-	}
-
-	/**
-	 * Gets a csv line
-	 * @param includeHead If the header line is to be included.
-	 * @return A csv line.
-	 */
-	public String getCsvLine(boolean includeHead){
+	public String getCsvLineBase(){
 		StringBuilder sb = new StringBuilder();
-		if(includeHead){
-			sb.append(
-				String.format(this.getCsvHead()+"%n")
-			);
-		}
 
 		sb.append(this.scrambleMode.name);
 		sb.append(",");
@@ -239,6 +210,11 @@ public class RunResults {
 		sb.append(",");
 		sb.append(this.getNumBytesOut());
 
+		return sb.toString();
+	}
+
+	public String getCsvTiming(){
+		StringBuilder sb = new StringBuilder();
 		LinkedHashMap<Step, Long> steps = this.getTimingMap();
 		for (Step curStep : Step.getStepsIn(this.scrambleMode)) {
 			Long val = steps.get(curStep);
@@ -247,14 +223,18 @@ public class RunResults {
 				(val == null ? "<undefined>" : val)
 			);
 		}
-
 		return sb.toString();
 	}
+
+	@Override
+	public abstract RunResults clone();
 
 	/**
 	 * Gets a csv line for this result.
 	 * @return a csv line representing this result.
 	 */
+	public abstract String getCsvLine(boolean header);
+
 	public String getCsvLine(){
 		return this.getCsvLine(false);
 	}
@@ -272,7 +252,11 @@ public class RunResults {
 		for(RunResults curResults : results){
 			if(mode == null){
 				mode = curResults.getScrambleMode();
-				sb.append(curResults.getCsvHead());
+				if(curResults instanceof ScrambleResults){
+					sb.append(ScrambleResults.getCsvHead());
+				}else{
+					sb.append(DescrambleResults.getCsvHead());
+				}
 			}
 
 			if(curResults.getScrambleMode() != mode){

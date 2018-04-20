@@ -7,6 +7,8 @@ import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
+import com.ebp.owat.lib.runner.utils.results.DescrambleResults;
+import com.ebp.owat.lib.runner.utils.results.RunResults;
 import com.ebp.owat.lib.utils.key.ScrambleKey;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
@@ -157,8 +159,17 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 	}
 
 	@Override
+	public synchronized DescrambleResults getLastRunResults() {
+		DescrambleResults results = (DescrambleResults) this.lastRunResults;
+		if(results == null){
+			return null;
+		}
+		return results.clone();
+	}
+
+	@Override
 	public void doSteps() throws IOException {
-		RunResults runResults = new RunResults(ScrambleMode.DESCRAMBLING);
+		DescrambleResults runResults = new DescrambleResults();
 		this.setLastRunResults(runResults);
 		long start, end;
 		M matrix;

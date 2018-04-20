@@ -5,7 +5,7 @@ import com.ebp.owat.app.config.Globals;
 import com.ebp.owat.app.gui.MainGuiApp;
 import com.ebp.owat.lib.runner.DeScrambleRunner;
 import com.ebp.owat.lib.runner.ScrambleRunner;
-import com.ebp.owat.lib.runner.utils.RunResults;
+import com.ebp.owat.lib.runner.utils.results.RunResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,8 +1,9 @@
 package com.ebp.owat.lib.runner;
 
 import com.ebp.owat.lib.datastructure.value.NodeMode;
-import com.ebp.owat.lib.runner.utils.RunResults;
+import com.ebp.owat.lib.runner.utils.results.RunResults;
 import com.ebp.owat.lib.runner.utils.ScrambleMode;
+import com.ebp.owat.lib.utils.rand.ThreadLocalRandGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -26,11 +27,15 @@ import static org.junit.Assert.assertEquals;
 public class RunnerTestPlusPlus {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunnerTestPlusPlus.class);
 
+	/** Flag to enable or disable file reporting results to CSV. Normal state is false. */
+	private static final boolean REPORT_TO_CSV = true;
+
+	/** Flag to run a short test. Runs a reasonable test set for normal testing if set to true. Normally true. */
+	private static final boolean SHORT = true;
+
 	private static final int START = 1,
 		INC = 50,
 		BOUND = 10_000;
-
-	private static final boolean SHORT = true;
 
 	private final byte data[];
 
@@ -55,6 +60,7 @@ public class RunnerTestPlusPlus {
 		builder.setDataOutput(scrambledDataOutput);
 		builder.setKeyOutput(keyOutput);
 		builder.setNodeType(mode);
+		builder.setRand(new ThreadLocalRandGenerator());
 
 		LOGGER.info("Scrambling test data.");
 
@@ -137,7 +143,6 @@ public class RunnerTestPlusPlus {
 		return output;
 	}
 
-	private static final boolean REPORT = false;
 	private static String RESULTS_DIR = "out/";
 	private static String SCRAMBLING_RESULTS_CSV = RESULTS_DIR + "scramblingResults.csv";
 	private static String DESCRAMBLING_RESULTS_CSV = RESULTS_DIR + "descramblingResults.csv";
@@ -151,14 +156,13 @@ public class RunnerTestPlusPlus {
 	}
 
 	private static void report(RunResults results) throws IOException {
-		if(!REPORT){
+		if(!REPORT_TO_CSV){
 			return;
 		}
+		String outFileLoc = (results.getScrambleMode() == ScrambleMode.SCRAMBLING ? SCRAMBLING_RESULTS_CSV : DESCRAMBLING_RESULTS_CSV);
+		LOGGER.debug("Writing run data to \"{}\"", outFileLoc);
 		try(
-			FileWriter fw = new FileWriter(
-				(results.getScrambleMode() == ScrambleMode.SCRAMBLING ? SCRAMBLING_RESULTS_CSV : DESCRAMBLING_RESULTS_CSV),
-				true
-			);
+			FileWriter fw = new FileWriter(outFileLoc, true);
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter out = new PrintWriter(bw)
 		){

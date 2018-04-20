@@ -5,7 +5,7 @@ import com.ebp.owat.app.config.Globals;
 import com.ebp.owat.lib.runner.DeScrambleRunner;
 import com.ebp.owat.lib.runner.OwatRunner;
 import com.ebp.owat.lib.runner.ScrambleRunner;
-import com.ebp.owat.lib.runner.utils.RunResults;
+import com.ebp.owat.lib.runner.utils.results.RunResults;
 import com.ebp.owat.lib.runner.utils.Step;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;

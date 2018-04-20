@@ -3,11 +3,10 @@ package com.ebp.owat.lib.runner;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
 import com.ebp.owat.lib.datastructure.value.Value;
-import com.ebp.owat.lib.runner.utils.RunResults;
+import com.ebp.owat.lib.runner.utils.results.RunResults;
 import com.ebp.owat.lib.runner.utils.RunnerUtilities;
 import com.ebp.owat.lib.runner.utils.ScrambleRunnerThread;
 import com.ebp.owat.lib.runner.utils.Step;
-import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -51,12 +50,7 @@ public abstract class OwatRunner<N extends Value, M extends Matrix<N> & Scramble
 	 * Gets a clone of the last run results.
 	 * @return A clone of the last run results.
 	 */
-	public synchronized RunResults getLastRunResults() {
-		if(this.lastRunResults == null){
-			return null;
-		}
-		return this.lastRunResults.clone();
-	}
+	public abstract RunResults getLastRunResults();
 
 	/**
 	 * Gets the percentage done on this current step.
