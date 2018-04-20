@@ -83,11 +83,6 @@ public class RunnerSimpleUtilitiesTest extends RunnerUtilTest {
 	}
 
 	@Test
-	public void testGetMatrixAsBytes(){
-		//TODO:: getMatrixAsBytes
-	}
-
-	@Test
 	public void testByteArrCompression() throws IOException {
 		byte original[] = "HEllo Worldasdaswf wefi;3w4jo;9 f41309 3q4jq34t0[8u34qg5t09[3q54g poi nqg r3oiuerq gnoerq gjh; qerg8oj345qg o835i4gjoe;qi5g lki;erhgklj;dfaghnk;ljetrqb5n3o45ituy3qotjewgfslkfgjsdlfweuteoligjdfglkdfsjngaldskiughrekgjhefgpiodasfgyuerghkermngerlkgjdfng".getBytes(StandardCharsets.UTF_8);
 

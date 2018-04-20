@@ -78,11 +78,12 @@ public abstract class RunResults {
 	/**
 	 * Sets the node mode of this run
 	 *
-	 * TODO:: throw exception if already set?
-	 *
 	 * @param nodeMode The node mode to set.
 	 */
 	public synchronized void setNodeMode(NodeMode nodeMode){
+		if(this.getNodeMode() != null){
+			throw new IllegalStateException("Node mode was already set.");
+		}
 		this.nodeMode = nodeMode;
 	}
 
@@ -105,11 +106,12 @@ public abstract class RunResults {
 	/**
 	 * Sets the type matrix used in this run
 	 *
-	 * TODO:: throw exception if already set?
-	 *
 	 * @param matrixMode The type of matrix used in the run.
 	 */
 	public synchronized void setMatrixMode(MatrixMode matrixMode){
+		if(this.getMatrixMode() != null){
+			throw new IllegalStateException("Matrix mode already set.");
+		}
 		this.matrixMode = matrixMode;
 	}
 
@@ -124,11 +126,12 @@ public abstract class RunResults {
 	/**
 	 * Sets the current step that the run is currently on.
 	 *
-	 * TODO:: throw exception if step already set?
-	 *
 	 * @param curStep The current step that the run is currently on.
 	 */
 	public synchronized void setCurStep(Step curStep){
+		if(this.getTimingMap().containsKey(curStep)){
+			throw new IllegalStateException("Step already occurred, cannot repeat steps.");
+		}
 		this.curStep = curStep;
 		this.resetStepProg();
 	}
@@ -246,6 +249,9 @@ public abstract class RunResults {
 	 * @param numBytesIn The number of bytes in the data read in.
 	 */
 	public synchronized void setNumBytesIn(long numBytesIn){
+		if(this.getNumBytesIn() != -1){
+			throw new IllegalStateException("Already set the number of bytes in.");
+		}
 		this.numBytesIn = numBytesIn;
 	}
 
@@ -260,11 +266,12 @@ public abstract class RunResults {
 	/**
 	 * Sets the number of bytes written out. Note this is not meant to include key data.
 	 *
-	 * TODO:: throw exception if already set
-	 *
 	 * @param numBytesOut The number of bytes in the data written out.
 	 */
 	public synchronized void setNumBytesOut(long numBytesOut){
+		if(this.getNumBytesOut() != -1){
+			throw new IllegalStateException("Already set the number of bytes out.");
+		}
 		this.numBytesOut = numBytesOut;
 	}
 
