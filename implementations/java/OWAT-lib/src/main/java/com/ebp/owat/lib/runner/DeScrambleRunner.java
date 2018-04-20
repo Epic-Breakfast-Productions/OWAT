@@ -158,7 +158,7 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 
 	@Override
 	public void doSteps() throws IOException {
-		RunResults runResults = new RunResults(ScrambleMode.DESCRAMBLING, this.nodeType);
+		RunResults runResults = new RunResults(ScrambleMode.DESCRAMBLING);
 		this.setLastRunResults(runResults);
 		long start, end;
 		M matrix;
@@ -166,15 +166,14 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 		runResults.setCurStep(Step.LOAD_KEY);
 		start = System.currentTimeMillis();
 		LOGGER.info("Loading key...");
-
 		{
 			byte decompressedKey[] = utils.decompressBytes(this.keyInput);
 			this.key = OBJECT_MAPPER.readValue(decompressedKey, ScrambleKey.class);
 			this.nodeType = this.key.meta.getNodeMode();
+			runResults.setNodeMode(this.nodeType);
 		}
-
 		end = System.currentTimeMillis();
-		runResults.setElapsedTime(Step.LOAD_DATA, start, end);
+		runResults.setElapsedTime(Step.LOAD_KEY, start, end);
 
 		runResults.setCurStep(Step.LOAD_SCRAMBLED_DATA);
 		start = System.currentTimeMillis();
@@ -182,6 +181,7 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 
 		{
 			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput, true);
+			runResults.setNumBytesIn(data.sizeL());
 
 			if(this.matrixMode == null){
 				this.matrixMode = MatrixMode.determineModeToUse(data.sizeL());
@@ -226,6 +226,7 @@ public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, 
 				length -= key.meta.lastColIndex;
 			}
 			byte[] bytes = this.utils.getMatrixAsBytes(matrix, this.nodeType, length);
+			runResults.setNumBytesOut(bytes.length);
 			LOGGER.debug("Number of bytes to output: {}", bytes.length);
 			this.dataOutput.write(bytes);
 		}

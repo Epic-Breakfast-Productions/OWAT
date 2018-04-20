@@ -19,11 +19,10 @@ public class RunResults {
 
 	/**
 	 * Constructor to set the scrambleMode of this scramble scrambleMode
-	 * @param nodeMode The scrambleMode of this run.
+	 * @param scrambleMode The scrambleMode of this run.
 	 */
-	public RunResults(ScrambleMode scrambleMode, NodeMode nodeMode){
+	public RunResults(ScrambleMode scrambleMode){
 		this.scrambleMode = scrambleMode;
-		this.nodeMode = nodeMode;
 		if(this.scrambleMode == ScrambleMode.SCRAMBLING){
 			this.curStep = Step.NOT_STARTED_SCRAMBLE;
 		}
@@ -33,7 +32,12 @@ public class RunResults {
 
 	}
 
-	/** The scrambleMode of this run. */
+	public RunResults(ScrambleMode scrambleMode, NodeMode nodeMode) {
+		this(scrambleMode);
+		this.setNodeMode(nodeMode);
+	}
+
+		/** The scrambleMode of this run. */
 	private final ScrambleMode scrambleMode;
 	/** The number of bytes read in for the data. */
 	private long numBytesIn = -1;
@@ -41,7 +45,7 @@ public class RunResults {
 	private long numBytesOut = -1;
 
 	/** The node type that was used. */
-	private final NodeMode nodeMode;
+	private NodeMode nodeMode;
 	/** The type of matrix used. */
 	private MatrixMode matrixMode;
 
@@ -54,8 +58,12 @@ public class RunResults {
 
 	private long curStepProgMax = 0;
 
-	public NodeMode getNodeMode(){
+	public synchronized NodeMode getNodeMode(){
 		return this.nodeMode;
+	}
+
+	public synchronized void setNodeMode(NodeMode nodeMode){
+		this.nodeMode = nodeMode;
 	}
 
 	public ScrambleMode getScrambleMode(){
@@ -236,7 +244,7 @@ public class RunResults {
 			Long val = steps.get(curStep);
 			sb.append(",");
 			sb.append(
-				(val == null ? -1 : val)
+				(val == null ? "<undefined>" : val)
 			);
 		}
 

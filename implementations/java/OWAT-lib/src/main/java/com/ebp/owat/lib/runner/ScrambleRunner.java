@@ -274,6 +274,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 			LOGGER.info("Loading data...");
 			
 			LongLinkedList<Byte> data = this.utils.readDataIn(this.dataInput);
+			runResults.setNumBytesIn(data.sizeL());
 
 			if(this.matrixMode == null){
 				this.matrixMode = MatrixMode.determineModeToUse(data.sizeL());
@@ -339,6 +340,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 		LOGGER.info("Outputting scrambled data...");
 		{
 			byte[] bytes = ENCODER.encode(this.utils.getMatrixAsBytes(matrix, this.nodeType));
+			runResults.setNumBytesOut(bytes.length);
 			LOGGER.debug("Number of bytes to output: {}", bytes.length);
 			this.dataOutput.write(bytes);
 		}

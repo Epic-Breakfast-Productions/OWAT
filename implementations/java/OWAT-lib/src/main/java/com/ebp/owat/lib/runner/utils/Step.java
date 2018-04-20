@@ -44,7 +44,15 @@ public enum Step {
 	public static List<Step> getStepsIn(ScrambleMode mode){
 		List<Step> steps = new LinkedList<>();
 
-		for(Step curStep : steps){
+		for(Step curStep : Step.values()){
+			if(
+				curStep == NOT_STARTED_SCRAMBLE ||
+				curStep == NOT_STARTED_DESCRAMBLE ||
+				curStep == DONE_DESCRAMBLING ||
+				curStep == DONE_SCRAMBLING
+			){
+				continue;
+			}
 			if(curStep.mode == mode){
 				steps.add(curStep);
 			}

@@ -34,6 +34,7 @@ import static com.ebp.owat.lib.datastructure.value.NodeMode.BYTE;
  * Not static due to the types.
  *
  * TODO:: finish javadocs
+ * TODO:: make this an abstract class, turn scramb/descramb to sub classes
  *
  * @param <N> The type of value held
  * @param <M> The matrix with the type N
