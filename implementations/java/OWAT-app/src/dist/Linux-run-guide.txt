@@ -1,0 +1,14 @@
+This is a guide to running OWAT on a Linux system.
+
+To run GUI:
+	Run the 'Linux-GUI.sh' file.
+
+To run from command line:
+
+	Simply open a terminal window, and navigate to the 'bin' folder.
+
+	You can run OWAT by running the 'owat' executable:
+		> ./owat
+
+	You can specify arguments here, for example to run the gui:
+		> ./owat -m GUI

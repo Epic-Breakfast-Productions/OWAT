@@ -1,0 +1,7 @@
+To run OWAT:
+
+In GUI mode (normal):
+	Simply run the 'Windows-GUI.bat' file.
+
+In command prompt:
+	Navigate to the 'bin' folder, run the owat.bat file.

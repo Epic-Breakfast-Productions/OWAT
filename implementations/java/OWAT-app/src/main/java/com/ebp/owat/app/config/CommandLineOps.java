@@ -27,7 +27,7 @@ public class CommandLineOps {
 	
 	private final String[] argsGotten;
 
-	@Option(name="-m", aliases={"--mode"}, usage="The mode that this will run with. Required. ")
+	@Option(name="-m", aliases={"--mode"}, usage="The mode that this will run with. Required. ", required = true)
 	private RunMode runMode = null;
 
 	@Option(name="-i", aliases={"--input"}, usage="Input data straight from the command line.")

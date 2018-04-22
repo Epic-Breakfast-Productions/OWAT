@@ -44,16 +44,8 @@ test {
 	dependsOn ':OWAT-lib:test';
 }
 
-task bundleForRelease(dependsOn: test) {
-	group 'distribution';
-
-	doFirst{
-		clean
-	}
-	doLast {
-		distTar;
-		distZip;
-	}
+assembleDist {
+	dependsOn 'test';
 }
 
 //config for the application plugin

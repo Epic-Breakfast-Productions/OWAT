@@ -9,4 +9,3 @@ task updateWrapper(type: Wrapper) {
 //TODO:: move app/lib version to gradle. Want the app version, app name, lib version available seprately to the app
 //TODO:: setup for deployment of lib to a repository for distribution to the masses
 //TODO:: ensure javaDocs get wrapped up with the library jars, so people can use them
-//TODO:: wrap up a README/user guide in dist
