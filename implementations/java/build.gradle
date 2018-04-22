@@ -2,7 +2,7 @@
 task updateWrapper(type: Wrapper) {
 	group "wrapper"
 	description "Rebuilds the wrapper with the version listed below. Use to update to new versions of Gradle"
-	gradleVersion = '4.4.1'
+	gradleVersion = '4.7'
 }
 
 //Gradle TODOs:
