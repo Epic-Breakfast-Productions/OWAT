@@ -1,6 +1,7 @@
 package com.ebp.owat.app.config;
 
 import com.ebp.owat.app.InputValidator;
+import com.ebp.owat.lib.runner.utils.MatrixMode;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -17,7 +18,9 @@ import java.util.List;
 import static com.ebp.owat.app.InputValidator.*;
 
 /**
+ * Processes command line options for the program.
  *
+ * TODO:: add ability to specify key data in the argument
  */
 public class CommandLineOps {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandLineOps.class);
@@ -41,6 +44,9 @@ public class CommandLineOps {
 
 	@Option(name = "-c", aliases = {"--csv-stats"}, usage = "For outputting timing data to a CSV file.")
 	private File csvFile = null;
+
+	@Option(name = "--matrix-mode", usage = "For specifying a specific matrix type to use.")
+	private MatrixMode matrixMode = null;
 
 	@Option(name = "-h", aliases = {"--help"}, usage = "Show this help dialogue.")
 	private boolean showHelp = false;
@@ -164,5 +170,9 @@ public class CommandLineOps {
 
 	public OutputStream getCsvStatsOutputStream() throws FileNotFoundException {
 		return new FileOutputStream(this.csvFile);
+	}
+
+	public MatrixMode getMatrixMode(){
+		return this.matrixMode;
 	}
 }

@@ -60,6 +60,10 @@ public class Main {
 	private static void doScramble() throws IOException {
 		ScrambleRunner.Builder builder = new ScrambleRunner.Builder();
 
+		if(COMMAND_LINE_OPS.getMatrixMode() != null){
+			builder.setMatrixMode(COMMAND_LINE_OPS.getMatrixMode());
+		}
+
 		builder.setKeyOutput(COMMAND_LINE_OPS.getKeyOutputStream())
 			.setDataOutput(COMMAND_LINE_OPS.getDataOutputStream())
 			.setDataInput(COMMAND_LINE_OPS.getDataInputStream());
@@ -81,6 +85,10 @@ public class Main {
 
 	private static void doDeScramble() throws IOException {
 		DeScrambleRunner.Builder builder = new DeScrambleRunner.Builder();
+
+		if(COMMAND_LINE_OPS.getMatrixMode() != null){
+			builder.setMatrixMode(COMMAND_LINE_OPS.getMatrixMode());
+		}
 
 		builder.setKeyInput(COMMAND_LINE_OPS.getKeyInputStream())
 			.setDataInput(COMMAND_LINE_OPS.getDataInputStream())
