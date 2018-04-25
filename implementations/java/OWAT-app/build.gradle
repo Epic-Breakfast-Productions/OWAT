@@ -1,5 +1,5 @@
 /*
- * This build file configures the OWAT Java application.
+ * This build file configures the OWAT-app project.
  */
 repositories {
 	jcenter()

@@ -1,7 +1,13 @@
-//specify gradle version (for when  we recreate the wrapper)
+/**
+ * Main gradle file for the OWAT-J project.
+ */
+
+/**
+ * Task to update the gradle wrapper to the version set.
+ */
 task updateWrapper(type: Wrapper) {
 	group "wrapper"
-	description "Rebuilds the wrapper with the version listed below. Use to update to new versions of Gradle"
+	description "Rebuilds the wrapper with the version set. Use to update to new versions of Gradle"
 	gradleVersion = '4.7'
 }
 

@@ -10,7 +10,7 @@ repositories {
 
 apply plugin: 'java'
 
-// In this section you declare the dependencies for your production and test code
+// Dependencies for the library
 dependencies {
 	//logging dependencies
 	compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.+'

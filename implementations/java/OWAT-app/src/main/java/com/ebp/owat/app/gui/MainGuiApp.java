@@ -5,8 +5,8 @@ import com.ebp.owat.app.config.Globals;
 import com.ebp.owat.lib.runner.DeScrambleRunner;
 import com.ebp.owat.lib.runner.OwatRunner;
 import com.ebp.owat.lib.runner.ScrambleRunner;
-import com.ebp.owat.lib.runner.utils.results.RunResults;
 import com.ebp.owat.lib.runner.utils.Step;
+import com.ebp.owat.lib.runner.utils.results.RunResults;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -35,6 +35,10 @@ import static javax.swing.JOptionPane.*;
 
 /**
  * Main class for the GUI.
+ *
+ * TODO:: make text boxes deal with having more text than the initial size of the box can hold
+ * TODO:: make things handle resizing better
+ *
  * <p>
  * Partially generated using Intellij.
  * Guides:
