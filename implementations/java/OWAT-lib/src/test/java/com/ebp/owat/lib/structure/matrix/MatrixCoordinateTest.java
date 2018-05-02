@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.structure.matrix;
 
-import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,9 +14,7 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests the MatrixCoordinate object.
@@ -170,7 +168,7 @@ public class MatrixCoordinateTest {
 		
 		MatrixCoordinate coord = getCoordInstance(curCoordClass, matrix, 0, 0);
 		
-		LOGGER.debug("toString: \"{}\", Hash: \"{}\"", coord, coord.hashCode());
+		LOGGER.debug("toString: \"{}\", hash: \"{}\"", coord, coord.hashCode());
 		
 		MatrixCoordinate coordTwo = getCoordInstance(curCoordClass, matrix, 0, 0);
 		

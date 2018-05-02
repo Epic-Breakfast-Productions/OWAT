@@ -1,10 +1,10 @@
-package com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition;
+package com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition;
 
-import com.ebp.owat.lib.datastructure.matrix.Linked.LinkedMatrix;
-import com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction;
-import com.ebp.owat.lib.datastructure.matrix.Linked.utils.LinkedMatrixNode;
+import com.ebp.owat.lib.datastructure.matrix.linked.LinkedMatrix;
+import com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction;
+import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
 
-import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.*;
+import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.*;
 
 public class FixedNode<T> extends NodePosition<T>{
 	/**

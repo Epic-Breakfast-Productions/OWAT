@@ -1,10 +1,8 @@
 package com.ebp.owat.lib.structure.matrix;
 
-import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
-import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
-import com.ebp.owat.lib.datastructure.matrix.Linked.LinkedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.array.ArrayMatrix;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedMatrix;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;

@@ -1,9 +1,9 @@
 package com.ebp.owat.lib.runner.utils;
 
-import com.ebp.owat.lib.datastructure.matrix.Hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
 import com.ebp.owat.lib.datastructure.matrix.Scrambler;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.BitValue;

@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.utils.scramble;
 
-import com.ebp.owat.lib.datastructure.matrix.Hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedMatrix;
 import org.junit.Assert;
 import org.junit.Test;
 

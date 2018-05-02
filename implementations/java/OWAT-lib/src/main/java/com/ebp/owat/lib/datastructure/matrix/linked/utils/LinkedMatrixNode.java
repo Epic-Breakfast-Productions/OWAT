@@ -1,8 +1,8 @@
-package com.ebp.owat.lib.datastructure.matrix.Linked.utils;
+package com.ebp.owat.lib.datastructure.matrix.linked.utils;
 
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 
-import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.*;
+import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.*;
 
 /**
  * A single node of the LinkedMatrix.

@@ -1,10 +1,10 @@
-package com.ebp.owat.lib.datastructure.matrix.Linked;
+package com.ebp.owat.lib.datastructure.matrix.linked;
 
-import com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction;
-import com.ebp.owat.lib.datastructure.matrix.Linked.utils.LinkedMatrixNode;
-import com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode;
-import com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.NodePosition;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction;
+import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
+import com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode;
+import com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.NodePosition;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.DistanceCalc;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
@@ -14,11 +14,11 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.EAST;
-import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction.SOUTH;
-import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode.FixedPosition;
-import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode.FixedPosition.NORTH_EAST;
-import static com.ebp.owat.lib.datastructure.matrix.Linked.utils.nodePosition.FixedNode.FixedPosition.SOUTH_WEST;
+import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.EAST;
+import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.SOUTH;
+import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode.FixedPosition;
+import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode.FixedPosition.NORTH_EAST;
+import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode.FixedPosition.SOUTH_WEST;
 
 /**
  * A matrix whose underlying structure is a linked lattice.

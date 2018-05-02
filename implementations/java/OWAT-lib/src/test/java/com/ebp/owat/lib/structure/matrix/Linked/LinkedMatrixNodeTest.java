@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.structure.matrix.Linked;
 
-import com.ebp.owat.lib.datastructure.matrix.Linked.utils.Direction;
-import com.ebp.owat.lib.datastructure.matrix.Linked.utils.LinkedMatrixNode;
+import com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction;
+import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Test;
