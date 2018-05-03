@@ -5,7 +5,6 @@ import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class ArrayMatrix<T> extends Matrix<T> {
 
-	/** The 2d array to hold values. */
+	/** The 2d array to hold values. array.get(ROW#).get(COL#) */
 	protected ArrayList<ArrayList<T>> array = null;
 
 	/** The number of elements held in the matrix. */
@@ -48,12 +47,6 @@ public class ArrayMatrix<T> extends Matrix<T> {
 	}
 
 	@Override
-	public boolean addRows(Collection<T> valuesIn) {
-		//TODO
-		return false;
-	}
-
-	@Override
 	public void addCol() {
 		if(this.initIfNoRowsCols()){
 			return;
@@ -62,24 +55,27 @@ public class ArrayMatrix<T> extends Matrix<T> {
 		this.array.add(new ArrayList<>());
 		ArrayList<T> newCol = this.array.get(this.array.size() - 1);
 
-		for(int i = 0; i < this.array.size(); i++){
+		for(int i = 0; i < this.getNumRows(); i++){
 			newCol.add(null);
 		}
 	}
 
 	@Override
-	public boolean addCols(Collection<T> valuesIn) {
-		//TODO
-		return false;
-	}
-
-	@Override
 	public List<T> removeRow() {
-		MatrixValidator.throwIfNoRowsCols(this);
+		if(!this.hasRowsCols()){
+			return null;
+		}
 		LinkedList<T> out = new LinkedList<>();
 
 		for (ArrayList<T> curCol : this.array) {
-			out.addLast(curCol.remove(curCol.size() - 1));
+			T remVal = curCol.remove(curCol.size() - 1);
+
+			if(remVal == null){
+				out.addLast(this.getDefaultValue());
+			}else {
+				this.numElementsHeld--;
+				out.addLast(remVal);
+			}
 		}
 
 		if(this.array.get(0).size() == 0){
@@ -91,10 +87,20 @@ public class ArrayMatrix<T> extends Matrix<T> {
 
 	@Override
 	public List<T> removeCol() {
-		MatrixValidator.throwIfNoRowsCols(this);
+		if(!this.hasRowsCols()){
+			return null;
+		}
 		List<T> out = this.array.remove(this.array.size() - 1);
 
-		if(this.array.size() == 0){
+		for (int i = 0; i < out.size(); i++) {
+			if(out.get(i) == null){
+				out.set(i, this.getDefaultValue());
+			}else{
+				this.numElementsHeld--;
+			}
+		}
+
+		if(this.array.size() == 0) {
 			this.array = null;
 		}
 		return out;
@@ -124,18 +130,6 @@ public class ArrayMatrix<T> extends Matrix<T> {
 	@Override
 	public T clearNode(MatrixCoordinate nodeToClear) {
 		return this.setValue(nodeToClear, null);
-	}
-
-	@Override
-	public List<T> replaceRow(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
-	}
-
-	@Override
-	public List<T> replaceCol(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
 	}
 
 	@Override

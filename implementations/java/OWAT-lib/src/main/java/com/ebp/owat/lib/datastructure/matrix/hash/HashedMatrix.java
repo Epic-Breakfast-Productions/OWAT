@@ -6,7 +6,10 @@ import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Matrix created by inserting elements into a {@link java.util.HashMap}, with a {@link MatrixCoordinate MatrixCoordinate} as the key for the value.
@@ -33,51 +36,11 @@ public class HashedMatrix<T>  extends Matrix<T> {
 	}
 
 	@Override
-	public boolean addRows(Collection<T> valuesIn) {
-		Queue<T> valuesToAdd = new LinkedList<>(valuesIn);
-		
-		long curRow = this.getNumRows();
-		
-		while(!valuesToAdd.isEmpty()){
-			this.addRow();
-			for(long i = 0; i < this.getNumCols(); i++){
-				//add values to new row
-				if(valuesToAdd.isEmpty()){
-					return false;
-				}
-				this.setValue(i, curRow, valuesToAdd.poll());
-			}
-			curRow++;
-		}
-		return true;
-	}
-
-	@Override
 	public void addCol() {
 		if(this.numRows == 0){
 			this.numRows++;
 		}
 		this.numCols++;
-	}
-
-	@Override
-	public boolean addCols(Collection<T> valuesIn) {
-		Queue<T> valuesToAdd = new LinkedList<>(valuesIn);
-		
-		long curCol = this.getNumCols();
-		
-		while(!valuesToAdd.isEmpty()){
-			this.addCol();
-			for(long i = 0; i < this.getNumRows(); i++){
-				//add values to new row
-				if(valuesToAdd.isEmpty()){
-					return false;
-				}
-				this.setValue(curCol, i, valuesToAdd.poll());
-			}
-			curCol++;
-		}
-		return true;
 	}
 
 	@Override
@@ -180,60 +143,6 @@ public class HashedMatrix<T>  extends Matrix<T> {
 		}
 		
 		return clearedVal;
-	}
-	
-	@Override
-	public List<T> replaceRow(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
-		MatrixValidator.throwIfNotOnMatrix(this, matrixCoordinate);
-		
-		List<T> output = this.getRow(matrixCoordinate);
-
-		long curCol = 0;
-		for(T curVal : newValues){
-			MatrixCoordinate curCoord = new MatrixCoordinate(this, curCol, matrixCoordinate.getY());
-			boolean hadVal = this.hasValue(curCoord);
-			boolean hasNewVal = !this.isDefaultValue(curVal);
-
-			if(hasNewVal){
-				this.setValue(curCoord, curVal);
-			}else if(hadVal){
-				this.clearNode(curCoord);
-			}
-			
-			curCol++;
-			if(!isValidColIndex(curCol)){
-				break;
-			}
-		}
-		
-		return output;
-	}
-	
-	@Override
-	public List<T> replaceCol(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
-		MatrixValidator.throwIfNotOnMatrix(this, matrixCoordinate);
-		
-		List<T> output = this.getCol(matrixCoordinate);
-		
-		long curRow = 0;
-		for(T curVal : newValues){
-			MatrixCoordinate curCoord = new MatrixCoordinate(this, matrixCoordinate.getX(), curRow);
-			boolean hadVal = this.hasValue(curCoord);
-			boolean hasNewVal = !this.isDefaultValue(curVal);
-			
-			if(hasNewVal){
-				this.setValue(curCoord, curVal);
-			}else if(hadVal){
-				this.clearNode(curCoord);
-			}
-			
-			curRow++;
-			if(!isValidRowIndex(curRow)){
-				break;
-			}
-		}
-		
-		return output;
 	}
 
 	@Override

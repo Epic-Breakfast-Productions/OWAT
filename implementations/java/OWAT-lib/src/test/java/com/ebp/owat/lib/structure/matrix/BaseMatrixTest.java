@@ -255,7 +255,10 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 		T m = this.getTestingInstance();
 		Integer n = m.getDefaultValue();
 		
-		assertTrue(m.grow(Arrays.asList(1)));
+		assertTrue(
+			m.grow(
+				Arrays.asList(1)
+			));
 		TestUtils.assertMatrix(
 			new Object[][]{
 				{1}
