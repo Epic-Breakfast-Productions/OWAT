@@ -1,8 +1,9 @@
 package com.ebp.owat.lib.runner;
 
 import com.ebp.owat.lib.datastructure.value.NodeMode;
-import com.ebp.owat.lib.runner.utils.results.RunResults;
+import com.ebp.owat.lib.runner.utils.MatrixMode;
 import com.ebp.owat.lib.runner.utils.ScrambleMode;
+import com.ebp.owat.lib.runner.utils.results.RunResults;
 import com.ebp.owat.lib.utils.rand.ThreadLocalRandGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,7 +31,10 @@ public class RunnerTestPlusPlus {
 	private static final boolean REPORT_TO_CSV = true;
 
 	/** Flag to run a short test. Runs a reasonable test set for normal testing if set to true. Normally true. */
-	private static final boolean SHORT = true;
+	private static final boolean SHORT = false;
+
+	/** Flag to run a test for each type of matrix available. Otherwise runs as 'auto'. Will DRASTICALLY increase runtime. */
+	private static final boolean MODES_TEST = false;
 
 	private static final int START = 1,
 		INC = 50,
@@ -39,8 +42,11 @@ public class RunnerTestPlusPlus {
 
 	private final byte data[];
 
-	public RunnerTestPlusPlus(byte data[]){
+	private final MatrixMode matrixMode;
+
+	public RunnerTestPlusPlus(byte data[], MatrixMode matrixMode){
 		this.data = data;
+		this.matrixMode = matrixMode;
 	}
 
 	private static ScrambleRunner.Builder getBuilder(){
@@ -56,6 +62,7 @@ public class RunnerTestPlusPlus {
 		ByteArrayOutputStream scrambledDataOutput = new ByteArrayOutputStream();
 		ByteArrayOutputStream keyOutput = new ByteArrayOutputStream();
 
+		builder.setMatrixMode(this.matrixMode);
 		builder.setDataInput(new ByteArrayInputStream(this.data));
 		builder.setDataOutput(scrambledDataOutput);
 		builder.setKeyOutput(keyOutput);
@@ -118,19 +125,26 @@ public class RunnerTestPlusPlus {
 	}
 
 	@Parameterized.Parameters
-	public static Collection getByteArraysToTest(){
-		return getMultiTestData();
-	}
-
-	private static List<byte[]> getMultiTestData(){
-		LinkedList<byte[]> testData = new LinkedList<>();
-
+	public static Collection<Object[]> getByteArraysToTest(){
+		Collection<Object[]> params = new LinkedList<>();
 
 		for(int i = START; i <= BOUND; i+= (SHORT?BOUND/4:INC)){
-			testData.add(getTestData(i));
+			Object curTest[] = new Object[2];
+
+			if(MODES_TEST){
+				for(MatrixMode curMode : MatrixMode.values()) {
+					curTest[0] = getTestData(i);
+					curTest[1] = curMode;
+					params.add(curTest.clone());
+				}
+			}else{
+				curTest[0] = getTestData(i);
+				curTest[1] = null;
+				params.add(curTest);
+			}
 		}
 
-		return testData;
+		return params;
 	}
 
 	private static byte[] getTestData(int numBytes){

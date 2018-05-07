@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -57,7 +58,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		T m = this.getTestingInstance();
 		Object def = m.getDefaultValue();
 		
-		assertTrue(m.addCols(Arrays.asList(1)));
+		assertTrue(m.addCols(Collections.singletonList(1)));
 		assertEquals(1, m.numElements());
 		assertEquals(1, m.getNumRows());
 		assertEquals(1, m.getNumCols());
@@ -107,7 +108,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		T m = this.getTestingInstance();
 		Object def = m.getDefaultValue();
 		
-		assertTrue(m.addRows(Arrays.asList(1)));
+		assertTrue(m.addRows(Collections.singletonList(1)));
 		
 		assertEquals(1, m.numElements());
 		assertEquals(1, m.getNumRows());
@@ -175,7 +176,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		m.grow(1);
 		m.setValue(0,0,1);
 		
-		assertEquals(Arrays.asList(1), m.removeCol());
+		assertEquals(Collections.singletonList(1), m.removeCol());
 		
 		assertEquals(0, m.getNumCols());
 		assertEquals(0, m.getNumRows());
@@ -220,7 +221,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		m.grow(1);
 		m.setValue(0,0,1);
 		
-		assertEquals(Arrays.asList(1), m.removeRow());
+		assertEquals(Collections.singletonList(1), m.removeRow());
 		
 		assertEquals(0, m.getNumCols());
 		assertEquals(0, m.getNumRows());
@@ -308,7 +309,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		
 		m.grow(1);
 		
-		assertEquals(Arrays.asList(d), m.getRow(0));
+		assertEquals(Collections.singletonList(d), m.getRow(0));
 		
 		m.addCols(Arrays.asList(1,2,3,4));
 		
@@ -326,7 +327,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		
 		m.grow(1);
 		
-		assertEquals(Arrays.asList(d), m.getCol(0));
+		assertEquals(Collections.singletonList(d), m.getCol(0));
 		
 		m.addRows(Arrays.asList(1,2,3,4));
 		
@@ -408,7 +409,8 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		m.grow(1);
 		
 		m.setValue(0,0,1);
-		
+
+		//noinspection unchecked
 		T result = (T)m.getSubMatrix(new MatrixCoordinate(m, 0,0), 1);
 		
 		assertEquals(m.numElements(), result.numElements());
@@ -423,7 +425,8 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		m.setValue(1,0,2);
 		m.setValue(0,1,3);
 		m.setValue(1,1,4);
-		
+
+		//noinspection unchecked
 		result = (T)m.getSubMatrix(new MatrixCoordinate(m, 0,0), 2);
 		
 		assertEquals(m.numElements(), result.numElements());
@@ -447,7 +450,8 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		TestUtils.setupMatrix(m);
 		
 		Integer n = m.getDefaultValue();
-		
+
+		//noinspection unchecked
 		result = (T)m.getSubMatrix(new MatrixCoordinate(m, 1,1), 3);
 		
 		assertEquals(6, result.numElements());
@@ -460,6 +464,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 			result
 		);
 
+		//noinspection unchecked
 		result = (T)m.getSubMatrix(new MatrixCoordinate(m, 1,1), 3, 2);
 
 		assertEquals(3, result.numElements());
@@ -477,6 +482,8 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 	@Test
 	public void testReplaceSubMatrix() throws Exception {
 		T m = this.getTestingInstance();
+		TestUtils.setupMatrix(m);
+		Integer d = m.getDefaultValue();
 		//TODO:: THIS
 	}
 }

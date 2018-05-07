@@ -34,13 +34,15 @@ public class TestUtils {
 
 	/**
 	 *
-	 new Object[][]{
-	 { 0, N, 2, N, 4},
-	 { N, 6, N, 8, N},
-	 {10, N,12,13,14},
-	 {15,16, N,18,19},
-	 {20, N,22, N,24}
+	 * <pre>
+	 {
+	    { 0, N, 2, N, 4},
+	    { N, 6, N, 8, N},
+	    {10, N,12,13,14},
+	    {15,16, N,18,19},
+	    {20, N,22, N,24}
 	 }
+	 </pre>
 	 * @param testMatrix
 	 */
 	public static void setupMatrix(Matrix<Integer> testMatrix){
