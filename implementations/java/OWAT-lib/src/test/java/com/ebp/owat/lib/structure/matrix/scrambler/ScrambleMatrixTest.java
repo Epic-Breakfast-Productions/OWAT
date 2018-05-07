@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.structure.matrix.scrambler;
 
-import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.Scrambler;
+import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
+import com.ebp.owat.lib.datastructure.matrix.array.ArrayScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.testUtils.TestUtils;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
  * Created by Greg Stewart on 3/30/17.
  */
 @RunWith(Parameterized.class)
-public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
+public class ScrambleMatrixTest <E extends ScrambleMatrix<Integer>> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScrambleMatrixTest.class);
 	
 	protected final Class<E> curMatrixClass;
@@ -41,7 +41,8 @@ public class ScrambleMatrixTest <E extends Matrix<Integer> & Scrambler> {
 	@Parameterized.Parameters
 	public static Collection getMatrixClassesToTest(){
 		return Arrays.asList(new Object[][] {
-				{HashedScramblingMatrix.class }
+				{HashedScramblingMatrix.class },
+				{ArrayScramblingMatrix.class }
 		});
 	}
 	

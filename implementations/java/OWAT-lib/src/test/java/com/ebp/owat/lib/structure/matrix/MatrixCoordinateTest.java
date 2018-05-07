@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.structure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.hash.HashedMatrix;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -53,7 +53,7 @@ public class MatrixCoordinateTest {
 		Constructor<? extends MatrixCoordinate> constBase = curCoordClass.getConstructor(Matrix.class);
 		Constructor<? extends MatrixCoordinate> constCoords = curCoordClass.getConstructor(Matrix.class, Long.TYPE, Long.TYPE);
 		
-		Matrix<Long> matrix = new HashedMatrix<>();
+		Matrix<Long> matrix = new HashedScramblingMatrix<>();
 		
 		MatrixCoordinate coord;
 		//test that you can't make a coord on an empty matrix
@@ -73,7 +73,7 @@ public class MatrixCoordinateTest {
 	
 	@Test
 	public void testCoordinateSettersGetters() throws Throwable {
-		Matrix<Long> matrix = new HashedMatrix<>();
+		Matrix<Long> matrix = new HashedScramblingMatrix<>();
 		matrix.addRow();
 
 		MatrixCoordinate coord = getCoordInstance(curCoordClass, matrix, 0, 0);
@@ -113,7 +113,7 @@ public class MatrixCoordinateTest {
 	
 	@Test
 	public void testCoordinateEquals() throws Throwable {
-		Matrix<Long> matrix = new HashedMatrix<>();
+		Matrix<Long> matrix = new HashedScramblingMatrix<>();
 		matrix.addRow();
 		
 		MatrixCoordinate coordOne = getCoordInstance(curCoordClass, matrix, 0, 0);
@@ -131,7 +131,7 @@ public class MatrixCoordinateTest {
 	
 	@Test
 	public void testCoordinateClone() throws Throwable {
-		Matrix<Long> matrix = new HashedMatrix<>();
+		Matrix<Long> matrix = new HashedScramblingMatrix<>();
 		matrix.addRow();
 		
 		MatrixCoordinate coord = getCoordInstance(curCoordClass, matrix, 0, 0);
@@ -143,7 +143,7 @@ public class MatrixCoordinateTest {
 	
 	@Test
 	public void testCoordinateIsStillOnMatrix() throws Throwable {
-		Matrix<Long> matrix = new HashedMatrix<>();
+		Matrix<Long> matrix = new HashedScramblingMatrix<>();
 		matrix.grow(3);
 		
 		MatrixCoordinate coord = getCoordInstance(curCoordClass, matrix, 2, 2);
@@ -161,8 +161,8 @@ public class MatrixCoordinateTest {
 	
 	@Test
 	public void testCoordinateOther() throws Throwable {
-		Matrix<Long> matrix = new HashedMatrix<>();
-		Matrix<Long> matrixTwo = new HashedMatrix<>();
+		Matrix<Long> matrix = new HashedScramblingMatrix<>();
+		Matrix<Long> matrixTwo = new HashedScramblingMatrix<>();
 		matrix.addRow();
 		matrixTwo.addRow();
 		

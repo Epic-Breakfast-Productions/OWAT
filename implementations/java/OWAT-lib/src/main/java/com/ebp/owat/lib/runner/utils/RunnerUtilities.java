@@ -1,8 +1,8 @@
 package com.ebp.owat.lib.runner.utils;
 
-import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
-import com.ebp.owat.lib.datastructure.matrix.Scrambler;
+import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
+import com.ebp.owat.lib.datastructure.matrix.array.ArrayScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
@@ -37,7 +37,7 @@ import static com.ebp.owat.lib.datastructure.value.NodeMode.BYTE;
  * @param <M> The matrix with the type N
  * @param <R> The type of random generator
  */
-public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> {
+public class RunnerUtilities<N extends Value, M extends ScrambleMatrix<N>, R extends OwatRandGenerator> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunnerUtilities.class);
 	private static final java.util.Base64.Decoder DECODER = Base64.getDecoder();
 
@@ -142,6 +142,13 @@ public class RunnerUtilities<N extends Value, M extends Matrix<N> & Scrambler, R
 					mode == BIT ?
 					new HashedScramblingMatrix<BitValue>() :
 					new HashedScramblingMatrix<ByteValue>()
+				);
+			case ARRAY:
+				//noinspection unchecked
+				return (M)(
+					mode == BIT ?
+						new ArrayScramblingMatrix<BitValue>() :
+						new ArrayScramblingMatrix<ByteValue>()
 				);
 			/*
 			 * Only add a type when it is fully implemented; ALL tests pass

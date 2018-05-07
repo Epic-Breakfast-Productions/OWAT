@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.runner.utilities;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
@@ -34,7 +35,7 @@ public class RunnerUtilPadMatrixTest extends RunnerUtilTest {
 	@Test
 	public void testPadMatrix() throws IOException {
 		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream(testData.getBytes(StandardCharsets.UTF_8)));
-		Matrix m = utilities.getMatrix(bytes,MatrixMode.HASHED,this.nodeType);
+		ScrambleMatrix m = utilities.getMatrix(bytes,MatrixMode.HASHED,this.nodeType);
 
 		long initHeight = m.getHeight();
 		long initWidth = m.getWidth();

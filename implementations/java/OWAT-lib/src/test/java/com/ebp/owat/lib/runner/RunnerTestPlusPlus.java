@@ -31,7 +31,7 @@ public class RunnerTestPlusPlus {
 	private static final boolean REPORT_TO_CSV = true;
 
 	/** Flag to run a short test. Runs a reasonable test set for normal testing if set to true. Normally true. */
-	private static final boolean SHORT = false;
+	private static final boolean SHORT = true;
 
 	/** Flag to run a test for each type of matrix available. Otherwise runs as 'auto'. Will DRASTICALLY increase runtime. */
 	private static final boolean MODES_TEST = false;

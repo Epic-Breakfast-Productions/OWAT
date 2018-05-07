@@ -282,7 +282,7 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 			m
 		);
 
-		/* Phased out due to ArrayMatrix not being able to handle this */
+		/* Phased out due to ArrayScramblingMatrix not being able to handle this */
 		//m.setValue(0,1,d);
 		//assertEquals(4, m.numElements());
 	}

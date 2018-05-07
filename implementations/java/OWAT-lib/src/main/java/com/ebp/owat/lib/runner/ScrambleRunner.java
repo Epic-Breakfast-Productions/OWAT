@@ -1,13 +1,11 @@
 package com.ebp.owat.lib.runner;
 
-import com.ebp.owat.lib.runner.utils.*;
-import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.Scrambler;
+import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
-import com.ebp.owat.lib.runner.utils.results.DescrambleResults;
-import com.ebp.owat.lib.runner.utils.results.RunResults;
+import com.ebp.owat.lib.runner.utils.MatrixMode;
+import com.ebp.owat.lib.runner.utils.Step;
 import com.ebp.owat.lib.runner.utils.results.ScrambleResults;
 import com.ebp.owat.lib.utils.key.ScrambleKey;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
@@ -29,7 +27,7 @@ import static com.ebp.owat.lib.runner.utils.RunnerUtilities.getByteArrFromString
  * @param <M> The type of matrix to use
  * @param <R> The random number generator to use
  */
-public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner<N,M,R> {
+public class ScrambleRunner<N extends Value, M extends ScrambleMatrix<N>, R extends OwatRandGenerator> extends OwatRunner<N,M,R> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScrambleRunner.class);
 	private static final java.util.Base64.Encoder ENCODER = Base64.getEncoder();
 
@@ -110,7 +108,7 @@ public class ScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R 
 	 * @param <M> The type of matrix to use
 	 * @param <R> The random number generator to use
 	 */
-	public static class Builder<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> {
+	public static class Builder<N extends Value, M extends ScrambleMatrix<N>, R extends OwatRandGenerator> {
 		/** The random number generator to use. */
 		private R rand = (R)new RandGenerator();
 		/** The type of matrix to use. */

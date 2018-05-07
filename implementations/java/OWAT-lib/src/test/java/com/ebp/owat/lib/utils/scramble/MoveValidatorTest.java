@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.utils.scramble;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.hash.HashedMatrix;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 public class MoveValidatorTest {
 	private static Matrix<Integer> getTestMatrix(long numRowsCols){
-		Matrix<Integer> output = new HashedMatrix<>();
+		Matrix<Integer> output = new HashedScramblingMatrix<>();
 		output.grow(numRowsCols);
 		return output;
 	}

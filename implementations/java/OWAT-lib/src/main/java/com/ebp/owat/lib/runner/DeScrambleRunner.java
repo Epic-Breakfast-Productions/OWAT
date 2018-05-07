@@ -1,14 +1,14 @@
 package com.ebp.owat.lib.runner;
 
-import com.ebp.owat.lib.runner.utils.*;
-import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.Scrambler;
+import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
+import com.ebp.owat.lib.runner.utils.MatrixMode;
+import com.ebp.owat.lib.runner.utils.RunnerUtilities;
+import com.ebp.owat.lib.runner.utils.Step;
 import com.ebp.owat.lib.runner.utils.results.DescrambleResults;
-import com.ebp.owat.lib.runner.utils.results.RunResults;
 import com.ebp.owat.lib.utils.key.ScrambleKey;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.scramble.ScrambleMove;
@@ -24,7 +24,7 @@ import java.util.Iterator;
  * @param <M> The type of matrix to use
  * @param <R> The random number generator to use
  */
-public class DeScrambleRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> extends OwatRunner<N,M,R> {
+public class DeScrambleRunner<N extends Value, M extends ScrambleMatrix<N>, R extends OwatRandGenerator> extends OwatRunner<N,M,R> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeScrambleRunner.class);
 
 	/** The key that will be used. */

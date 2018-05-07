@@ -1,11 +1,13 @@
 package com.ebp.owat.lib.runner.utils;
 
+import java.util.Random;
+
 /**
  * Enum to describe the types of matrices
  */
 public enum MatrixMode {
 	HASHED("hashed"),
-	LINKED("linked"),
+	//LINKED("linked"),
 	ARRAY("array");
 
 	public final String name;
@@ -20,6 +22,10 @@ public enum MatrixMode {
 	 * @return The matrix mode best to use.
 	 */
 	public static MatrixMode determineModeToUse(long n){
+		//TODO:: use statistics to determine how to do this intelligently
+		if(new Random().nextBoolean()){
+			return ARRAY;
+		}
 		return HASHED;
 	}
 }

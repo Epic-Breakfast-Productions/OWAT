@@ -1,7 +1,7 @@
 package com.ebp.owat.lib.utils.scramble;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.hash.HashedMatrix;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.ebp.owat.lib.utils.rand.RandGenerator;
 import com.ebp.owat.lib.utils.scramble.generator.ScrambleMoveGenerator;
@@ -17,7 +17,7 @@ public class ScrambleMoveGeneratorTest {
 	
 	@Test
 	public void scrambleMoveGeneratorTest(){
-		Matrix<Boolean> testMatrix = new HashedMatrix<>();
+		Matrix<Boolean> testMatrix = new HashedScramblingMatrix<>();
 		ScrambleMoveGenerator gen = new ScrambleMoveGenerator(LONG_GEN, testMatrix);
 		
 		try{

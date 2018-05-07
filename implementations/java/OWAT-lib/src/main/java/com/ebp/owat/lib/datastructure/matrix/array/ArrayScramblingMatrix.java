@@ -1,7 +1,8 @@
 package com.ebp.owat.lib.datastructure.matrix.array;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.hash.HashedMatrix;
+import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
@@ -24,7 +25,7 @@ import java.util.List;
  * Does not support setting null values.
  * @param <T> The type of data the matrix holds.
  */
-public class ArrayMatrix<T> extends Matrix<T> {
+public class ArrayScramblingMatrix<T> extends ScrambleMatrix<T> {
 
 	/** The 2d array to hold values. array.get(ROW#).get(COL#) Row, Column to make things conceptually easier when  thinking about array initialization. TODO:: standardify this and verify all methods follow */
 	protected ArrayList<ArrayList<T>> array = null;
@@ -193,6 +194,6 @@ public class ArrayMatrix<T> extends Matrix<T> {
 
 	@Override
 	protected Matrix<T> getNewInstance() {
-		return new HashedMatrix<>();
+		return new HashedScramblingMatrix<>();
 	}
 }

@@ -1,12 +1,11 @@
 package com.ebp.owat.lib.runner;
 
-import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.Scrambler;
+import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
 import com.ebp.owat.lib.datastructure.value.Value;
-import com.ebp.owat.lib.runner.utils.results.RunResults;
 import com.ebp.owat.lib.runner.utils.RunnerUtilities;
 import com.ebp.owat.lib.runner.utils.ScrambleRunnerThread;
 import com.ebp.owat.lib.runner.utils.Step;
+import com.ebp.owat.lib.runner.utils.results.RunResults;
 import com.ebp.owat.lib.utils.rand.OwatRandGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ import java.io.IOException;
  * @param <M> The type of matrix to use
  * @param <R> The random number generator to use
  */
-public abstract class OwatRunner<N extends Value, M extends Matrix<N> & Scrambler, R extends OwatRandGenerator> {
+public abstract class OwatRunner<N extends Value, M extends ScrambleMatrix<N>, R extends OwatRandGenerator> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OwatRunner.class);
 
 	/**

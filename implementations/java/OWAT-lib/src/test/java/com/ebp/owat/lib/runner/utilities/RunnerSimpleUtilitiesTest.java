@@ -1,6 +1,6 @@
 package com.ebp.owat.lib.runner.utilities;
 
-import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.datastructure.value.Value;
@@ -67,7 +67,7 @@ public class RunnerSimpleUtilitiesTest extends RunnerUtilTest {
 	@Test
 	public void addRandRowOrColTest() throws IOException {
 		LongLinkedList<Byte> bytes = utilities.readDataIn(new ByteArrayInputStream("8".getBytes(StandardCharsets.UTF_8)));
-		Matrix m = utilities.getMatrix(bytes,MatrixMode.HASHED,NodeMode.BYTE);
+		ScrambleMatrix m = utilities.getMatrix(bytes,MatrixMode.HASHED,NodeMode.BYTE);
 
 		assertTrue("Was not full before testing could begin.", m.isFull());
 
