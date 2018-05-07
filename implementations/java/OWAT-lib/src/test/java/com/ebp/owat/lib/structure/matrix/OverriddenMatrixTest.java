@@ -1,7 +1,6 @@
 package com.ebp.owat.lib.structure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.testUtils.TestUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -336,154 +334,5 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		m.addCol();
 		
 		assertEquals(Arrays.asList(d,d,d,d,d), m.getCol(1));
-	}
-	
-	@Test
-	public void testReplaceRow() throws Exception {
-		T m = this.getTestingInstance();
-		Integer d = m.getDefaultValue();
-		
-		m.grow(5);
-		
-		List<Integer> result = m.replaceRow(0, Arrays.asList(1,2,3,4,5));
-		
-		assertEquals(Arrays.asList(d,d,d,d,d), result);
-		assertEquals(Arrays.asList(1,2,3,4,5), m.getRow(0));
-		assertEquals(5, m.numElements());
-		
-		result = m.replaceRow(3, Arrays.asList(5,4,3,2,1));
-		
-		assertEquals(Arrays.asList(d,d,d,d,d), result);
-		assertEquals(Arrays.asList(5,4,3,2,1), m.getRow(3));
-		assertEquals(10, m.numElements());
-		
-		result = m.replaceRow(3, Arrays.asList(1,2,3,4,5));
-		
-		assertEquals(Arrays.asList(5,4,3,2,1), result);
-		assertEquals(Arrays.asList(1,2,3,4,5), m.getRow(3));
-		assertEquals(10, m.numElements());
-		
-		result = m.replaceRow(0, Arrays.asList(d,d,d,d,d));
-		
-		assertEquals(Arrays.asList(1,2,3,4,5), result);
-		assertEquals(Arrays.asList(d,d,d,d,d), m.getRow(0));
-		assertEquals(5, m.numElements());
-	}
-	
-	@Test
-	public void testReplaceCol() throws Exception {
-		T m = this.getTestingInstance();
-		Integer d = m.getDefaultValue();
-		
-		m.grow(5);
-		
-		List<Integer> result = m.replaceCol(0, Arrays.asList(1,2,3,4,5));
-		
-		assertEquals(Arrays.asList(d,d,d,d,d), result);
-		assertEquals(Arrays.asList(1,2,3,4,5), m.getCol(0));
-		assertEquals(5, m.numElements());
-		
-		result = m.replaceCol(3, Arrays.asList(5,4,3,2,1));
-		
-		assertEquals(Arrays.asList(d,d,d,d,d), result);
-		assertEquals(Arrays.asList(5,4,3,2,1), m.getCol(3));
-		assertEquals(10, m.numElements());
-		
-		result = m.replaceCol(3, Arrays.asList(1,2,3,4,5));
-		
-		assertEquals(Arrays.asList(5,4,3,2,1), result);
-		assertEquals(Arrays.asList(1,2,3,4,5), m.getCol(3));
-		assertEquals(10, m.numElements());
-		
-		result = m.replaceCol(0, Arrays.asList(d,d,d,d,d));
-		
-		assertEquals(Arrays.asList(1,2,3,4,5), result);
-		assertEquals(Arrays.asList(d,d,d,d,d), m.getCol(0));
-		assertEquals(5, m.numElements());
-	}
-	
-	@Test
-	public void testGetSubMatrix() throws Exception {
-		T m = this.getTestingInstance();
-		
-		m.grow(1);
-		
-		m.setValue(0,0,1);
-
-		//noinspection unchecked
-		T result = (T)m.getSubMatrix(new MatrixCoordinate(m, 0,0), 1);
-		
-		assertEquals(m.numElements(), result.numElements());
-		TestUtils.assertMatrix(
-			new Object[][]{
-				{1}
-			},
-			result
-		);
-		
-		m.grow(1);
-		m.setValue(1,0,2);
-		m.setValue(0,1,3);
-		m.setValue(1,1,4);
-
-		//noinspection unchecked
-		result = (T)m.getSubMatrix(new MatrixCoordinate(m, 0,0), 2);
-		
-		assertEquals(m.numElements(), result.numElements());
-		TestUtils.assertMatrix(
-			new Object[][]{
-				{1,2},
-				{3,4}
-			},
-			result
-		);
-		
-		TestUtils.assertMatrix(
-			new Object[][]{
-				{1}
-			},
-			m.getSubMatrix(new MatrixCoordinate(m, 0,0), 1)
-		);
-		
-		m = this.getTestingInstance();
-		
-		TestUtils.setupMatrix(m);
-		
-		Integer n = m.getDefaultValue();
-
-		//noinspection unchecked
-		result = (T)m.getSubMatrix(new MatrixCoordinate(m, 1,1), 3);
-		
-		assertEquals(6, result.numElements());
-		TestUtils.assertMatrix(
-			new Object[][]{
-				{6, n, 8},
-				{n, 12, 13},
-				{16, n, 18}
-			},
-			result
-		);
-
-		//noinspection unchecked
-		result = (T)m.getSubMatrix(new MatrixCoordinate(m, 1,1), 3, 2);
-
-		assertEquals(3, result.numElements());
-		TestUtils.assertMatrix(
-			new Object[][]{
-				{6, n},
-				{n, 12},
-				{16, n}
-			},
-			result
-		);
-	}
-	
-	
-	@Test
-	public void testReplaceSubMatrix() throws Exception {
-		T m = this.getTestingInstance();
-		TestUtils.setupMatrix(m);
-		Integer d = m.getDefaultValue();
-		//TODO:: THIS
 	}
 }

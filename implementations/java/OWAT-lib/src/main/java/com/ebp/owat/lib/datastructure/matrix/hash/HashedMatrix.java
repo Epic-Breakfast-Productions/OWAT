@@ -2,7 +2,6 @@ package com.ebp.owat.lib.datastructure.matrix.hash;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
-import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
@@ -179,54 +178,10 @@ public class HashedMatrix<T>  extends Matrix<T> {
 
 		return output;
 	}
-	
+
 	@Override
-	public Matrix<T> getSubMatrix(MatrixCoordinate topLeft, long height, long width) {
-		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
-		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
-		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
-		
-		Matrix<T> output = new HashedMatrix<>();
-		output.grow(width, height);
-		
-		MatrixCoordinate curThisCoord = topLeft.clone();//somewhere in here
-		for(long curY = 0; curY < height; curY++){
-			curThisCoord.setY(curY + topLeft.getY());
-			for(long curX = 0; curX < width; curX++){
-				MatrixCoordinate curOutCoord = new MatrixCoordinate(output, curX, curY);
-				curThisCoord.setX(curX + topLeft.getX());
-				if(this.hasValue(curThisCoord)) {
-					output.setValue(curOutCoord, this.get(curThisCoord));
-				}
-			}
-		}
-		
-		return output;
+	protected Matrix<T> getNewInstance() {
+		return new HashedMatrix<>();
 	}
-	
-	@Override
-	public void replaceSubMatrix(Matrix<T> subMatrix, MatrixCoordinate topLeft, long height, long width) {
-		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
-		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
-		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
-		
-		MatrixCoordinate curThatCoord = new MatrixCoordinate(subMatrix);
-		for(long curY = 0; curY < height; curY++){
-			curThatCoord.setY(curY);
-			for(long curX = 0; curX < width; curX++){
-				curThatCoord.setX(curX);
-				MatrixCoordinate curThisCoord = new MatrixCoordinate(this, curX + topLeft.getX(), curY + topLeft.getY());
-				
-				boolean hadVal = this.hasValue(curThisCoord);
-				boolean hasNewVal = subMatrix.hasValue(curThatCoord);
-				
-				if(hasNewVal){
-					this.setValue(curThisCoord, subMatrix.get(curThatCoord));
-				}else if(hadVal){
-					this.clearNode(curThisCoord);
-				}
-				
-			}
-		}
-	}
+
 }

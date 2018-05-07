@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.datastructure.matrix;
 
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
+import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
@@ -645,6 +646,12 @@ public abstract class Matrix<T> implements Iterable<T> {
 			}
 		};
 	}
+
+	/**
+	 * Returns: new <matrix type>();
+	 * @return A new instance of the matrix type
+	 */
+	protected abstract Matrix<T> getNewInstance();
 	
 	/**
 	 * Gets a sub matrix from this matrix.
@@ -653,13 +660,57 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * @param width The width of the sub matrix to get; how many columns it should have.
 	 * @return A sub matrix of this matrix.
 	 */
-	public abstract Matrix<T> getSubMatrix(MatrixCoordinate topLeft, long height, long width);
+	public Matrix<T> getSubMatrix(MatrixCoordinate topLeft, long height, long width){
+		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
+
+		Matrix<T> output = this.getNewInstance();
+		output.grow(width, height);
+
+		MatrixCoordinate curThisCoord = topLeft.clone();//somewhere in here
+		for(long curY = 0; curY < height; curY++){
+			curThisCoord.setY(curY + topLeft.getY());
+			for(long curX = 0; curX < width; curX++){
+				MatrixCoordinate curOutCoord = new MatrixCoordinate(output, curX, curY);
+				curThisCoord.setX(curX + topLeft.getX());
+				if(this.hasValue(curThisCoord)) {
+					output.setValue(curOutCoord, this.get(curThisCoord));
+				}
+			}
+		}
+
+		return output;
+	}
 	
 	public Matrix<T> getSubMatrix(MatrixCoordinate topLeft, long heightWidth){
 		return this.getSubMatrix(topLeft, heightWidth, heightWidth);
 	}
 	
-	public abstract void replaceSubMatrix(Matrix<T> matrix, MatrixCoordinate topLeft, long height, long width);
+	public  void replaceSubMatrix(Matrix<T> subMatrix, MatrixCoordinate topLeft, long height, long width){
+		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
+
+		MatrixCoordinate curThatCoord = new MatrixCoordinate(subMatrix);
+		for(long curY = 0; curY < height; curY++){
+			curThatCoord.setY(curY);
+			for(long curX = 0; curX < width; curX++){
+				curThatCoord.setX(curX);
+				MatrixCoordinate curThisCoord = new MatrixCoordinate(this, curX + topLeft.getX(), curY + topLeft.getY());
+
+				boolean hadVal = this.hasValue(curThisCoord);
+				boolean hasNewVal = subMatrix.hasValue(curThatCoord);
+
+				if(hasNewVal){
+					this.setValue(curThisCoord, subMatrix.get(curThatCoord));
+				}else if(hadVal){
+					this.clearNode(curThisCoord);
+				}
+
+			}
+		}
+	}
 	
 	public void replaceSubMatrix(Matrix<T> matrix, MatrixCoordinate topLeft, long heightWidth){
 		this.replaceSubMatrix(matrix, topLeft, heightWidth, heightWidth);

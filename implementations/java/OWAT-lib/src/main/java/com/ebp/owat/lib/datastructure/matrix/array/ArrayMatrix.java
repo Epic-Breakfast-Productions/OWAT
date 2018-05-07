@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.datastructure.matrix.array;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
@@ -175,17 +176,6 @@ public class ArrayMatrix<T> extends Matrix<T> {
 	}
 
 	@Override
-	public Matrix<T> getSubMatrix(MatrixCoordinate topLeft, long height, long width) {
-		//TODO
-		return null;
-	}
-
-	@Override
-	public void replaceSubMatrix(Matrix<T> matrix, MatrixCoordinate topLeft, long height, long width) {
-		//TODO
-	}
-
-	@Override
 	public long getNumCols() {
 		if(this.array == null){
 			return 0;
@@ -199,5 +189,10 @@ public class ArrayMatrix<T> extends Matrix<T> {
 			return this.array.size();
 		}
 		return 0;
+	}
+
+	@Override
+	protected Matrix<T> getNewInstance() {
+		return new HashedMatrix<>();
 	}
 }

@@ -43,6 +43,8 @@ public class TestUtils {
 	    {20, N,22, N,24}
 	 }
 	 </pre>
+
+	 # elements: 16
 	 * @param testMatrix
 	 */
 	public static void setupMatrix(Matrix<Integer> testMatrix){

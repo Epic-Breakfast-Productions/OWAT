@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.datastructure.matrix.linked;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.hash.HashedMatrix;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode;
@@ -384,5 +385,10 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	@Override
 	public void replaceSubMatrix(Matrix<T> matrix, MatrixCoordinate topLeft, long height, long width) {
 		//TODO
+	}
+
+	@Override
+	protected Matrix<T> getNewInstance() {
+		return new HashedMatrix<>();
 	}
 }
