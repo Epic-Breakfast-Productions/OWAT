@@ -7,6 +7,11 @@ repositories {
 apply plugin: 'java'
 apply plugin: 'application' // https://docs.gradle.org/current/userguide/application_plugin.html
 
+//config for the application plugin
+version="1.4.0"
+mainClassName = "com.ebp.owat.app.Main"
+applicationName = "owatj"
+
 // In this section you declare the dependencies for your production and test code
 dependencies {
 	compile project(":OWAT-lib")
@@ -47,7 +52,3 @@ test {
 assembleDist {
 	dependsOn 'test';
 }
-
-//config for the application plugin
-mainClassName = "com.ebp.owat.app.Main"
-applicationName = "owatj"

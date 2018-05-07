@@ -35,10 +35,10 @@ import static javax.swing.JOptionPane.*;
 
 /**
  * Main class for the GUI.
- *
+ * <p>
  * TODO:: make text boxes deal with having more text than the initial size of the box can hold
  * TODO:: make things handle resizing better
- *
+ * <p>
  * <p>
  * Partially generated using Intellij.
  * Guides:
@@ -616,7 +616,7 @@ public class MainGuiApp {
 					this.processProgressBar.setValue((int) percent);
 					this.processProgressBar.setString(progText);
 
-					if(lastPercent != percent || lastStep != curResults.getCurStep()){
+					if (lastPercent != percent || lastStep != curResults.getCurStep()) {
 						lastPercent = percent;
 						lastStep = curResults.getCurStep();
 						LOGGER.info(progText);
@@ -641,7 +641,7 @@ public class MainGuiApp {
 			error = e;
 		} catch (CancellationException e) {
 			error = e;
-		} catch (Exception e){
+		} catch (Exception e) {
 			error = e;
 			LOGGER.warn("Unexpected error: ", e);
 			showMessage(ERROR_MESSAGE, "Unexpected Error", "An error occurred that we did not expect. Error: \n" + e.getMessage());

@@ -10,6 +10,8 @@ repositories {
 
 apply plugin: 'java'
 
+version="1.4.0";
+
 // Dependencies for the library
 dependencies {
 	//logging dependencies
