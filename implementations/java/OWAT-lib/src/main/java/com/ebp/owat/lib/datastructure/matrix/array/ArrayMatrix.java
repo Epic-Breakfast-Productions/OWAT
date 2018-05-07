@@ -13,12 +13,19 @@ import java.util.List;
  *
  * Only supports coordinates up to int max size.
  *
+ * <pre>
+ * {
+ *     {col1, col2}, //row 1
+ *     {col1, col2}  //row 2
+ * }
+ * </pre>
+ *
  * Does not support setting null values.
  * @param <T> The type of data the matrix holds.
  */
 public class ArrayMatrix<T> extends Matrix<T> {
 
-	/** The 2d array to hold values. array.get(ROW#).get(COL#) */
+	/** The 2d array to hold values. array.get(ROW#).get(COL#) Row, Column to make things conceptually easier when  thinking about array initialization. TODO:: standardify this and verify all methods follow */
 	protected ArrayList<ArrayList<T>> array = null;
 
 	/** The number of elements held in the matrix. */
@@ -41,9 +48,11 @@ public class ArrayMatrix<T> extends Matrix<T> {
 			return;
 		}
 
-		for(ArrayList<T> curCol : this.array){
-			curCol.add(null);
+		ArrayList<T> newRow = new ArrayList<>();
+		for(int i = 0; i < this.getNumCols(); i++){
+			newRow.add(null);
 		}
+		this.array.add(newRow);
 	}
 
 	@Override
@@ -52,41 +61,13 @@ public class ArrayMatrix<T> extends Matrix<T> {
 			return;
 		}
 
-		this.array.add(new ArrayList<>());
-		ArrayList<T> newCol = this.array.get(this.array.size() - 1);
-
-		for(int i = 0; i < this.getNumRows(); i++){
-			newCol.add(null);
+		for(ArrayList<T> curRow : this.array){
+			curRow.add(null);
 		}
 	}
 
 	@Override
 	public List<T> removeRow() {
-		if(!this.hasRowsCols()){
-			return null;
-		}
-		LinkedList<T> out = new LinkedList<>();
-
-		for (ArrayList<T> curCol : this.array) {
-			T remVal = curCol.remove(curCol.size() - 1);
-
-			if(remVal == null){
-				out.addLast(this.getDefaultValue());
-			}else {
-				this.numElementsHeld--;
-				out.addLast(remVal);
-			}
-		}
-
-		if(this.array.get(0).size() == 0){
-			this.array = null;
-		}
-
-		return out;
-	}
-
-	@Override
-	public List<T> removeCol() {
 		if(!this.hasRowsCols()){
 			return null;
 		}
@@ -107,9 +88,34 @@ public class ArrayMatrix<T> extends Matrix<T> {
 	}
 
 	@Override
+	public List<T> removeCol() {
+		if(!this.hasRowsCols()){
+			return null;
+		}
+		LinkedList<T> out = new LinkedList<>();
+
+		for (ArrayList<T> curRow : this.array) {
+			T remVal = curRow.remove(curRow.size() - 1);
+
+			if(remVal == null){
+				out.addLast(this.getDefaultValue());
+			}else {
+				this.numElementsHeld--;
+				out.addLast(remVal);
+			}
+		}
+
+		if(this.array.get(0).size() == 0){
+			this.array = null;
+		}
+
+		return out;
+	}
+
+	@Override
 	public T setValue(MatrixCoordinate nodeToReplace, T newValue) {
 		MatrixValidator.throwIfNotOnMatrix(this, nodeToReplace);
-		T old = this.array.get((int)nodeToReplace.getX()).set((int)nodeToReplace.getY(), newValue);
+		T old = this.array.get((int)nodeToReplace.getRow()).set((int)nodeToReplace.getCol(), newValue);
 
 		//TODO;; contemplate what happens when a user inserts a null value
 		if(old == null && newValue != null){
@@ -124,7 +130,7 @@ public class ArrayMatrix<T> extends Matrix<T> {
 	@Override
 	public boolean hasValue(MatrixCoordinate node) {
 		MatrixValidator.throwIfNotOnMatrix(this, node);
-		return this.array.get((int)node.getX()).get((int)node.getY()) != null;
+		return this.array.get((int)node.getRow()).get((int)node.getCol()) != null;
 	}
 
 	@Override
@@ -140,7 +146,7 @@ public class ArrayMatrix<T> extends Matrix<T> {
 	@Override
 	public T get(MatrixCoordinate coordIn) {
 		MatrixValidator.throwIfNotOnMatrix(this, coordIn);
-		T val = this.array.get((int)coordIn.getX()).get((int)coordIn.getY());
+		T val = this.array.get((int)coordIn.getRow()).get((int)coordIn.getCol());
 
 		if(val == null){
 			return this.defaultValue;
@@ -151,11 +157,11 @@ public class ArrayMatrix<T> extends Matrix<T> {
 	@Override
 	public List<T> getCol(MatrixCoordinate coordIn) {
 		MatrixValidator.throwIfNoRowsCols(this);
-		//get the first element in each column
+
 		List<T> out = new ArrayList<>();
 
-		for(ArrayList<T> curCol : this.array){
-			out.add(curCol.get((int)coordIn.getX()));
+		for(ArrayList<T> curRow : this.array){
+			out.add(curRow.get((int)coordIn.getCol()));
 		}
 
 		return out;
@@ -164,6 +170,7 @@ public class ArrayMatrix<T> extends Matrix<T> {
 	@Override
 	public List<T> getRow(MatrixCoordinate coordIn) {
 		MatrixValidator.throwIfNoRowsCols(this);
+		//noinspection unchecked
 		return (List<T>) this.array.get((int)coordIn.getY()).clone();
 	}
 
@@ -183,13 +190,13 @@ public class ArrayMatrix<T> extends Matrix<T> {
 		if(this.array == null){
 			return 0;
 		}
-		return this.array.size();
+		return this.array.get(0).size();
 	}
 
 	@Override
 	public long getNumRows() {
 		if(this.getNumCols() != 0){
-			return this.array.get(0).size();
+			return this.array.size();
 		}
 		return 0;
 	}
