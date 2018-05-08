@@ -13,13 +13,16 @@ public class Globals {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Globals.class);
 
 	/** The location of the properties file in the resources folder. */
-	public static final String PROPERTY_FILE_LOC = "properties.properties";
+	public static final String PROPERTY_FILE_LOC = "project.properties";
 	
 	/** The properties read from the properties file. To populate, call {@link Globals the constructor} */
 	private static final Properties PROPERTIES = new Properties();
 	
 	static {
 		try(InputStream is = Globals.class.getClassLoader().getResourceAsStream(PROPERTY_FILE_LOC)){
+			if(is == null){
+				throw new FileNotFoundException("Input stream was null, assuming file is not present.");
+			}
 			PROPERTIES.load(is);
 		} catch (FileNotFoundException e) {
 			LOGGER.error("Properties file not found. Cannot read properties in. Error: ", e);

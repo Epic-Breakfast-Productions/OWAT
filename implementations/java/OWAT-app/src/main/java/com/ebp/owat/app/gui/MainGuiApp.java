@@ -101,10 +101,11 @@ public class MainGuiApp {
 	private JPanel scrambledDataFileInputPane;
 	private JPanel deScrambledDataDirectOutputPanel;
 	private JPanel deScrambledDataFileOutputPanel;
-	private JLabel versionLabel;
+	private JLabel appVersionLabel;
 	private JLabel gitHubLink;
 	private JLabel ebpLink;
 	private JTextPane thisProgramIsAnTextPane;
+	private JLabel libVersionLabel;
 
 	private JFrame frame;
 
@@ -830,7 +831,8 @@ public class MainGuiApp {
 	public MainGuiApp(JFrame frame) throws URISyntaxException {
 		this.frame = frame;
 		$$$setupUI$$$();
-		this.versionLabel.setText("Version " + Globals.getProp(Globals.PropertyKey.APP_VERSION_PROP_KEY) + " " + Globals.getProp(Globals.PropertyKey.APP_VERSION_NAME_PROP_KEY));
+		this.appVersionLabel.setText("App Version " + Globals.getProp(Globals.PropertyKey.APP_VERSION_PROP_KEY) + " " + Globals.getProp(Globals.PropertyKey.APP_VERSION_NAME_PROP_KEY));
+		this.libVersionLabel.setText("Lib Version " + Globals.getProp(Globals.PropertyKey.LIB_VERSION_PROP_KEY));
 		resetButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -1284,7 +1286,7 @@ public class MainGuiApp {
 		chooseDeScrambledDataOutputFileButton.setText("Choose File");
 		deScrambledDataFileOutputPanel.add(chooseDeScrambledDataOutputFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		infoPanel = new JPanel();
-		infoPanel.setLayout(new GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
+		infoPanel.setLayout(new GridLayoutManager(6, 2, new Insets(0, 0, 0, 0), -1, -1));
 		infoPanel.setToolTipText("Info about this program");
 		modeSelect.addTab("*Info*", null, infoPanel, "Information about this program");
 		final JLabel label8 = new JLabel();
@@ -1292,21 +1294,26 @@ public class MainGuiApp {
 		if (label8Font != null) label8.setFont(label8Font);
 		label8.setText("OWAT-J");
 		infoPanel.add(label8, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-		versionLabel = new JLabel();
-		Font versionLabelFont = this.$$$getFont$$$(null, Font.ITALIC, 20, versionLabel.getFont());
-		if (versionLabelFont != null) versionLabel.setFont(versionLabelFont);
-		versionLabel.setText(" ");
-		infoPanel.add(versionLabel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		appVersionLabel = new JLabel();
+		Font appVersionLabelFont = this.$$$getFont$$$(null, Font.ITALIC, 20, appVersionLabel.getFont());
+		if (appVersionLabelFont != null) appVersionLabel.setFont(appVersionLabelFont);
+		appVersionLabel.setText(" APP VERSION");
+		infoPanel.add(appVersionLabel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		gitHubLink = new JLabel();
 		gitHubLink.setText("Github: https://github.com/Epic-Breakfast-Productions/OWAT");
-		infoPanel.add(gitHubLink, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		infoPanel.add(gitHubLink, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		ebpLink = new JLabel();
 		ebpLink.setText("Made by EBP: http://epic-breakfast-productions.tech");
-		infoPanel.add(ebpLink, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		infoPanel.add(ebpLink, new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		thisProgramIsAnTextPane = new JTextPane();
 		thisProgramIsAnTextPane.setEditable(false);
 		thisProgramIsAnTextPane.setText("This program is an implementation of the OWAT protocol.\n\nIt takes in some data, and obfuscates it by scrambling that data in itself and additional random data, generating a key in the process. This key is used to descramble the data later.\n\nFor more details, please feel free to visit the github page for this project.");
-		infoPanel.add(thisProgramIsAnTextPane, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+		infoPanel.add(thisProgramIsAnTextPane, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+		libVersionLabel = new JLabel();
+		Font libVersionLabelFont = this.$$$getFont$$$(null, Font.ITALIC, 20, libVersionLabel.getFont());
+		if (libVersionLabelFont != null) libVersionLabel.setFont(libVersionLabelFont);
+		libVersionLabel.setText(" LIB VERSION");
+		infoPanel.add(libVersionLabel, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 	}
 
 	/**
