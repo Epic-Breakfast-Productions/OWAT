@@ -30,8 +30,8 @@ public abstract class MatrixTest <T extends Matrix<Integer>> {
 	public static Collection getMatrixClassesToTest(){
 		return Arrays.asList(new Object[][] {
 			{ HashedScramblingMatrix.class },
-			//{ LinkedMatrix.class },//27 tests fail,
-			{ ArrayScramblingMatrix.class }//2 tests fail
+			{ ArrayScramblingMatrix.class },
+			//{ LinkedMatrix.class }//28 tests fail,
 		});
 	}
 	

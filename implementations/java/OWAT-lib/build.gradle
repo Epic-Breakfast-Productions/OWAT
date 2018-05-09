@@ -12,7 +12,7 @@ repositories {
 
 apply plugin: 'java'
 
-version="1.4.1";
+version="1.4.2";
 
 // Dependencies for the library
 dependencies {
@@ -41,7 +41,6 @@ String projectPropertiesFile = "project.properties";
 String projectPropertiesDir = "$projectDir/src/test/resources/";
 /**
  * Writes out the version configuration for the app.
- * TODO:: make the test run actually use this at some point
  */
 //noinspection GroovyAssignabilityCheck
 task writeVersionConfig() {

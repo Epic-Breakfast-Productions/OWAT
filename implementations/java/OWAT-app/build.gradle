@@ -10,7 +10,7 @@ apply plugin: 'java'
 apply plugin: 'application' // https://docs.gradle.org/current/userguide/application_plugin.html
 
 //config for the application plugin
-version="1.4.0"
+version="1.4.1"
 mainClassName = "com.ebp.owat.app.Main"
 applicationName = "OWAT-J"
 

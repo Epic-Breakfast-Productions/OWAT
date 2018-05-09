@@ -41,8 +41,9 @@ public class ScrambleMatrixTest <E extends ScrambleMatrix<Integer>> {
 	@Parameterized.Parameters
 	public static Collection getMatrixClassesToTest(){
 		return Arrays.asList(new Object[][] {
-				{HashedScramblingMatrix.class },
-				{ArrayScramblingMatrix.class }
+			{ HashedScramblingMatrix.class },
+			{ ArrayScramblingMatrix.class },
+			//{ LinkedMatrix.class }//6 fail
 		});
 	}
 	

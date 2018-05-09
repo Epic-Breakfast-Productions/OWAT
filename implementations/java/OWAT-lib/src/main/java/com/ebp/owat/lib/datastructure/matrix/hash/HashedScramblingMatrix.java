@@ -21,6 +21,11 @@ import java.util.Map;
  * @param <T> The type of object this matrix holds.
  */
 public class HashedScramblingMatrix<T> extends ScrambleMatrix<T> {
+	/** The number of rows held by this object. */
+	protected long numRows = 0L;
+
+	/** The number of columns held by this object. */
+	protected long numCols = 0L;
 
 	/**
 	 * The map of values the matrix holds.
@@ -143,6 +148,16 @@ public class HashedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		}
 		
 		return clearedVal;
+	}
+
+	@Override
+	public long getNumCols() {
+		return this.numCols;
+	}
+
+	@Override
+	public long getNumRows() {
+		return this.numRows;
 	}
 
 	@Override

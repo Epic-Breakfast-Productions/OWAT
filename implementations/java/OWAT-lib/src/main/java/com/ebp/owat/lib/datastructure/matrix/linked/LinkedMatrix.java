@@ -31,10 +31,18 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	 */
 	private static final long ADD_REFERENCE_FREQUENCY = 100;
 
+
+	private long curAddCount = 0;
+
 	/** The number of elements held in the matrix. */
 	protected long numElementsHeld = 0;
 
-	private long curAddCount = 0;
+
+	/** The number of rows held by this object. */
+	protected long numRows = 0L;
+
+	/** The number of columns held by this object. */
+	protected long numCols = 0L;
 
 	/**
 	 * @return If the added node should be made a reference.
@@ -190,12 +198,6 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	}
 
 	@Override
-	public boolean addRows(Collection<T> valuesIn) {
-		//TODO
-		return false;
-	}
-
-	@Override
 	public void addCol() {
 		if(this.initIfNoRowsCols()){
 			return;
@@ -219,12 +221,6 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		}
 
 		this.resetNodePositions();
-	}
-
-	@Override
-	public boolean addCols(Collection<T> valuesIn) {
-		//TODO
-		return false;
 	}
 
 	private void moveOrRemoveBordering(Direction dir){
@@ -323,15 +319,13 @@ public class LinkedMatrix<T> extends Matrix<T> {
 	}
 
 	@Override
-	public List<T> replaceRow(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
+	public long getNumCols() {
+		return this.numCols;
 	}
 
 	@Override
-	public List<T> replaceCol(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
-		//TODO
-		return null;
+	public long getNumRows() {
+		return this.numRows;
 	}
 
 	@Override
@@ -374,17 +368,6 @@ public class LinkedMatrix<T> extends Matrix<T> {
 		}while(!node.isBorder(EAST));
 
 		return output;
-	}
-
-	@Override
-	public Matrix<T> getSubMatrix(MatrixCoordinate topLeft, long height, long width) {
-		//TODO
-		return null;
-	}
-
-	@Override
-	public void replaceSubMatrix(Matrix<T> matrix, MatrixCoordinate topLeft, long height, long width) {
-		//TODO
 	}
 
 	@Override

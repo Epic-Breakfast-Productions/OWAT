@@ -30,12 +30,6 @@ import java.util.*;
  * @param <T> The type of value this matrix holds.
  */
 public abstract class Matrix<T> implements Iterable<T> {
-	/** The number of rows held by this object. */
-	protected long numRows = 0L;
-
-	/** The number of columns held by this object. */
-	protected long numCols = 0L;
-	
 	/**
 	 * The default value to set new elements where values are not specified.
 	 */
@@ -515,9 +509,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * Gets the number of columns held by this matrix.
 	 * @return The number of columns held by this matrix.
 	 */
-	public long getNumCols(){
-		return this.numCols;
-	}
+	public abstract long getNumCols();
 	
 	public long getWidth(){return this.getNumCols();}
 	
@@ -525,9 +517,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 * Gets the number of rows held by this matrix.
 	 * @return The number of rows held by this matrix.
 	 */
-	public long getNumRows(){
-		return this.numRows;
-	}
+	public abstract long getNumRows();
 	
 	public long getHeight(){return this.getNumRows();}
 	
