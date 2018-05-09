@@ -1,6 +1,6 @@
 package com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition;
 
-import com.ebp.owat.lib.datastructure.matrix.linked.LinkedMatrix;
+import com.ebp.owat.lib.datastructure.matrix.linked.LinkedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
@@ -17,11 +17,11 @@ import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.*;
 public class NodePosition<T> extends MatrixCoordinate {
 	protected LinkedMatrixNode<T> node = null;
 
-	private NodePosition(LinkedMatrix<T> matrix, Coordinate coord) {
+	private NodePosition(LinkedScramblingMatrix<T> matrix, Coordinate coord) {
 		super(matrix, coord.getX(), coord.getY());
 	}
 
-	public NodePosition(LinkedMatrix<T> matrix, LinkedMatrixNode<T> node) {
+	public NodePosition(LinkedScramblingMatrix<T> matrix, LinkedMatrixNode<T> node) {
 		this(matrix, node.getCoord());
 		this.node = node;
 	}
@@ -115,6 +115,6 @@ public class NodePosition<T> extends MatrixCoordinate {
 
 	@Override
 	public NodePosition<T> clone() {
-		return new NodePosition<T>((LinkedMatrix<T>) this.matrix, (Coordinate)this);
+		return new NodePosition<T>((LinkedScramblingMatrix<T>) this.matrix, (Coordinate)this);
 	}
 }

@@ -25,7 +25,7 @@ import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.Fi
  * A matrix whose underlying structure is a linked lattice.
  * @param <T>
  */
-public class LinkedMatrix<T> extends Matrix<T> {
+public class LinkedScramblingMatrix<T> extends Matrix<T> {
 	/**
 	 * The frequency of how often reference nodes are added.
 	 */

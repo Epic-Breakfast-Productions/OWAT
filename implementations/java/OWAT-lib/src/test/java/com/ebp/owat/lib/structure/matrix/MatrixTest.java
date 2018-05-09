@@ -31,7 +31,7 @@ public abstract class MatrixTest <T extends Matrix<Integer>> {
 		return Arrays.asList(new Object[][] {
 			{ HashedScramblingMatrix.class },
 			{ ArrayScramblingMatrix.class },
-			//{ LinkedMatrix.class }//28 tests fail,
+			//{ LinkedScramblingMatrix.class }//28 tests fail,
 		});
 	}
 	

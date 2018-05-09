@@ -1,6 +1,6 @@
 package com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition;
 
-import com.ebp.owat.lib.datastructure.matrix.linked.LinkedMatrix;
+import com.ebp.owat.lib.datastructure.matrix.linked.LinkedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
 
@@ -27,7 +27,7 @@ public class FixedNode<T> extends NodePosition<T>{
 
 	public final FixedPosition position;
 
-	public FixedNode(LinkedMatrix<T> matrix, LinkedMatrixNode<T> node, FixedPosition position) {
+	public FixedNode(LinkedScramblingMatrix<T> matrix, LinkedMatrixNode<T> node, FixedPosition position) {
 		super(matrix, node);
 		this.position = position;
 		this.resetPosition();

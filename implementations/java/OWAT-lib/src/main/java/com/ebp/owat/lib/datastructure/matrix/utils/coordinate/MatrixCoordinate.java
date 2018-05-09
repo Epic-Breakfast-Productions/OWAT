@@ -1,9 +1,8 @@
 package com.ebp.owat.lib.datastructure.matrix.utils.coordinate;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.OwatMatrixException;
-import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
+import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 
 import java.util.Objects;
 
@@ -85,7 +84,7 @@ public class MatrixCoordinate extends Coordinate {
 	
 	@Override
 	public String toString() {
-		return "MatrixCoordinate. Values: X(col)=" + this.x + " Y(row)=" + this.y + " LinkedMatrix: " + this.matrix;
+		return "MatrixCoordinate. Values: X(col)=" + this.x + " Y(row)=" + this.y + " Matrix: " + this.matrix;
 	}
 
 	@Override

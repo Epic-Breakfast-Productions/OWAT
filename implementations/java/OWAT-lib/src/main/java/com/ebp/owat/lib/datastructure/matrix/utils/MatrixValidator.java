@@ -4,7 +4,7 @@ import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 
 /**
- * Validating methods for the various LinkedMatrix related classes.
+ * Validating methods for the various Matrix related classes.
  */
 public class MatrixValidator {
 	
@@ -36,7 +36,7 @@ public class MatrixValidator {
 	 */
 	public static boolean areOnMatrix(Matrix matrix, MatrixCoordinate... matrixCoordinates){
 		if(matrix == null){
-			throw new NullPointerException("Null matrix given to MatrixValidator.areOnMatrix(LinkedMatrix, MatrixCoordinate...).");
+			throw new NullPointerException("Null matrix given to MatrixValidator.areOnMatrix(LinkedScramblingMatrix, MatrixCoordinate...).");
 		}
 		for(MatrixCoordinate curCoord : matrixCoordinates){
 			if(curCoord == null || !isOnMatrix(matrix, curCoord)){

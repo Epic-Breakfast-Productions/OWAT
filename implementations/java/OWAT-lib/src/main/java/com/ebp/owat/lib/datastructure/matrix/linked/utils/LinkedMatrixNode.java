@@ -5,7 +5,7 @@ import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.Coordinate;
 import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.*;
 
 /**
- * A single node of the LinkedMatrix.
+ * A single node of the LinkedScramblingMatrix.
  *
  * Holds the nodes to the north, south, east and west of this node, and a value.
  *
