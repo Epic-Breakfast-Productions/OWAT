@@ -3,6 +3,7 @@ package com.ebp.owat.lib.structure.matrix;
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.array.ArrayScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
+import com.ebp.owat.lib.datastructure.matrix.linked.LinkedScramblingMatrix;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -31,7 +32,7 @@ public abstract class MatrixTest <T extends Matrix<Integer>> {
 		return Arrays.asList(new Object[][] {
 			{ HashedScramblingMatrix.class },
 			{ ArrayScramblingMatrix.class },
-			//{ LinkedScramblingMatrix.class }//28 tests fail,
+			{ LinkedScramblingMatrix.class }
 		});
 	}
 	

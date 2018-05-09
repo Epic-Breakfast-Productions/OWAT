@@ -11,7 +11,6 @@ import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.*;
 /**
  * Describes the position of a node on the matrix
  *
- * TODO:: should probably extend MatrixCoordinate?
  * @param <T> The type of value the nodes hold.
  */
 public class NodePosition<T> extends MatrixCoordinate {
@@ -43,7 +42,7 @@ public class NodePosition<T> extends MatrixCoordinate {
 			return false;
 		}
 		this.node = this.node.getDir(NORTH);
-		this.incY();
+		this.decY();
 		return true;
 	}
 
@@ -56,7 +55,7 @@ public class NodePosition<T> extends MatrixCoordinate {
 			return false;
 		}
 		this.node = this.node.getDir(SOUTH);
-		this.decY();
+		this.incY();
 		return true;
 	}
 
@@ -115,6 +114,6 @@ public class NodePosition<T> extends MatrixCoordinate {
 
 	@Override
 	public NodePosition<T> clone() {
-		return new NodePosition<T>((LinkedScramblingMatrix<T>) this.matrix, (Coordinate)this);
+		return new NodePosition<T>((LinkedScramblingMatrix<T>) this.matrix, this.node);
 	}
 }

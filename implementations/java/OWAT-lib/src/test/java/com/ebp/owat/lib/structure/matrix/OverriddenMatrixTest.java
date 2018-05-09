@@ -260,16 +260,15 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		Integer d = m.getDefaultValue();
 		
 		m.grow(1);
-		
-		Object result = m.setValue(0,0,1);
-		
+
+		assertEquals(d, m.setValue(0,0,1));
 		assertEquals(1, m.numElements());
-		assertEquals(m.getDefaultValue(), result);
+		assertEquals(1, (int)m.get(0,0));
 		
 		m.grow(3);
 		
-		m.setValue(3,3, 2);
-		m.setValue(1,2, 3);
+		assertEquals(d, m.setValue(3,3, 2));
+		assertEquals(d, m.setValue(1,2, 3));
 		assertEquals(3, m.numElements());
 		
 		TestUtils.assertMatrix(
@@ -334,5 +333,10 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 		m.addCol();
 		
 		assertEquals(Arrays.asList(d,d,d,d,d), m.getCol(1));
+	}
+
+	@Test
+	public void testHasValue(){
+		//TODO:: this
 	}
 }

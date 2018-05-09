@@ -43,7 +43,7 @@ public class ScrambleMatrixTest <E extends ScrambleMatrix<Integer>> {
 		return Arrays.asList(new Object[][] {
 			{ HashedScramblingMatrix.class },
 			{ ArrayScramblingMatrix.class },
-			//{ LinkedScramblingMatrix.class }//6 fail
+			//{ LinkedScramblingMatrix.class }//infinite loop somewhere
 		});
 	}
 	

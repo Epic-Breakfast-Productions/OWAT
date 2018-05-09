@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.datastructure.matrix.linked;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
 import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
@@ -25,7 +26,7 @@ import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.Fi
  * A matrix whose underlying structure is a linked lattice.
  * @param <T>
  */
-public class LinkedScramblingMatrix<T> extends Matrix<T> {
+public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 	/**
 	 * The frequency of how often reference nodes are added.
 	 */
@@ -129,7 +130,6 @@ public class LinkedScramblingMatrix<T> extends Matrix<T> {
 	 */
 	private LinkedMatrixNode<T> getMatrixNode(MatrixCoordinate coord){
 		MatrixValidator.throwIfNotOnMatrix(this, coord);
-		//TODO:: returns null sometimes, unacceptable.
 
 		NodePosition<T> curPosition = this.getClosestHeldPosition(coord);
 
@@ -147,7 +147,13 @@ public class LinkedScramblingMatrix<T> extends Matrix<T> {
 				curPosition.moveWest();
 			}
 		}
-		return curPosition.getNode();
+		LinkedMatrixNode<T> output = curPosition.getNode();
+
+		if(output == null){
+			throw new IllegalStateException("Failed to get a node. This should not happen.");
+		}
+
+		return output;
 	}
 
 	/**
@@ -205,13 +211,17 @@ public class LinkedScramblingMatrix<T> extends Matrix<T> {
 
 		this.numCols++;
 		LinkedMatrixNode<T> lastNode = new LinkedMatrixNode<>();
-		lastNode.setEast(this.getMatrixNode(FixedPosition.NORTH_EAST));
+		lastNode.setWest(this.getMatrixNode(FixedPosition.NORTH_EAST));
 		for(long l = 1; l < this.getNumRows(); l++){
 			LinkedMatrixNode<T> curNode = new LinkedMatrixNode<>();
 
-			lastNode.setWest(curNode);
+			lastNode.setSouth(curNode);
 
-			curNode.getNorth().getEast().getSouth().setWest(curNode);
+			curNode
+				.getNorth()
+				.getWest()
+				.getSouth()
+				.setEast(curNode);
 
 			if(this.addedNode()){
 				this.referenceNodes.add(new NodePosition<>(this, curNode));

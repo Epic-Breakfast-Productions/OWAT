@@ -26,6 +26,9 @@ public enum MatrixMode {
 		if(new Random().nextBoolean()){
 			return ARRAY;
 		}
+		if(new Random().nextBoolean()){
+			//return LINKED;
+		}
 		return HASHED;
 	}
 }
