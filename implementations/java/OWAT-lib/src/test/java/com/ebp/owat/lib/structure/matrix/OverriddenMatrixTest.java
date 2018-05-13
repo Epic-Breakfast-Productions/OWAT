@@ -336,7 +336,32 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 	}
 
 	@Test
-	public void testHasValue(){
-		//TODO:: this
+	public void testHasValue() throws Exception {
+		T m = this.getTestingInstance();
+		m.grow(2);
+		m.setValue(0,0,5);
+		m.setValue(1,1,5);
+
+		assertTrue(m.hasValue(0,0));
+		assertTrue(m.hasValue(1,1));
+
+		assertFalse(m.hasValue(1,0));
+		assertFalse(m.hasValue(0,1));
+	}
+
+	@Test
+	public void testClear() throws Exception {
+		T m = this.getTestingInstance();
+		m.grow(5);
+		m.setValue(0,0,5);
+
+		m.clear();
+
+		assertEquals(0, m.size());
+		assertEquals(0, m.numElements());
+		assertEquals(0, m.getNumCols());
+		assertEquals(0, m.getNumRows());
+
+		//TODO:: test can do things after clear
 	}
 }

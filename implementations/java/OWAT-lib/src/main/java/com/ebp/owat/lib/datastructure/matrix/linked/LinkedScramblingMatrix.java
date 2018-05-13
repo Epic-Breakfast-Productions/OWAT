@@ -2,7 +2,6 @@ package com.ebp.owat.lib.datastructure.matrix.linked;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
-import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode;
@@ -125,26 +124,24 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 
 	/**
 	 * Gets the matrixNode at the coordinate given.
-	 * @param coord The coordinate of the node to get.
+	 * @param destination The coordinate of the node to get.
 	 * @return The node at the coordinate given.
 	 */
-	private LinkedMatrixNode<T> getMatrixNode(MatrixCoordinate coord){
-		MatrixValidator.throwIfNotOnMatrix(this, coord);
+	private LinkedMatrixNode<T> getMatrixNode(MatrixCoordinate destination){
+		MatrixValidator.throwIfNotOnMatrix(this, destination);
 
-		NodePosition<T> curPosition = this.getClosestHeldPosition(coord);
+		NodePosition<T> curPosition = this.getClosestHeldPosition(destination);
 
-		while(!curPosition.baseCoordEquals(coord)){
-			if(curPosition.getY() > coord.getY()){
+		while(!curPosition.baseCoordEquals(destination)){
+			if(curPosition.getY() > destination.getY()){
 				curPosition.moveNorth();
-			}
-			if(curPosition.getY() < coord.getY()){
+			}else if(curPosition.getY() < destination.getY()){
 				curPosition.moveSouth();
 			}
-			if(curPosition.getX() > coord.getX()){
-				curPosition.moveEast();
-			}
-			if(curPosition.getX() < coord.getX()){
+			if(curPosition.getX() > destination.getX()){
 				curPosition.moveWest();
+			}else if(curPosition.getX() < destination.getX()){
+				curPosition.moveEast();//TODO:: this made alot of tests fail. why?
 			}
 		}
 		LinkedMatrixNode<T> output = curPosition.getNode();
@@ -233,7 +230,14 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		this.resetNodePositions();
 	}
 
-	private void moveOrRemoveBordering(Direction dir){
+	/**
+	 * Moves or removes bordering positions held on a border given.
+	 *
+	 * Moves the node if possible; removes it if it didn't move.
+	 *
+	 * @param dir The direction of the border.
+	 */
+	private void moveOrRemoveBorderingPositions(Direction dir){
 		List<NodePosition<T>> toRemove = new LinkedList<>();
 		for(NodePosition<T> curPos : this.referenceNodes){
 			if(curPos.getNode().isBorder(dir)){
@@ -257,20 +261,40 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 
 		LinkedMatrixNode<T> node = this.getMatrixNode(SOUTH_WEST);
 
-		this.moveOrRemoveBordering(SOUTH);
+		this.moveOrRemoveBorderingPositions(SOUTH);
 
-		do{
-			output.add(node.getValue());
-			LinkedMatrixNode<T> upper = node.getNorth();
-			upper.setSouth(null);
+		if(this.getNumCols() <= 1) {
+			do{
+				if(node.hasValue()) {
+					output.add(node.getValue());
+					this.numElementsHeld--;
+				}else{
+					output.add(this.getDefaultValue());
+				}
+				node = node.getEast();
+			}while(node != null);
+			this.clear();
+		}else{
+			do{
+				if(node.hasValue()) {
+					output.add(node.getValue());
+					this.numElementsHeld--;
+				}else{
+					output.add(this.getDefaultValue());
+				}
+				LinkedMatrixNode<T> upper = node.getNorth();
+				upper.setSouth(null);
 
-			node.setNorth(null);
-			node.setWest(null);
+				node.setNorth(null);
+				node.setWest(null);
 
-			node = node.getEast();
-		}while(node != null);
+				node = node.getEast();
+			}while(node != null);
 
-		this.resetNodePositions();
+			this.numRows--;
+			this.resetNodePositions();
+		}
+
 		return output;
 	}
 
@@ -279,26 +303,44 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		if(!this.hasRowsCols()){
 			return null;
 		}
-		//TODO:: move node positions left one in last col
 		LinkedMatrixNode<T> node = this.getMatrixNode(NORTH_EAST);
 
-		this.moveOrRemoveBordering(EAST);
-
+		this.moveOrRemoveBorderingPositions(EAST);
 
 		List<T> output = new LongLinkedList<>();
 
-		do{
-			output.add(node.getValue());
-			LinkedMatrixNode<T> west = node.getWest();
-			west.setEast(null);
+		if(this.getNumCols() <= 1){
+			do{
+				if(node.hasValue()) {
+					output.add(node.getValue());
+					this.numElementsHeld--;
+				}else{
+					output.add(this.getDefaultValue());
+				}
+				node = node.getSouth();
+			}while(node != null);
+			this.clear();
+		}else{
+			do{
+				if(node.hasValue()) {
+					output.add(node.getValue());
+					this.numElementsHeld--;
+				}else{
+					output.add(this.getDefaultValue());
+				}
+				LinkedMatrixNode<T> west = node.getWest();
+				west.setEast(null);
 
-			node.setWest(null);
-			node.setNorth(null);
+				node.setWest(null);
+				node.setNorth(null);
 
-			node = node.getSouth();
-		}while(node != null);
+				node = node.getSouth();
+			}while(node != null);
+			this.numCols--;
+			this.resetNodePositions();
+		}
 
-		this.resetNodePositions();
+
 		return output;
 	}
 
@@ -356,6 +398,10 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		LinkedMatrixNode<T> node = this.getMatrixNode(coordIn.getX(), 0);
 		output.add(node.getValue());
 
+		if(node.getDir(SOUTH) == null){
+			return output;
+		}
+
 		do{
 			node = node.getDir(Direction.SOUTH);
 			output.add(node.getValue());
@@ -372,6 +418,10 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		LinkedMatrixNode<T> node = this.getMatrixNode(0, coordIn.getY());
 		output.add(node.getValue());
 
+		if(node.getDir(EAST) == null){
+			return output;
+		}
+
 		do{
 			node = node.getDir(EAST);
 			output.add(node.getValue());
@@ -382,6 +432,14 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 
 	@Override
 	protected Matrix<T> getNewInstance() {
-		return new HashedScramblingMatrix<>();
+		return new LinkedScramblingMatrix<>();
+	}
+
+	@Override
+	public void clear() {
+		this.referenceNodes.clear();
+		this.numCols = 0;
+		this.numRows = 0;
+		this.numElementsHeld = 0;
 	}
 }

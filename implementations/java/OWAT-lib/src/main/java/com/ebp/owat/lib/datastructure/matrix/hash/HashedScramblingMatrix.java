@@ -200,4 +200,11 @@ public class HashedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		return new HashedScramblingMatrix<>();
 	}
 
+	@Override
+	public void clear() {
+		this.valueMap.clear();
+		this.numCols=0;
+		this.numRows=0;
+	}
+
 }

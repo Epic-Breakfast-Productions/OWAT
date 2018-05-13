@@ -739,4 +739,14 @@ public abstract class Matrix<T> implements Iterable<T> {
 		}
 		return output;
 	}
+
+	/**
+	 * Clears the matrix of ALL data. Resets size to zero and effectively deallocates memory used.
+	 */
+	public abstract void clear();
+
+	@Override
+	public void finalize(){
+		this.clear();
+	}
 }

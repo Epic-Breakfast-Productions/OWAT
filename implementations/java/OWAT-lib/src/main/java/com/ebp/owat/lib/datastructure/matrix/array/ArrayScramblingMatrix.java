@@ -196,4 +196,15 @@ public class ArrayScramblingMatrix<T> extends ScrambleMatrix<T> {
 	protected Matrix<T> getNewInstance() {
 		return new HashedScramblingMatrix<>();
 	}
+
+	@Override
+	public void clear() {
+		for(ArrayList<T> curRow : this.array){
+			curRow.clear();
+		}
+		this.array.clear();
+		this.array = null;
+
+		this.numElementsHeld = 0;
+	}
 }
