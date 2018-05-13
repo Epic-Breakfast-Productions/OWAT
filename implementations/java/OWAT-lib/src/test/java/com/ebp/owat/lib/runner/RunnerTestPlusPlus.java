@@ -28,7 +28,7 @@ public class RunnerTestPlusPlus {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RunnerTestPlusPlus.class);
 
 	/** Flag to enable or disable file reporting results to CSV. Normal state is false. */
-	private static final boolean REPORT_TO_CSV = true;
+	private static final boolean REPORT_TO_CSV = false;
 
 	/** Flag to run a short test. Runs a reasonable test set for normal testing if set to true. Normally true. */
 	private static final boolean SHORT = true;

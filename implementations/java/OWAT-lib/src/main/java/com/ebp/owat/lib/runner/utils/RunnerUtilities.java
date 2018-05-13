@@ -404,7 +404,7 @@ public class RunnerUtilities<N extends Value, M extends ScrambleMatrix<N>, R ext
 	 */
 	public long determineNumStepsToTake(M matrix, OwatRandGenerator rand, long minNumScrambleSteps) {
 		long min = minNumScrambleSteps + getNormallizedNumber(matrix.size()) + matrix.size();
-		long max = rand.nextLong(min, min + (long) Math.ceil(Math.sqrt(matrix.size())) + rand.nextLong(1000));
+		long max = rand.nextLong(min + 1, min + (long) Math.ceil(Math.sqrt(matrix.size())) + rand.nextLong(1000));
 		return rand.nextLong(min, max);
 	}
 
