@@ -4,6 +4,7 @@ import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
 import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
 import com.ebp.owat.lib.datastructure.matrix.array.ArrayScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
+import com.ebp.owat.lib.datastructure.matrix.linked.LinkedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 import com.ebp.owat.lib.datastructure.value.BitValue;
@@ -149,6 +150,13 @@ public class RunnerUtilities<N extends Value, M extends ScrambleMatrix<N>, R ext
 					mode == BIT ?
 						new ArrayScramblingMatrix<BitValue>() :
 						new ArrayScramblingMatrix<ByteValue>()
+				);
+			case LINKED:
+				//noinspection unchecked
+				return (M)(
+					mode == BIT ?
+						new LinkedScramblingMatrix<BitValue>() :
+						new LinkedScramblingMatrix<ByteValue>()
 				);
 			/*
 			 * Only add a type when it is fully implemented; ALL tests pass

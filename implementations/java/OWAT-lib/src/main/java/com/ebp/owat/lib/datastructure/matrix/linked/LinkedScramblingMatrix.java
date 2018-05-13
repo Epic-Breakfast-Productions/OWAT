@@ -340,7 +340,6 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 			this.resetNodePositions();
 		}
 
-
 		return output;
 	}
 
@@ -348,11 +347,13 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 	public T setValue(MatrixCoordinate nodeToReplace, T newValue) {
 		LinkedMatrixNode<T> node = this.getMatrixNode(nodeToReplace);
 
-		T valToReturn = node.getValue();
-		node.setValue(newValue);
-		this.numElementsHeld++;
-
-		return valToReturn;
+		if(node.hasValue()){
+			return node.setValue(newValue);
+		}else{
+			this.numElementsHeld++;
+			node.setValue(newValue);
+			return this.defaultValue;
+		}
 	}
 
 	@Override
@@ -442,4 +443,9 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		this.numRows = 0;
 		this.numElementsHeld = 0;
 	}
+
+	//TODO:: override replaceRow/Col
+	//TODO:: override iterator
+	//TODO:: override getSubMatrix
+	//TODO:: override setSubMatrix
 }

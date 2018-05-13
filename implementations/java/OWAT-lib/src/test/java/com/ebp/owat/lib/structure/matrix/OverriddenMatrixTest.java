@@ -347,6 +347,9 @@ public class OverriddenMatrixTest<T extends Matrix<Integer>> extends MatrixTest<
 
 		assertFalse(m.hasValue(1,0));
 		assertFalse(m.hasValue(0,1));
+
+		m.clearNode(0, 0);
+		assertFalse(m.hasValue(0,0));
 	}
 
 	@Test

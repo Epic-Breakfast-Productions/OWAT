@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public enum MatrixMode {
 	HASHED("hashed"),
-	//LINKED("linked"),
+	LINKED("linked"),
 	ARRAY("array");
 
 	public final String name;
@@ -27,7 +27,7 @@ public enum MatrixMode {
 			return ARRAY;
 		}
 		if(new Random().nextBoolean()){
-			//return LINKED;
+			return LINKED;
 		}
 		return HASHED;
 	}
