@@ -645,7 +645,7 @@ public abstract class Matrix<T> implements Iterable<T> {
 	
 	/**
 	 * Gets a sub matrix from this matrix.
-	 * @param topLeft The top left most node of the sud matrix.
+	 * @param topLeft The top left most node of the sub matrix.
 	 * @param height The height of the sub matrix to get; how many rows it should have.
 	 * @param width The width of the sub matrix to get; how many columns it should have.
 	 * @return A sub matrix of this matrix.
@@ -672,15 +672,30 @@ public abstract class Matrix<T> implements Iterable<T> {
 
 		return output;
 	}
-	
+
+	/**
+	 * Gets a sub matrix of this one.
+	 * @param topLeft The top left corner of the sub matrix
+	 * @param heightWidth The height/width of the matrix to get
+	 * @return The sub matrix gotten.
+	 */
 	public Matrix<T> getSubMatrix(MatrixCoordinate topLeft, long heightWidth){
 		return this.getSubMatrix(topLeft, heightWidth, heightWidth);
 	}
-	
-	public  void replaceSubMatrix(Matrix<T> subMatrix, MatrixCoordinate topLeft, long height, long width){
+
+	/**
+	 * Replaces the sub matrix given.
+	 * @param subMatrix The submatrix to use to replace values.
+	 * @param topLeft The top left corner of the sub matrix on this one.
+	 * @param height The height of the sub matrix to fill in.
+	 * @param width The width of the sub matrix to fill in.
+	 */
+	public void replaceSubMatrix(Matrix<T> subMatrix, MatrixCoordinate topLeft, long height, long width){
 		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
 		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
 		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
+		MatrixValidator.throwIfBadIndex(subMatrix, height - 1, Plane.Y);
+		MatrixValidator.throwIfBadIndex(subMatrix, width - 1, Plane.X);
 
 		MatrixCoordinate curThatCoord = new MatrixCoordinate(subMatrix);
 		for(long curY = 0; curY < height; curY++){
@@ -697,7 +712,6 @@ public abstract class Matrix<T> implements Iterable<T> {
 				}else if(hadVal){
 					this.clearNode(curThisCoord);
 				}
-
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.NodePosition;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
+import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.DistanceCalc;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
@@ -432,7 +433,7 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 	}
 
 	@Override
-	protected Matrix<T> getNewInstance() {
+	protected LinkedScramblingMatrix<T> getNewInstance() {
 		return new LinkedScramblingMatrix<>();
 	}
 
@@ -446,6 +447,66 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 
 	//TODO:: override replaceRow/Col
 	//TODO:: override iterator
-	//TODO:: override getSubMatrix
-	//TODO:: override setSubMatrix
+
+
+	@Override
+	public List<T> replaceRow(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
+		//TODO
+		return super.replaceRow(matrixCoordinate, newValues);
+	}
+
+	@Override
+	public List<T> replaceCol(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
+		//TODO
+		return super.replaceCol(matrixCoordinate, newValues);
+	}
+
+	@Override
+	public LinkedScramblingMatrix<T> getSubMatrix(MatrixCoordinate topLeft, long height, long width) {
+		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
+
+		LinkedScramblingMatrix<T> output = this.getNewInstance();
+		output.grow(width, height);
+
+		LinkedMatrixNode<T> rowStart = null;
+
+		MatrixCoordinate worker = new MatrixCoordinate(output);
+
+		for(int i = 0; i < height; i++){
+			if(rowStart == null){
+				rowStart = this.getMatrixNode(topLeft);
+			}else{
+				rowStart = rowStart.getSouth();
+			}
+
+			LinkedMatrixNode<T> cur = rowStart;
+
+			worker.setY(i);
+
+			for(int j = 0; j < width; j++){
+				worker.setX(j);
+				if(cur.hasValue()){
+					output.setValue(worker, cur.getValue());
+				}
+				cur = cur.getEast();
+			}
+		}
+		return output;
+	}
+
+	@Override
+	public void replaceSubMatrix(Matrix<T> subMatrix, MatrixCoordinate topLeft, long height, long width) {
+		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
+		MatrixValidator.throwIfBadIndex(subMatrix, height - 1, Plane.Y);
+		MatrixValidator.throwIfBadIndex(subMatrix, width - 1, Plane.X);
+
+		//TODO
+		super.replaceSubMatrix(subMatrix, topLeft, height, width);
+	}
+
+
 }

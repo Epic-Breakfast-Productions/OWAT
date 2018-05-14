@@ -1,6 +1,5 @@
 package com.ebp.owat.lib.datastructure.matrix.hash;
 
-import com.ebp.owat.lib.datastructure.matrix.Matrix;
 import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
@@ -196,7 +195,7 @@ public class HashedScramblingMatrix<T> extends ScrambleMatrix<T> {
 	}
 
 	@Override
-	protected Matrix<T> getNewInstance() {
+	protected HashedScramblingMatrix<T> getNewInstance() {
 		return new HashedScramblingMatrix<>();
 	}
 
