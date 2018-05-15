@@ -142,7 +142,7 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 			if(curPosition.getX() > destination.getX()){
 				curPosition.moveWest();
 			}else if(curPosition.getX() < destination.getX()){
-				curPosition.moveEast();//TODO:: this made alot of tests fail. why?
+				curPosition.moveEast();
 			}
 		}
 		LinkedMatrixNode<T> output = curPosition.getNode();
@@ -504,8 +504,37 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		MatrixValidator.throwIfBadIndex(subMatrix, height - 1, Plane.Y);
 		MatrixValidator.throwIfBadIndex(subMatrix, width - 1, Plane.X);
 
-		//TODO
-		super.replaceSubMatrix(subMatrix, topLeft, height, width);
+		LinkedMatrixNode<T> rowStart = null;
+
+		MatrixCoordinate subWorker = new MatrixCoordinate(subMatrix);
+
+		for(int i = 0; i < height; i++){
+			if(rowStart == null){
+				rowStart = this.getMatrixNode(topLeft);
+			}else{
+				rowStart = rowStart.getSouth();
+			}
+
+			LinkedMatrixNode<T> cur = rowStart;
+
+			subWorker.setY(i);
+
+			for(int j = 0; j < width; j++){
+				subWorker.setX(j);
+				if(subMatrix.hasValue(subWorker)){
+					if(!cur.hasValue()){
+						this.numElementsHeld++;
+					}
+					cur.setValue(subMatrix.get(subWorker));
+				}else{
+					if(cur.hasValue()){
+						cur.clearValue();
+						this.numElementsHeld--;
+					}
+				}
+				cur = cur.getEast();
+			}
+		}
 	}
 
 
