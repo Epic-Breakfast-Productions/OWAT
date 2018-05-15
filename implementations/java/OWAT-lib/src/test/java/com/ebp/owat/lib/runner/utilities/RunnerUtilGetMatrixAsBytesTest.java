@@ -1,9 +1,7 @@
 package com.ebp.owat.lib.runner.utilities;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
-import com.ebp.owat.lib.datastructure.value.ByteValue;
 import com.ebp.owat.lib.datastructure.value.NodeMode;
 import com.ebp.owat.lib.runner.utils.MatrixMode;
 import org.junit.Test;
@@ -15,8 +13,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
-
-import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class RunnerUtilGetMatrixAsBytesTest extends RunnerUtilTest {

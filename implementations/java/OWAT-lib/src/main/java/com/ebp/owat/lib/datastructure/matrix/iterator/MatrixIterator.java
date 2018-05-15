@@ -1,10 +1,11 @@
-package com.ebp.owat.lib.datastructure.matrix;
+package com.ebp.owat.lib.datastructure.matrix.iterator;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * An iterator that is specifically used to go over a matrix.
- * @param <T> The value this will return.
+ * @param <T> The type of value held by the matrix.
  */
 public abstract class MatrixIterator<T> implements Iterator<T> {
 	//TODO:: rework to use coord
@@ -20,8 +21,9 @@ public abstract class MatrixIterator<T> implements Iterator<T> {
 	}
 
 	/**
-	 * Gets the next value without moving to it.
+	 * Gets the next value without moving to it. If none left, throws NoSuchElementException
 	 * @return The next value.
+	 * @throws NoSuchElementException if no more elements to iterate through.
 	 */
 	public abstract T peekNext();
 

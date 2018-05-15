@@ -1,9 +1,9 @@
 package com.ebp.owat.lib.runner.utils;
 
-import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
 import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
 import com.ebp.owat.lib.datastructure.matrix.array.ArrayScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.hash.HashedScramblingMatrix;
+import com.ebp.owat.lib.datastructure.matrix.iterator.MatrixIterator;
 import com.ebp.owat.lib.datastructure.matrix.linked.LinkedScramblingMatrix;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;

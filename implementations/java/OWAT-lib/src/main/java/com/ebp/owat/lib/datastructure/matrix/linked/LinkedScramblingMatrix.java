@@ -1,8 +1,9 @@
 package com.ebp.owat.lib.datastructure.matrix.linked;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
-import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
 import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
+import com.ebp.owat.lib.datastructure.matrix.iterator.EmptyMatrixIterator;
+import com.ebp.owat.lib.datastructure.matrix.iterator.MatrixIterator;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode;
@@ -13,16 +14,12 @@ import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.DistanceCalc;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.EAST;
 import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.SOUTH;
 import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode.FixedPosition;
-import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode.FixedPosition.NORTH_EAST;
-import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode.FixedPosition.SOUTH_WEST;
+import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode.FixedPosition.*;
 
 /**
  * A matrix whose underlying structure is a linked lattice.
@@ -449,8 +446,47 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 
 	@Override
 	public MatrixIterator<T> iterator() {
-		//TODO
-		return super.iterator();
+		if(!this.hasRowsCols()){
+			return new EmptyMatrixIterator<>();
+		}
+
+		return new MatrixIterator<T>() {
+			LinkedMatrixNode<T> cur = getMatrixNode(NORTH_WEST);
+			LinkedMatrixNode<T> curRowStart = this.cur;
+
+			@Override
+			public T peekNext() {
+				return this.cur.getValue();
+			}
+
+			@Override
+			public boolean hasNext() {
+				return this.cur != null;
+			}
+
+			@Override
+			public T next() {
+				if(!this.hasNext()){
+					throw new NoSuchElementException("No more to iterate through.");
+				}
+				T val = this.cur.getValue(getDefaultValue());
+
+				if(!this.cur.isBorder(EAST)){
+					this.cur = this.cur.getEast();
+					this.curCol++;
+				}else{
+					if(this.curRowStart.isBorder(SOUTH)){
+						this.cur = null;
+					}else{
+						this.curCol = 0;
+						this.curRow++;
+						this.curRowStart = this.curRowStart.getDir(SOUTH);
+						this.cur = this.curRowStart;
+					}
+				}
+				return val;
+			}
+		};
 	}
 
 	@Override

@@ -441,9 +441,16 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 	
 	@Test
 	public void testIterator() throws Exception {
+		//TODO:: test for correct coordinates of values iterated
 		T m = this.getTestingInstance();
 		
 		assertFalse(m.iterator().hasNext());
+		try{
+			m.iterator().peekNext();
+			Assert.fail();
+		}catch (NoSuchElementException e){
+			//nothing to do
+		}
 		
 		m.grow(1);
 		
@@ -455,10 +462,13 @@ public class BaseMatrixTest<T extends Matrix<Integer>> extends MatrixTest<T> {
 		m.grow(1);
 		
 		it = m.iterator();
-		
+
+		int count = 0;
 		while(it.hasNext()){
 			assertEquals(m.getDefaultValue(), it.next());
+			count++;
 		}
+		assertEquals(m.size(), count);
 		
 		m.setValue(0,0,1);
 		m.setValue(1,0,2);

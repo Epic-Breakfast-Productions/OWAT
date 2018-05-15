@@ -1,5 +1,7 @@
 package com.ebp.owat.lib.datastructure.matrix;
 
+import com.ebp.owat.lib.datastructure.matrix.iterator.EmptyMatrixIterator;
+import com.ebp.owat.lib.datastructure.matrix.iterator.MatrixIterator;
 import com.ebp.owat.lib.datastructure.matrix.utils.MatrixValidator;
 import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
@@ -606,8 +608,10 @@ public abstract class Matrix<T> implements Iterable<T> {
 	 */
 	@Override
 	public MatrixIterator<T> iterator() {
+		if(!this.hasRowsCols()){
+			return new EmptyMatrixIterator<>();
+		}
 		return new MatrixIterator<T>() {
-
 			@Override
 			public boolean hasNext() {
 				return isValidRowIndex(this.curRow);
