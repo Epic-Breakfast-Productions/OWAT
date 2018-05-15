@@ -1,6 +1,7 @@
 package com.ebp.owat.lib.datastructure.matrix.linked;
 
 import com.ebp.owat.lib.datastructure.matrix.Matrix;
+import com.ebp.owat.lib.datastructure.matrix.MatrixIterator;
 import com.ebp.owat.lib.datastructure.matrix.ScrambleMatrix;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction;
 import com.ebp.owat.lib.datastructure.matrix.linked.utils.LinkedMatrixNode;
@@ -13,6 +14,7 @@ import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -445,20 +447,74 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		this.numElementsHeld = 0;
 	}
 
-	//TODO:: override replaceRow/Col
-	//TODO:: override iterator
-
+	@Override
+	public MatrixIterator<T> iterator() {
+		//TODO
+		return super.iterator();
+	}
 
 	@Override
 	public List<T> replaceRow(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
-		//TODO
-		return super.replaceRow(matrixCoordinate, newValues);
+		MatrixValidator.throwIfNotOnMatrix(this, matrixCoordinate);
+
+		List<T> output = new LongLinkedList<>();
+		LinkedMatrixNode<T> cur = this.getMatrixNode(0, matrixCoordinate.getY());
+
+		Iterator<T> it = newValues.iterator();
+
+		while(cur != null){
+			output.add(cur.getValue(this.getDefaultValue()));
+
+			if(it.hasNext()) {
+				T newVal = it.next();
+				boolean hadVal = cur.hasValue();
+				boolean hasNewVal = !this.isDefaultValue(newVal);
+
+				if(!hadVal && hasNewVal){
+					cur.setValue(newVal);
+					this.numElementsHeld++;
+				}else if(hadVal && !hasNewVal){
+					cur.clearValue();
+					this.numElementsHeld--;
+				}else if(hasNewVal){
+					cur.setValue(newVal);
+				}
+			}
+			cur = cur.getEast();
+		}
+		return output;
 	}
 
 	@Override
 	public List<T> replaceCol(MatrixCoordinate matrixCoordinate, Collection<T> newValues) throws IndexOutOfBoundsException {
-		//TODO
-		return super.replaceCol(matrixCoordinate, newValues);
+		MatrixValidator.throwIfNotOnMatrix(this, matrixCoordinate);
+
+		List<T> output = new LongLinkedList<>();
+		LinkedMatrixNode<T> cur = this.getMatrixNode(matrixCoordinate.getX(), 0);
+
+		Iterator<T> it = newValues.iterator();
+
+		while(cur != null){
+			output.add(cur.getValue(this.getDefaultValue()));
+
+			if(it.hasNext()) {
+				T newVal = it.next();
+				boolean hadVal = cur.hasValue();
+				boolean hasNewVal = !this.isDefaultValue(newVal);
+
+				if(!hadVal && hasNewVal){
+					cur.setValue(newVal);
+					this.numElementsHeld++;
+				}else if(hadVal && !hasNewVal){
+					cur.clearValue();
+					this.numElementsHeld--;
+				}else if(hasNewVal){
+					cur.setValue(newVal);
+				}
+			}
+			cur = cur.getSouth();
+		}
+		return output;
 	}
 
 	@Override
