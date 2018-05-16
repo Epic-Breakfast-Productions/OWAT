@@ -321,6 +321,7 @@ public class ScrambleRunner<N extends Value, M extends ScrambleMatrix<N>, R exte
 			end = System.currentTimeMillis();
 			runResults.setElapsedTime(Step.PAD_DATA, start, end);
 		}
+		runResults.setMatrixSize(matrix.size());
 
 		runResults.setCurStep(Step.SCRAMBLING);
 		start = System.currentTimeMillis();

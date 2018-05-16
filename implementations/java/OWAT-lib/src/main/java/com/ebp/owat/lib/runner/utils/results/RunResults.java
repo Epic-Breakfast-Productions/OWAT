@@ -50,6 +50,8 @@ public abstract class RunResults {
 	private long numBytesIn = -1;
 	/** The number of bytes in the data written out. */
 	private long numBytesOut = -1;
+	/** The size of the matrix used. */
+	private long matrixSize = -1;
 
 	/** The node type that was used. */
 	private NodeMode nodeMode;
@@ -276,6 +278,25 @@ public abstract class RunResults {
 	}
 
 	/**
+	 * Gets the size of the matrix used.
+	 * @return The size of the matrix used.
+	 */
+	public synchronized long getMatrixSize(){
+		return this.matrixSize;
+	}
+
+	/**
+	 * Sets the size of the matrix used.
+	 * @param matrixSize The size of the matrix used.
+	 */
+	public synchronized void setMatrixSize(long matrixSize){
+		if(this.getMatrixSize() != -1){
+			throw new IllegalStateException("Already set the number of bytes out.");
+		}
+		this.matrixSize = matrixSize;
+	}
+
+	/**
 	 * Gets the number of bytes written out. Note this is not meant to include key data.
 	 * @return The number of bytes written out.
 	 */
@@ -300,7 +321,7 @@ public abstract class RunResults {
 	 * @return The base CSV header applicable to all run modes.
 	 */
 	public static String getCsvHeadBase(){
-		return "scrambleMode,nodeMode,matrixMode,lastStep,numBytesIn,numBytesOut";
+		return "scrambleMode,nodeMode,matrixMode,lastStep,matrixSize,numBytesIn,numBytesOut";
 	}
 
 	/**
@@ -317,6 +338,8 @@ public abstract class RunResults {
 		sb.append(this.matrixMode.name);
 		sb.append(",");
 		sb.append(this.getCurStep().stepName);
+		sb.append(",");
+		sb.append(this.getMatrixSize());
 		sb.append(",");
 		sb.append(this.getNumBytesIn());
 		sb.append(",");

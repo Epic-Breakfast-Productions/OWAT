@@ -32,6 +32,7 @@ public class ScrambleResults extends RunResults {
 		output.setCurStepProg(this.getCurStepProg());
 		output.setCurStepProgMax(this.getCurStepProgMax());
 		output.setTimingMap(this.getTimingMap());
+		output.setMatrixSize(this.getMatrixSize());
 		output.setNumBytesIn(this.getNumBytesIn());
 		output.setNumBytesOut(this.getNumBytesOut());
 

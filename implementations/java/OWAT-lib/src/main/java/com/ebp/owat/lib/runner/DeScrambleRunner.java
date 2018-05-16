@@ -203,6 +203,7 @@ public class DeScrambleRunner<N extends Value, M extends ScrambleMatrix<N>, R ex
 			LOGGER.debug("Length of scrambled data: {} bytes", data.sizeL());
 			LOGGER.debug("Using matrix type: {}", this.matrixMode.name);
 			matrix = this.utils.getMatrix(data, this.matrixMode, this.nodeType, this.key.meta.dataHeight, this.key.meta.dataWidth);
+			runResults.setMatrixSize(matrix.size());
 		}
 		end = System.currentTimeMillis();
 		runResults.setElapsedTime(Step.LOAD_SCRAMBLED_DATA, start, end);
