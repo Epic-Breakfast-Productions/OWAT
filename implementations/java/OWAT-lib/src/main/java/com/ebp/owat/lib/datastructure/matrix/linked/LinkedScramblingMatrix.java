@@ -122,7 +122,6 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 			}
 		}
 		if(output == null){
-			//TODO:: handle this better?
 			throw new IllegalStateException("No nodes held.");
 		}
 		return output.clone();
@@ -705,23 +704,5 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 			sm.getArg(ScrambleConstants.SwapCol.ROWCOL1),
 			sm.getArg(ScrambleConstants.SwapCol.ROWCOL2)
 		);
-	}
-
-	@Override
-	public void slideRow(ScrambleMove sm) {
-		//TODO
-		super.slideRow(sm);
-	}
-
-	@Override
-	public void slideCol(ScrambleMove sm) {
-		//TODO
-		super.slideCol(sm);
-	}
-
-	@Override
-	public void rotBox(ScrambleMove sm) {
-		//TODO
-		super.rotBox(sm);
 	}
 }
