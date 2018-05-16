@@ -24,6 +24,8 @@ import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.EAST;
 import static com.ebp.owat.lib.datastructure.matrix.linked.utils.Direction.SOUTH;
 import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode.FixedPosition;
 import static com.ebp.owat.lib.datastructure.matrix.linked.utils.nodePosition.FixedNode.FixedPosition.*;
+import static com.ebp.owat.lib.datastructure.matrix.utils.Plane.X;
+import static com.ebp.owat.lib.datastructure.matrix.utils.Plane.Y;
 
 /**
  * A matrix whose underlying structure is a linked lattice.
@@ -176,6 +178,16 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 
 	private LinkedMatrixNode<T> getMatrixNode(long xIn, long yIn){
 		return this.getMatrixNode(new MatrixCoordinate(this, xIn, yIn));
+	}
+
+	private LinkedMatrixNode<T> getRowColStart(Plane rowCol, long index){
+		switch (rowCol){
+			case X://col
+				return this.getMatrixNode(index, 0);
+			case Y://row
+				return this.getMatrixNode(0, index);
+		}
+		throw new IllegalStateException();
 	}
 
 	@Override
@@ -560,8 +572,8 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 	@Override
 	public LinkedScramblingMatrix<T> getSubMatrix(MatrixCoordinate topLeft, long height, long width) {
 		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
-		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
-		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Y);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, X);
 
 		LinkedScramblingMatrix<T> output = this.getNewInstance();
 		output.grow(width, height);
@@ -595,10 +607,10 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 	@Override
 	public void replaceSubMatrix(Matrix<T> subMatrix, MatrixCoordinate topLeft, long height, long width) {
 		MatrixValidator.throwIfNotOnMatrix(this, topLeft);
-		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Plane.Y);
-		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, Plane.X);
-		MatrixValidator.throwIfBadIndex(subMatrix, height - 1, Plane.Y);
-		MatrixValidator.throwIfBadIndex(subMatrix, width - 1, Plane.X);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getY() + height - 1, Y);
+		MatrixValidator.throwIfBadIndex(this,topLeft.getX() + width - 1, X);
+		MatrixValidator.throwIfBadIndex(subMatrix, height - 1, Y);
+		MatrixValidator.throwIfBadIndex(subMatrix, width - 1, X);
 
 		LinkedMatrixNode<T> rowStart = null;
 
@@ -633,13 +645,7 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		}
 	}
 
-	@Override
-	public void swap(ScrambleMove sm) {
-		MoveValidator.throwIfInvalidMove(this, sm, ScrambleMoves.SWAP);
-
-		LinkedMatrixNode<T> nodeOne = this.getMatrixNode(new MatrixCoordinate(this, sm.getArg(ScrambleConstants.Swap.X1), sm.getArg(ScrambleConstants.Swap.Y1)));
-		LinkedMatrixNode<T> nodeTwo = this.getMatrixNode(new MatrixCoordinate(this, sm.getArg(ScrambleConstants.Swap.X2), sm.getArg(ScrambleConstants.Swap.Y2)));
-
+	private void swapNodeValues(LinkedMatrixNode<T> nodeOne, LinkedMatrixNode<T> nodeTwo){
 		if(nodeOne.hasValue() && nodeTwo.hasValue()){
 			T valOne = nodeOne.getValue();
 			nodeOne.setValue(nodeTwo.getValue());
@@ -654,15 +660,51 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 	}
 
 	@Override
+	public void swap(ScrambleMove sm) {
+		MoveValidator.throwIfInvalidMove(this, sm, ScrambleMoves.SWAP);
+
+		this.swapNodeValues(
+			this.getMatrixNode(new MatrixCoordinate(this, sm.getArg(ScrambleConstants.Swap.X1), sm.getArg(ScrambleConstants.Swap.Y1))),
+			this.getMatrixNode(new MatrixCoordinate(this, sm.getArg(ScrambleConstants.Swap.X2), sm.getArg(ScrambleConstants.Swap.Y2)))
+		);
+	}
+
+	private void swapRowCols(Plane rowCol, long indexOne, long indexTwo){
+		LinkedMatrixNode<T> oneCur = this.getRowColStart(rowCol, indexOne);
+		LinkedMatrixNode<T> twoCur = this.getRowColStart(rowCol, indexTwo);
+
+		Direction go = (rowCol == X ? SOUTH : EAST);
+
+		while(oneCur != null && twoCur != null){
+			this.swapNodeValues(
+				oneCur,
+				twoCur
+			);
+			oneCur = oneCur.getDir(go);
+			twoCur = twoCur.getDir(go);
+		}
+	}
+
+	@Override
 	public void swapRows(ScrambleMove sm) {
-		//TODO
-		super.swapRows(sm);
+		MoveValidator.throwIfInvalidMove(this, sm, ScrambleMoves.SWAP_ROW);
+
+		this.swapRowCols(
+			Y,
+			sm.getArg(ScrambleConstants.SwapRow.ROWCOL1),
+			sm.getArg(ScrambleConstants.SwapRow.ROWCOL2)
+		);
 	}
 
 	@Override
 	public void swapCols(ScrambleMove sm) {
-		//TODO
-		super.swapCols(sm);
+		MoveValidator.throwIfInvalidMove(this, sm, ScrambleMoves.SWAP_COL);
+
+		this.swapRowCols(
+			X,
+			sm.getArg(ScrambleConstants.SwapCol.ROWCOL1),
+			sm.getArg(ScrambleConstants.SwapCol.ROWCOL2)
+		);
 	}
 
 	@Override
