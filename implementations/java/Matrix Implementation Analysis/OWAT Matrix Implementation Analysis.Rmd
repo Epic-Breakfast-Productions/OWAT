@@ -1,0 +1,119 @@
+---
+title: "OWAT-J Matrix Implementation Analysis"
+author: "Greg Stewart"
+date: "May 15, 2018"
+output: github_document
+---
+<!--
+This script takes the runtime data from OWAT and performs analyis on the results.
+
+In particular, it is comparing the different implementations of matrices used in the library.
+
+It also outputs the best places for the runner to decide to run one implementation or another.
+
+Author: Greg Stewart
+
+Requires R markdown (install.packages("rmarkdown"))
+-->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+DEFAULT_COLOR = "black"
+LINKED_COLOR = "azure3" # gray
+ARRAY_COLOR = "blue2" # blue
+HASHED_COLOR = "chartreuse4" # green
+DEFAULT_PCH = 20
+
+
+
+scramblingData = read.csv("data/scramblingResults.csv", header = TRUE)
+descramblingData = read.csv("data/descramblingResults.csv", header = TRUE)
+
+scramblingData$Color=DEFAULT_COLOR
+scramblingData$Color[scramblingData$matrixMode=="linked"]=LINKED_COLOR
+scramblingData$Color[scramblingData$matrixMode=="array"]=ARRAY_COLOR
+scramblingData$Color[scramblingData$matrixMode=="hashed"]=HASHED_COLOR
+
+descramblingData$Color=DEFAULT_COLOR
+descramblingData$Color[descramblingData$matrixMode=="linked"]=LINKED_COLOR
+descramblingData$Color[descramblingData$matrixMode=="array"]=ARRAY_COLOR
+descramblingData$Color[descramblingData$matrixMode=="hashed"]=HASHED_COLOR
+
+
+```
+
+## Quick Summary:
+
+
+```{r echo=FALSE}
+
+# SCRAMBLING
+plot(
+  scramblingData$numBytesIn[scramblingData$nodeMode=="byte"],
+  scramblingData$Scrambling[scramblingData$nodeMode=="byte"],
+  main="Scramble Timing Graphed [Byte]",
+  xlab="Number of bytes input",
+  ylab="Time taken (ms)",
+  pch=DEFAULT_PCH,
+  col=scramblingData$Color
+)
+legend(
+  "top",
+  legend=c("Linked", "Array", "Hashed"),
+  col=c(LINKED_COLOR, ARRAY_COLOR, HASHED_COLOR),
+  pch=DEFAULT_PCH
+)
+
+plot(
+  scramblingData$numBytesIn[scramblingData$nodeMode=="bit"],
+  scramblingData$Scrambling[scramblingData$nodeMode=="bit"],
+  main="Scramble Timing Graphed [Bit]",
+  xlab="Number of bytes input",
+  ylab="Time taken (ms)",
+  pch=DEFAULT_PCH,
+  col=scramblingData$Color
+)
+legend(
+  "top",
+  legend=c("Linked", "Array", "Hashed"),
+  col=c(LINKED_COLOR, ARRAY_COLOR, HASHED_COLOR),
+  pch=DEFAULT_PCH
+)
+
+
+# DESCRAMBLING
+
+plot(
+  descramblingData$numBytesOut[descramblingData$nodeMode=="byte"],
+  descramblingData$Descrambling[descramblingData$nodeMode=="byte"],
+  main="Descramble Timing Graphed [Byte]",
+  xlab="Number of bytes output",
+  ylab="Time taken (ms)",
+  pch=DEFAULT_PCH,
+  col=descramblingData$Color
+)
+legend(
+  "top",
+  legend=c("Linked", "Array", "Hashed"),
+  col=c(LINKED_COLOR, ARRAY_COLOR, HASHED_COLOR),
+  pch=DEFAULT_PCH
+)
+
+plot(
+  descramblingData$numBytesOut[descramblingData$nodeMode=="bit"],
+  descramblingData$Descrambling[descramblingData$nodeMode=="bit"],
+  main="Descramble Timing Graphed [Bit]",
+  xlab="Number of bytes output",
+  ylab="Time taken (ms)",
+  pch=DEFAULT_PCH,
+  col=descramblingData$Color
+)
+legend(
+  "top",
+  legend=c("Linked", "Array", "Hashed"),
+  col=c(LINKED_COLOR, ARRAY_COLOR, HASHED_COLOR),
+  pch=DEFAULT_PCH
+)
+```
