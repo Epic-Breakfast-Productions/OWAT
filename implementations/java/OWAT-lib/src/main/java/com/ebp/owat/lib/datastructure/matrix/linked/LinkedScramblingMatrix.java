@@ -13,6 +13,10 @@ import com.ebp.owat.lib.datastructure.matrix.utils.Plane;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.DistanceCalc;
 import com.ebp.owat.lib.datastructure.matrix.utils.coordinate.MatrixCoordinate;
 import com.ebp.owat.lib.datastructure.set.LongLinkedList;
+import com.ebp.owat.lib.utils.scramble.MoveValidator;
+import com.ebp.owat.lib.utils.scramble.ScrambleConstants;
+import com.ebp.owat.lib.utils.scramble.ScrambleMove;
+import com.ebp.owat.lib.utils.scramble.ScrambleMoves;
 
 import java.util.*;
 
@@ -629,5 +633,53 @@ public class LinkedScramblingMatrix<T> extends ScrambleMatrix<T> {
 		}
 	}
 
+	@Override
+	public void swap(ScrambleMove sm) {
+		MoveValidator.throwIfInvalidMove(this, sm, ScrambleMoves.SWAP);
 
+		LinkedMatrixNode<T> nodeOne = this.getMatrixNode(new MatrixCoordinate(this, sm.getArg(ScrambleConstants.Swap.X1), sm.getArg(ScrambleConstants.Swap.Y1)));
+		LinkedMatrixNode<T> nodeTwo = this.getMatrixNode(new MatrixCoordinate(this, sm.getArg(ScrambleConstants.Swap.X2), sm.getArg(ScrambleConstants.Swap.Y2)));
+
+		if(nodeOne.hasValue() && nodeTwo.hasValue()){
+			T valOne = nodeOne.getValue();
+			nodeOne.setValue(nodeTwo.getValue());
+			nodeTwo.setValue(valOne);
+		}else if(nodeOne.hasValue()){
+			nodeTwo.setValue(nodeOne.getValue());
+			nodeOne.clearValue();
+		}else if(nodeTwo.hasValue()){
+			nodeOne.setValue(nodeTwo.getValue());
+			nodeTwo.clearValue();
+		}
+	}
+
+	@Override
+	public void swapRows(ScrambleMove sm) {
+		//TODO
+		super.swapRows(sm);
+	}
+
+	@Override
+	public void swapCols(ScrambleMove sm) {
+		//TODO
+		super.swapCols(sm);
+	}
+
+	@Override
+	public void slideRow(ScrambleMove sm) {
+		//TODO
+		super.slideRow(sm);
+	}
+
+	@Override
+	public void slideCol(ScrambleMove sm) {
+		//TODO
+		super.slideCol(sm);
+	}
+
+	@Override
+	public void rotBox(ScrambleMove sm) {
+		//TODO
+		super.rotBox(sm);
+	}
 }
