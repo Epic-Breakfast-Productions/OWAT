@@ -52,10 +52,10 @@ descramblingData$Color[descramblingData$matrixMode=="hashed"]=HASHED_COLOR
 
 # SCRAMBLING
 plot(
-  scramblingData$numBytesIn[scramblingData$nodeMode=="byte"],
+  scramblingData$matrixSize[scramblingData$nodeMode=="byte"],
   scramblingData$Scrambling[scramblingData$nodeMode=="byte"],
   main="Scramble Timing Graphed [Byte]",
-  xlab="Number of bytes input",
+  xlab="Size of Matrix",
   ylab="Time taken (ms)",
   pch=DEFAULT_PCH,
   cex=DEFAULT_CEX,
@@ -69,10 +69,10 @@ legend(
 )
 
 plot(
-  scramblingData$numBytesIn[scramblingData$nodeMode=="bit"],
+  scramblingData$matrixSize[scramblingData$nodeMode=="bit"],
   scramblingData$Scrambling[scramblingData$nodeMode=="bit"],
   main="Scramble Timing Graphed [Bit]",
-  xlab="Number of bytes input",
+  xlab="Size of Matrix",
   ylab="Time taken (ms)",
   pch=DEFAULT_PCH,
   cex=DEFAULT_CEX,
@@ -89,10 +89,10 @@ legend(
 # DESCRAMBLING
 
 plot(
-  descramblingData$numBytesOut[descramblingData$nodeMode=="byte"],
+  descramblingData$matrixSize[descramblingData$nodeMode=="byte"],
   descramblingData$Descrambling[descramblingData$nodeMode=="byte"],
   main="Descramble Timing Graphed [Byte]",
-  xlab="Number of bytes output",
+  xlab="Size of Matrix",
   ylab="Time taken (ms)",
   pch=DEFAULT_PCH,
   cex=DEFAULT_CEX,
@@ -106,10 +106,10 @@ legend(
 )
 
 plot(
-  descramblingData$numBytesOut[descramblingData$nodeMode=="bit"],
+  descramblingData$matrixSize[descramblingData$nodeMode=="bit"],
   descramblingData$Descrambling[descramblingData$nodeMode=="bit"],
   main="Descramble Timing Graphed [Bit]",
-  xlab="Number of bytes output",
+  xlab="Size of Matrix",
   ylab="Time taken (ms)",
   pch=DEFAULT_PCH,
   cex=DEFAULT_CEX,
