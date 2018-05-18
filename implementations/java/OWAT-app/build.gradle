@@ -10,7 +10,7 @@ apply plugin: 'java'
 apply plugin: 'application' // https://docs.gradle.org/current/userguide/application_plugin.html
 
 //config for the application plugin
-version="1.4.1"
+version="1.4.2"
 mainClassName = "com.ebp.owat.app.Main"
 applicationName = "OWAT-J"
 
@@ -87,7 +87,6 @@ app.buildtime: ${new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())}
 app.version.nickname = $versionNickname
 lib.version = $libVersion
 """
-		sleep((int)(0.25 * 1000));
 	}
 }
 

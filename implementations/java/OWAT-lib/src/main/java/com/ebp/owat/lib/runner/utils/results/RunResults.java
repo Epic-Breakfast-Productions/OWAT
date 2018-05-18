@@ -190,11 +190,11 @@ public abstract class RunResults {
 	 * Gets the percentage complete of the current step.
 	 * @return The percentage of the step completed.
 	 */
-	public synchronized byte getStepPercentDone(){
+	public synchronized float getStepPercentDone(){
 		if(this.getCurStepProgMax() < 1){
 			return 0;
 		}
-		return (byte) (((double)this.getCurStepProg() / (double) this.getCurStepProgMax()) * 100.0);
+		return (float)(((double)this.getCurStepProg() / (double) this.getCurStepProgMax()) * 100.0);
 	}
 
 	/**

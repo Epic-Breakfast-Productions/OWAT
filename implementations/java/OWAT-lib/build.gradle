@@ -20,7 +20,7 @@ repositories {
 }
 
 group="com.ebp.owat.lib"
-version="1.5.0";
+version="1.6.0";
 
 // Dependencies for the library
 dependencies {
@@ -67,7 +67,6 @@ lib.version = $version
 # the time of build
 lib.buildtime: ${new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())}
 """
-		sleep((int)(0.25 * 1000));
 	}
 }
 

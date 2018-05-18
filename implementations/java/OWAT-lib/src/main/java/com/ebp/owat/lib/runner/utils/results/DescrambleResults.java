@@ -29,8 +29,8 @@ public class DescrambleResults extends RunResults {
 		DescrambleResults output = new DescrambleResults(this.getNodeMode());
 		output.setMatrixMode(this.getMatrixMode());
 		output.setCurStep(this.getCurStep());
-		output.setCurStepProg(this.getCurStepProg());
 		output.setCurStepProgMax(this.getCurStepProgMax());
+		output.setCurStepProg(this.getCurStepProg());
 		output.setTimingMap(this.getTimingMap());
 		output.setMatrixSize(this.getMatrixSize());
 		output.setNumBytesIn(this.getNumBytesIn());

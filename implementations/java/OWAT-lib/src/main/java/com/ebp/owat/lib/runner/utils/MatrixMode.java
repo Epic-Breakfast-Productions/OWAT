@@ -1,7 +1,5 @@
 package com.ebp.owat.lib.runner.utils;
 
-import java.util.Random;
-
 /**
  * Enum to describe the types of matrices
  */
@@ -22,13 +20,6 @@ public enum MatrixMode {
 	 * @return The matrix mode best to use.
 	 */
 	public static MatrixMode determineModeToUse(long n){
-		//TODO:: use statistics to determine how to do this intelligently
-		if(new Random().nextBoolean()){
-			return ARRAY;
-		}
-		if(new Random().nextBoolean()){
-			return LINKED;
-		}
-		return HASHED;
+		return ARRAY;//allways the most efficient, https://github.com/Epic-Breakfast-Productions/OWAT/blob/master/implementations/java/Matrix%20Implementation%20Analysis/OWAT_Matrix_Implementation_Analysis.md
 	}
 }

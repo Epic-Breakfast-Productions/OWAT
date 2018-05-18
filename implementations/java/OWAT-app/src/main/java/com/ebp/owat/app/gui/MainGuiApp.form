@@ -132,34 +132,6 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="48bb4" binding="scrambleDataDirectInputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                            <margin top="0" left="0" bottom="0" right="0"/>
-                            <constraints>
-                              <tabbedpane title="Enter Text">
-                                <tooltip value="This is to enter your own data to be scrambled."/>
-                              </tabbedpane>
-                            </constraints>
-                            <properties>
-                              <maximumSize width="-1" height="-1"/>
-                              <minimumSize width="-1" height="-1"/>
-                              <preferredSize width="-1" height="-1"/>
-                              <toolTipText value=""/>
-                            </properties>
-                            <border type="none"/>
-                            <children>
-                              <component id="995c7" class="javax.swing.JTextArea" binding="scrambleDataDirectInput">
-                                <constraints>
-                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                    <preferred-size width="150" height="50"/>
-                                  </grid>
-                                </constraints>
-                                <properties>
-                                  <font name="Monospaced"/>
-                                  <lineWrap value="true"/>
-                                </properties>
-                              </component>
-                            </children>
-                          </grid>
                           <grid id="ce10a" binding="scrambleDataFileInputPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
@@ -189,6 +161,34 @@
                                 </constraints>
                                 <properties>
                                   <text value="Choose File"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                          <grid id="48bb4" binding="scrambleDataDirectInputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <tabbedpane title="Enter Text">
+                                <tooltip value="This is to enter your own data to be scrambled."/>
+                              </tabbedpane>
+                            </constraints>
+                            <properties>
+                              <maximumSize width="-1" height="-1"/>
+                              <minimumSize width="-1" height="-1"/>
+                              <preferredSize width="-1" height="-1"/>
+                              <toolTipText value=""/>
+                            </properties>
+                            <border type="none"/>
+                            <children>
+                              <component id="995c7" class="javax.swing.JTextArea" binding="scrambleDataDirectInput">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                    <preferred-size width="150" height="50"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <font name="Monospaced"/>
+                                  <lineWrap value="true"/>
                                 </properties>
                               </component>
                             </children>
@@ -250,29 +250,6 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="5512e" binding="scrambledDataDirectOutputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                            <margin top="0" left="0" bottom="0" right="0"/>
-                            <constraints>
-                              <tabbedpane title="Direct output"/>
-                            </constraints>
-                            <properties/>
-                            <border type="none"/>
-                            <children>
-                              <component id="b1a9f" class="javax.swing.JTextArea" binding="scrambledDataDirectOutput">
-                                <constraints>
-                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                    <preferred-size width="150" height="50"/>
-                                  </grid>
-                                </constraints>
-                                <properties>
-                                  <editable value="false"/>
-                                  <font name="Monospaced"/>
-                                  <lineWrap value="true"/>
-                                  <text value=""/>
-                                </properties>
-                              </component>
-                            </children>
-                          </grid>
                           <grid id="f157d" binding="scrambledDataFileOutputPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
@@ -306,6 +283,29 @@
                               </component>
                             </children>
                           </grid>
+                          <grid id="5512e" binding="scrambledDataDirectOutputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <tabbedpane title="Direct output"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="b1a9f" class="javax.swing.JTextArea" binding="scrambledDataDirectOutput">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                    <preferred-size width="150" height="50"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <editable value="false"/>
+                                  <font name="Monospaced"/>
+                                  <lineWrap value="true"/>
+                                  <text value=""/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
                         </children>
                       </tabbedpane>
                       <tabbedpane id="83247" binding="outputScrambleKeyModeSelectPane">
@@ -317,28 +317,6 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="7ad59" binding="scrambleKeyDirectOutputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                            <margin top="0" left="0" bottom="0" right="0"/>
-                            <constraints>
-                              <tabbedpane title="Direct Output"/>
-                            </constraints>
-                            <properties/>
-                            <border type="none"/>
-                            <children>
-                              <component id="c7524" class="javax.swing.JTextArea" binding="keyDirectOutput">
-                                <constraints>
-                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                    <preferred-size width="150" height="50"/>
-                                  </grid>
-                                </constraints>
-                                <properties>
-                                  <editable value="false"/>
-                                  <font name="Monospaced"/>
-                                  <lineWrap value="true"/>
-                                </properties>
-                              </component>
-                            </children>
-                          </grid>
                           <grid id="5ac1c" binding="scrambleKeyFileOutputPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
@@ -366,6 +344,28 @@
                                 </constraints>
                                 <properties>
                                   <text value="Choose File"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                          <grid id="7ad59" binding="scrambleKeyDirectOutputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <tabbedpane title="Direct Output"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="c7524" class="javax.swing.JTextArea" binding="keyDirectOutput">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                    <preferred-size width="150" height="50"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <editable value="false"/>
+                                  <font name="Monospaced"/>
+                                  <lineWrap value="true"/>
                                 </properties>
                               </component>
                             </children>
@@ -431,27 +431,6 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="8b2a2" binding="scrambledDataDirectInputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                            <margin top="0" left="0" bottom="0" right="0"/>
-                            <constraints>
-                              <tabbedpane title="Direct Input"/>
-                            </constraints>
-                            <properties/>
-                            <border type="none"/>
-                            <children>
-                              <component id="9fb8b" class="javax.swing.JTextArea" binding="scrambledDataDirectInput">
-                                <constraints>
-                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                    <preferred-size width="150" height="50"/>
-                                  </grid>
-                                </constraints>
-                                <properties>
-                                  <font name="Monospaced"/>
-                                  <lineWrap value="true"/>
-                                </properties>
-                              </component>
-                            </children>
-                          </grid>
                           <grid id="2b9f1" binding="scrambledDataFileInputPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
@@ -483,6 +462,27 @@
                               </component>
                             </children>
                           </grid>
+                          <grid id="8b2a2" binding="scrambledDataDirectInputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <tabbedpane title="Direct Input"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="9fb8b" class="javax.swing.JTextArea" binding="scrambledDataDirectInput">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                    <preferred-size width="150" height="50"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <font name="Monospaced"/>
+                                  <lineWrap value="true"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
                         </children>
                       </tabbedpane>
                       <component id="82e44" class="javax.swing.JLabel">
@@ -502,27 +502,6 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="72727" binding="scrambleKeyDirectInputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                            <margin top="0" left="0" bottom="0" right="0"/>
-                            <constraints>
-                              <tabbedpane title="Direct Input"/>
-                            </constraints>
-                            <properties/>
-                            <border type="none"/>
-                            <children>
-                              <component id="c6ac5" class="javax.swing.JTextArea" binding="keyDirectInput">
-                                <constraints>
-                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                    <preferred-size width="150" height="50"/>
-                                  </grid>
-                                </constraints>
-                                <properties>
-                                  <font name="Monospaced"/>
-                                  <lineWrap value="true"/>
-                                </properties>
-                              </component>
-                            </children>
-                          </grid>
                           <grid id="f08e7" binding="scrambleKeyFileInputPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
@@ -550,6 +529,27 @@
                                 </constraints>
                                 <properties>
                                   <text value="Choose File"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                          <grid id="72727" binding="scrambleKeyDirectInputPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <tabbedpane title="Direct Input"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="c6ac5" class="javax.swing.JTextArea" binding="keyDirectInput">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                    <preferred-size width="150" height="50"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <font name="Monospaced"/>
+                                  <lineWrap value="true"/>
                                 </properties>
                               </component>
                             </children>
@@ -584,28 +584,6 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="5188" binding="deScrambledDataDirectOutputPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                            <margin top="0" left="0" bottom="0" right="0"/>
-                            <constraints>
-                              <tabbedpane title="Display"/>
-                            </constraints>
-                            <properties/>
-                            <border type="none"/>
-                            <children>
-                              <component id="295c7" class="javax.swing.JTextArea" binding="deScrambledDirectOutput">
-                                <constraints>
-                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                    <preferred-size width="150" height="50"/>
-                                  </grid>
-                                </constraints>
-                                <properties>
-                                  <editable value="false"/>
-                                  <font name="Monospaced"/>
-                                  <lineWrap value="true"/>
-                                </properties>
-                              </component>
-                            </children>
-                          </grid>
                           <grid id="e6997" binding="deScrambledDataFileOutputPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
@@ -633,6 +611,28 @@
                                 </constraints>
                                 <properties>
                                   <text value="Choose File"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                          <grid id="5188" binding="deScrambledDataDirectOutputPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <tabbedpane title="Display"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="295c7" class="javax.swing.JTextArea" binding="deScrambledDirectOutput">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                    <preferred-size width="150" height="50"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <editable value="false"/>
+                                  <font name="Monospaced"/>
+                                  <lineWrap value="true"/>
                                 </properties>
                               </component>
                             </children>

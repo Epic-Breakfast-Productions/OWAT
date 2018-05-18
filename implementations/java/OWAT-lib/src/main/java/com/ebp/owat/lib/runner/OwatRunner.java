@@ -55,7 +55,7 @@ public abstract class OwatRunner<N extends Value, M extends ScrambleMatrix<N>, R
 	 * Gets the percentage done on this current step.
 	 * @return The percentage of the process on the current step.
 	 */
-	public synchronized byte getLastRunCurStepPercent(){
+	public synchronized float getLastRunCurStepPercent(){
 		return this.lastRunResults.getStepPercentDone();
 	}
 
