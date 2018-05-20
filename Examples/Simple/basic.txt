@@ -1,0 +1,5 @@
+Hello World
+
+This is a simple text document to show off OWAT's capabilities.
+
+123456789!@#$%^&*()_+=-/?.>,<;:'"[{]}\|
